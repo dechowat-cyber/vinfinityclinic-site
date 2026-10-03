@@ -89,6 +89,7 @@ def head(title, desc, path, keywords, extra_ld=()):
 <a href="/filler/">ฟิลเลอร์</a>
 <a href="/skin-booster/">สกินบูสเตอร์</a>
 <a href="/#programs">โปรแกรม</a>
+<a href="/articles/">บทความ</a>
 <a href="/#doctor">แพทย์</a>
 <a href="/#clinic">ติดต่อ</a>
 </nav>
@@ -114,6 +115,7 @@ def footer():
 <p><a href="/skin-booster/">สกินบูสเตอร์ อุดรธานี</a></p>
 <p><a href="/#programs">ยกกระชับ New Doublo 2.0</a></p>
 <p><a href="/#programs">The Architect Rebuild</a></p>
+<p><a href="/articles/">บทความ Advanced Injection</a></p>
 </div>
 <div>
 <h4>ติดต่อ</h4>
@@ -130,10 +132,14 @@ def footer():
 """
 
 
-def build(out, title, desc, path, keywords, body_file, faqs):
+def build(out, title, desc, path, keywords, body_file, faqs, extra_ld=()):
     body = (ROOT / "pages" / body_file).read_text(encoding="utf-8")
+    anat = ROOT / "pages" / "_anatomy.html"
+    if "{{ANATOMY}}" in body and anat.exists():
+        body = body.replace("{{ANATOMY}}", anat.read_text(encoding="utf-8"))
     body = body.replace("{{LINE}}", LINE).replace("{{MSG}}", MSG).replace("{{FAQ}}", faq_html(faqs))
-    html = head(title, desc, path, keywords, [faq_ld(faqs)]) + body + footer()
+    lds = ([faq_ld(faqs)] if faqs else []) + list(extra_ld)
+    html = head(title, desc, path, keywords, lds) + body + footer()
     p = ROOT / out
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(html, encoding="utf-8")
@@ -164,6 +170,16 @@ BOOSTER_FAQ = [
     ("ใครไม่ควรทำสกินบูสเตอร์", "ผู้ที่ตั้งครรภ์หรือให้นมบุตร มีการติดเชื้อบริเวณที่จะฉีด หรือแพ้ส่วนประกอบของผลิตภัณฑ์ ควรแจ้งแพทย์ระหว่างการประเมิน"),
 ]
 
+
+def article_ld(path, headline, desc, cites):
+    return {"@context": "https://schema.org", "@type": ["MedicalWebPage", "Article"],
+            "headline": headline, "description": desc, "inLanguage": "th",
+            "url": SITE + path, "datePublished": "2026-10-03", "dateModified": "2026-10-03",
+            "author": {"@id": SITE + "/#dr-dechowat"}, "reviewedBy": {"@id": SITE + "/#dr-dechowat"},
+            "publisher": {"@id": SITE + "/#clinic"}, "image": SITE + "/assets/img/og.jpg",
+            "citation": cites}
+
+
 if __name__ == "__main__":
     build("index.html",
           "ฟิลเลอร์ สกินบูสเตอร์ ยกกระชับ อุดรธานี | Vinfinity Clinic โดย นพ.เดโชวัต",
@@ -180,3 +196,20 @@ if __name__ == "__main__":
           "สกินบูสเตอร์ที่อุดรธานี ฟื้นฟูความชุ่มชื้น ความแน่น และความกระจ่างใสของผิว วางแผนคอร์สโดยแพทย์ตามสภาพผิว ทำร่วมกับยกกระชับและฟิลเลอร์ได้",
           "/skin-booster/", "สกินบูสเตอร์ อุดร, สกินบูสเตอร์ อุดรธานี, skin booster อุดร, PN อุดร, ฉีดผิว อุดรธานี, ผิวฉ่ำ อุดร",
           "skin-booster.html", BOOSTER_FAQ)
+    a1 = "ฉีดฟิลเลอร์ให้ปลอดภัย: งานวิจัยปี 2021–2026 บอกอะไรเรา"
+    d1 = "สรุปหลักฐานล่าสุดเรื่องความปลอดภัยของฟิลเลอร์ หลอดเลือดกลางใบหน้า เข็มกับแคนนูลา การดูดทดสอบ อัลตราซาวด์ Doppler และการรับมือภาวะหลอดเลือดอุดตัน เรียบเรียงโดย นพ.เดโชวัต พรมดา"
+    build("articles/filler-safety-evidence/index.html", a1 + " | Vinfinity Clinic", d1,
+          "/articles/filler-safety-evidence/", "ฟิลเลอร์ ปลอดภัย, ฟิลเลอร์ หลอดเลือดอุดตัน, cannula vs needle, ultrasound filler, hyaluronidase, ฟิลเลอร์ อุดรธานี",
+          "article-filler-safety.html", [], [article_ld("/articles/filler-safety-evidence/", a1, d1, [
+              "https://doi.org/10.1093/asjof/ojaf064", "https://jamanetwork.com/journals/jamadermatology/fullarticle/2774505",
+              "https://academic.oup.com/asj/article/45/12/1285/8217433", "https://jcadonline.com/cmac-guideline-hyaluronic-vascular-occlusion/",
+              "https://link.springer.com/article/10.1007/s00266-026-05744-z", "https://doi.org/10.1111/jocd.71046"])])
+    a2 = "เติมให้ถูกชั้น: กายวิภาคใบหน้า 5 ชั้น กับการฉีดแบบ Layered"
+    d2 = "ไขมันชั้นตื้นกับชั้นลึกทำงานต่างกันอย่างไร ทำไมต้องเลือกเจลให้ตรงชั้น และหลักฐานล่าสุดของสกินบูสเตอร์ PN สรุปจากงานวิจัยปี 2024–2026"
+    build("articles/layered-injection-anatomy/index.html", a2 + " | Vinfinity Clinic", d2,
+          "/articles/layered-injection-anatomy/", "กายวิภาคใบหน้า, fat compartments, layered filler, ฟิลเลอร์ชั้นลึก, สกินบูสเตอร์ PN, ฟิลเลอร์ อุดร",
+          "article-layered.html", [], [article_ld("/articles/layered-injection-anatomy/", a2, d2, [
+              "https://pmc.ncbi.nlm.nih.gov/articles/PMC12931948/", "https://doi.org/10.2147/CCID.S437942"])])
+    build("articles/index.html", "บทความ Advanced Injection อ้างอิงงานวิจัย | Vinfinity Clinic",
+          "บทความเรื่องฟิลเลอร์ สกินบูสเตอร์ และกายวิภาคใบหน้า เขียนจากงานวิจัยล่าสุดพร้อมเอกสารอ้างอิง โดย นพ.เดโชวัต พรมดา",
+          "/articles/", "บทความ ฟิลเลอร์, advanced injection, evidence-based, Vinfinity", "articles.html", [])

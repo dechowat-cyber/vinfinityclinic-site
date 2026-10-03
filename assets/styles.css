@@ -214,3 +214,58 @@ h1,h2,h3{font-weight:500}
 .hero h1{font-family:'Montserrat','Kanit',sans-serif;font-weight:600}
 @media (max-width:640px){.lockup .lk-mark{height:34px}.lockup .lk-word{height:12px}.lockup .lk-tag{font-size:7px}}
 .portrait-frame picture,.clinic-grid picture{height:100%}
+
+/* ---------- anatomy explorer (original illustration) ---------- */
+.anatomy{overflow:hidden}
+.ana-grid{display:grid;grid-template-columns:1.35fr .65fr;gap:40px;align-items:center;margin-top:40px}
+.ana-figure{margin:0}
+.ana-figure figcaption{font-size:12.5px;color:var(--muted-2);margin-top:6px}
+.ana-svg{width:100%;height:auto;display:block;overflow:visible}
+.ana-svg text{font-family:'Montserrat','Kanit',sans-serif}
+.ana-en{font-size:10.5px;letter-spacing:.18em;fill:#B4BED3;font-weight:600}
+.ana-th{font-size:16px;fill:#FFFFFF;font-weight:500}
+.ana-note{font-size:11.5px;fill:#D5DDEE}
+.ana-layer{cursor:pointer;transition:transform 1.1s cubic-bezier(.2,.8,.2,1),opacity .5s ease;transform:translateY(0)}
+.anatomy.is-open .ana-layer{transform:translateY(var(--off))}
+.anatomy.is-open .ana-layer[data-layer="0"]{transition-delay:.0s}
+.anatomy.is-open .ana-layer[data-layer="1"]{transition-delay:.12s}
+.anatomy.is-open .ana-layer[data-layer="2"]{transition-delay:.24s}
+.anatomy.is-open .ana-layer[data-layer="3"]{transition-delay:.36s}
+.ana-layer .ana-label{opacity:0;transition:opacity .6s ease .9s}
+.anatomy.is-open .ana-layer .ana-label{opacity:.55}
+.anatomy.is-open .ana-layer.is-on .ana-label{opacity:1}
+.ana-layer.is-dim{opacity:.6}
+.ana-layer.is-on{opacity:1}
+.ana-artery{transition:opacity .6s ease}
+.anatomy.is-open .ana-artery{opacity:0}
+.ana-flow{animation:ana-flow 1.6s linear infinite}
+@keyframes ana-flow{to{stroke-dashoffset:-28}}
+.ana-tabs{display:flex;flex-direction:column;gap:8px}
+.ana-tab{display:flex;align-items:center;gap:14px;width:100%;min-height:48px;padding:10px 16px;border-radius:14px;border:1px solid rgba(213,221,238,.22);background:rgba(255,255,255,.04);color:#E6ECF6;font:inherit;font-size:15.5px;text-align:left;cursor:pointer;transition:background .2s,border-color .2s}
+.ana-tab .n{font-family:'Montserrat',sans-serif;font-size:13px;letter-spacing:.08em;color:var(--silver);min-width:22px}
+.ana-tab:hover{background:rgba(255,255,255,.08)}
+.ana-tab[aria-pressed="true"]{background:rgba(213,221,238,.16);border-color:rgba(213,221,238,.6);color:#fff}
+.ana-tab:focus-visible{outline:2px solid var(--silver);outline-offset:2px}
+.ana-panels{margin-top:18px;min-height:190px}
+.ana-panel{background:rgba(255,255,255,.07);border:1px solid rgba(213,221,238,.22);backdrop-filter:blur(10px);border-radius:18px;padding:22px}
+.ana-panel-en{font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-2)}
+.ana-panel h3{font-size:22px;margin:6px 0 8px;color:#fff}
+.ana-panel p{color:#D5DDEE;font-size:15px}
+.ana-panel-tx{display:inline-block;margin-top:12px;color:#fff;font-weight:500;font-size:15px}
+@media (max-width:960px){.ana-grid{grid-template-columns:1fr}.ana-tabs{flex-direction:row;flex-wrap:wrap}.ana-tab{width:auto;flex:1 1 140px}}
+@media (prefers-reduced-motion:reduce){.ana-layer,.ana-layer .ana-label,.ana-artery{transition:none}.ana-flow{animation:none}}
+.ana-toggle{margin-top:10px;min-height:44px;padding:0 18px;border-radius:999px;border:1px solid rgba(213,221,238,.4);background:transparent;color:#D5DDEE;font:inherit;font-size:14px;cursor:pointer}
+.ana-toggle:hover{color:#fff;border-color:#fff}
+
+/* articles */
+.article-meta{margin-top:18px;font-size:14px;color:var(--muted-2)}
+.keybox{background:#fff;border:1px solid var(--line);border-left:0;border-radius:18px;padding:24px 28px;margin-bottom:8px;box-shadow:0 1px 2px rgba(11,20,46,.04)}
+.keybox h2{margin:0 0 10px !important;font-size:22px !important}
+.keybox ul{margin:0}
+.prose sup a{font-size:11px;text-decoration:none;font-weight:600;padding:0 2px}
+.refs{font-size:14.5px;color:var(--muted);padding-left:22px}
+.refs li{margin-bottom:10px;line-height:1.6}
+.refs li:target{background:var(--silver);border-radius:6px}
+.article-card{text-decoration:none;color:inherit;transition:transform .15s ease,box-shadow .15s ease}
+.article-card:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(11,20,46,.08);color:inherit}
+.article-card .foot span:last-child{color:var(--royal);font-weight:600}
