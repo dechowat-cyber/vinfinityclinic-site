@@ -9,3 +9,8 @@
 - ราคาเริ่มต้น Doublo 2.0 / ฟิลเลอร์ต่อ cc / สกินบูสเตอร์
 - ที่อยู่ เวลาทำการ ลิงก์ Google Maps เลขใบอนุญาตสถานพยาบาล
 - ยืนยันข้อความ: เปิดกล่องตรวจสอบต่อหน้า, สแกนหน้า 3D, ฆสพ. ครอบคลุมเนื้อหาเว็บไซต์
+
+## Local SEO / AI search (branch `seo`)
+- NAP constants live at the top of build.py (address, hours, Google place id). Keep them identical to Google Business Profile and Facebook.
+- New pages: /filler/tear-trough/ and /articles/choosing-filler-clinic-udon/. robots.txt allows search and AI crawlers; llms.txt summarises the clinic for AI assistants.
+- Reviews: the site links to Google and Facebook reviews. To show quotes, add them to REVIEWS in build.py only with the reviewer's consent and after ฆสพ. approval.
