@@ -50,8 +50,9 @@ CLINIC_LD = {
         {"@type": "MedicalProcedure", "name": "ฉีดฟิลเลอร์ (Hyaluronic acid filler)", "url": SITE + "/filler/"},
         {"@type": "MedicalProcedure", "name": "ฟิลเลอร์ใต้ตา (Tear trough filler)", "url": SITE + "/filler/tear-trough/"},
         {"@type": "MedicalProcedure", "name": "สกินบูสเตอร์ (Skin booster)", "url": SITE + "/skin-booster/"},
-        {"@type": "MedicalProcedure", "name": "ยกกระชับด้วยอัลตราซาวด์ (HIFU)", "url": SITE + "/#programs"}],
-    "knowsAbout": ["ฟิลเลอร์", "ฟิลเลอร์ใต้ตา", "สกินบูสเตอร์", "กายวิภาคใบหน้า", "facial anatomy", "hyaluronic acid filler"],
+        {"@type": "MedicalProcedure", "name": "สลายฟิลเลอร์ แก้ฟิลเลอร์ (Filler correction)", "url": SITE + "/filler/dissolve/"},
+        {"@type": "MedicalProcedure", "name": "ยกกระชับด้วยอัลตราซาวด์ HIFU (New Doublo 2.0)", "url": SITE + "/lifting/"}],
+    "knowsAbout": ["ฟิลเลอร์", "ฟิลเลอร์ใต้ตา", "ฟิลเลอร์ปาก", "ฟิลเลอร์คาง", "ฟิลเลอร์ขมับ", "ฟิลเลอร์ร่องแก้ม", "สลายฟิลเลอร์", "ยกกระชับ HIFU", "dermal filler Udon Thani", "สกินบูสเตอร์", "กายวิภาคใบหน้า", "facial anatomy", "hyaluronic acid filler"],
     "areaServed": [{"@type": "City", "name": n} for n in ["อุดรธานี", "หนองคาย", "หนองบัวลำภู", "สกลนคร", "ขอนแก่น", "เลย", "เวียงจันทน์"]],
     "sameAs": ["https://www.facebook.com/Vinfinity.Clinic", "https://www.instagram.com/vinfinityclinic/", MAPS_URL],
     "founder": {"@id": SITE + "/#dr-dechowat"},
@@ -127,12 +128,15 @@ def faq_html(items):
     return "\n".join(f"<details><summary>{q}</summary><p>{a}</p></details>" for q, a in items)
 
 
-def head(title, desc, path, keywords, extra_ld=()):
+HREFLANG = f'\n<link rel="alternate" hreflang="th" href="{SITE}/">\n<link rel="alternate" hreflang="en" href="{SITE}/en/">\n<link rel="alternate" hreflang="x-default" href="{SITE}/">'
+
+
+def head(title, desc, path, keywords, extra_ld=(), lang="th"):
     lds = [CLINIC_LD, DOCTOR_LD, *extra_ld]
     ld = "\n".join(f'<script type="application/ld+json">{json.dumps(x, ensure_ascii=False)}</script>' for x in lds)
     url = SITE + path
     return f"""<!doctype html>
-<html lang="th">
+<html lang="{lang}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -142,7 +146,7 @@ def head(title, desc, path, keywords, extra_ld=()):
 <link rel="canonical" href="{url}">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta property="og:type" content="website">
-<meta property="og:locale" content="th_TH">
+<meta property="og:locale" content="{"en_US" if lang == "en" else "th_TH"}">{HREFLANG if path in ("/", "/en/") else ""}
 <meta property="og:site_name" content="Vinfinity Clinic">
 <meta property="og:title" content="{title}">
 <meta property="og:description" content="{desc}">
@@ -191,7 +195,8 @@ def footer():
 <p><a href="/filler/">ฟิลเลอร์ อุดรธานี</a></p>
 <p><a href="/filler/tear-trough/">ฟิลเลอร์ใต้ตา อุดรธานี</a></p>
 <p><a href="/skin-booster/">สกินบูสเตอร์ อุดรธานี</a></p>
-<p><a href="/#programs">ยกกระชับ New Doublo 2.0</a></p>
+<p><a href="/filler/dissolve/">สลายฟิลเลอร์ แก้ฟิลเลอร์</a></p>
+<p><a href="/lifting/">ยกกระชับ HIFU อุดรธานี</a></p>
 <p><a href="/#programs">The Architect Rebuild</a></p>
 <p><a href="/articles/choosing-filler-clinic-udon/">เลือกคลินิกฟิลเลอร์ในอุดร</a></p>
 <p><a href="/articles/">บทความ Advanced Injection</a></p>
@@ -201,6 +206,7 @@ def footer():
 <p><a href="{LINE}">LINE @vinfinityclinic</a></p>
 <p><a href="{MSG}">Facebook Messenger</a></p>
 <p><a href="tel:{TEL.replace('-', '')}">โทร {TEL}</a></p>
+<p><a href="/en/" hreflang="en">English</a></p>
 </div>
 <div>
 <h4>สาขาอุดรธานี</h4>
@@ -217,7 +223,7 @@ def footer():
 """
 
 
-def build(out, title, desc, path, keywords, body_file, faqs, extra_ld=()):
+def build(out, title, desc, path, keywords, body_file, faqs, extra_ld=(), lang="th"):
     body = (ROOT / "pages" / body_file).read_text(encoding="utf-8")
     for key, part in (("ANATOMY", "_anatomy.html"), ("RESULTS_EYE", "_results_eye.html"),
                       ("RESULTS_LAYERS", "_results_layers.html")):
@@ -226,9 +232,10 @@ def build(out, title, desc, path, keywords, body_file, faqs, extra_ld=()):
             body = body.replace("{{%s}}" % key, f.read_text(encoding="utf-8"))
     body = (body.replace("{{REVIEWS}}", reviews_html()).replace("{{CLINIC_INFO}}", clinic_info_html())
             .replace("{{MAP}}", map_html()))
+    body = body.replace("{{ADDR}}", ADDR_LINE)
     body = body.replace("{{LINE}}", LINE).replace("{{MSG}}", MSG).replace("{{FAQ}}", faq_html(faqs))
     lds = ([faq_ld(faqs)] if faqs else []) + list(extra_ld)
-    html = head(title, desc, path, keywords, lds) + body + footer()
+    html = head(title, desc, path, keywords, lds, lang) + body + footer()
     p = ROOT / out
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(html, encoding="utf-8")
@@ -253,6 +260,26 @@ FILLER_FAQ = [
     ("จะรู้ได้อย่างไรว่าเป็นของแท้", "คลินิกใช้ผลิตภัณฑ์ที่ขึ้นทะเบียนกับ อย. และเปิดกล่องให้ตรวจสอบต่อหน้าก่อนฉีด"),
     ("ฉีดฟิลเลอร์ อุดร ที่ไหนดี ควรดูอะไร", "ควรเลือกสถานพยาบาลที่ได้รับอนุญาต ผู้ฉีดเป็นแพทย์ที่ตรวจสอบรายชื่อกับแพทยสภาได้ ใช้ผลิตภัณฑ์ขึ้นทะเบียน อย. และมีการประเมินก่อนเสนอราคา อ่านเช็กลิสต์ฉบับเต็มได้ในบทความ 7 ข้อที่ควรเช็กก่อนเลือกคลินิกฟิลเลอร์ในอุดร"),
     ("Vinfinity Clinic อุดรธานี อยู่ที่ไหน เปิดกี่โมง", f"คลินิกอยู่ที่ {ADDR_LINE} {HOURS_TEXT} นัดล่วงหน้าทาง LINE @vinfinityclinic หรือโทร {TEL}"),
+]
+LIFT_FAQ = [
+    ("ยกกระชับ อุดรธานี ราคาเท่าไหร่", "New Doublo 2.0 ที่ Vinfinity Clinic ราคาเริ่มต้น 22,222 บาท ราคาจริงขึ้นกับระดับและตำแหน่ง แพทย์แจ้งค่าใช้จ่ายทั้งหมดก่อนเริ่ม"),
+    ("HIFU เจ็บไหม", "อาจรู้สึกร้อนหรือตึงเป็นจังหวะ โดยเฉพาะบริเวณใกล้กระดูก ความรู้สึกขึ้นกับระดับพลังงานและแต่ละคน"),
+    ("ทำ HIFU แล้วเห็นผลเมื่อไหร่", "บางคนรู้สึกกระชับขึ้นหลังทำ แต่ผลจากการสร้างคอลลาเจนใหม่มักค่อย ๆ ชัดขึ้นในช่วงหลายสัปดาห์ถึงไม่กี่เดือน"),
+    ("ยกกระชับแล้วหน้าจะซูบไหม", "แพทย์จะเลือกระดับและหลีกเลี่ยงบริเวณที่ไขมันน้อยหรือแก้มตอบ ถ้าจำเป็นอาจวางแผนเติมโครงด้วยฟิลเลอร์ร่วมด้วย"),
+    ("ต้องพักฟื้นไหม", "ส่วนใหญ่กลับไปใช้ชีวิตได้ทันที อาจมีแดงหรือบวมเล็กน้อยระยะสั้น"),
+]
+DISSOLVE_FAQ = [
+    ("สลายฟิลเลอร์ อุดร ทำได้ทุกชนิดไหม", "เอนไซม์สลายได้เฉพาะฟิลเลอร์ชนิดไฮยาลูรอนิกแอซิด ฟิลเลอร์ชนิดอื่นต้องใช้วิธีต่างออกไป ควรบอกแพทย์ว่าเคยฉีดอะไร"),
+    ("สลายฟิลเลอร์เจ็บไหม", "รู้สึกคล้ายฉีดฟิลเลอร์ อาจบวมหรือแดงเล็กน้อย 1–3 วัน"),
+    ("สลายแล้วฉีดใหม่ได้เมื่อไหร่", "ส่วนใหญ่ควรรอให้บวมยุบและเนื้อเยื่อเข้าที่ประมาณ 2 สัปดาห์ แพทย์จะนัดประเมินก่อนเติมใหม่"),
+    ("ฉีดฟิลเลอร์ที่อื่นมา แก้ที่ Vinfinity ได้ไหม", "ได้ แพทย์จะซักประวัติและประเมินก่อน ถ้ามีข้อมูลผลิตภัณฑ์หรือรูปก่อนฉีดให้นำมาด้วย"),
+    ("ฟิลเลอร์เป็นก้อนหายเองได้ไหม", "บางกรณีบวมหรือก้อนเล็กยุบเองได้ในช่วงแรก ถ้าเป็นนานหรือแข็งขึ้นควรให้แพทย์ประเมิน ส่วนอาการปวดมาก ผิวซีดหรือคล้ำเป็นแถบ ต้องพบแพทย์ทันที"),
+]
+EN_FAQ = [
+    ("Where is Vinfinity Clinic Udon Thani?", f"{ADDR_LINE}, Thailand. Open daily 10:00–19:00, closed on Tuesdays."),
+    ("How much is dermal filler in Udon Thani at Vinfinity?", "Hyaluronic acid filler starts at THB 9,990 per cc. The doctor confirms the full cost after assessment, before treatment."),
+    ("Who performs the injections?", "A physician assesses and injects every patient. The clinic is led by Dechowat Promda, M.D."),
+    ("Can I come from Vientiane or Nong Khai?", "Yes. Book ahead on LINE @vinfinityclinic or Messenger so the doctor can plan your treatment for the day you arrive."),
 ]
 TT_FAQ = [
     ("ฟิลเลอร์ใต้ตา อุดรธานี ราคาเท่าไหร่", "ฟิลเลอร์ที่ Vinfinity Clinic ราคาเริ่มต้น 9,990 บาทต่อ cc ปริมาณที่ใช้ใต้ตาขึ้นกับความลึกของร่องแต่ละคน แพทย์จะแจ้งค่าใช้จ่ายทั้งหมดหลังประเมินก่อนเริ่มทำ"),
@@ -296,6 +323,21 @@ if __name__ == "__main__":
             "url": SITE + "/filler/tear-trough/", "inLanguage": "th", "lastReviewed": "2026-10-03",
             "reviewedBy": {"@id": SITE + "/#dr-dechowat"}, "about": {"@type": "MedicalProcedure", "name": "Tear trough filler",
             "alternateName": "ฟิลเลอร์ใต้ตา", "procedureType": "https://schema.org/NoninvasiveProcedure"}}])
+    build("filler/dissolve/index.html",
+          "สลายฟิลเลอร์ แก้ฟิลเลอร์ อุดรธานี ฟิลเลอร์เป็นก้อน | Vinfinity Clinic",
+          "สลายฟิลเลอร์ แก้ฟิลเลอร์ อุดร ฟิลเลอร์เป็นก้อน เป็นสีฟ้า หรือไหลผิดตำแหน่ง แพทย์ประเมินก่อนวางแผนแก้ไขทุกเคส รับแก้เคสที่ฉีดจากที่อื่น ที่ Vinfinity Clinic อุดรธานี",
+          "/filler/dissolve/", "สลายฟิลเลอร์ อุดร, แก้ฟิลเลอร์ อุดร, ฟิลเลอร์เป็นก้อน, ฟิลเลอร์ไหล, ฟิลเลอร์ใต้ตาเป็นสีฟ้า, hyaluronidase อุดรธานี",
+          "filler-dissolve.html", DISSOLVE_FAQ, [crumb_ld(("ฟิลเลอร์", "/filler/"), ("สลายฟิลเลอร์", "/filler/dissolve/"))])
+    build("lifting/index.html",
+          "ยกกระชับ อุดรธานี HIFU New Doublo 2.0 ราคา | Vinfinity Clinic",
+          "ยกกระชับหน้า อุดร ด้วย HIFU New Doublo 2.0 หลายระดับความลึก ไม่ต้องผ่าตัด แพทย์ประเมินความหย่อนคล้อยก่อนเลือกระดับ ราคาเริ่มต้น 22,222 บาท ที่ Vinfinity Clinic อุดรธานี",
+          "/lifting/", "ยกกระชับ อุดร, ยกกระชับ อุดรธานี, HIFU อุดร, Doublo อุดร, ไฮฟู่ อุดรธานี, ยกกระชับหน้า ไม่ผ่าตัด, หน้าเรียว อุดร",
+          "lifting.html", LIFT_FAQ, [crumb_ld(("ยกกระชับ", "/lifting/"))])
+    build("en/index.html",
+          "Dermal Filler Udon Thani | Vinfinity Clinic, physician-led aesthetic clinic",
+          "Physician-led aesthetic clinic in Udon Thani, Thailand. Hyaluronic acid filler from THB 9,990/cc, tear trough filler, skin boosters and HIFU lifting by Dechowat Promda, M.D. Near Vientiane and Nong Khai.",
+          "/en/", "filler Udon Thani, dermal filler Udon Thani, aesthetic clinic Udon Thani, tear trough filler Thailand, filler near Vientiane",
+          "en.html", EN_FAQ, [crumb_ld(("English", "/en/"))], lang="en")
     a3 = "ฉีดฟิลเลอร์ อุดร ที่ไหนดี 7 ข้อที่ควรเช็กก่อนเลือกคลินิก"
     d3 = "วิธีเลือกคลินิกฟิลเลอร์ในอุดรธานี ตรวจสอบใบอนุญาตสถานพยาบาล รายชื่อแพทย์กับแพทยสภา และเลขทะเบียน อย. ด้วยตัวเอง พร้อมคำถามที่ควรถามแพทย์ก่อนฉีด"
     build("articles/choosing-filler-clinic-udon/index.html", a3 + " | Vinfinity Clinic", d3,
@@ -309,9 +351,9 @@ if __name__ == "__main__":
           "/filler/", "ฟิลเลอร์ อุดร, ฟิลเลอร์ อุดรธานี, ฉีดฟิลเลอร์ อุดร, ฉีดฟิลเลอร์ อุดรธานี, ฟิลเลอร์ ราคา อุดร, ฟิลเลอร์ใต้ตา อุดร, ฟิลเลอร์คาง อุดร, ฟิลเลอร์ปาก อุดร, ฟิลเลอร์ขมับ, ฟิลเลอร์ร่องแก้ม, คลินิกฟิลเลอร์ อุดร",
           "filler.html", FILLER_FAQ, [crumb_ld(("ฟิลเลอร์", "/filler/"))])
     build("skin-booster/index.html",
-          "สกินบูสเตอร์ อุดรธานี ฟื้นฟูคุณภาพผิวจากชั้นลึก | Vinfinity Clinic",
+          "สกินบูสเตอร์ อุดร ฉีดผิวฉ่ำ ฟื้นฟูคุณภาพผิว | Vinfinity Clinic อุดรธานี",
           "สกินบูสเตอร์ที่อุดรธานี ฟื้นฟูความชุ่มชื้น ความแน่น และความกระจ่างใสของผิว วางแผนคอร์สโดยแพทย์ตามสภาพผิว ทำร่วมกับยกกระชับและฟิลเลอร์ได้",
-          "/skin-booster/", "สกินบูสเตอร์ อุดร, สกินบูสเตอร์ อุดรธานี, skin booster อุดร, PN อุดร, ฉีดผิว อุดรธานี, ผิวฉ่ำ อุดร",
+          "/skin-booster/", "สกินบูสเตอร์ อุดร, สกินบูสเตอร์ อุดรธานี, skin booster อุดร, ฉีดผิว อุดร, ฉีดผิวฉ่ำ อุดรธานี, PN อุดร, PDRN อุดร, ผิวฉ่ำ อุดร, ผิวโกลว์",
           "skin-booster.html", BOOSTER_FAQ, [crumb_ld(("สกินบูสเตอร์", "/skin-booster/"))])
     a1 = "ฉีดฟิลเลอร์ให้ปลอดภัย: งานวิจัยปี 2021–2026 บอกอะไรเรา"
     d1 = "สรุปหลักฐานล่าสุดเรื่องความปลอดภัยของฟิลเลอร์ หลอดเลือดกลางใบหน้า เข็มกับแคนนูลา การดูดทดสอบ อัลตราซาวด์ Doppler และการรับมือภาวะหลอดเลือดอุดตัน เรียบเรียงโดย นพ.เดโชวัต พรมดา"
