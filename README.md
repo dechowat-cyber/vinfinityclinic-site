@@ -9,3 +9,8 @@
 - ราคาเริ่มต้น Doublo 2.0 / ฟิลเลอร์ต่อ cc / สกินบูสเตอร์
 - ที่อยู่ เวลาทำการ ลิงก์ Google Maps เลขใบอนุญาตสถานพยาบาล
 - ยืนยันข้อความ: เปิดกล่องตรวจสอบต่อหน้า, สแกนหน้า 3D, ฆสพ. ครอบคลุมเนื้อหาเว็บไซต์
+
+## Before / After (branch `before-after`)
+- Source: tools/make_results.py → pages/_results_eye.html, pages/_results_layers.html. Edit the cases, captions and layer tags there, then run `python3 tools/make_results.py && python3 build.py`.
+- Layer tags per case are a draft — the treating doctor must confirm them.
+- Before going to main: get ฆสพ. approval for the before/after content, and confirm written consent from every patient shown.

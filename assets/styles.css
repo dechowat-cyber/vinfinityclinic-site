@@ -269,3 +269,51 @@ h1,h2,h3{font-weight:500}
 .article-card{text-decoration:none;color:inherit;transition:transform .15s ease,box-shadow .15s ease}
 .article-card:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(11,20,46,.08);color:inherit}
 .article-card .foot span:last-child{color:var(--royal);font-weight:600}
+
+/* ===== Before / After ===== */
+.results,.layer-cases{padding:110px 0}
+.results{background:var(--mist)}
+.results-head{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:end;margin-bottom:44px}
+.results-head .lead{margin:0}
+.ba{position:relative;aspect-ratio:450/574;overflow:hidden;border-radius:18px;background:var(--navy);touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.ba picture,.ba img{width:100%;height:100%;object-fit:cover}
+.ba-before{position:absolute;inset:0;clip-path:inset(0 calc(100% - var(--pos)) 0 0)}
+.ba-handle{position:absolute;top:0;bottom:0;left:var(--pos);width:2px;margin-left:-1px;background:#fff;box-shadow:0 0 0 1px rgba(11,20,46,.15);pointer-events:none}
+.ba-handle::after{content:"";position:absolute;top:50%;left:50%;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;background:rgba(255,255,255,.92) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231E3470' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 6l-6 6 6 6M15 6l6 6-6 6'/%3E%3C/svg%3E") center/22px no-repeat;box-shadow:0 6px 18px rgba(11,20,46,.28)}
+.ba-range{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:ew-resize;-webkit-appearance:none;appearance:none}
+.ba-range:focus-visible{opacity:.01}
+.ba:has(.ba-range:focus-visible){outline:3px solid var(--sapphire);outline-offset:3px}
+.ba-tag{position:absolute;bottom:14px;font:600 10.5px/1 'Montserrat',sans-serif;letter-spacing:.2em;padding:7px 11px;border-radius:999px;pointer-events:none}
+.ba-tag-b{left:14px;background:rgba(255,255,255,.9);color:var(--navy)}
+.ba-tag-a{right:14px;background:var(--royal);color:#fff}
+.ba-no{font:600 11px 'Montserrat',sans-serif;letter-spacing:.2em;color:var(--sapphire)}
+.ba-rail{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:18px}
+.ba-card{margin:0;background:#fff;border:1px solid var(--line);border-radius:22px;padding:10px 10px 16px}
+.ba-card figcaption{display:grid;gap:4px;padding:14px 6px 0;font-size:15px;color:var(--navy)}
+.ba-legal{font-size:13px;color:var(--muted);margin:26px 0 0;max-width:820px}
+.results-cta{display:flex;flex-wrap:wrap;gap:22px;align-items:center;margin-top:30px}
+.results-link{color:var(--royal);font-weight:500;text-decoration:none}
+.lcases{display:grid;grid-template-columns:repeat(6,1fr);gap:22px}
+.lcase{grid-column:span 2;background:#fff;border:1px solid var(--line);border-radius:24px;padding:12px;display:grid;align-content:start}
+.lcase:nth-child(4){grid-column:2/span 2}
+.lcase-body{padding:18px 8px 6px}
+.lcase h3{font-size:20px;font-weight:500;margin:6px 0 4px;color:var(--navy)}
+.lcase p{margin:0 0 14px;color:var(--muted);font-size:15px}
+.lchips{display:flex;flex-wrap:wrap;gap:6px}
+.lchip{display:inline-flex;align-items:center;gap:6px;font:400 12.5px 'Kanit',sans-serif;padding:5px 10px;border-radius:999px;border:1px solid var(--line);color:var(--muted-2);background:transparent}
+.lchip b{font:600 10px 'Montserrat',sans-serif;letter-spacing:.08em}
+.lchip.is-on{background:var(--royal);border-color:var(--royal);color:#fff;cursor:pointer}
+.lchip.is-on:hover{background:var(--sapphire)}
+@media (max-width:1100px){
+  .ba-rail{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -32px;padding:0 32px 8px;scrollbar-width:none}
+  .ba-rail::-webkit-scrollbar{display:none}
+  .ba-card{flex:0 0 min(300px,78vw);scroll-snap-align:start}
+  .lcases{grid-template-columns:repeat(2,1fr)}
+  .lcase,.lcase:nth-child(4){grid-column:auto}
+}
+@media (max-width:760px){
+  .results,.layer-cases{padding:72px 0}
+  .results-head{grid-template-columns:1fr;gap:14px;margin-bottom:28px}
+  .ba-rail{margin:0 -16px;padding:0 16px 8px}
+  .lcases{grid-template-columns:1fr}
+}

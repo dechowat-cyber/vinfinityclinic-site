@@ -88,6 +88,7 @@ def head(title, desc, path, keywords, extra_ld=()):
 <nav class="nav" aria-label="เมนูหลัก">
 <a href="/filler/">ฟิลเลอร์</a>
 <a href="/skin-booster/">สกินบูสเตอร์</a>
+<a href="/#results">เคสจริง</a>
 <a href="/#programs">โปรแกรม</a>
 <a href="/articles/">บทความ</a>
 <a href="/#doctor">แพทย์</a>
@@ -134,9 +135,11 @@ def footer():
 
 def build(out, title, desc, path, keywords, body_file, faqs, extra_ld=()):
     body = (ROOT / "pages" / body_file).read_text(encoding="utf-8")
-    anat = ROOT / "pages" / "_anatomy.html"
-    if "{{ANATOMY}}" in body and anat.exists():
-        body = body.replace("{{ANATOMY}}", anat.read_text(encoding="utf-8"))
+    for key, part in (("ANATOMY", "_anatomy.html"), ("RESULTS_EYE", "_results_eye.html"),
+                      ("RESULTS_LAYERS", "_results_layers.html")):
+        f = ROOT / "pages" / part
+        if "{{%s}}" % key in body and f.exists():
+            body = body.replace("{{%s}}" % key, f.read_text(encoding="utf-8"))
     body = body.replace("{{LINE}}", LINE).replace("{{MSG}}", MSG).replace("{{FAQ}}", faq_html(faqs))
     lds = ([faq_ld(faqs)] if faqs else []) + list(extra_ld)
     html = head(title, desc, path, keywords, lds) + body + footer()
