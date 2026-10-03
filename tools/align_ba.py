@@ -14,7 +14,7 @@ from pathlib import Path
 import cv2
 import numpy as np
 
-CASES = ["06", "09", "15", "25", "13", "14", "16", "20", "26", "27"]
+CASES = __import__("os").environ.get("CASES", "").split() or ["01", "09", "15", "25", "13", "14", "16", "20", "26", "27"]
 # usable photo area inside each composed post (inside rounded corners, above BEFORE/AFTER labels)
 BOX = {"b": (70, 356, 524, 995), "a": (556, 356, 1010, 995)}
 OUT_W, OUT_H = 450, 574
