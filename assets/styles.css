@@ -299,3 +299,5 @@ h1,h2,h3{font-weight:500}
 }
 .rv-src{min-width:0}.rv-src>span:nth-child(2){min-width:0}.rv-src small{overflow-wrap:anywhere}
 @media (max-width:760px){.rv-go{font-size:0}.rv-go::after{content:"→";font-size:18px}.rv-src{padding:18px}}
+@media (max-width:1240px){.nav{gap:18px;font-size:14px}}
+@media (max-width:1100px){.nav a[href="/#programs"],.nav a[href="/#doctor"]{display:none}}
