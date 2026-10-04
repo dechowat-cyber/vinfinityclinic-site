@@ -5,7 +5,7 @@ import { q, one } from "./db";
 import { requireStaff } from "./session";
 import { HEALTH_ROLES, logHealthAccess } from "./health";
 import { consentState } from "./crm";
-import { startSession } from "./photos";
+import { startSession, autoPairs } from "./photos";
 
 /** Opens a photo session and goes straight to the camera. FR-11: no photos without data consent. */
 export async function startPhotoSession(fd: FormData) {
@@ -21,9 +21,11 @@ export async function startPhotoSession(fd: FormData) {
 export async function completePhotoSession(fd: FormData) {
   await requireStaff(HEALTH_ROLES);
   const id = Number(fd.get("id"));
-  const s = await one("update photo_sessions set completed_at = coalesce(completed_at, now()) where id = $1 returning client_id", [id]);
+  const s = await one("update photo_sessions set completed_at = coalesce(completed_at, now()) where id = $1 returning client_id, kind", [id]);
   if (!s) redirect("/staff/clients");
   revalidatePath(`/staff/clients/${s.client_id}`);
+  // after / follow-up: open the before & after slider straight away, paired automatically
+  if (s.kind !== "before" && (await autoPairs(Number(s.client_id))).some((p) => p.after.id === id)) redirect(`/staff/clients/${s.client_id}/compare?b=${id}`);
   redirect(`/staff/clients/${s.client_id}#photos`);
 }
 

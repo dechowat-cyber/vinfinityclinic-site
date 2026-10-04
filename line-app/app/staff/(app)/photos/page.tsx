@@ -1,7 +1,7 @@
 import { q } from "@/lib/db";
 import { requireStaff } from "@/lib/session";
 import { HEALTH_ROLES } from "@/lib/health";
-import { PROTOCOLS, KINDS, followupsDue } from "@/lib/photos";
+import { PROTOCOLS, KINDS, followupsDue, recentPairs } from "@/lib/photos";
 import { thaiDate, thaiTime, todayBkk, bkk, addDays } from "@/lib/time";
 
 export const dynamic = "force-dynamic";
@@ -13,11 +13,13 @@ export default async function Photos() {
   await requireStaff(HEALTH_ROLES);
   const now = new Date();
   const since = bkk(addDays(todayBkk(now), -6), "00:00").toISOString();
-  const [due, recent] = await Promise.all([
+  const [due, recent, pairs] = await Promise.all([
     followupsDue(now),
     q(`select s.*, c.name, c.display_name, (select count(*)::int from photos p where p.session_id = s.id) as n
        from photo_sessions s join clients c on c.id = s.client_id where s.created_at >= $1 order by s.created_at desc limit 100`, [since]),
+    recentPairs(bkk(addDays(todayBkk(now), -29), "00:00").toISOString()),
   ]);
+  const names = new Map(recent.map((r) => [Number(r.client_id), r.name || r.display_name]));
   return (
     <>
       <div><div className="eyebrow">PHOTO STUDIO</div><h1>ภาพก่อน-หลัง</h1></div>
@@ -31,6 +33,17 @@ export default async function Photos() {
                 <td><a className="btn small" href={`/staff/clients/${t.client_id}#photos`}>ถ่ายติดตามผล</a></td></tr>))}</tbody></table>}
         <p className="muted" style={{ fontSize: 13 }}>นัดลูกค้ามาถ่ายพร้อมนัดติดตามอาการ ภาพจะซ้อนเงากับชุด “ก่อนทำ” ให้อัตโนมัติ</p>
       </section>
+      {pairs.length > 0 && <section className="card">
+        <div className="eyebrow">BEFORE &amp; AFTER อัตโนมัติ · 30 วันล่าสุด</div>
+        <div className="ba-grid">{pairs.map((p) => {
+          const k = p.angles[0];
+          return (
+            <a key={p.after.id} href={`/staff/clients/${p.clientId}/compare?b=${p.after.id}`} className="ba-card">
+              <div><img src={`/api/staff/photo/${p.before.shots[k]}`} alt="ก่อน" loading="lazy" /><img src={`/api/staff/photo/${p.after.shots[k]}`} alt="หลัง" loading="lazy" /></div>
+              <small><b>{names.get(p.clientId) || `#${p.clientId}`}</b> · {KINDS[p.after.kind]} · {thaiDate(new Date(p.after.created_at))}</small>
+            </a>);
+        })}</div>
+      </section>}
       <table className="t">
         <thead><tr><th>เวลา</th><th>ลูกค้า</th><th>ชุด</th><th>ภาพ</th><th>สถานะ</th></tr></thead>
         <tbody>

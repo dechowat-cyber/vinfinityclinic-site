@@ -147,3 +147,47 @@ export async function followupsDue(now = new Date()) {
   const seen = new Set<number>();
   return out.reverse().filter((t) => !seen.has(Number(t.client_id)) && seen.add(Number(t.client_id)));
 }
+
+export type Pair = { before: PhotoSession; after: PhotoSession; angles: string[] };
+
+/** Angles both sessions have, in protocol order (the after session's protocol first). */
+export function sharedAngles(a: PhotoSession, b: PhotoSession) {
+  const order = [...new Set([...(PROTOCOLS[b.protocol]?.angles ?? []), ...(PROTOCOLS[a.protocol]?.angles ?? [])].map((x) => x.key))];
+  return order.filter((k) => a.shots[k] && b.shots[k]);
+}
+
+/**
+ * The "before" that an after / follow-up session should be compared with: the latest before session
+ * taken ahead of the treatment it belongs to (or ahead of the session itself) that shares at least one angle.
+ */
+export function baselineFor(s: PhotoSession, all: PhotoSession[], txDone?: string | null) {
+  const cutoff = new Date(txDone && new Date(txDone) < new Date(s.created_at) ? txDone : s.created_at).getTime();
+  return all
+    .filter((b) => b.kind === "before" && b.id !== s.id && new Date(b.created_at).getTime() <= cutoff && sharedAngles(b, s).length > 0)
+    .sort((x, y) => new Date(y.created_at).getTime() - new Date(x.created_at).getTime())[0] ?? null;
+}
+
+/** Automatic before & after pairs for a client, newest after first. */
+export async function autoPairs(clientId: number): Promise<Pair[]> {
+  const all = await sessionsFor(clientId, 100);
+  const tx = await q("select s.id, t.done_at from photo_sessions s join treatments t on t.id = s.treatment_id where s.client_id = $1", [clientId]);
+  const done = new Map(tx.map((r) => [Number(r.id), new Date(r.done_at).toISOString()]));
+  const out: Pair[] = [];
+  for (const s of all) {
+    if (s.kind === "before" || s.taken === 0) continue;
+    const b = baselineFor(s, all, done.get(s.id));
+    if (b) out.push({ before: b, after: s, angles: sharedAngles(b, s) });
+  }
+  return out;
+}
+
+/** Latest pair per client across the clinic (for the Photo studio overview). */
+export async function recentPairs(since: string, limit = 24) {
+  const ids = await q(`select distinct client_id from photo_sessions where kind <> 'before' and created_at >= $1 limit $2`, [since, limit]);
+  const out: (Pair & { clientId: number })[] = [];
+  for (const r of ids) {
+    const p = (await autoPairs(Number(r.client_id)))[0];
+    if (p) out.push({ ...p, clientId: Number(r.client_id) });
+  }
+  return out.sort((a, b) => new Date(b.after.created_at).getTime() - new Date(a.after.created_at).getTime());
+}

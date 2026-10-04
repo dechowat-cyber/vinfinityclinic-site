@@ -4,7 +4,8 @@ import { requireStaff, ROLES } from "@/lib/session";
 import { canSeeHealth, logHealthAccess, HEALTH_LABELS, HEALTH_FIELDS } from "@/lib/health";
 import { saveConsult, savePlan, decideDiscount, sendPlan, markDone, openIssue } from "@/lib/actions2";
 import { thaiDate, thaiTime } from "@/lib/time";
-import { PROTOCOLS, KINDS, sessionsFor, suggestKind } from "@/lib/photos";
+import { PROTOCOLS, KINDS, sessionsFor, suggestKind, autoPairs, angleLabel } from "@/lib/photos";
+import { BeforeAfter } from "../../before-after";
 import { startPhotoSession } from "@/lib/photoActions";
 import { PlanBuilder } from "./plan";
 
@@ -21,7 +22,7 @@ export default async function ClientPage({ params, searchParams }: { params: Pro
   const health = canSeeHealth(me);
   if (health) await logHealthAccess(me.id, id, "client_page");
   const photoMsg = (await searchParams).photo;
-  const [lead, appts, consults, plans, treatments, photos, catalog, consent, touches, sessions, kind] = await Promise.all([
+  const [lead, appts, consults, plans, treatments, photos, catalog, consent, touches, sessions, kind, pairs] = await Promise.all([
     one("select * from leads where client_id = $1 order by id desc limit 1", [id]),
     q("select * from appointments where client_id = $1 order by start_at desc limit 10", [id]),
     health ? q("select * from consults where client_id = $1 order by id desc limit 5", [id]) : Promise.resolve([]),
@@ -33,7 +34,10 @@ export default async function ClientPage({ params, searchParams }: { params: Pro
     q("select direction, kind, body, created_at from touchpoints where client_id = $1 order by created_at desc limit 15", [id]),
     health ? sessionsFor(id) : Promise.resolve([]),
     health ? suggestKind(id) : Promise.resolve("before"),
+    health ? autoPairs(id) : Promise.resolve([]),
   ]);
+  const pair = pairs[0];
+  const day = (d: string) => thaiDate(new Date(d)).replace(/^วัน\S+ /, "");
   const consult = consults[0] ?? null;
   const h = (c.health || {}) as Record<string, string>;
   const legacy = photos.filter((p) => !p.session_id && p.angle !== "care").slice(0, 10);
@@ -77,6 +81,11 @@ export default async function ClientPage({ params, searchParams }: { params: Pro
           <div className="eyebrow">PHOTO STUDIO · ภาพมาตรฐาน</div>
           {sessions.length > 1 && <a className="btn ghost small" href={`/staff/clients/${id}/compare`}>เปรียบเทียบก่อน-หลัง</a>}
         </div>
+        {pair && <div className="ba-inline">
+          <div className="eyebrow" style={{ margin: "12px 0 8px" }}>BEFORE &amp; AFTER ล่าสุด · {KINDS[pair.after.kind]} เทียบกับก่อนทำ {day(pair.before.created_at)}{pairs.length > 1 ? ` · มีอีก ${pairs.length - 1} คู่` : ""}</div>
+          <BeforeAfter key={`${pair.before.id}-${pair.after.id}`} beforeLabel={day(pair.before.created_at)} afterLabel={day(pair.after.created_at)}
+            angles={pair.angles.map((k) => ({ key: k, label: angleLabel(k), before: pair.before.shots[k], after: pair.after.shots[k] }))} />
+        </div>}
         {photoMsg === "consent" && <p className="err">ลูกค้ายังไม่ยินยอมให้เก็บข้อมูล ถ่ายภาพไม่ได้</p>}
         <form action={startPhotoSession} className="row" style={{ margin: "12px 0 4px" }}>
           <input type="hidden" name="client_id" value={id} />

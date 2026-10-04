@@ -62,3 +62,31 @@ test("follow-up photo due at D14, cleared by a follow-up session", async () => {
   // D30 comes round again
   assert.equal((await followupsDue(new Date("2026-11-04T03:00:00Z"))).find((t) => Number(t.client_id) === c.id)!.step, 30);
 });
+
+test("auto before & after: each after/follow-up pairs with the before of its course", async () => {
+  const { autoPairs } = await import("../lib/photos");
+  const c = await upsertClientByLine("UPH4", {});
+  const at = async (id: number, iso: string) => {
+    await q("update photo_sessions set created_at = $2 where id = $1", [id, iso]);
+    await q("update photos set created_at = $2 where session_id = $1", [id, iso]);
+  };
+  // course 1: before (Jan) → treatment → follow-up (Feb)
+  const b1 = await startSession({ clientId: c.id, kind: "before", protocol: "face5", staffId: 1 });
+  await shoot(b1, "front"); await shoot(b1, "left45"); await at(b1, "2026-01-10T03:00:00Z");
+  const f1 = await startSession({ clientId: c.id, kind: "followup", protocol: "face5", staffId: 1 });
+  await shoot(f1, "front"); await at(f1, "2026-02-10T03:00:00Z");
+  // course 2: new before (Mar) → treatment → after the same day
+  const b2 = await startSession({ clientId: c.id, kind: "before", protocol: "eyes", staffId: 1 });
+  await shoot(b2, "front"); await shoot(b2, "eye_up"); await at(b2, "2026-03-01T03:00:00Z");
+  const tx = (await q("insert into treatments(client_id, name, done_at) values ($1,'ฟิลเลอร์ใต้ตา','2026-03-01T04:00:00Z') returning id", [c.id]))[0].id;
+  const a2 = await startSession({ clientId: c.id, kind: "after", protocol: "eyes", staffId: 1 });
+  await shoot(a2, "eye_up"); await shoot(a2, "front"); await at(a2, "2026-03-01T05:00:00Z");
+  assert.equal(Number((await q("select treatment_id from photo_sessions where id = $1", [a2]))[0].treatment_id), Number(tx));
+  // an empty session never pairs
+  await startSession({ clientId: c.id, kind: "followup", protocol: "lips", staffId: 1 });
+
+  const pairs = await autoPairs(c.id);
+  assert.deepEqual(pairs.map((p) => [p.before.id, p.after.id]), [[b2, a2], [b1, f1]]);
+  assert.deepEqual(pairs[0].angles, ["front", "eye_up"]); // after's protocol order, shared angles only
+  assert.deepEqual(pairs[1].angles, ["front"]);
+});
