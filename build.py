@@ -5,7 +5,7 @@ import json, pathlib
 
 ROOT = pathlib.Path(__file__).parent
 SITE = "https://vinfinityclinic.com"
-LINE = "https://line.me/R/ti/p/@vinfinityclinic"
+LINE = "https://line.me/R/ti/p/@230eeqvl"
 MSG = "https://m.me/Vinfinity.Clinic"
 TEL = "082-462-2963"
 # NAP — keep identical everywhere (site, Google Business Profile, Facebook)
@@ -116,7 +116,7 @@ def clinic_info_html():
     return f"""<div><small>ที่อยู่</small><b>{ADDR_LINE}</b></div>
 <div><small>เวลาทำการ</small><b>{HOURS_TEXT}</b></div>
 <div><small>โทร</small><a href="tel:{TEL.replace('-', '')}"><b>{TEL}</b></a></div>
-<div><small>LINE</small><a href="{LINE}"><b>@vinfinityclinic</b></a></div>
+<div><small>LINE</small><a href="{LINE}"><b>@230eeqvl</b></a></div>
 <a class="btn btn-navy" style="margin-top:auto" href="{MAPS_URL}" target="_blank" rel="noopener">เปิดแผนที่ Google Maps</a>"""
 
 
@@ -202,7 +202,7 @@ def footer():
 </div>
 <div>
 <h4>ติดต่อ</h4>
-<p><a href="{LINE}">LINE @vinfinityclinic</a></p>
+<p><a href="{LINE}">LINE @230eeqvl</a></p>
 <p><a href="{MSG}">Facebook Messenger</a></p>
 <p><a href="tel:{TEL.replace('-', '')}">โทร {TEL}</a></p>
 <p><a href="/en/" hreflang="en">English</a></p>
@@ -244,8 +244,8 @@ HOME_FAQ = [
     ("ฟิลเลอร์กับสกินบูสเตอร์ต่างกันอย่างไร", "ฟิลเลอร์ใช้เติมหรือปรับโครงสร้างในตำแหน่งที่ต้องการ ส่วนสกินบูสเตอร์ใช้ฟื้นฟูคุณภาพผิว เช่น ความชุ่มชื้นและความแน่น ทั้งสองอย่างมักใช้ร่วมกันในแผนการรักษาแบบเป็นชั้น"),
     ("ต้องทำกี่ครั้งถึงจะเห็นผล", "ขึ้นกับหัตถการและสภาพผิวของแต่ละคน แพทย์จะแจ้งจำนวนครั้งและระยะห่างหลังการประเมิน"),
     ("ผลลัพธ์อยู่ได้นานแค่ไหน", "ขึ้นกับชนิดผลิตภัณฑ์ ตำแหน่ง และการเผาผลาญของแต่ละบุคคล แพทย์จะแนะนำช่วงเวลานัดติดตามผลให้เหมาะกับแต่ละคน"),
-    ("นัดปรึกษาอย่างไร", "ทัก LINE @vinfinityclinic หรือ Facebook Messenger ส่งรูปหน้าตรงและเรื่องที่กังวล ทีมจะนัดเวลาประเมินกับแพทย์ให้"),
-    ("Vinfinity Clinic อุดรธานี อยู่ที่ไหน เปิดกี่โมง", f"คลินิกอยู่ที่ {ADDR_LINE} {HOURS_TEXT} โทร {TEL} หรือนัดทาง LINE @vinfinityclinic"),
+    ("นัดปรึกษาอย่างไร", "ทัก LINE @230eeqvl หรือ Facebook Messenger ส่งรูปหน้าตรงและเรื่องที่กังวล ทีมจะนัดเวลาประเมินกับแพทย์ให้"),
+    ("Vinfinity Clinic อุดรธานี อยู่ที่ไหน เปิดกี่โมง", f"คลินิกอยู่ที่ {ADDR_LINE} {HOURS_TEXT} โทร {TEL} หรือนัดทาง LINE @230eeqvl"),
     ("มีสาขาที่ลาวไหม", "มีสาขาเวียงจันทน์ สปป.ลาว และสาขาอุดรธานี ลูกค้าจากลาวสามารถนัดล่วงหน้าเพื่อเดินทางมาทำที่อุดรธานีได้"),
 ]
 FILLER_FAQ = [
@@ -256,7 +256,7 @@ FILLER_FAQ = [
     ("ถ้าไม่พอใจผลลัพธ์แก้ไขได้ไหม", "ฟิลเลอร์ชนิดไฮยาลูรอนิกแอซิดสามารถสลายได้ด้วยเอนไซม์โดยแพทย์ ควรปรึกษาแพทย์เพื่อประเมินก่อน"),
     ("จะรู้ได้อย่างไรว่าเป็นของแท้", "คลินิกใช้ผลิตภัณฑ์ที่ขึ้นทะเบียนกับ อย. และเปิดกล่องให้ตรวจสอบต่อหน้าก่อนฉีด"),
     ("ฉีดฟิลเลอร์ อุดร ที่ไหนดี ควรดูอะไร", "ควรเลือกสถานพยาบาลที่ได้รับอนุญาต ผู้ฉีดเป็นแพทย์ที่ตรวจสอบรายชื่อกับแพทยสภาได้ ใช้ผลิตภัณฑ์ขึ้นทะเบียน อย. และมีการประเมินก่อนเสนอราคา อ่านเช็กลิสต์ฉบับเต็มได้ในบทความ 7 ข้อที่ควรเช็กก่อนเลือกคลินิกฟิลเลอร์ในอุดร"),
-    ("Vinfinity Clinic อุดรธานี อยู่ที่ไหน เปิดกี่โมง", f"คลินิกอยู่ที่ {ADDR_LINE} {HOURS_TEXT} นัดล่วงหน้าทาง LINE @vinfinityclinic หรือโทร {TEL}"),
+    ("Vinfinity Clinic อุดรธานี อยู่ที่ไหน เปิดกี่โมง", f"คลินิกอยู่ที่ {ADDR_LINE} {HOURS_TEXT} นัดล่วงหน้าทาง LINE @230eeqvl หรือโทร {TEL}"),
 ]
 LIFT_FAQ = [
     ("ยกกระชับ อุดรธานี ราคาเท่าไหร่", "New Doublo 2.0 ที่ Vinfinity Clinic ราคาเริ่มต้น 22,222 บาท ราคาจริงขึ้นกับระดับและตำแหน่ง แพทย์แจ้งค่าใช้จ่ายทั้งหมดก่อนเริ่ม"),
@@ -276,7 +276,7 @@ EN_FAQ = [
     ("Where is Vinfinity Clinic Udon Thani?", f"{ADDR_LINE}, Thailand. Open daily 10:00–19:00, closed on Tuesdays."),
     ("How much is dermal filler in Udon Thani at Vinfinity?", "Hyaluronic acid filler starts at THB 9,990 per cc. The doctor confirms the full cost after assessment, before treatment."),
     ("Who performs the injections?", "A physician assesses and injects every patient. The clinic is led by Dechowat Promda, M.D."),
-    ("Can I come from Vientiane or Nong Khai?", "Yes. Book ahead on LINE @vinfinityclinic or Messenger so the doctor can plan your treatment for the day you arrive."),
+    ("Can I come from Vientiane or Nong Khai?", "Yes. Book ahead on LINE @230eeqvl or Messenger so the doctor can plan your treatment for the day you arrive."),
 ]
 TT_FAQ = [
     ("ฟิลเลอร์ใต้ตา อุดรธานี ราคาเท่าไหร่", "ฟิลเลอร์ที่ Vinfinity Clinic ราคาเริ่มต้น 9,990 บาทต่อ cc ปริมาณที่ใช้ใต้ตาขึ้นกับความลึกของร่องแต่ละคน แพทย์จะแจ้งค่าใช้จ่ายทั้งหมดหลังประเมินก่อนเริ่มทำ"),
@@ -307,7 +307,7 @@ def article_ld(path, headline, desc, cites):
 if __name__ == "__main__":
     build("index.html",
           "ฟิลเลอร์ อุดร สกินบูสเตอร์ ยกกระชับ อุดรธานี | Vinfinity Clinic โดย นพ.เดโชวัต",
-          "Vinfinity Clinic อุดรธานี คลินิกฟิลเลอร์ สกินบูสเตอร์ และยกกระชับในตัวเมืองอุดร ออกแบบการรักษาเป็นชั้นเฉพาะใบหน้า แพทย์ประเมินและฉีดเองทุกเคส เปิด 10:00–19:00 (ปิดวันอังคาร) นัดทาง LINE @vinfinityclinic",
+          "Vinfinity Clinic อุดรธานี คลินิกฟิลเลอร์ สกินบูสเตอร์ และยกกระชับในตัวเมืองอุดร ออกแบบการรักษาเป็นชั้นเฉพาะใบหน้า แพทย์ประเมินและฉีดเองทุกเคส เปิด 10:00–19:00 (ปิดวันอังคาร) นัดทาง LINE @230eeqvl",
           "/", "ฟิลเลอร์ อุดร, ฟิลเลอร์ อุดรธานี, สกินบูสเตอร์ อุดร, สกินบูสเตอร์ อุดรธานี, คลินิกความงาม อุดรธานี, ยกกระชับ อุดร, Doublo อุดร, หมอบาส Vinfinity",
           "home.html", HOME_FAQ)
     build("filler/tear-trough/index.html",

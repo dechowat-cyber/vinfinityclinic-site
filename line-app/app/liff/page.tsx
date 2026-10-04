@@ -59,7 +59,7 @@ export default function Liff() {
     return { ok: res.ok, status: res.status, ...j };
   }, [token, devUser]);
 
-  if (fatal) return <main className="liff"><div className="done"><div className="big">{fatal}</div><a className="btn" href="https://line.me/R/ti/p/@vinfinityclinic">เปิด LINE @vinfinityclinic</a></div></main>;
+  if (fatal) return <main className="liff"><div className="done"><div className="big">{fatal}</div><a className="btn" href="https://line.me/R/ti/p/@230eeqvl">เปิด LINE Vinfinity Clinic</a></div></main>;
   if (!ready) return <main className="liff"><div className="done muted">กำลังโหลด…</div></main>;
   return view === "my" ? <My api={api} onBook={() => setView("book")} /> : <Book api={api} src={src} onMy={() => setView("my")} />;
 }
