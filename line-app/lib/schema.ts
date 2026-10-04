@@ -212,4 +212,24 @@ create table if not exists issues (
   created_at timestamptz not null default now(),
   closed_at timestamptz
 );
+-- ---------- Photo studio (Next Motion style): sessions, protocols, ghost overlay ----------
+create table if not exists photo_sessions (
+  id bigserial primary key,
+  client_id bigint not null references clients(id),
+  appointment_id bigint,
+  consult_id bigint,
+  treatment_id bigint,
+  kind text not null default 'before',
+  protocol text not null default 'face5',
+  note text,
+  created_by bigint,
+  created_at timestamptz not null default now(),
+  completed_at timestamptz
+);
+create index if not exists photo_sessions_client on photo_sessions(client_id, created_at desc);
+alter table photos add column if not exists session_id bigint;
+alter table photos add column if not exists width int;
+alter table photos add column if not exists height int;
+alter table photos add column if not exists meta jsonb;
+create index if not exists photos_session on photos(session_id);
 `;

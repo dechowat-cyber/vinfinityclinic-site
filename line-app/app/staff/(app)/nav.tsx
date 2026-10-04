@@ -7,6 +7,7 @@ const LINKS = [
   { href: "/staff/leads", label: "Leads / แชท" },
   { href: "/staff/appointments", label: "นัดหมาย" },
   { href: "/staff/clients", label: "ลูกค้า" },
+  { href: "/staff/photos", label: "ภาพก่อน-หลัง" },
   { href: "/staff/care", label: "ดูแลหลังทำ" },
   { href: "/staff/links", label: "ลิงก์ช่องทาง" },
   { href: "/staff/catalog", label: "ราคากลาง" },

@@ -3,8 +3,9 @@ import { q, one } from "@/lib/db";
 import { requireStaff, ROLES } from "@/lib/session";
 import { canSeeHealth, logHealthAccess, HEALTH_LABELS, HEALTH_FIELDS } from "@/lib/health";
 import { saveConsult, savePlan, decideDiscount, sendPlan, markDone, openIssue } from "@/lib/actions2";
-import { thaiDate, thaiTime, parts } from "@/lib/time";
-import { PhotoCapture } from "./photos";
+import { thaiDate, thaiTime } from "@/lib/time";
+import { PROTOCOLS, KINDS, sessionsFor, suggestKind } from "@/lib/photos";
+import { startPhotoSession } from "@/lib/photoActions";
 import { PlanBuilder } from "./plan";
 
 export const dynamic = "force-dynamic";
@@ -12,28 +13,30 @@ export const dynamic = "force-dynamic";
 const fmt = (d: string | Date) => `${thaiDate(new Date(d))} ${thaiTime(new Date(d))}`;
 const PLAN_TH: Record<string, string> = { draft: "ร่าง", sent: "ส่งการ์ดแล้ว", booked: "จองแล้ว", done: "ทำแล้ว" };
 
-export default async function ClientPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function ClientPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ photo?: string }> }) {
   const me = await requireStaff();
   const id = Number((await params).id);
   const c = await one(`select c.*, r.name as ref_name, r.display_name as ref_display from clients c left join clients r on r.id = c.referred_by where c.id = $1`, [id]);
   if (!c) notFound();
   const health = canSeeHealth(me);
   if (health) await logHealthAccess(me.id, id, "client_page");
-  const [lead, appts, consults, plans, treatments, photos, catalog, consent, touches] = await Promise.all([
+  const photoMsg = (await searchParams).photo;
+  const [lead, appts, consults, plans, treatments, photos, catalog, consent, touches, sessions, kind] = await Promise.all([
     one("select * from leads where client_id = $1 order by id desc limit 1", [id]),
     q("select * from appointments where client_id = $1 order by start_at desc limit 10", [id]),
     health ? q("select * from consults where client_id = $1 order by id desc limit 5", [id]) : Promise.resolve([]),
     q("select * from plans where client_id = $1 order by id desc limit 10", [id]),
     q("select * from treatments where client_id = $1 order by done_at desc limit 20", [id]),
-    health ? q("select id, angle, created_at from photos where client_id = $1 order by created_at desc limit 60", [id]) : Promise.resolve([]),
+    health ? q("select id, angle, session_id, created_at from photos where client_id = $1 order by created_at desc limit 60", [id]) : Promise.resolve([]),
     q("select id, name, unit, price::float as price, category from catalog where active order by category, name"),
     q(`select distinct on (type) type, granted, version, created_at from consents where client_id = $1 order by type, created_at desc`, [id]),
     q("select direction, kind, body, created_at from touchpoints where client_id = $1 order by created_at desc limit 15", [id]),
+    health ? sessionsFor(id) : Promise.resolve([]),
+    health ? suggestKind(id) : Promise.resolve("before"),
   ]);
   const consult = consults[0] ?? null;
   const h = (c.health || {}) as Record<string, string>;
-  const latest: Record<string, { id: number; at: string }> = {};
-  for (const p of photos) if (!latest[p.angle]) latest[p.angle] = { id: Number(p.id), at: parts(new Date(p.created_at)).date.split("-").reverse().join("/") };
+  const legacy = photos.filter((p) => !p.session_id && p.angle !== "care").slice(0, 10);
   const care = photos.filter((p) => p.angle === "care").slice(0, 6);
   const dataOk = consent.find((x) => x.type === "data")?.granted === true;
 
@@ -69,7 +72,33 @@ export default async function ClientPage({ params }: { params: Promise<{ id: str
         </div>
       ) : <div className="card muted">ข้อมูลสุขภาพ ภาพ และบันทึกการปรึกษา เปิดดูได้เฉพาะแพทย์ ผู้ช่วยแพทย์ ที่ปรึกษา และผู้จัดการสาขา ({ROLES[me.role]} ดูไม่ได้)</div>}
 
-      {health && dataOk && <section className="card"><div className="eyebrow" style={{ marginBottom: 12 }}>ภาพมาตรฐาน 5 มุม</div><PhotoCapture clientId={id} consultId={consult?.id ?? null} latest={latest} /></section>}
+      {health && dataOk && <section className="card" id="photos">
+        <div className="row" style={{ justifyContent: "space-between" }}>
+          <div className="eyebrow">PHOTO STUDIO · ภาพมาตรฐาน</div>
+          {sessions.length > 1 && <a className="btn ghost small" href={`/staff/clients/${id}/compare`}>เปรียบเทียบก่อน-หลัง</a>}
+        </div>
+        {photoMsg === "consent" && <p className="err">ลูกค้ายังไม่ยินยอมให้เก็บข้อมูล ถ่ายภาพไม่ได้</p>}
+        <form action={startPhotoSession} className="row" style={{ margin: "12px 0 4px" }}>
+          <input type="hidden" name="client_id" value={id} />
+          <select name="kind" className="inp" defaultValue={kind}>{Object.entries(KINDS).map(([k, l]) => <option key={k} value={k}>{l}</option>)}</select>
+          <select name="protocol" className="inp" defaultValue="face5">{Object.entries(PROTOCOLS).map(([k, p]) => <option key={k} value={k}>{p.label} · {p.angles.length} ภาพ</option>)}</select>
+          <input name="note" className="inp" placeholder="หมายเหตุ เช่น หลังฉีด 1 cc" style={{ flex: 1, minWidth: 160 }} />
+          <button className="btn">เปิดกล้อง</button>
+        </form>
+        {sessions.length === 0 ? <p className="muted" style={{ fontSize: 14 }}>ยังไม่มีชุดภาพ · ถ่ายชุด “ก่อนทำ” ก่อนเริ่มหัตถการทุกครั้ง</p> :
+          <ul className="sessions">{sessions.map((s) => (
+            <li key={s.id}>
+              <div className="row" style={{ justifyContent: "space-between" }}>
+                <span><b>{KINDS[s.kind] ?? s.kind}</b> · {fmt(s.created_at)} · {PROTOCOLS[s.protocol]?.label ?? s.protocol} · {s.taken}/{s.expected}{s.note ? ` · ${s.note}` : ""}</span>
+                {s.completed_at ? <span className="tag ok">บันทึกแล้ว</span> : <a className="btn small" href={`/staff/clients/${id}/capture?session=${s.id}`}>ถ่ายต่อ</a>}
+              </div>
+              <div className="photos">{(PROTOCOLS[s.protocol]?.angles ?? []).map((a) => s.shots[a.key]
+                ? <a key={a.key} className="shot" href={`/api/staff/photo/${s.shots[a.key]}`} target="_blank"><img src={`/api/staff/photo/${s.shots[a.key]}`} alt={a.label} loading="lazy" /><small>{a.label}</small></a>
+                : <span key={a.key} className="shot"><span className="ph">–</span><small>{a.label}</small></span>)}</div>
+            </li>))}</ul>}
+        {legacy.length > 0 && <><div className="eyebrow" style={{ marginTop: 14 }}>ภาพก่อนมีระบบชุดภาพ</div>
+          <div className="photos" style={{ marginTop: 8 }}>{legacy.map((p) => <a key={p.id} className="shot" href={`/api/staff/photo/${p.id}`} target="_blank"><img src={`/api/staff/photo/${p.id}`} alt={p.angle} loading="lazy" /><small>{p.angle} · {fmt(p.created_at)}</small></a>)}</div></>}
+      </section>}
       {health && care.length > 0 && <section className="card"><div className="eyebrow">รูปอาการหลังทำที่ลูกค้าส่งมา</div>
         <div className="photos" style={{ marginTop: 10 }}>{care.map((p) => <a key={p.id} className="shot" href={`/api/staff/photo/${p.id}`} target="_blank"><img src={`/api/staff/photo/${p.id}`} alt="รูปอาการ" /><small>{fmt(p.created_at)}</small></a>)}</div></section>}
 

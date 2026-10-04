@@ -37,6 +37,15 @@ plan follow-up D2 (A09), D-1 reminder 18:00 and the 20:00 unconfirmed list. Ever
 GitHub Actions (`.github/workflows/line-tick.yml`) calls it without a secret (throttled, returns no details); Vercel cron with CRON_SECRET gets the summary.
 Settings → kill switch pauses all automatic messages. Aftercare stays off until a doctor approves the texts.
 
+## Photo studio (Next Motion style)
+Client page → **PHOTO STUDIO** → choose ก่อนทำ / หลังทำทันที / ติดตามผล and a protocol (face 5 angles, under-eye, lips/chin, jaw/neck) → **เปิดกล้อง**.
+- Live camera on the clinic iPad (`/staff/clients/[id]/capture`). Every shot is stored as a 3:4 crop, so the **ghost** of the earlier photo of the same angle (taken from the latest earlier "before" session) lines up 1:1. Opacity slider, alignment guides, 3-second timer, switch camera; Bluetooth shutter remotes (Enter / space / volume-up) work. Hold "กดค้างเพื่อเทียบ" to flick between the new shot and the reference.
+- Each session links to today's appointment, the latest consult and (after / follow-up) the latest treatment. A retake replaces the shot while the session is open; **บันทึกชุดภาพ** locks it. Empty sessions can be discarded.
+- `/staff/clients/[id]/compare`: before vs after per angle, as a wipe or side by side.
+- Today board: column **ภาพ** (no before photos yet = red) and a KPI for follow-up shots due at D14 / D30 / D90. The list is under **ภาพก่อน-หลัง** (`/staff/photos`).
+- Photos stay in Postgres (never the device gallery). The API refuses uploads without data consent (FR-11), and every capture, view and compare is written to `health_access`.
+- Safari needs camera permission for the app domain (HTTPS). Use the same backdrop, light and distance every time.
+
 ## Notes
 - Consent text is a draft (`consentVersion`), pending legal/doctor review.
 - Pushes count against the OA plan quota; reminders are D-1 only. Check the plan before launch.
