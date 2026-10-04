@@ -32,7 +32,7 @@ CLINIC_LD = {
     "alternateName": "วินฟินิตี้ คลินิกเวชกรรม",
     "slogan": "Infinite Beauty, Precisely",
     "url": SITE + "/",
-    "image": SITE + "/assets/img/reception.jpg",
+    "image": SITE + "/assets/img/clinic-lounge.jpg",
     "logo": SITE + "/assets/vinfinity-logo-stacked.png",
     "telephone": "+66824622963",
     "priceRange": "฿฿฿",
