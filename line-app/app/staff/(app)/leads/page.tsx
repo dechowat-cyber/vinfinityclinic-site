@@ -29,6 +29,7 @@ export default async function Leads({ searchParams }: { searchParams: Promise<{ 
      order by (l.replied_at is null or l.replied_at < l.last_inbound_at) desc, l.last_inbound_at desc nulls last limit 200`,
     s && s !== "all" ? [s] : []);
   const waiting = rows.filter((r) => r.last_inbound_at && (!r.replied_at || new Date(r.replied_at) < new Date(r.last_inbound_at)));
+  const byStatus = await q(`select status, count(*)::int n from leads where created_at > now() - interval '30 days' group by 1`);
   const bySource = await q(`select coalesce(source,'ไม่ทราบ') src, count(*)::int n, count(*) filter (where status = 'Consult-Booked')::int booked
                             from leads where created_at > now() - interval '30 days' group by 1 order by 2 desc`);
 
@@ -44,6 +45,7 @@ export default async function Leads({ searchParams }: { searchParams: Promise<{ 
         <div className="kpi"><b>{waiting.length}</b><small>รอตอบ</small></div>
         {bySource.slice(0, 3).map((b) => <div className="kpi" key={b.src}><b>{b.n}</b><small>{b.src} · นัดแล้ว {b.booked} (30 วัน)</small></div>)}
       </div>
+      <div className="row">{STATUSES.map((x) => <span key={x} className="tag">{TH[x]} {byStatus.find((b) => b.status === x)?.n ?? 0}</span>)}<small className="muted">(lead ใหม่ 30 วัน) · ตั้งสถานะ “ติดตาม” แล้วระบบส่ง D1/D3/D7 ให้เอง หยุดทันทีเมื่อลูกค้าตอบ</small></div>
       <table className="t">
         <thead><tr><th>ลูกค้า</th><th>ข้อความล่าสุด</th><th>รอ</th><th>สถานะ</th><th>เจ้าของ</th><th></th></tr></thead>
         <tbody>
@@ -53,7 +55,7 @@ export default async function Leads({ searchParams }: { searchParams: Promise<{ 
             const late = isWaiting && (now.getTime() - new Date(r.last_inbound_at).getTime()) > 10 * 60000;
             return (
               <tr key={r.id} className={late ? "late" : ""}>
-                <td><b>{r.name || r.display_name || "-"}</b><br /><small className="muted">{r.phone || ""} · {r.source || "line"} {r.consent_data === true ? "· ยินยอมแล้ว" : r.consent_data === false ? "· ไม่ยินยอม" : "· ยังไม่ถาม"}</small>
+                <td><a href={`/staff/clients/${r.client_id}`}><b>{r.name || r.display_name || "-"}</b></a><br /><small className="muted">{r.phone || ""} · {r.source || "line"} {r.consent_data === true ? "· ยินยอมแล้ว" : r.consent_data === false ? "· ไม่ยินยอม" : "· ยังไม่ถาม"}</small>
                   {r.interest && <><br /><small>{r.interest}</small></>}</td>
                 <td style={{ maxWidth: 280 }}><small>{r.last_msg || "-"}</small></td>
                 <td>{isWaiting ? <span className={`tag ${late ? "bad" : "warn"}`}>{ago(r.last_inbound_at, now)}</span> : <small className="muted">{ago(r.last_inbound_at, now)}</small>}</td>

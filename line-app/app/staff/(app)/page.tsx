@@ -24,11 +24,12 @@ export default async function Today() {
   const today = todayBkk(now);
   const from = bkk(today, "00:00").toISOString(), to = bkk(addDays(today, 1), "00:00").toISOString();
   const tomorrowTo = bkk(addDays(today, 2), "00:00").toISOString();
-  const [rows, unconfirmed, openLeads] = await Promise.all([
+  const [rows, unconfirmed, openLeads, care] = await Promise.all([
     q(`select a.*, c.name, c.display_name, c.phone, c.line_user_id from appointments a join clients c on c.id = a.client_id
        where a.start_at >= $1 and a.start_at < $2 and a.status <> 'cancelled' order by a.start_at`, [from, to]),
     q(`select count(*)::int n from appointments where start_at >= $1 and start_at < $2 and status = 'booked'`, [to, tomorrowTo]),
     q(`select count(*)::int n from leads where status in ('New','Contacted','Qualified') and (replied_at is null or replied_at < last_inbound_at)`),
+    q(`select count(*)::int n from care_requests where status in ('waiting_photo','waiting_review')`),
   ]);
   const qr = await QRCode.toDataURL(bookUrl(null, { src: "walkin" }), { margin: 1, width: 220, color: { dark: "#0B142E", light: "#FFFFFF" } });
   const arrived = rows.filter((r) => ["arrived", "in_consult", "done"].includes(r.status)).length;
@@ -43,6 +44,7 @@ export default async function Today() {
         <div className="kpi"><b>{arrived}</b><small>มาถึงแล้ว</small></div>
         <div className="kpi"><b>{unconfirmed[0].n}</b><small>นัดพรุ่งนี้ที่ยังไม่ยืนยัน</small></div>
         <div className="kpi"><b>{openLeads[0].n}</b><small>แชทรอตอบ</small></div>
+        <a className="kpi" href="/staff/care" style={{ textDecoration: "none", color: "inherit", borderColor: care[0].n ? "var(--bad)" : undefined }}><b>{care[0].n}</b><small>เคสขอให้หมอดู</small></a>
       </div>
       <table className="t">
         <thead><tr><th>เวลา</th><th>ลูกค้า</th><th>เรื่อง</th><th>แพทย์</th><th>สถานะ</th><th>รอ</th><th></th></tr></thead>
@@ -54,7 +56,7 @@ export default async function Today() {
             return (
               <tr key={r.id} className={wait > 10 ? "late" : ""}>
                 <td>{parts(new Date(r.start_at)).time}</td>
-                <td><b>{r.name || r.display_name || "-"}</b><br /><small className="muted">{r.phone || ""}{r.line_user_id ? " · LINE" : ""}{r.source ? ` · ${r.source}` : ""}</small></td>
+                <td><a href={`/staff/clients/${r.client_id}`}><b>{r.name || r.display_name || "-"}</b></a><br /><small className="muted">{r.phone || ""}{r.line_user_id ? " · LINE" : ""}{r.source ? ` · ${r.source}` : ""}</small></td>
                 <td><small>{r.note || "-"}</small></td>
                 <td><small>{r.doctor}</small></td>
                 <td><span className={`tag ${tone}`}>{lab}</span></td>

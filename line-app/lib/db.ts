@@ -1,4 +1,5 @@
 import { SCHEMA } from "./schema";
+import { seedWith } from "./seed";
 
 type Row = Record<string, any>;
 type Runner = { query: (text: string, params?: unknown[]) => Promise<Row[]>; exec: (text: string) => Promise<void> };
@@ -31,7 +32,7 @@ async function makeRunner(): Promise<Runner> {
 
 export async function db(): Promise<Runner> {
   const runner = await (st.runner ??= makeRunner());
-  await (st.ready ??= runner.exec(SCHEMA));
+  await (st.ready ??= runner.exec(SCHEMA).then(() => seedWith(runner)));
   return runner;
 }
 

@@ -1,7 +1,10 @@
 import { q, one } from "./db";
 import { getSettings, ClinicSettings, saveSettings } from "./settings";
 import { upsertClientByLine, markInbound, logTouch, recordConsent, consentState, getClientByLine } from "./crm";
-import { setStatus } from "./booking";
+import { setStatus, availableSlots, reschedule, SlotTakenError } from "./booking";
+import { parseSource, applySource, ensureRefCode } from "./source";
+import { notifyStaff, alertCare } from "./notify";
+import { addDays, todayBkk } from "./time";
 import * as line from "./line";
 import * as M from "./messages";
 import { parts, minutes } from "./time";
@@ -61,6 +64,42 @@ export async function handleEvent(ev: Ev, now = new Date(), s?: ClinicSettings):
     }
     if (p.get("menu") === "book") return { replyToken: ev.replyToken, messages: [M.bookingPrompt(userId)] };
     if (p.get("menu") === "my") return { replyToken: ev.replyToken, messages: [M.myPrompt(userId)] };
+    if (p.get("resched")) {
+      const a = await one(`select * from appointments where id = $1 and client_id = $2 and status in ('booked','confirmed')`, [Number(p.get("resched")), c.id]);
+      if (!a) return { replyToken: ev.replyToken, messages: [{ type: "text", text: "ไม่พบนัดนี้แล้วค่ะ ดูนัดล่าสุดได้ที่เมนู นัดของฉัน นะคะ" }] };
+      return { replyToken: ev.replyToken, messages: [M.reschedOptions(a.id, await nextFreeSlots(s, now, a.doctor), userId)] };
+    }
+    if (p.get("resched_to")) {
+      try {
+        const newId = await reschedule(Number(p.get("resched_to")), c.id, String(p.get("t")), s);
+        const appt = await one("select * from appointments where id = $1", [newId]);
+        await logTouch(c.id, "in", "appt_reschedule", `${p.get("resched_to")} -> ${newId}`);
+        return { replyToken: ev.replyToken, messages: [M.confirmation(appt as any, s, userId)] };
+      } catch (e) {
+        const msg = e instanceof SlotTakenError ? "เวลานี้เพิ่งถูกจองไปค่ะ" : "เลื่อนนัดไม่สำเร็จค่ะ";
+        return { replyToken: ev.replyToken, messages: [{ type: "text", text: `${msg} ลองเลือกเวลาอื่นได้ที่เมนู นัดของฉัน นะคะ` }] };
+      }
+    }
+    if (p.get("care")) {
+      const tid = Number(p.get("t")) || null;
+      if (p.get("care") === "ok") { await logTouch(c.id, "in", "aftercare_ok", String(tid)); return { replyToken: ev.replyToken, messages: [M.careOk()] }; }
+      await q("insert into care_requests(client_id, treatment_id) values ($1,$2)", [c.id, tid]);
+      await logTouch(c.id, "in", "aftercare_ask", String(tid));
+      await alertCare(c.id, "ลูกค้าขอให้คุณหมอดูอาการหลังทำ (รอรูป)");
+      return { replyToken: ev.replyToken, messages: M.careAsk(isOpen(s, now), s) };
+    }
+    if (p.get("csat")) {
+      const score = Math.max(1, Math.min(5, Number(p.get("csat")) || 0));
+      const tr = await one("update treatments set csat_score = $3, csat_at = now() where id = $1 and client_id = $2 and csat_score is null returning id, name", [Number(p.get("t")), c.id, score]);
+      if (!tr) return { replyToken: ev.replyToken, messages: [{ type: "text", text: "ได้รับคะแนนแล้วค่ะ ขอบคุณนะคะ" }] };
+      await logTouch(c.id, "in", "csat", String(score));
+      if (score <= 3) {
+        await q("insert into issues(client_id, level, source, summary, owner_role) values ($1,'L2','csat',$2,'DR')", [c.id, `CSAT ${score}/5 หลังทำ ${tr.name}`]);
+        await notifyStaff(`มีเรื่องต้องดูแล: ลูกค้าให้คะแนน CSAT ${score}/5 · เปิดดูในระบบ ${process.env.APP_URL || ""}/staff/care`, `csat-${tr.id}`);
+      }
+      const code = score >= 4 ? await ensureRefCode(c.id) : null;
+      return { replyToken: ev.replyToken, messages: [M.csatThanks(score, code)] };
+    }
     if (p.get("appt") === "confirm") {
       const a = await one(`select * from appointments where id = $1 and client_id = $2`, [Number(p.get("id")), c.id]);
       if (!a || !["booked", "confirmed"].includes(a.status)) {
@@ -75,8 +114,24 @@ export async function handleEvent(ev: Ev, now = new Date(), s?: ClinicSettings):
 
   if (ev.type === "message") {
     const text: string = ev.message?.type === "text" ? ev.message.text : `[${ev.message?.type}]`;
-    await markInbound(c.id);
+    const leadId = await markInbound(c.id);
     await logTouch(c.id, "in", "message", text);
+    // FR-01/02: source tag from the pre-filled CTA message
+    if (ev.message?.type === "text") await applySource(c.id, leadId, parseSource(text));
+    // FR-09: any reply stops nurture and puts the person back in the inbox
+    await q("update leads set status = 'Contacted', nurture_started_at = null where id = $1 and status = 'Nurture'", [leadId]);
+    // FR-33: photo for a pending "อยากให้หมอดู" request
+    if (ev.message?.type === "image") {
+      const cr = await one(`select id from care_requests where client_id = $1 and status in ('waiting_photo','waiting_review') and created_at > $2 order by id desc limit 1`,
+        [c.id, new Date(now.getTime() - 48 * 3600_000).toISOString()]);
+      if (cr) {
+        const img = await line.content(ev.message.id).catch(() => null);
+        if (img) await q("insert into photos(client_id, angle, mime, data) values ($1,'care',$2,$3)", [c.id, img.mime, img.data]);
+        await q("update care_requests set status = 'waiting_review' where id = $1", [cr.id]);
+        await alertCare(c.id, "ลูกค้าส่งรูปอาการหลังทำแล้ว รอพยาบาล/แพทย์ดู");
+        return { replyToken: ev.replyToken, messages: [M.carePhotoThanks()] };
+      }
+    }
     const msgs: line.Msg[] = [];
     if (/จอง|นัด|คิว|book/i.test(text) && text.length < 40) msgs.push(M.bookingPrompt(userId));
     if (!isOpen(s, now)) {
@@ -104,4 +159,15 @@ export async function confirmStaffGroup() {
   if (!cand) return null;
   await saveSettings({ staffGroupId: cand.value.groupId });
   return cand.value.groupId;
+}
+
+
+/** FR-15: three nearest free slots from tomorrow on. */
+export async function nextFreeSlots(s: ClinicSettings, now: Date, doctor: string, n = 3) {
+  const out: { start: string }[] = [];
+  for (let i = 0; i <= s.horizonDays && out.length < n; i++) {
+    const d = addDays(todayBkk(now), i);
+    for (const x of await availableSlots(d, s, doctor, now)) { if (x.available) out.push(x); if (out.length >= n) break; }
+  }
+  return out;
 }

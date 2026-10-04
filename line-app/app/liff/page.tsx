@@ -31,7 +31,8 @@ export default function Liff() {
   const [ready, setReady] = useState(false);
   const [fatal, setFatal] = useState("");
   const [token, setToken] = useState<string | null>(null);
-  const [view, setView] = useState(params.get("view") === "my" ? "my" : "book");
+  const [view, setView] = useState(params.get("view") === "my" ? "my" : params.get("view") === "form" ? "form" : "book");
+  const plan = params.get("plan");
   const devUser = params.get("dev_user");
   const link = params.get("t");
   const src = params.get("src") || "liff";
@@ -62,7 +63,8 @@ export default function Liff() {
 
   if (fatal) return <main className="liff"><div className="done"><div className="big">{fatal}</div><a className="btn" href="https://line.me/R/ti/p/@230eeqvl">เปิด LINE Vinfinity Clinic</a></div></main>;
   if (!ready) return <main className="liff"><div className="done muted">กำลังโหลด…</div></main>;
-  return view === "my" ? <My api={api} onBook={() => setView("book")} /> : <Book api={api} src={src} onMy={() => setView("my")} />;
+  if (view === "form") return <Form api={api} onMy={() => setView("my")} />;
+  return view === "my" ? <My api={api} onBook={() => setView("book")} onForm={() => setView("form")} /> : <Book api={api} src={src} plan={plan} onMy={() => setView("my")} />;
 }
 
 function Header({ title, sub }: { title: string; sub: string }) {
@@ -95,7 +97,7 @@ function Picker({ api, value, onChange }: { api: any; value: string | null; onCh
   );
 }
 
-function Book({ api, src, onMy }: { api: any; src: string; onMy: () => void }) {
+function Book({ api, src, plan, onMy }: { api: any; src: string; plan: string | null; onMy: () => void }) {
   const [start, setStart] = useState<string | null>(null);
   const [form, setForm] = useState({ name: "", phone: "", interest: "", consentData: false, consentMarketing: false });
   const [step, setStep] = useState<"pick" | "form" | "done">("pick");
@@ -110,7 +112,7 @@ function Book({ api, src, onMy }: { api: any; src: string; onMy: () => void }) {
 
   async function submit() {
     setErr(""); setBusy(true);
-    const j = await api("/api/liff/book", { json: { ...form, start, src } });
+    const j = await api("/api/liff/book", { json: { ...form, start, src, plan } });
     setBusy(false);
     if (j.ok) { setResult(j.appointment); setStep("done"); return; }
     if (j.error === "slot_taken") { setErr(`ช่วงเวลานี้เพิ่งถูกจองค่ะ ลองเลือก ${j.alternatives?.map((a: Slot) => a.time).join(", ") || "เวลาอื่น"} นะคะ`); setStep("pick"); setStart(null); return; }
@@ -127,7 +129,7 @@ function Book({ api, src, onMy }: { api: any; src: string; onMy: () => void }) {
 
   return (
     <main className="liff">
-      <Header title="จองคิวปรึกษาคุณหมอ" sub="ปรึกษาประมาณ 30 นาที · แพทย์ประเมินโครงหน้าก่อนวางแผนทุกครั้ง" />
+      <Header title={plan ? "จองคิวทำตามแผน" : "จองคิวปรึกษาคุณหมอ"} sub={plan ? "เลือกวันเวลาที่สะดวก ทีมจะเตรียมตามแผนที่คุณหมอออกไว้" : "ปรึกษาประมาณ 30 นาที · แพทย์ประเมินโครงหน้าก่อนวางแผนทุกครั้ง"} />
       <div className="liff-body">
         {err && <div className="card err">{err}</div>}
         {step === "pick" ? <Picker api={api} value={start} onChange={setStart} /> : (
@@ -153,7 +155,7 @@ function Book({ api, src, onMy }: { api: any; src: string; onMy: () => void }) {
   );
 }
 
-function My({ api, onBook }: { api: any; onBook: () => void }) {
+function My({ api, onBook, onForm }: { api: any; onBook: () => void; onForm: () => void }) {
   const [data, setData] = useState<any>(null);
   const [moving, setMoving] = useState<Appt | null>(null);
   const [start, setStart] = useState<string | null>(null);
@@ -187,10 +189,56 @@ function My({ api, onBook }: { api: any; onBook: () => void }) {
             </div>))}
         {moving && <><div className="eyebrow">เลือกเวลาใหม่</div><Picker api={api} value={start} onChange={setStart} />
           <button className="btn" disabled={!start} onClick={move}>ยืนยันเวลาใหม่</button></>}
+        {data?.appointments?.length > 0 && <button className="btn ghost" onClick={onForm}>กรอก / แก้แบบฟอร์มก่อนมา</button>}
         {data?.consent && <label className="check card"><input type="checkbox" checked={!!data.consent.marketing}
           onChange={async (e) => { await api("/api/liff/my", { json: { action: "marketing", value: e.target.checked } }); load(); }} />
           <span>รับข่าวสารและสิทธิพิเศษทาง LINE</span></label>}
       </div>
+    </main>
+  );
+}
+
+const FIELDS: [string, string, string][] = [
+  ["birthYear", "ปีเกิด (พ.ศ.)", "เช่น 2535"],
+  ["allergies", "แพ้ยา แพ้อาหาร หรือแพ้สารใดไหม", "ถ้าไม่มี พิมพ์ ไม่มี"],
+  ["conditions", "โรคประจำตัว", "ถ้าไม่มี พิมพ์ ไม่มี"],
+  ["medications", "ยาหรืออาหารเสริมที่ใช้อยู่", "เช่น ยาละลายลิ่มเลือด วิตามินอี น้ำมันปลา"],
+  ["previous", "เคยทำหัตถการความงามอะไรมาบ้าง และประมาณเมื่อไหร่", "เช่น ฟิลเลอร์ใต้ตา ปี 2567"],
+  ["concerns", "เรื่องที่กังวลหรืออยากปรึกษา", ""],
+  ["goals", "อยากให้ผลลัพธ์ออกมาแบบไหน", "เช่น ดูสดชื่นขึ้นแต่ยังเป็นธรรมชาติ"],
+];
+
+function Form({ api, onMy }: { api: any; onMy: () => void }) {
+  const [f, setF] = useState<Record<string, string>>({});
+  const [state, setState] = useState<"load" | "edit" | "saving" | "done" | "consent">("load");
+  useEffect(() => { api("/api/liff/form").then((j: any) => {
+    if (j.consent?.data !== true) { setState("consent"); return; }
+    setF({ name: j.client?.name || "", phone: j.client?.phone || "", ...(j.client?.health || {}) }); setState("edit");
+  }); }, [api]);
+  const set = (k: string) => (e: any) => setF({ ...f, [k]: e.target.value });
+  async function save() {
+    setState("saving");
+    const j = await api("/api/liff/form", { json: f });
+    setState(j.ok ? "done" : "edit");
+  }
+  if (state === "done") return <main className="liff"><Header title="บันทึกแล้ว" sub="ขอบคุณค่ะ คุณหมอจะอ่านก่อนพบกัน วันนัดจะได้ไม่ต้องกรอกซ้ำ" />
+    <div className="done"><button className="btn" onClick={() => window.liff?.isInClient?.() ? window.liff.closeWindow() : onMy()}>เสร็จสิ้น</button></div></main>;
+  return (
+    <main className="liff">
+      <Header title="แบบฟอร์มก่อนมา" sub="ใช้เวลาประมาณ 2 นาที ข้อมูลนี้เห็นเฉพาะแพทย์และทีมดูแลการรักษา" />
+      <div className="liff-body">
+        {state === "load" ? <div className="muted">กำลังโหลด…</div> : state === "consent" ? <div className="card">ต้องยินยอมเรื่องข้อมูลส่วนตัวก่อนนะคะ ตอบ "ยินยอม" ในแชท หรือจองคิวผ่านปุ่มจองคิวก่อนค่ะ</div> : (
+          <section className="card">
+            <div className="field"><label htmlFor="fn">ชื่อ-นามสกุล</label><input id="fn" value={f.name || ""} onChange={set("name")} /></div>
+            <div className="field"><label htmlFor="fp">เบอร์โทร</label><input id="fp" inputMode="tel" value={f.phone || ""} onChange={set("phone")} /></div>
+            <div className="field"><label htmlFor="pg">ตั้งครรภ์หรือให้นมบุตรอยู่ไหม</label>
+              <select id="pg" value={f.pregnant || ""} onChange={set("pregnant")}><option value="">เลือก</option><option>ไม่ใช่</option><option>ตั้งครรภ์</option><option>ให้นมบุตร</option><option>ไม่แน่ใจ</option></select></div>
+            {FIELDS.map(([k, l, ph]) => <div className="field" key={k}><label htmlFor={k}>{l}</label>
+              {k === "birthYear" ? <input id={k} inputMode="numeric" placeholder={ph} value={f[k] || ""} onChange={set(k)} /> :
+                <textarea id={k} rows={2} placeholder={ph} value={f[k] || ""} onChange={set(k)} />}</div>)}
+          </section>)}
+      </div>
+      {state !== "consent" && state !== "load" && <div className="sticky"><button className="btn" disabled={state === "saving"} onClick={save}>{state === "saving" ? "กำลังบันทึก…" : "บันทึก"}</button></div>}
     </main>
   );
 }

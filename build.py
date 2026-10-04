@@ -5,7 +5,10 @@ import json, pathlib
 
 ROOT = pathlib.Path(__file__).parent
 SITE = "https://vinfinityclinic.com"
-LINE = "https://line.me/R/ti/p/@230eeqvl"
+from urllib.parse import quote as _q
+# FR-01: every LINE button opens the chat with a pre-filled message carrying the source tag,
+# which the LINE app (line-app/lib/source.ts) reads and stamps on the lead.
+LINE = "https://line.me/R/oaMessage/%40230eeqvl/?" + _q("สวัสดีค่ะ สนใจปรึกษาคุณหมอ (จากเว็บไซต์)")
 MSG = "https://m.me/Vinfinity.Clinic"
 TEL = "082-462-2963"
 # NAP — keep identical everywhere (site, Google Business Profile, Facebook)

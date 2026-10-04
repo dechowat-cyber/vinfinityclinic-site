@@ -1,0 +1,19 @@
+# Runs the LINE app scheduler (SLA watchdog, reminders, no-show, aftercare, CSAT) every 5 minutes.
+# Vercel Hobby only allows daily crons, so GitHub Actions calls the endpoint instead.
+# Needs repository secret LINE_CRON_SECRET (same value as CRON_SECRET in Vercel).
+name: line-tick
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch: {}
+jobs:
+  tick:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Call scheduler
+        env:
+          SECRET: ${{ secrets.LINE_CRON_SECRET }}
+        run: |
+          if [ -z "$SECRET" ]; then echo "LINE_CRON_SECRET not set"; exit 0; fi
+          curl -fsS --max-time 60 -H "Authorization: Bearer $SECRET" https://vinfinity-line.vercel.app/api/cron/tick

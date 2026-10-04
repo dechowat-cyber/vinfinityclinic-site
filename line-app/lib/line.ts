@@ -69,6 +69,14 @@ export async function verifyIdToken(idToken: string): Promise<{ sub: string; nam
   return j?.sub ? { sub: j.sub, name: j.name, picture: j.picture } : null;
 }
 
+/** Downloads an image/video a user sent (needed for aftercare photos). */
+export async function content(messageId: string): Promise<{ data: Buffer; mime: string }> {
+  const token = await accessToken();
+  const res = await fetch(`https://api-data.line.me/v2/bot/message/${messageId}/content`, { headers: { Authorization: `Bearer ${token}` } });
+  if (!res.ok) throw new Error(`content_${res.status}`);
+  return { data: Buffer.from(await res.arrayBuffer()), mime: res.headers.get("content-type") || "image/jpeg" };
+}
+
 // ---- rich menu (run once from the staff settings page) ----
 export async function installRichMenu(menu: Msg, png: Buffer) {
   const created: any = await call("/richmenu", { json: menu });

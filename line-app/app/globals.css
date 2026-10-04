@@ -61,7 +61,7 @@ a{color:var(--royal)}
 .side .me{margin-top:auto;font-size:13px;color:var(--peri);padding:8px 12px}
 .main{padding:26px 30px;display:grid;gap:18px;align-content:start}
 .main h1{font-size:26px;font-weight:500;margin:0}
-.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
 .kpi{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 16px}
 .kpi b{display:block;font-size:26px;font-weight:500}
 .kpi small{color:var(--muted)}
@@ -72,3 +72,17 @@ table.t{width:100%;border-collapse:collapse;background:#fff;border:1px solid var
 .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
 @media (max-width:820px){.staff{grid-template-columns:1fr}.side{flex-direction:row;overflow-x:auto;padding:10px}.side .brand,.side .me{display:none}.main{padding:18px}.kpis{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}}
+
+/* ---------- Phase 1 additions ---------- */
+.inp{border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:#fff}
+.kv{display:grid;gap:8px;margin:12px 0 0}
+.kv div{display:grid;grid-template-columns:42% 1fr;gap:10px;border-top:1px solid var(--line);padding-top:8px}
+.kv dt{color:var(--muted);font-size:14px}.kv dd{margin:0;white-space:pre-wrap}
+.photos{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.shot{display:grid;gap:6px;cursor:pointer;text-decoration:none;color:inherit}
+.shot img,.shot .ph{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:12px;border:1px solid var(--line);background:var(--mist)}
+.shot .ph{display:grid;place-items:center;font-size:32px;color:var(--peri)}
+.shot small{font-size:12px;color:var(--muted)}
+.list{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:6px;font-size:14px}
+.links td code{font-size:12px;word-break:break-all}
+@media (max-width:820px){.photos{grid-template-columns:repeat(3,minmax(0,1fr))}}

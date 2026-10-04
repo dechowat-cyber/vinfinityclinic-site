@@ -20,6 +20,10 @@ export type ClinicSettings = {
   mapsUrl: string;
   website: string;
   richMenuId?: string;
+  aftercareApproved?: boolean;
+  aftercareApprovedBy?: string | null;
+  aftercareApprovedAt?: string | null;
+  paused?: boolean;
 };
 
 // Defaults match the Udon Thani branch as published on Google Maps (closed on Tuesdays).

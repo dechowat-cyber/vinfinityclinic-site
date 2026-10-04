@@ -1,5 +1,6 @@
 import { q } from "@/lib/db";
 import { saveClinic, setupRichMenu, useStaffGroup } from "@/lib/actions";
+import { togglePause } from "@/lib/actions2";
 import { getSettings } from "@/lib/settings";
 import { requireStaff } from "@/lib/session";
 
@@ -28,6 +29,11 @@ export default async function Settings() {
             {cand.length > 0 ? <form action={useStaffGroup} style={{ display: "inline" }}> <button className="btn ghost small">ใช้กลุ่มที่เพิ่งเชิญบอท</button></form> : <small className="muted"> เชิญบอทเข้ากลุ่ม แล้วพิมพ์ในกลุ่มหนึ่งข้อความ</small>}</td></tr>
         </tbody></table>
       </div>
+      <form className="card" action={togglePause}>
+        <div className="eyebrow">ข้อความอัตโนมัติ (kill switch)</div>
+        <p style={{ margin: "8px 0" }}>{s.paused ? "หยุดส่งข้อความอัตโนมัติทั้งหมดอยู่ (เตือนนัด nurture aftercare CSAT แจ้งเตือนทีม)" : "เปิดอยู่ · ระบบเช็คทุก 5 นาที"}</p>
+        <input type="hidden" name="on" value={s.paused ? "0" : "1"} /><button className={`btn small ${s.paused ? "" : "danger"}`}>{s.paused ? "เปิดส่งอีกครั้ง" : "หยุดส่งทั้งหมดชั่วคราว"}</button>
+      </form>
       <form className="card" action={saveClinic}>
         <div className="eyebrow">เวลาทำการ</div>
         <table className="t" style={{ marginTop: 10 }}><tbody>

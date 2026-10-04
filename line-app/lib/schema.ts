@@ -88,4 +88,128 @@ create table if not exists settings (
   value jsonb not null,
   updated_at timestamptz not null default now()
 );
+
+-- ---------- Phase 1 completion (FR-01/02, 07, 09, 14-16, 20-23, 32-35) ----------
+alter table clients add column if not exists ref_code text;
+alter table clients add column if not exists referred_by bigint;
+alter table clients add column if not exists health jsonb;
+alter table clients add column if not exists health_updated_at timestamptz;
+create unique index if not exists clients_ref_code on clients(ref_code) where ref_code is not null;
+alter table leads add column if not exists referred_by bigint;
+alter table leads add column if not exists nurture_started_at timestamptz;
+alter table leads add column if not exists nurture_step int not null default 0;
+alter table appointments add column if not exists reminder2_sent_at timestamptz;
+alter table appointments add column if not exists plan_id bigint;
+
+create table if not exists jobs (
+  key text primary key,
+  created_at timestamptz not null default now()
+);
+
+create table if not exists health_access (
+  id bigserial primary key,
+  staff_id bigint,
+  client_id bigint,
+  what text,
+  created_at timestamptz not null default now()
+);
+
+create table if not exists consults (
+  id bigserial primary key,
+  client_id bigint not null references clients(id),
+  appointment_id bigint,
+  concerns text,
+  goals text,
+  assessment text,
+  notes text,
+  created_by bigint,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists photos (
+  id bigserial primary key,
+  client_id bigint not null references clients(id),
+  consult_id bigint,
+  angle text not null,
+  mime text not null default 'image/jpeg',
+  data bytea not null,
+  created_by bigint,
+  created_at timestamptz not null default now()
+);
+create index if not exists photos_client on photos(client_id, created_at desc);
+
+create table if not exists catalog (
+  id bigserial primary key,
+  code text unique,
+  name text not null,
+  category text,
+  unit text not null default 'ครั้ง',
+  price numeric not null default 0,
+  aftercare_key text not null default 'general',
+  active boolean not null default true,
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists plans (
+  id bigserial primary key,
+  client_id bigint not null references clients(id),
+  consult_id bigint,
+  goal text,
+  items jsonb not null default '[]',
+  subtotal numeric not null default 0,
+  discount numeric not null default 0,
+  discount_status text not null default 'none',
+  discount_by bigint,
+  total numeric not null default 0,
+  valid_until date,
+  status text not null default 'draft',
+  card_sent_at timestamptz,
+  created_by bigint,
+  created_at timestamptz not null default now()
+);
+
+create table if not exists treatments (
+  id bigserial primary key,
+  client_id bigint not null references clients(id),
+  plan_id bigint,
+  catalog_id bigint,
+  name text not null,
+  aftercare_key text not null default 'general',
+  done_at timestamptz not null default now(),
+  done_by bigint,
+  csat_score int,
+  csat_at timestamptz
+);
+create index if not exists treatments_done on treatments(done_at);
+
+create table if not exists aftercare_templates (
+  key text not null,
+  day int not null,
+  body text not null,
+  updated_at timestamptz not null default now(),
+  primary key (key, day)
+);
+
+create table if not exists care_requests (
+  id bigserial primary key,
+  client_id bigint not null references clients(id),
+  treatment_id bigint,
+  status text not null default 'waiting_photo',
+  ack_by bigint,
+  ack_at timestamptz,
+  created_at timestamptz not null default now()
+);
+
+create table if not exists issues (
+  id bigserial primary key,
+  client_id bigint references clients(id),
+  level text not null default 'L1',
+  source text,
+  summary text,
+  owner_role text,
+  status text not null default 'open',
+  created_at timestamptz not null default now(),
+  closed_at timestamptz
+);
 `;

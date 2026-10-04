@@ -30,6 +30,13 @@ LINE does not let a channel move between providers. The app still works:
 - Leave `NEXT_PUBLIC_LIFF_ID` empty: the rich menu sends a postback and the bot replies with a signed personal booking link (45 days).
 - LINE Login for staff can live in your own provider.
 
+## Scheduler (every 5 minutes)
+`/api/cron/tick` runs SLA watchdog (FR-07), wait timer (FR-19), T-2h reminder (FR-15), no-show + rebook (FR-16),
+nurture D1/D3/D7 (FR-09), aftercare D0/D1/D3/D7 (FR-32), care escalation (FR-33), D14 CSAT + review (FR-34/35),
+plan follow-up D2 (A09), D-1 reminder 18:00 and the 20:00 unconfirmed list. Every step is idempotent (`jobs` table).
+GitHub Actions (`.github/workflows/line-tick.yml`) calls it; set repo secret `LINE_CRON_SECRET` = Vercel `CRON_SECRET`.
+Settings → kill switch pauses all automatic messages. Aftercare stays off until a doctor approves the texts.
+
 ## Notes
 - Consent text is a draft (`consentVersion`), pending legal/doctor review.
 - Pushes count against the OA plan quota; reminders are D-1 only. Check the plan before launch.

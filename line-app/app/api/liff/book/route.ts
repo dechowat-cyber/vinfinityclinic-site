@@ -33,6 +33,11 @@ export async function POST(req: Request) {
 
   try {
     const id = await book({ clientId: client.id, startIso: String(body.start), s, source: src, note: interest || null });
+    const planId = Number(body.plan) || null;
+    if (planId) {
+      const pl = await one("update plans set status = 'booked' where id = $1 and client_id = $2 returning id", [planId, client.id]);
+      if (pl) await q("update appointments set plan_id = $2, kind = 'treatment' where id = $1", [id, planId]);
+    }
     const appt = await one("select * from appointments where id = $1", [id]);
     await logTouch(client.id, "in", "booked", `#${id} ${appt!.start_at}`, "liff");
     if (client.line_user_id) {

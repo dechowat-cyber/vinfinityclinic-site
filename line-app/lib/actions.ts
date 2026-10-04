@@ -71,7 +71,9 @@ export async function leadUpdate(fd: FormData) {
   if (fd.get("replied")) {
     await q("update leads set replied_at = now(), status = case when status = 'New' then 'Contacted' else status end, owner_staff_id = coalesce(owner_staff_id, $2) where id = $1", [id, me.id]);
   } else if (LEAD_STATUSES.includes(status)) {
-    await q("update leads set status = $2, lost_reason = $3, owner_staff_id = coalesce(owner_staff_id, $4) where id = $1",
+    await q(`update leads set status = $2, lost_reason = $3, owner_staff_id = coalesce(owner_staff_id, $4),
+        nurture_started_at = case when $2 = 'Nurture' and status <> 'Nurture' then now() when $2 <> 'Nurture' then null else nurture_started_at end,
+        nurture_step = case when $2 = 'Nurture' and status <> 'Nurture' then 0 else nurture_step end where id = $1`,
       [id, status, status === "Lost" ? String(fd.get("lost_reason") || "ไม่ระบุ") : null, me.id]);
   }
   revalidatePath("/staff/leads");

@@ -17,14 +17,14 @@ export async function sendReminders(now = new Date()) {
   const s = await getSettings();
   const t = todayBkk(now);
   const rows = await q(
-    `select a.*, c.line_user_id from appointments a join clients c on c.id = a.client_id
+    `select a.*, c.line_user_id, c.health_updated_at from appointments a join clients c on c.id = a.client_id
      where a.start_at >= $1 and a.start_at < $2 and a.status in ('booked','confirmed') and a.reminder_sent_at is null`,
     [bkk(addDays(t, 1), "00:00").toISOString(), bkk(addDays(t, 2), "00:00").toISOString()]);
   let sent = 0, noLine = 0, failed = 0;
   for (const a of rows) {
     if (!a.line_user_id) { noLine++; continue; }
     try {
-      await push(a.line_user_id, [reminder(a as any, s)], `rem-${a.id}`);
+      await push(a.line_user_id, [reminder(a as any, s, a.line_user_id, !a.health_updated_at)], `rem-${a.id}`);
       await q("update appointments set reminder_sent_at = now() where id = $1", [a.id]);
       await logTouch(a.client_id, "out", "reminder_d1", `appt ${a.id}`, "system");
       sent++;
@@ -37,9 +37,6 @@ export async function sendReminders(now = new Date()) {
 export async function eveningRun(now = new Date()) {
   const s = await getSettings();
   const t = todayBkk(now);
-  const ns = await q(
-    `update appointments set status = 'no_show' where status in ('booked','confirmed') and start_at < $1 returning id`,
-    [new Date(now.getTime() - 30 * 60000).toISOString()]);
   const un = await q(
     `select a.start_at, c.name, c.display_name, c.phone, c.line_user_id from appointments a join clients c on c.id = a.client_id
      where a.start_at >= $1 and a.start_at < $2 and a.status = 'booked' order by a.start_at`,
@@ -50,5 +47,5 @@ export async function eveningRun(now = new Date()) {
     await push(s.staffGroupId, [{ type: "text", text: `นัดพรุ่งนี้ ${thaiDate(new Date(bkk(addDays(t, 1), "12:00")))} ที่ยังไม่ยืนยัน ${un.length} ราย\n${lines.join("\n")}\nรบกวนโทรตามก่อนเที่ยงนะคะ` }], `eve-${addDays(t, 1)}`);
     listed = true;
   }
-  return { noShow: ns.length, unconfirmed: un.length, listed };
+  return { unconfirmed: un.length, listed };
 }
