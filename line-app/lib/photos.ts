@@ -130,7 +130,8 @@ export async function saveShot(o: { sessionId: number; angle: string; mime: stri
 /** Treatments that have reached D14 / D30 / D90 and have no follow-up session since that point. */
 export async function followupsDue(now = new Date()) {
   const rows = await q(`
-    select t.id, t.client_id, t.name, t.done_at, c.name as client_name, c.display_name, c.phone
+    select t.id, t.client_id, t.name, t.done_at, c.name as client_name, c.display_name, c.phone,
+      (select b.protocol from photo_sessions b where b.client_id = t.client_id and b.kind = 'before' and b.created_at <= t.done_at order by b.created_at desc limit 1) as protocol
     from treatments t join clients c on c.id = t.client_id
     where t.done_at < $1 and t.done_at > $2
       and exists (select 1 from photo_sessions b where b.client_id = t.client_id and b.kind = 'before')
@@ -190,4 +191,46 @@ export async function recentPairs(since: string, limit = 24) {
     if (p) out.push({ ...p, clientId: Number(r.client_id) });
   }
   return out.sort((a, b) => new Date(b.after.created_at).getTime() - new Date(a.after.created_at).getTime());
+}
+
+/** Picks the protocol from what the client came for (appointment note, lead interest, plan items). */
+export function suggestProtocol(text: string | null | undefined) {
+  const t = (text || "").toLowerCase();
+  if (/ใต้ตา|ร่องตา|tear|eye/.test(t)) return "eyes";
+  if (/ปาก|คาง|lip|chin/.test(t)) return "lips";
+  if (/ยก|กราม|คอ|doublo|hifu|ulthera|lift|jaw|neck/.test(t)) return "jaw";
+  return "face5";
+}
+
+export type QueueItem = {
+  appointmentId: number; clientId: number; name: string; phone: string | null; time: string; status: string; note: string | null;
+  consent: boolean; kind: string; protocol: string; openSession: number | null; shot: string[];
+};
+
+/** Today's visits as a photo queue: who still needs before / after shots, with the suggested next step. */
+export async function studioQueue(now = new Date()): Promise<QueueItem[]> {
+  const [from, to] = dayRange(now);
+  const rows = await q(`
+    select a.id, a.client_id, a.start_at, a.status, a.note, c.name, c.display_name, c.phone,
+      (select granted from consents k where k.client_id = c.id and k.type = 'data' order by k.created_at desc, k.id desc limit 1) as consent,
+      (select interest from leads l where l.client_id = c.id order by l.id desc limit 1) as interest,
+      (select string_agg(i->>'name', ' ') from plans p, jsonb_array_elements(p.items) i where p.client_id = c.id and p.status <> 'done') as plan_items,
+      (select id from photo_sessions s where s.client_id = c.id and s.completed_at is null and s.created_at >= $1 order by s.id desc limit 1) as open_session,
+      (select array_agg(distinct s.kind) from photo_sessions s where s.client_id = c.id and s.created_at >= $1 and s.created_at < $2
+         and exists (select 1 from photos p where p.session_id = s.id)) as shot
+    from appointments a join clients c on c.id = a.client_id
+    where a.start_at >= $1 and a.start_at < $2 and a.status not in ('cancelled','no_show')
+    order by (a.status in ('arrived','in_consult')) desc, a.start_at`, [from, to]);
+  const out: QueueItem[] = [];
+  for (const r of rows) {
+    const shot: string[] = r.shot || [];
+    out.push({
+      appointmentId: Number(r.id), clientId: Number(r.client_id), name: r.name || r.display_name || `#${r.client_id}`, phone: r.phone,
+      time: new Date(r.start_at).toISOString(), status: r.status, note: r.note, consent: r.consent === true,
+      kind: shot.includes("before") ? "after" : await suggestKind(Number(r.client_id), now),
+      protocol: suggestProtocol([r.note, r.interest, r.plan_items].join(" ")),
+      openSession: r.open_session ? Number(r.open_session) : null, shot,
+    });
+  }
+  return out;
 }

@@ -90,3 +90,27 @@ test("auto before & after: each after/follow-up pairs with the before of its cou
   assert.deepEqual(pairs[0].angles, ["front", "eye_up"]); // after's protocol order, shared angles only
   assert.deepEqual(pairs[1].angles, ["front"]);
 });
+
+test("photo queue: today's visits with the next shot and a protocol from what they came for", async () => {
+  const { studioQueue, suggestProtocol } = await import("../lib/photos");
+  const { recordConsent } = await import("../lib/crm");
+  assert.equal(suggestProtocol("ฟิลเลอร์ใต้ตา"), "eyes");
+  assert.equal(suggestProtocol("Doublo 2.0 ยกกระชับ"), "jaw");
+  assert.equal(suggestProtocol("ฟิลเลอร์ปาก"), "lips");
+  assert.equal(suggestProtocol(null), "face5");
+  const now = bkk("2026-12-07", "11:00");
+  const c = await upsertClientByLine("UPH5", {});
+  await recordConsent(c.id, "data", true, "v1");
+  await q("insert into appointments(client_id, doctor, start_at, end_at, status, note) values ($1,'DR',$2,$3,'arrived','ฟิลเลอร์ใต้ตา')",
+    [c.id, bkk("2026-12-07", "10:30").toISOString(), bkk("2026-12-07", "11:00").toISOString()]);
+  let v = (await studioQueue(now)).find((x) => x.clientId === c.id)!;
+  assert.deepEqual([v.kind, v.protocol, v.consent, v.openSession, v.shot], ["before", "eyes", true, null, []]);
+  const s = await startSession({ clientId: c.id, kind: "before", protocol: "eyes", staffId: 1, now });
+  await q("update photo_sessions set created_at = $2 where id = $1", [s, now.toISOString()]);
+  await shoot(s, "front");
+  v = (await studioQueue(now)).find((x) => x.clientId === c.id)!;
+  assert.equal(v.openSession, s); // unfinished session → "ถ่ายต่อ"
+  await q("update photo_sessions set completed_at = $2 where id = $1", [s, now.toISOString()]);
+  v = (await studioQueue(now)).find((x) => x.clientId === c.id)!;
+  assert.deepEqual([v.kind, v.openSession, v.shot], ["after", null, ["before"]]);
+});

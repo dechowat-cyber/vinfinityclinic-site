@@ -150,3 +150,13 @@ table.t{width:100%;border-collapse:collapse;background:#fff;border:1px solid var
 .ba-card img{width:100%;aspect-ratio:3/4;object-fit:cover;background:var(--mist)}
 .ba-card small{font-size:13px;color:var(--muted)}
 details.card summary{cursor:pointer;color:var(--royal)}
+
+/* ---------- Photo Studio quick access ---------- */
+.btn.cam{white-space:nowrap}
+.btn.big{padding:14px 22px;font-size:17px;border-radius:14px;min-height:52px}
+.side a.cam-link{background:var(--royal);color:#fff;font-weight:500;margin:4px 0 8px}
+.side a.cam-link[aria-current=page]{background:var(--sapphire)}
+.queue{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:0}
+.queue li{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 0;border-top:1px solid var(--line)}
+.queue li:first-child{border-top:0}
+.queue li.now{background:linear-gradient(90deg,#FFF7E8,transparent);margin:0 -18px;padding:12px 18px}

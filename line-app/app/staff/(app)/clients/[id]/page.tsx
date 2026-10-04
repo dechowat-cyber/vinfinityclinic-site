@@ -4,8 +4,9 @@ import { requireStaff, ROLES } from "@/lib/session";
 import { canSeeHealth, logHealthAccess, HEALTH_LABELS, HEALTH_FIELDS } from "@/lib/health";
 import { saveConsult, savePlan, decideDiscount, sendPlan, markDone, openIssue } from "@/lib/actions2";
 import { thaiDate, thaiTime } from "@/lib/time";
-import { PROTOCOLS, KINDS, sessionsFor, suggestKind, autoPairs, angleLabel } from "@/lib/photos";
+import { PROTOCOLS, KINDS, sessionsFor, suggestKind, suggestProtocol, autoPairs, angleLabel } from "@/lib/photos";
 import { BeforeAfter } from "../../before-after";
+import { QuickShoot } from "../../quick-shoot";
 import { startPhotoSession } from "@/lib/photoActions";
 import { PlanBuilder } from "./plan";
 
@@ -37,6 +38,7 @@ export default async function ClientPage({ params, searchParams }: { params: Pro
     health ? autoPairs(id) : Promise.resolve([]),
   ]);
   const pair = pairs[0];
+  const protocol = suggestProtocol([appts[0]?.note, lead?.interest].join(" "));
   const day = (d: string) => thaiDate(new Date(d)).replace(/^วัน\S+ /, "");
   const consult = consults[0] ?? null;
   const h = (c.health || {}) as Record<string, string>;
@@ -50,7 +52,9 @@ export default async function ClientPage({ params, searchParams }: { params: Pro
         <div><div className="eyebrow">CLIENT · #{id}</div><h1>{c.name || c.display_name || "-"}</h1>
           <p className="muted" style={{ margin: "4px 0 0" }}>{c.phone || "ไม่มีเบอร์"} · {c.line_user_id ? "LINE" : "ไม่มี LINE"} · source {c.source || "-"}
             {c.ref_name || c.ref_display ? ` · แนะนำโดย ${c.ref_name || c.ref_display}` : ""}{c.ref_code ? ` · รหัสแนะนำของลูกค้า ${c.ref_code}` : ""}</p></div>
-        <div className="row">{consent.map((x) => <span key={x.type} className={`tag ${x.granted ? "ok" : "bad"}`}>{x.type === "data" ? "ยินยอมข้อมูล" : "รับข่าวสาร"}: {x.granted ? "ใช่" : "ไม่"}</span>)}
+        <div className="row">{health && dataOk && <QuickShoot clientId={id} kind={kind} protocol={protocol}
+            openSession={sessions.find((x) => !x.completed_at)?.id ?? null} />}
+          {consent.map((x) => <span key={x.type} className={`tag ${x.granted ? "ok" : "bad"}`}>{x.type === "data" ? "ยินยอมข้อมูล" : "รับข่าวสาร"}: {x.granted ? "ใช่" : "ไม่"}</span>)}
           {lead && <span className="tag">{lead.status}</span>}</div>
       </div>
 
@@ -90,7 +94,7 @@ export default async function ClientPage({ params, searchParams }: { params: Pro
         <form action={startPhotoSession} className="row" style={{ margin: "12px 0 4px" }}>
           <input type="hidden" name="client_id" value={id} />
           <select name="kind" className="inp" defaultValue={kind}>{Object.entries(KINDS).map(([k, l]) => <option key={k} value={k}>{l}</option>)}</select>
-          <select name="protocol" className="inp" defaultValue="face5">{Object.entries(PROTOCOLS).map(([k, p]) => <option key={k} value={k}>{p.label} · {p.angles.length} ภาพ</option>)}</select>
+          <select name="protocol" className="inp" defaultValue={protocol}>{Object.entries(PROTOCOLS).map(([k, p]) => <option key={k} value={k}>{p.label} · {p.angles.length} ภาพ</option>)}</select>
           <input name="note" className="inp" placeholder="หมายเหตุ เช่น หลังฉีด 1 cc" style={{ flex: 1, minWidth: 160 }} />
           <button className="btn">เปิดกล้อง</button>
         </form>

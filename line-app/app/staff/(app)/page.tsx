@@ -3,7 +3,10 @@ import { q } from "@/lib/db";
 import { apptStatus, walkIn } from "@/lib/actions";
 import { bkk, todayBkk, addDays, parts } from "@/lib/time";
 import { bookUrl } from "@/lib/link";
-import { followupsDue } from "@/lib/photos";
+import { followupsDue, suggestProtocol } from "@/lib/photos";
+import { QuickShoot } from "./quick-shoot";
+import { requireStaff } from "@/lib/session";
+import { HEALTH_ROLES } from "@/lib/health";
 
 export const dynamic = "force-dynamic";
 
@@ -18,18 +21,22 @@ const NEXT: Record<string, [string, string][]> = {
   in_consult: [["done", "เสร็จ"]],
 };
 
-/** Photo studio status for a visit: before photos must exist before the treatment starts. */
-function photoTag(r: Record<string, any>) {
+/** Photo studio status for a visit, with a one-tap button straight into the camera for the next shot. */
+function photoCell(r: Record<string, any>, canShoot: boolean) {
   const k: string[] = r.shot_kinds || [];
   if (!["arrived", "in_consult", "done"].includes(r.status)) return "";
-  const href = `/staff/clients/${r.client_id}#photos`;
-  if (!k.includes("before")) return <a href={href} className="tag bad">ยังไม่ถ่าย before</a>;
-  return <a href={href} className={`tag ${k.includes("after") ? "ok" : "warn"}`}>before ✓{k.includes("after") ? " · after ✓" : ""}</a>;
+  const both = k.includes("before") && k.includes("after");
+  const tags = k.filter((x) => x !== "followup").map((x) => <span key={x} className="tag ok">{x} ✓</span>);
+  if (!canShoot || both) return <div className="row">{tags.length ? tags : <span className="tag bad">ยังไม่ถ่าย before</span>}</div>;
+  return <div className="row">{tags}<QuickShoot clientId={Number(r.client_id)} kind={k.includes("before") ? "after" : "before"} protocol={suggestProtocol(r.note)}
+    consent={r.consent === true} openSession={r.open_session ? Number(r.open_session) : null} /></div>;
 }
 
 function mins(from: Date | string | null, now: Date) { return from ? Math.round((now.getTime() - new Date(from).getTime()) / 60000) : 0; }
 
 export default async function Today() {
+  const me = await requireStaff();
+  const canShoot = HEALTH_ROLES.includes(me.role);
   const now = new Date();
   const today = todayBkk(now);
   const from = bkk(today, "00:00").toISOString(), to = bkk(addDays(today, 1), "00:00").toISOString();
@@ -37,7 +44,9 @@ export default async function Today() {
   const [rows, unconfirmed, openLeads, care, due] = await Promise.all([
     q(`select a.*, c.name, c.display_name, c.phone, c.line_user_id,
          (select array_agg(distinct s.kind) from photo_sessions s where s.client_id = a.client_id and s.created_at >= $1 and s.created_at < $2
-            and exists (select 1 from photos p where p.session_id = s.id)) as shot_kinds
+            and exists (select 1 from photos p where p.session_id = s.id)) as shot_kinds,
+         (select id from photo_sessions s where s.client_id = a.client_id and s.completed_at is null and s.created_at >= $1 order by s.id desc limit 1) as open_session,
+         (select granted from consents k where k.client_id = a.client_id and k.type = 'data' order by k.created_at desc, k.id desc limit 1) as consent
        from appointments a join clients c on c.id = a.client_id
        where a.start_at >= $1 and a.start_at < $2 and a.status <> 'cancelled' order by a.start_at`, [from, to]),
     q(`select count(*)::int n from appointments where start_at >= $1 and start_at < $2 and status = 'booked'`, [to, tomorrowTo]),
@@ -76,7 +85,7 @@ export default async function Today() {
                 <td><small>{r.doctor}</small></td>
                 <td><span className={`tag ${tone}`}>{lab}</span></td>
                 <td>{r.status === "arrived" ? <span className={`tag ${wait > 10 ? "bad" : ""}`}>{wait} นาที</span> : ""}</td>
-                <td>{photoTag(r)}</td>
+                <td>{photoCell(r, canShoot)}</td>
                 <td><div className="row">{(NEXT[r.status] || []).map(([st, l]) => (
                   <form key={st} action={apptStatus}><input type="hidden" name="id" value={r.id} /><input type="hidden" name="status" value={st} />
                     <button className={`btn small ${st === "no_show" ? "danger" : ""}`}>{l}</button></form>))}</div></td>

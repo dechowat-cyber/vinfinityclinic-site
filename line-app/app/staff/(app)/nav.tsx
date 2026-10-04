@@ -2,12 +2,12 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const LINKS = [
+const LINKS: { href: string; label: string; bm?: boolean; roles?: string[]; cam?: boolean }[] = [
   { href: "/staff", label: "วันนี้" },
+  { href: "/staff/photos", label: "📷 Photo Studio", roles: ["BM", "DR", "NS", "CS"], cam: true },
   { href: "/staff/leads", label: "Leads / แชท" },
   { href: "/staff/appointments", label: "นัดหมาย" },
   { href: "/staff/clients", label: "ลูกค้า" },
-  { href: "/staff/photos", label: "ภาพก่อน-หลัง" },
   { href: "/staff/care", label: "ดูแลหลังทำ" },
   { href: "/staff/links", label: "ลิงก์ช่องทาง" },
   { href: "/staff/catalog", label: "ราคากลาง" },
@@ -21,8 +21,8 @@ export function Nav({ name, role, roleLabel }: { name: string; role: string; rol
   return (
     <nav className="side" aria-label="เมนูพนักงาน">
       <div className="brand">VINFINITY</div>
-      {LINKS.filter((l) => !l.bm || role === "BM").map((l) => (
-        <Link key={l.href} href={l.href} aria-current={(l.href === "/staff" ? path === l.href : path.startsWith(l.href)) ? "page" : undefined}>{l.label}</Link>
+      {LINKS.filter((l) => (!l.bm || role === "BM") && (!l.roles || l.roles.includes(role))).map((l) => (
+        <Link key={l.href} href={l.href} className={l.cam ? "cam-link" : undefined} aria-current={(l.href === "/staff" ? path === l.href : path.startsWith(l.href)) ? "page" : undefined}>{l.label}</Link>
       ))}
       <div className="me">{name} · {roleLabel}<br /><a href="/api/auth/logout" style={{ padding: 0 }}>ออกจากระบบ</a></div>
     </nav>
