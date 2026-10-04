@@ -34,6 +34,8 @@ async function call(path: string, init: RequestInit & { json?: unknown } = {}) {
     headers: { Authorization: `Bearer ${token}`, ...(init.json ? { "Content-Type": "application/json" } : {}), ...(init.headers || {}) },
     body: init.json ? JSON.stringify(init.json) : (init.body as any),
   });
+  // 409 with a retry key = LINE already accepted this exact request earlier; treat as sent.
+  if (res.status === 409 && (init.headers as Record<string, string> | undefined)?.["X-Line-Retry-Key"]) return null;
   if (!res.ok) {
     const text = await res.text();
     console.error("[line] error", path, res.status, text);
@@ -48,8 +50,14 @@ export type Msg = Record<string, any>;
 /** Free: replying with a reply token does not count against the monthly message quota. */
 export const reply = (replyToken: string, messages: Msg[]) => call("/message/reply", { json: { replyToken, messages: messages.slice(0, 5) } });
 /** Counts against the LINE OA plan's monthly push quota. */
+/** LINE requires X-Line-Retry-Key to be a UUID; derive a stable one from any idempotency key. */
+export function retryUuid(key: string) {
+  if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(key)) return key;
+  const h = crypto.createHash("sha256").update(key).digest("hex");
+  return `${h.slice(0, 8)}-${h.slice(8, 12)}-5${h.slice(13, 16)}-${((parseInt(h[16], 16) & 3) | 8).toString(16)}${h.slice(17, 20)}-${h.slice(20, 32)}`;
+}
 export const push = (to: string, messages: Msg[], retryKey?: string) =>
-  call("/message/push", { json: { to, messages: messages.slice(0, 5) }, headers: retryKey ? { "X-Line-Retry-Key": retryKey } : {} });
+  call("/message/push", { json: { to, messages: messages.slice(0, 5) }, headers: retryKey ? { "X-Line-Retry-Key": retryUuid(retryKey) } : {} });
 
 export async function profile(userId: string): Promise<{ displayName?: string; pictureUrl?: string; language?: string } | null> {
   try { return (await call(`/profile/${userId}`)) as any; } catch { return null; }
