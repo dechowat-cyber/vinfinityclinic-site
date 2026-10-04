@@ -1,6 +1,7 @@
 import { q } from "@/lib/db";
 import { requireStaff } from "@/lib/session";
 import { HEALTH_ROLES } from "@/lib/health";
+import { Icon } from "../icons";
 
 export const dynamic = "force-dynamic";
 
@@ -28,7 +29,7 @@ export default async function Clients({ searchParams }: { searchParams: Promise<
               <td><small>{r.source || "-"}</small></td><td><small>{r.lead_status || "-"}</small></td>
               <td><small>{r.last_appt ? new Date(r.last_appt).toLocaleDateString("th-TH", { timeZone: "Asia/Bangkok" }) : "-"}</small></td>
               <td>{r.open_plans ? <span className="tag warn">{r.open_plans}</span> : ""}</td>
-              {cam && <td>{r.consent === true ? <a className="btn ghost small" href={`/staff/clients/${r.id}#photos`}>📷</a> : ""}</td>}</tr>))}
+              {cam && <td>{r.consent === true ? <a className="btn ghost small" href={`/staff/clients/${r.id}#photos`} aria-label="ถ่ายภาพ"><Icon name="camera" /></a> : ""}</td>}</tr>))}
         </tbody>
       </table>
     </>

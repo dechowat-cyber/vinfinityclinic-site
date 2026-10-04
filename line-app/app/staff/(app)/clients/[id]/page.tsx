@@ -15,6 +15,7 @@ import { PlanBuilder } from "./plan";
 export const dynamic = "force-dynamic";
 
 const fmt = (d: string | Date) => `${thaiDate(new Date(d))} ${thaiTime(new Date(d))}`;
+const APPT_TH: Record<string, string> = { booked: "จองแล้ว", confirmed: "ยืนยันแล้ว", arrived: "มาถึงแล้ว", in_consult: "กำลังปรึกษา", done: "เสร็จ", no_show: "ไม่มา", cancelled: "ยกเลิก" };
 const PLAN_TH: Record<string, string> = { draft: "ร่าง", sent: "ส่งการ์ดแล้ว", booked: "จองแล้ว", done: "ทำแล้ว" };
 
 const PAY_ERR: Record<string, string> = { bad_amount: "จำนวนเงินไม่ถูกต้อง", bad_method: "เลือกวิธีชำระ", bad_plan: "แผนไม่ตรงกับลูกค้า", receipt_busy: "ระบบออกเลขใบเสร็จไม่ทัน ลองใหม่อีกครั้ง" };
@@ -70,10 +71,18 @@ export default async function ClientPage({ params, searchParams }: { params: Pro
           {lead && <span className="tag">{lead.status}</span>}</div>
       </div>
 
+      <nav className="subnav" aria-label="ส่วนของหน้านี้">
+        {health && <a href="#overview">ประวัติ & ปรึกษา</a>}
+        {health && dataOk && <a href="#photos">ภาพก่อน-หลัง</a>}
+        <a href="#plans">แผนการรักษา</a>
+        <a href="#payments">ชำระเงิน</a>
+        <a href="#history">นัด & ไทม์ไลน์</a>
+      </nav>
+
       {!dataOk && <div className="card err">ลูกค้ายังไม่ยินยอมให้เก็บข้อมูลเพื่อการรักษา ห้ามบันทึกข้อมูลสุขภาพหรือถ่ายภาพจนกว่าจะยินยอม (FR-11)</div>}
 
       {health ? (
-        <div className="grid2">
+        <div className="grid2" id="overview">
           <section className="card">
             <div className="eyebrow">แบบฟอร์มก่อนมา {c.health_updated_at ? `· ${fmt(c.health_updated_at)}` : "· ยังไม่ได้กรอก"}</div>
             <dl className="kv">{HEALTH_FIELDS.map((k) => <div key={k}><dt>{HEALTH_LABELS[k]}</dt><dd>{h[k] || "-"}</dd></div>)}</dl>
@@ -127,6 +136,7 @@ export default async function ClientPage({ params, searchParams }: { params: Pro
       {health && care.length > 0 && <section className="card"><div className="eyebrow">รูปอาการหลังทำที่ลูกค้าส่งมา</div>
         <div className="photos" style={{ marginTop: 10 }}>{care.map((p) => <a key={p.id} className="shot" href={`/api/staff/photo/${p.id}`} target="_blank"><img src={`/api/staff/photo/${p.id}`} alt="รูปอาการ" /><small>{fmt(p.created_at)}</small></a>)}</div></section>}
 
+      <div id="plans" style={{ display: "grid", gap: 18 }}>
       {health && dataOk && <PlanBuilder clientId={id} consultId={consult?.id ?? null} catalog={catalog as any} action={savePlan} isBM={me.role === "BM"} />}
 
       {plans.length > 0 && <table className="t">
@@ -150,6 +160,8 @@ export default async function ClientPage({ params, searchParams }: { params: Pro
             </div></td>
           </tr>))}</tbody>
       </table>}
+
+      </div>
 
       <section className="card" id="payments">
         <div className="row" style={{ justifyContent: "space-between" }}>
@@ -180,9 +192,9 @@ export default async function ClientPage({ params, searchParams }: { params: Pro
               </tr>))}</tbody></table>}
       </section>
 
-      <div className="grid2">
+      <div className="grid2" id="history">
         <section className="card"><div className="eyebrow">นัดหมาย</div>
-          {appts.length === 0 ? <p className="muted">ยังไม่มีนัด</p> : <ul className="list">{appts.map((a) => <li key={a.id}>{fmt(a.start_at)} · {a.kind === "treatment" ? "ทำหัตถการ" : "ปรึกษา"} · <span className="tag">{a.status}</span></li>)}</ul>}
+          {appts.length === 0 ? <p className="muted">ยังไม่มีนัด</p> : <ul className="list">{appts.map((a) => <li key={a.id}>{fmt(a.start_at)} · {a.kind === "treatment" ? "ทำหัตถการ" : "ปรึกษา"} · <span className="tag">{APPT_TH[a.status] ?? a.status}</span></li>)}</ul>}
           <div className="eyebrow" style={{ marginTop: 16 }}>หัตถการที่ทำแล้ว</div>
           {treatments.length === 0 ? <p className="muted">-</p> : <ul className="list">{treatments.map((t) => <li key={t.id}>{fmt(t.done_at)} · {t.name}{t.csat_score ? ` · CSAT ${t.csat_score}/5` : ""}</li>)}</ul>}
         </section>

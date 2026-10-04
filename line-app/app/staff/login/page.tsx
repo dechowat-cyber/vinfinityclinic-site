@@ -9,8 +9,9 @@ const ERR: Record<string, string> = {
 export default async function Login({ searchParams }: { searchParams: Promise<{ e?: string }> }) {
   const { e } = await searchParams;
   return (
-    <main style={{ minHeight: "100vh", display: "grid", placeItems: "center", background: "linear-gradient(135deg,#0B142E,#1A326B)", padding: 18 }}>
-      <div className="card" style={{ maxWidth: 380, width: "100%", textAlign: "center", padding: 30 }}>
+    <main className="login">
+      <div className="card" style={{ maxWidth: 380, width: "100%", textAlign: "center", padding: 32 }}>
+        <div className="login-mark"><img src="/brand/mark.svg" alt="" width={34} height={35} /></div>
         <div className="eyebrow">VINFINITY CLINIC · STAFF</div>
         <h1 style={{ fontWeight: 500, fontSize: 24, margin: "10px 0 6px" }}>ระบบหน้าร้าน</h1>
         <p className="muted" style={{ marginTop: 0 }}>เข้าสู่ระบบด้วยบัญชี LINE ของคุณ (1 คน 1 บัญชี)</p>

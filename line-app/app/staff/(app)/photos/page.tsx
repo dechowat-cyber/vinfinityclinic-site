@@ -39,7 +39,7 @@ export default async function Photos({ searchParams }: { searchParams: Promise<{
   return (
     <>
       <div className="row" style={{ justifyContent: "space-between" }}>
-        <div><div className="eyebrow">PHOTO STUDIO</div><h1>📷 ถ่ายภาพ / ก่อน-หลัง</h1></div>
+        <div><div className="eyebrow">PHOTO STUDIO</div><h1>ถ่ายภาพ / ก่อน-หลัง</h1></div>
         <div className="row"><span className={`tag ${waiting ? "warn" : "ok"}`}>วันนี้รอถ่าย {waiting}</span><span className={`tag ${due.length ? "warn" : ""}`}>ถึงรอบติดตามผล {due.length}</span></div>
       </div>
 

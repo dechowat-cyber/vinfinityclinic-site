@@ -2,6 +2,9 @@
 
 Next.js 15 on Vercel + Postgres (Neon). Customer side lives in LINE (rich menu, consent, LIFF booking, confirmation card, D-1 reminder). Staff side is `/staff` (Today board, Lead inbox, Appointments, Settings, Team).
 
+## Look and feel
+Same CI v2 as vinfinityclinic.com (`assets/styles.css`): Midnight #0B142E, Royal #1E3470, Sapphire #3A5496, Silver Ice #D5DDEE, Mist #EEF2F8, gradient 135°; Montserrat (Latin, numbers) + Kanit (Thai), self-hosted in `public/fonts` (no Google Fonts request). Logo mark in `public/brand`, favicon `app/icon.svg`. The staff menu is grouped by task (งานวันนี้ / ลูกค้า / ธุรกิจ / ตั้งค่า), shows only what the role can open, and carries live badges (photos to take, chats waiting, care requests, recalls due). Long client pages have a sticky section bar. Keep Thai labels free of wide letter-spacing.
+
 ## Run locally
 ```
 npm install
