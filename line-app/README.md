@@ -23,6 +23,13 @@ With no `DATABASE_URL` it uses in-memory Postgres; dev login and `dev_user` are 
 4. Open `APP_URL/staff/login`, sign in with LINE: the first person becomes manager (BM). Others wait for approval in **Team**.
 5. Settings → **Install rich menu**. Invite the bot into the staff LINE group, type one message there, then Settings → use that group.
 
+## When the Messaging API channel is in someone else's provider
+LINE does not let a channel move between providers. The app still works:
+- Put `LINE_CHANNEL_ID` + `LINE_CHANNEL_SECRET` (OA Manager → Settings → Messaging API) in Vercel; the app issues its own short-lived tokens.
+- Set the webhook URL in the same OA Manager page.
+- Leave `NEXT_PUBLIC_LIFF_ID` empty: the rich menu sends a postback and the bot replies with a signed personal booking link (45 days).
+- LINE Login for staff can live in your own provider.
+
 ## Notes
 - Consent text is a draft (`consentVersion`), pending legal/doctor review.
 - Pushes count against the OA plan quota; reminders are D-1 only. Check the plan before launch.

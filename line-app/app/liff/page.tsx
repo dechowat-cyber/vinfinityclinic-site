@@ -33,11 +33,12 @@ export default function Liff() {
   const [token, setToken] = useState<string | null>(null);
   const [view, setView] = useState(params.get("view") === "my" ? "my" : "book");
   const devUser = params.get("dev_user");
+  const link = params.get("t");
   const src = params.get("src") || "liff";
 
   useEffect(() => {
     (async () => {
-      if (!LIFF_ID) { setReady(true); return; } // local preview
+      if (!LIFF_ID || link) { setReady(true); return; } // personal link from the bot, or local preview
       try {
         await loadSdk();
         await window.liff.init({ liffId: LIFF_ID });
@@ -52,12 +53,12 @@ export default function Liff() {
     const url = devUser ? `${path}${path.includes("?") ? "&" : "?"}dev_user=${encodeURIComponent(devUser)}` : path;
     const res = await fetch(url, {
       method: init.json ? "POST" : "GET",
-      headers: { "Content-Type": "application/json", ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+      headers: { "Content-Type": "application/json", ...(token ? { Authorization: `Bearer ${token}` } : {}), ...(link ? { "x-vf-link": link } : {}) },
       body: init.json ? JSON.stringify(init.json) : undefined,
     });
     const j = await res.json().catch(() => ({}));
     return { ok: res.ok, status: res.status, ...j };
-  }, [token, devUser]);
+  }, [token, devUser, link]);
 
   if (fatal) return <main className="liff"><div className="done"><div className="big">{fatal}</div><a className="btn" href="https://line.me/R/ti/p/@230eeqvl">เปิด LINE Vinfinity Clinic</a></div></main>;
   if (!ready) return <main className="liff"><div className="done muted">กำลังโหลด…</div></main>;

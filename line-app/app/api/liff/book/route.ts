@@ -36,7 +36,7 @@ export async function POST(req: Request) {
     const appt = await one("select * from appointments where id = $1", [id]);
     await logTouch(client.id, "in", "booked", `#${id} ${appt!.start_at}`, "liff");
     if (client.line_user_id) {
-      try { await push(client.line_user_id, [confirmation(appt as any, s)], crypto.randomUUID()); await logTouch(client.id, "out", "confirmation"); }
+      try { await push(client.line_user_id, [confirmation(appt as any, s, client.line_user_id)], crypto.randomUUID()); await logTouch(client.id, "out", "confirmation"); }
       catch (e) { console.error("[book] confirmation push failed", e); }
     }
     return Response.json({ ok: true, appointment: appt });

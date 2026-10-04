@@ -42,7 +42,7 @@ export async function handleEvent(ev: Ev, now = new Date(), s?: ClinicSettings):
     await markInbound(c.id);
     await logTouch(c.id, "in", "follow");
     const st = await consentState(c.id);
-    const msgs = st.data === undefined ? M.welcome(s) : [M.welcome(s)[0], M.bookingPrompt()];
+    const msgs = st.data === undefined ? M.welcome(s) : [M.welcome(s)[0], M.bookingPrompt(userId)];
     await logTouch(c.id, "out", "welcome");
     return { replyToken: ev.replyToken, messages: msgs };
   }
@@ -57,8 +57,10 @@ export async function handleEvent(ev: Ev, now = new Date(), s?: ClinicSettings):
       await recordConsent(c.id, type, yes, s.consentVersion);
       await logTouch(c.id, "in", `consent_${type}_${yes ? "yes" : "no"}`);
       if (type === "data") return { replyToken: ev.replyToken, messages: yes ? [M.marketingAsk()] : [M.declinedDataReply(), M.marketingAsk()] };
-      return { replyToken: ev.replyToken, messages: [M.thanksMarketing(yes), M.bookingPrompt()] };
+      return { replyToken: ev.replyToken, messages: [M.thanksMarketing(yes), M.bookingPrompt(userId)] };
     }
+    if (p.get("menu") === "book") return { replyToken: ev.replyToken, messages: [M.bookingPrompt(userId)] };
+    if (p.get("menu") === "my") return { replyToken: ev.replyToken, messages: [M.myPrompt(userId)] };
     if (p.get("appt") === "confirm") {
       const a = await one(`select * from appointments where id = $1 and client_id = $2`, [Number(p.get("id")), c.id]);
       if (!a || !["booked", "confirmed"].includes(a.status)) {
@@ -76,14 +78,14 @@ export async function handleEvent(ev: Ev, now = new Date(), s?: ClinicSettings):
     await markInbound(c.id);
     await logTouch(c.id, "in", "message", text);
     const msgs: line.Msg[] = [];
-    if (/จอง|นัด|คิว|book/i.test(text) && text.length < 40) msgs.push(M.bookingPrompt());
+    if (/จอง|นัด|คิว|book/i.test(text) && text.length < 40) msgs.push(M.bookingPrompt(userId));
     if (!isOpen(s, now)) {
       // FR-08: at most one off-hours reply per person per 12 hours
       const recent = await one(`select 1 from touchpoints where client_id = $1 and kind = 'off_hours' and created_at > $2`,
         [c.id, new Date(now.getTime() - 12 * 3600_000).toISOString()]);
       if (!recent) {
         await logTouch(c.id, "out", "off_hours");
-        return { replyToken: ev.replyToken, messages: M.offHours(s) };
+        return { replyToken: ev.replyToken, messages: M.offHours(s, userId) };
       }
     }
     const st = await consentState(c.id);

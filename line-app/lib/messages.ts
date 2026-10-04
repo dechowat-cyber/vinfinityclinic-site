@@ -1,7 +1,7 @@
 // Every customer-facing text lives here so it can be reviewed in one place.
 // Wording follows the Front-of-House Playbook (section 05): no guarantees, no superlatives.
 import { ClinicSettings } from "./settings";
-import { liffUrl } from "./line";
+import { bookUrl } from "./link";
 import { thaiDate, thaiTime } from "./time";
 
 const NAVY = "#0B142E", ROYAL = "#1E3470", SILVER = "#D5DDEE", MUTED = "#5A6480";
@@ -60,43 +60,49 @@ export function marketingAsk() {
   };
 }
 
-export function bookingPrompt(text = "เลือกวันและเวลาที่สะดวกได้เลยค่ะ ปรึกษาครั้งแรกใช้เวลาประมาณ 30 นาที") {
+export function bookingPrompt(userId: string | null, text = "เลือกวันและเวลาที่สะดวกได้เลยค่ะ ปรึกษาครั้งแรกใช้เวลาประมาณ 30 นาที") {
   return {
     type: "flex", altText: "จองคิวปรึกษาคุณหมอ",
     contents: { type: "bubble", body: { type: "box", layout: "vertical", spacing: "md", paddingAll: "18px", contents: [
       txt("จองคิวปรึกษาคุณหมอ", { weight: "bold", size: "md", color: NAVY }), txt(text, { size: "sm", color: MUTED }),
-    ] }, footer: { type: "box", layout: "vertical", contents: [btn("เลือกวันเวลา", { type: "uri", uri: liffUrl("", { src: "line_chat" }) })] } },
+    ] }, footer: { type: "box", layout: "vertical", contents: [btn("เลือกวันเวลา", { type: "uri", uri: bookUrl(userId, { src: "line_chat" }) })] } },
   };
 }
 
-export function offHours(s: ClinicSettings) {
+export function offHours(s: ClinicSettings, userId: string | null) {
   const open = s.hours.map((h, i) => (h ? null : ["อาทิตย์", "จันทร์", "อังคาร", "พุธ", "พฤหัสบดี", "ศุกร์", "เสาร์"][i])).filter(Boolean);
   return [
     txt(`ขอบคุณที่ทักมานะคะ ตอนนี้อยู่นอกเวลาทำการ ทีมจะตอบกลับในวันทำการถัดไปตั้งแต่ ${s.hours.find(Boolean)?.open ?? "10:00"} น. ค่ะ\nเวลาทำการ ${s.hours.find(Boolean)?.open}–${s.hours.find(Boolean)?.close} น.${open.length ? ` (ปิดวัน${open.join(", วัน")})` : ""}\n\nถ้ามีอาการผิดปกติหลังทำหัตถการ โทร ${s.phone} ได้ทันทีค่ะ`),
-    bookingPrompt("ระหว่างนี้จองคิวปรึกษาคุณหมอได้เองตลอด 24 ชั่วโมงค่ะ"),
+    bookingPrompt(userId, "ระหว่างนี้จองคิวปรึกษาคุณหมอได้เองตลอด 24 ชั่วโมงค่ะ"),
   ];
 }
 
-type Appt = { id: number; start_at: string | Date; doctor: string };
+type Appt = { id: number; start_at: string | Date; doctor: string; line_user_id?: string | null };
+export const myUrl = (userId: string | null | undefined) => bookUrl(userId, { view: "my" });
+export function myPrompt(userId: string) {
+  return { type: "flex", altText: "นัดของฉัน", contents: { type: "bubble", body: { type: "box", layout: "vertical", paddingAll: "18px", contents: [
+    txt("นัดของฉัน", { weight: "bold", size: "md", color: NAVY }), txt("ดู เลื่อน หรือยกเลิกนัดได้ที่นี่ค่ะ", { size: "sm", color: MUTED })] },
+    footer: { type: "box", layout: "vertical", contents: [btn("เปิดนัดของฉัน", { type: "uri", uri: myUrl(userId) })] } } };
+}
 
-export function confirmation(a: Appt, s: ClinicSettings) {
+export function confirmation(a: Appt, s: ClinicSettings, userId: string | null = a.line_user_id ?? null) {
   const d = new Date(a.start_at);
   return {
     type: "flex", altText: `ยืนยันนัดปรึกษา ${thaiDate(d)} ${thaiTime(d)}`,
     contents: card("ยืนยันนัดปรึกษาแล้ว", "APPOINTMENT", [["วัน", thaiDate(d)], ["เวลา", thaiTime(d)], ["สาขา", "อุดรธานี"], ["แพทย์", a.doctor]], [
-      btn("นัดของฉัน / เลื่อนนัด", { type: "uri", uri: liffUrl("", { view: "my" }) }),
+      btn("นัดของฉัน / เลื่อนนัด", { type: "uri", uri: myUrl(userId) }),
       btn("ดูแผนที่", { type: "uri", uri: s.mapsUrl }, "secondary"),
     ], "นัดปรึกษาไม่ต้องวางมัดจำ รบกวนมาก่อนเวลา 10 นาทีนะคะ"),
   };
 }
 
-export function reminder(a: Appt, s: ClinicSettings) {
+export function reminder(a: Appt, s: ClinicSettings, userId: string | null = a.line_user_id ?? null) {
   const d = new Date(a.start_at);
   return {
     type: "flex", altText: `เตือนนัดพรุ่งนี้ ${thaiTime(d)}`,
     contents: card(`พรุ่งนี้ ${thaiTime(d)}`, "REMINDER · D-1", [["วัน", thaiDate(d)], ["สาขา", "อุดรธานี"], ["แพทย์", a.doctor]], [
       btn("ยืนยันมาตามนัด", { type: "postback", data: `appt=confirm&id=${a.id}`, displayText: "ยืนยันมาตามนัดค่ะ" }),
-      btn("เลื่อนนัด", { type: "uri", uri: liffUrl("", { view: "my" }) }, "secondary"),
+      btn("เลื่อนนัด", { type: "uri", uri: myUrl(userId) }, "secondary"),
     ], `รบกวนมาก่อนเวลา 10 นาทีนะคะ ติดต่อ ${s.phone}`),
   };
 }

@@ -36,7 +36,7 @@ export async function POST(req: Request) {
       const newId = await reschedule(id, client.id, String(body.start), s);
       const appt = await one("select * from appointments where id = $1", [newId]);
       await logTouch(client.id, "in", "appt_reschedule", `${id} -> ${newId}`, "liff");
-      if (client.line_user_id) push(client.line_user_id, [confirmation(appt as any, s)], crypto.randomUUID()).catch((e) => console.error(e));
+      if (client.line_user_id) push(client.line_user_id, [confirmation(appt as any, s, client.line_user_id)], crypto.randomUUID()).catch((e) => console.error(e));
       return Response.json({ ok: true, appointment: appt });
     } catch (e) {
       if (e instanceof SlotTakenError) return Response.json({ error: "slot_taken" }, { status: 409 });

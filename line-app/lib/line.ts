@@ -10,8 +10,24 @@ export function verifySignature(body: string, signature: string | null, secret =
   return a.length === b.length && crypto.timingSafeEqual(a, b);
 }
 
+let cached: { token: string; until: number } | null = null;
+/** Long-lived token from env, or a stateless token issued with channel ID + secret (no console access needed). */
+export async function accessToken(): Promise<string> {
+  if (env("LINE_CHANNEL_ACCESS_TOKEN")) return env("LINE_CHANNEL_ACCESS_TOKEN");
+  if (!env("LINE_CHANNEL_ID") || !env("LINE_CHANNEL_SECRET")) return "";
+  if (cached && cached.until > Date.now()) return cached.token;
+  const res = await fetch("https://api.line.me/oauth2/v3/token", {
+    method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({ grant_type: "client_credentials", client_id: env("LINE_CHANNEL_ID"), client_secret: env("LINE_CHANNEL_SECRET") }),
+  });
+  if (!res.ok) throw new Error(`line_token_${res.status}: ${(await res.text()).slice(0, 200)}`);
+  const j: any = await res.json();
+  cached = { token: j.access_token, until: Date.now() + (Number(j.expires_in || 900) - 60) * 1000 };
+  return cached.token;
+}
+
 async function call(path: string, init: RequestInit & { json?: unknown } = {}) {
-  const token = env("LINE_CHANNEL_ACCESS_TOKEN");
+  const token = await accessToken();
   if (!token) { console.warn("[line] no access token; skipped", path); return null; }
   const res = await fetch(path.startsWith("http") ? path : API + path, {
     method: init.method ?? (init.json ? "POST" : "GET"),
@@ -57,7 +73,7 @@ export async function verifyIdToken(idToken: string): Promise<{ sub: string; nam
 export async function installRichMenu(menu: Msg, png: Buffer) {
   const created: any = await call("/richmenu", { json: menu });
   const id = created.richMenuId as string;
-  const token = env("LINE_CHANNEL_ACCESS_TOKEN");
+  const token = await accessToken();
   const up = await fetch(`https://api-data.line.me/v2/bot/richmenu/${id}/content`, {
     method: "POST", headers: { Authorization: `Bearer ${token}`, "Content-Type": "image/png" }, body: new Uint8Array(png),
   });

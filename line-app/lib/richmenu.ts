@@ -1,9 +1,9 @@
-import { liffUrl } from "./line";
+import { useLiff, bookUrl } from "./link";
 
 // 2500 x 1686, 3 columns x 2 rows. The image (public/richmenu.png) is drawn to match these areas.
 export const RICH_MENU_ITEMS = [
-  { label: "จองคิวปรึกษาคุณหมอ", en: "BOOK A CONSULT", action: () => ({ type: "uri", uri: liffUrl("", { src: "richmenu" }) }) },
-  { label: "นัดของฉัน", en: "MY APPOINTMENTS", action: () => ({ type: "uri", uri: liffUrl("", { view: "my" }) }) },
+  { label: "จองคิวปรึกษาคุณหมอ", en: "BOOK A CONSULT", action: () => (useLiff() ? { type: "uri", uri: bookUrl(null, { src: "richmenu" }) } : { type: "postback", data: "menu=book", displayText: "จองคิวปรึกษาคุณหมอ" }) },
+  { label: "นัดของฉัน", en: "MY APPOINTMENTS", action: () => (useLiff() ? { type: "uri", uri: bookUrl(null, { view: "my" }) } : { type: "postback", data: "menu=my", displayText: "นัดของฉัน" }) },
   { label: "คุยกับทีมคลินิก", en: "CHAT WITH US", action: () => ({ type: "message", text: "อยากปรึกษาค่ะ" }) },
   { label: "โปรแกรมและราคาเริ่มต้น", en: "PROGRAMS", action: () => ({ type: "uri", uri: "https://vinfinityclinic.com/#programs" }) },
   { label: "เคสจริงและรีวิว", en: "REVIEWS", action: () => ({ type: "uri", uri: "https://vinfinityclinic.com/#reviews" }) },

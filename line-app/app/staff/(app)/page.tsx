@@ -2,7 +2,7 @@ import QRCode from "qrcode";
 import { q } from "@/lib/db";
 import { apptStatus, walkIn } from "@/lib/actions";
 import { bkk, todayBkk, addDays, parts } from "@/lib/time";
-import { liffUrl } from "@/lib/line";
+import { bookUrl } from "@/lib/link";
 
 export const dynamic = "force-dynamic";
 
@@ -30,7 +30,7 @@ export default async function Today() {
     q(`select count(*)::int n from appointments where start_at >= $1 and start_at < $2 and status = 'booked'`, [to, tomorrowTo]),
     q(`select count(*)::int n from leads where status in ('New','Contacted','Qualified') and (replied_at is null or replied_at < last_inbound_at)`),
   ]);
-  const qr = await QRCode.toDataURL(liffUrl("", { src: "walkin" }), { margin: 1, width: 220, color: { dark: "#0B142E", light: "#FFFFFF" } });
+  const qr = await QRCode.toDataURL(bookUrl(null, { src: "walkin" }), { margin: 1, width: 220, color: { dark: "#0B142E", light: "#FFFFFF" } });
   const arrived = rows.filter((r) => ["arrived", "in_consult", "done"].includes(r.status)).length;
 
   return (

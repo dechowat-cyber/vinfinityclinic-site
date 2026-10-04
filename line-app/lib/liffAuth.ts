@@ -1,5 +1,6 @@
 import { verifyIdToken } from "./line";
 import { upsertClientByLine } from "./crm";
+import { readLinkToken } from "./link";
 
 /**
  * Resolves the client behind a LIFF request. In local development (no LINE Login channel
@@ -13,6 +14,7 @@ export async function clientFromRequest(req: Request, body?: any) {
     const v = await verifyIdToken(idToken);
     if (v) ({ sub, name, picture } = v);
   }
+  if (!sub) sub = readLinkToken(req.headers.get("x-vf-link") || body?.t || new URL(req.url).searchParams.get("t"));
   if (!sub && !process.env.LINE_LOGIN_CHANNEL_ID && process.env.VERCEL_ENV !== "production") {
     sub = new URL(req.url).searchParams.get("dev_user") || body?.devUser || null;
   }

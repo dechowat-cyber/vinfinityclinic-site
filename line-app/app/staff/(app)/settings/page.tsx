@@ -18,8 +18,8 @@ export default async function Settings() {
       <div className="card">
         <div className="eyebrow">การเชื่อมต่อ</div>
         <table className="t" style={{ marginTop: 10 }}><tbody>
-          <tr><td>LINE Messaging API (รับ/ส่งข้อความ)</td><td>{ok(env("LINE_CHANNEL_SECRET") && env("LINE_CHANNEL_ACCESS_TOKEN"))}</td></tr>
-          <tr><td>LIFF (หน้าจองคิวใน LINE)</td><td>{ok(env("NEXT_PUBLIC_LIFF_ID"))}</td></tr>
+          <tr><td>LINE Messaging API (รับ/ส่งข้อความ)</td><td>{ok(env("LINE_CHANNEL_SECRET") && (env("LINE_CHANNEL_ACCESS_TOKEN") || env("LINE_CHANNEL_ID")))}</td></tr>
+          <tr><td>หน้าจองคิว</td><td>{env("NEXT_PUBLIC_LIFF_ID") ? ok(true) : <span className="tag">ใช้ลิงก์ส่วนตัวจากบอท (ยังไม่มี LIFF)</span>}</td></tr>
           <tr><td>LINE Login (พนักงานเข้าระบบ)</td><td>{ok(env("LINE_LOGIN_CHANNEL_ID") && env("LINE_LOGIN_CHANNEL_SECRET"))}</td></tr>
           <tr><td>ฐานข้อมูล</td><td>{ok(env("DATABASE_URL"))}</td></tr>
           <tr><td>Cron เตือนนัด</td><td>{ok(env("CRON_SECRET"))}</td></tr>
