@@ -19,6 +19,7 @@ const GROUPS: { title: string; items: Item[] }[] = [
   ] },
   { title: "ธุรกิจ", items: [
     { href: "/staff/reports", label: "รายงาน", icon: "chart", roles: ["BM", "MK"] },
+    { href: "/staff/segments", label: "กลุ่มลูกค้า / แคมเปญ", icon: "target", roles: ["BM", "MK"] },
     { href: "/staff/catalog", label: "ราคากลาง", icon: "tag" },
     { href: "/staff/links", label: "ลิงก์ช่องทาง", icon: "link" },
   ] },

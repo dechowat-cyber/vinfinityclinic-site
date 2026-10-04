@@ -10,6 +10,9 @@ import { QuickShoot } from "../../quick-shoot";
 import { startPhotoSession } from "@/lib/photoActions";
 import { METHODS, CASHIER_ROLES, VOID_ROLES, paidByPlan, clientRevenue, baht } from "@/lib/payments";
 import { takePayment, voidPaymentAction } from "@/lib/crmActions";
+import { possibleDuplicates } from "@/lib/identity";
+import { mergeAction } from "@/lib/cdpActions";
+import { SOURCE_LABEL } from "@/lib/reports";
 import { PlanBuilder } from "./plan";
 
 export const dynamic = "force-dynamic";
@@ -20,7 +23,7 @@ const PLAN_TH: Record<string, string> = { draft: "ร่าง", sent: "ส่�
 
 const PAY_ERR: Record<string, string> = { bad_amount: "จำนวนเงินไม่ถูกต้อง", bad_method: "เลือกวิธีชำระ", bad_plan: "แผนไม่ตรงกับลูกค้า", receipt_busy: "ระบบออกเลขใบเสร็จไม่ทัน ลองใหม่อีกครั้ง" };
 
-export default async function ClientPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ photo?: string; pay?: string }> }) {
+export default async function ClientPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ photo?: string; pay?: string; merged?: string }> }) {
   const me = await requireStaff();
   const id = Number((await params).id);
   const c = await one(`select c.*, r.name as ref_name, r.display_name as ref_display from clients c left join clients r on r.id = c.referred_by where c.id = $1`, [id]);
@@ -43,9 +46,11 @@ export default async function ClientPage({ params, searchParams }: { params: Pro
     health ? suggestKind(id) : Promise.resolve("before"),
     health ? autoPairs(id) : Promise.resolve([]),
   ]);
-  const [paidMap, revenue, payments] = await Promise.all([
+  const [paidMap, revenue, payments, dups, visit] = await Promise.all([
     paidByPlan(id), clientRevenue(id),
     q("select p.*, s.name as staff_name from payments p left join staff s on s.id = p.received_by where p.client_id = $1 order by p.created_at desc limit 30", [id]),
+    possibleDuplicates(id),
+    one("select src, utm_source, utm_medium, utm_campaign, gclid is not null as g, fbclid is not null as f, ttclid is not null as t, landing, created_at from web_visits where client_id = $1 order by created_at limit 1", [id]),
   ]);
   const cashier = CASHIER_ROLES.includes(me.role);
   const due = plans.map((p) => ({ id: Number(p.id), goal: p.goal, balance: Math.max(0, Number(p.total) - (paidMap.get(Number(p.id)) ?? 0)) })).filter((p) => p.balance > 0);
@@ -62,7 +67,8 @@ export default async function ClientPage({ params, searchParams }: { params: Pro
     <>
       <div className="row" style={{ justifyContent: "space-between" }}>
         <div><div className="eyebrow">CLIENT · #{id}</div><h1>{c.name || c.display_name || "-"}</h1>
-          <p className="muted" style={{ margin: "4px 0 0" }}>{c.phone || "ไม่มีเบอร์"} · {c.line_user_id ? "LINE" : "ไม่มี LINE"} · source {c.source || "-"}
+          <p className="muted" style={{ margin: "4px 0 0" }}>{c.phone || "ไม่มีเบอร์"} · {c.line_user_id ? "LINE" : "ไม่มี LINE"} · ช่องทาง {SOURCE_LABEL[c.source] ?? c.source ?? "-"}
+            {visit ? ` · เว็บ: ${[visit.utm_source, visit.utm_medium, visit.utm_campaign].filter(Boolean).join(" / ") || visit.landing || "-"}${visit.g ? " · Google Ads click" : ""}${visit.f ? " · Meta click" : ""}${visit.t ? " · TikTok click" : ""}` : ""}
             {c.ref_name || c.ref_display ? ` · แนะนำโดย ${c.ref_name || c.ref_display}` : ""}{c.ref_code ? ` · รหัสแนะนำของลูกค้า ${c.ref_code}` : ""}</p></div>
         <div className="row">{health && dataOk && <QuickShoot clientId={id} kind={kind} protocol={protocol}
             openSession={sessions.find((x) => !x.completed_at)?.id ?? null} />}
@@ -70,6 +76,16 @@ export default async function ClientPage({ params, searchParams }: { params: Pro
           {consent.map((x) => <span key={x.type} className={`tag ${x.granted ? "ok" : "bad"}`}>{x.type === "data" ? "ยินยอมข้อมูล" : "รับข่าวสาร"}: {x.granted ? "ใช่" : "ไม่"}</span>)}
           {lead && <span className="tag">{lead.status}</span>}</div>
       </div>
+
+      {sp.merged && <div className="card" style={{ borderColor: "var(--ok)" }}>รวมรายการ #{sp.merged} เข้ากับลูกค้ารายนี้แล้ว</div>}
+      {dups.length > 0 && <div className="card warn-card">
+        <b>อาจเป็นลูกค้าคนเดียวกัน (เบอร์โทรตรงกัน):</b> {dups.map((d) => <a key={d.id} href={`/staff/clients/${d.id}`} style={{ marginLeft: 8 }}>#{d.id} {d.name || d.display_name || ""}{d.line_user_id ? " (LINE)" : ""}</a>)}
+        {me.role === "BM" && <div className="row" style={{ marginTop: 8 }}>{dups.map((d) => {
+          const keepThis = !!c.line_user_id || !d.line_user_id;
+          return <form key={d.id} action={mergeAction}><input type="hidden" name="primary" value={keepThis ? id : d.id} /><input type="hidden" name="secondary" value={keepThis ? d.id : id} />
+            <button className="btn small">{keepThis ? `รวม #${d.id} เข้ารายการนี้` : `รวมรายการนี้เข้า #${d.id} (มี LINE)`}</button></form>;
+        })}</div>}
+      </div>}
 
       <nav className="subnav" aria-label="ส่วนของหน้านี้">
         {health && <a href="#overview">ประวัติ & ปรึกษา</a>}

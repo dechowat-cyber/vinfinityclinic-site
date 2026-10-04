@@ -226,3 +226,14 @@ details.card summary{cursor:pointer;color:var(--royal)}
 .login-mark{width:64px;height:64px;border-radius:18px;background:var(--grad);display:grid;place-items:center;margin:0 auto 14px}
 .staff .btn .ico{width:18px;height:18px;flex:none}
 .staff .btn.big .ico{width:22px;height:22px}
+
+/* ---------- CDP ---------- */
+.warn-card{border-color:#F3D29B;background:#FFFBF2}
+.seg-form{display:grid;gap:12px}
+.seg-form fieldset{border:0;padding:0;margin:0}
+.seg-form legend{font-size:14px;color:var(--muted);margin-bottom:6px}
+.seg-form .field{margin:0;min-width:150px;flex:1}
+.seg-form select[multiple]{border:1px solid var(--line);border-radius:12px;padding:6px;background:#fff;font-size:15px}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:14px;background:#fff;cursor:pointer;min-height:40px}
+.chip input{accent-color:var(--royal)}
+.seg-form .field input{width:100%;min-width:0}

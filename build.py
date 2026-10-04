@@ -5,6 +5,12 @@ import json, pathlib
 
 ROOT = pathlib.Path(__file__).parent
 SITE = "https://vinfinityclinic.com"
+# CDP: the staff/LINE app that records web visits (/r/web) — see assets/track.js
+LINE_APP = "https://vinfinity-line.vercel.app"
+# Ad pixels: fill the IDs to switch them on. They load only after the visitor accepts the cookie banner.
+GA4_ID = ""        # G-XXXXXXXXXX
+META_PIXEL_ID = ""  # 15-16 digits
+TIKTOK_PIXEL_ID = ""
 from urllib.parse import quote as _q
 # FR-01: every LINE button opens the chat with a pre-filled message carrying the source tag,
 # which the LINE app (line-app/lib/source.ts) reads and stamps on the lead.
@@ -221,6 +227,8 @@ def footer():
 <div class="legal">วินฟินิตี้ คลินิกเวชกรรม อุดรธานี · ใบอนุญาตประกอบกิจการสถานพยาบาลเลขที่ 41101001567 · ฆสพ.อด.100/2568 · ผลลัพธ์ของการรักษาขึ้นอยู่กับแต่ละบุคคล การทำหัตถการทุกชนิดอาจมีผลข้างเคียง ควรปรึกษาแพทย์ก่อนตัดสินใจ</div>
 </div>
 </footer>
+<script>window.VF={{app:{json.dumps(LINE_APP)},ga4:{json.dumps(GA4_ID)},meta:{json.dumps(META_PIXEL_ID)},tiktok:{json.dumps(TIKTOK_PIXEL_ID)}}};</script>
+<script src="/assets/track.js" defer></script>
 </body>
 </html>
 """

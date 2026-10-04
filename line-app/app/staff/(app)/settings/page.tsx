@@ -1,6 +1,7 @@
 import { q } from "@/lib/db";
 import { saveClinic, setupRichMenu, useStaffGroup } from "@/lib/actions";
 import { togglePause } from "@/lib/actions2";
+import { capiStatus } from "@/lib/capi";
 import { getSettings } from "@/lib/settings";
 import { requireStaff } from "@/lib/session";
 
@@ -13,6 +14,7 @@ export default async function Settings() {
   const s = await getSettings();
   const cand = await q("select value from settings where key = 'candidate_group'");
   const env = (k: string) => !!process.env[k];
+  const capi = await capiStatus();
   return (
     <>
       <div><div className="eyebrow">SETTINGS</div><h1>ตั้งค่า</h1></div>
@@ -29,6 +31,15 @@ export default async function Settings() {
             {cand.length > 0 ? <form action={useStaffGroup} style={{ display: "inline" }}> <button className="btn ghost small">ใช้กลุ่มที่เพิ่งเชิญบอท</button></form> : <small className="muted"> เชิญบอทเข้ากลุ่ม แล้วพิมพ์ในกลุ่มหนึ่งข้อความ</small>}</td></tr>
         </tbody></table>
       </div>
+      <section className="card">
+        <div className="eyebrow">CONVERSION API · ส่งผลลัพธ์กลับแพลตฟอร์มโฆษณา</div>
+        <table className="t" style={{ marginTop: 10 }}><tbody>
+          {([["meta", "Meta (Facebook / IG)", "META_PIXEL_ID + META_CAPI_TOKEN"], ["tiktok", "TikTok", "TIKTOK_PIXEL_ID + TIKTOK_ACCESS_TOKEN"], ["ga4", "Google Analytics 4 → Google Ads", "GA4_MEASUREMENT_ID + GA4_API_SECRET"]] as const).map(([k, l, v]) => (
+            <tr key={k}><td>{l}</td><td>{capi.platforms.includes(k) ? <span className="tag ok">เปิด</span> : <span className="tag">ปิด</span>}</td><td><small className="muted">{v}</small></td></tr>))}
+        </tbody></table>
+        <p className="muted" style={{ fontSize: 13 }}>ส่งเฉพาะลูกค้าที่ยินยอมรับข่าวสาร · เบอร์โทรถูก hash · ไม่ส่งชื่อหัตถการ · เหตุการณ์: แชทครั้งแรก, จองนัด, ชำระเงิน (ย้อนหลังได้ 7 วัน)
+          {Object.keys(capi.counts).length > 0 && <> · สถานะ: {Object.entries(capi.counts).map(([k, n]) => `${k} ${n}`).join(", ")}</>}</p>
+      </section>
       <form className="card" action={togglePause}>
         <div className="eyebrow">ข้อความอัตโนมัติ (kill switch)</div>
         <p style={{ margin: "8px 0" }}>{s.paused ? "หยุดส่งข้อความอัตโนมัติทั้งหมดอยู่ (เตือนนัด nurture aftercare CSAT แจ้งเตือนทีม)" : "เปิดอยู่ · ระบบเช็คทุก 5 นาที"}</p>

@@ -14,17 +14,19 @@ export const SOURCES: Record<string, string> = {
 
 export const oaId = () => process.env.LINE_OA_ID || "@230eeqvl";
 
-export function deepLink(src: string, refCode?: string) {
-  const tag = src === "ref" && refCode ? `รหัสแนะนำ ${refCode}` : SOURCES[src] || src;
+export function deepLink(src: string, refCode?: string, visitCode?: string) {
+  const base = src === "ref" && refCode ? `รหัสแนะนำ ${refCode}` : SOURCES[src] || src;
+  const tag = visitCode ? `${base} #${visitCode}` : base;
   const text = `สวัสดีค่ะ สนใจปรึกษาคุณหมอ (${tag})`;
   return `https://line.me/R/oaMessage/${encodeURIComponent(oaId())}/?${encodeURIComponent(text)}`;
 }
 
 /** Reads a source tag or referral code from a chat message. */
-export function parseSource(text: string): { source?: string; refCode?: string } {
+export function parseSource(text: string): { source?: string; refCode?: string; visitCode?: string } {
   const ref = /รหัสแนะนำ\s*([A-Z0-9]{5,8})/i.exec(text);
   if (ref) return { source: "ref", refCode: ref[1].toUpperCase() };
-  for (const [k, label] of Object.entries(SOURCES)) if (text.includes(`(${label})`)) return { source: k };
+  const visitCode = /\(จาก[^)]*#([A-HJ-NP-Z2-9]{6})\)/.exec(text)?.[1];
+  for (const [k, label] of Object.entries(SOURCES)) if (text.includes(`(${label})`) || text.includes(`(${label} #`)) return visitCode ? { source: k, visitCode } : { source: k };
   return {};
 }
 
@@ -50,8 +52,12 @@ export async function ensureRefCode(clientId: number): Promise<string> {
 }
 
 /** FR-01/02: stamp source on the client and open lead; bind referrer (never self). */
-export async function applySource(clientId: number, leadId: number, found: { source?: string; refCode?: string }) {
+export async function applySource(clientId: number, leadId: number, found: { source?: string; refCode?: string; visitCode?: string }) {
   if (!found.source) return null;
+  if (found.visitCode) {
+    const { linkVisit } = await import("./attribution");
+    await linkVisit(found.visitCode, clientId, leadId);
+  }
   await q("update clients set source = coalesce(source, $2) where id = $1", [clientId, found.source]);
   await q("update leads set source = coalesce(source, $2) where id = $1", [leadId, found.source]);
   if (found.refCode) {

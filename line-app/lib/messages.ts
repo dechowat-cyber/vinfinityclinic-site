@@ -155,6 +155,14 @@ export function noShow(userId: string | null) {
     ] }, footer: { type: "box", layout: "vertical", contents: [btn("จองเวลาใหม่", { type: "uri", uri: bookUrl(userId, { src: "noshow" }) })] } } };
 }
 
+/** Segment campaign (marketing): the manager's text, optionally with a booking button. */
+export function campaign(userId: string | null, text: string, withBooking: boolean, campaignId: number) {
+  if (!withBooking) return txt(text);
+  return { type: "flex", altText: text.slice(0, 380),
+    contents: { type: "bubble", body: { type: "box", layout: "vertical", paddingAll: "18px", contents: [txt(text, { size: "sm", color: NAVY })] },
+      footer: { type: "box", layout: "vertical", contents: [btn("จองคิว", { type: "uri", uri: bookUrl(userId, { src: `camp_${campaignId}` }) })] } } };
+}
+
 /** Recall: the same treatment is coming due again. Draft wording, sent only with marketing consent. */
 export function recall(userId: string | null, treatment: string, lastDate: string) {
   return { type: "flex", altText: `ใกล้ครบรอบ${treatment}แล้วค่ะ จองคิวได้เลย`,

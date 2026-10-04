@@ -268,4 +268,70 @@ create table if not exists recalls (
   updated_at timestamptz not null default now()
 );
 create index if not exists recalls_due on recalls(status, due_on);
+
+-- ---------- CDP: identity, web attribution, segments, conversions ----------
+alter table clients add column if not exists phone_norm text generated always as (
+  case when regexp_replace(coalesce(phone, ''), '[^0-9]', '', 'g') ~ '^66[0-9]{8,9}$' then '0' || substr(regexp_replace(phone, '[^0-9]', '', 'g'), 3)
+       else nullif(regexp_replace(coalesce(phone, ''), '[^0-9]', '', 'g'), '') end) stored;
+create index if not exists clients_phone_norm on clients(phone_norm) where phone_norm is not null;
+create table if not exists client_merges (
+  id bigserial primary key,
+  primary_id bigint not null,
+  secondary_id bigint not null,
+  snapshot jsonb not null,
+  merged_by bigint,
+  created_at timestamptz not null default now()
+);
+create table if not exists web_visits (
+  id bigserial primary key,
+  code text unique not null,
+  src text not null default 'web',
+  utm_source text, utm_medium text, utm_campaign text, utm_content text, utm_term text,
+  gclid text, fbclid text, ttclid text, ga_cid text, fbp text,
+  landing text, referrer text,
+  client_id bigint,
+  matched_at timestamptz,
+  created_at timestamptz not null default now()
+);
+create index if not exists web_visits_client on web_visits(client_id);
+create table if not exists segments (
+  id bigserial primary key,
+  name text not null,
+  filters jsonb not null default '{}',
+  created_by bigint,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+create table if not exists campaigns (
+  id bigserial primary key,
+  segment_id bigint,
+  name text not null,
+  filters jsonb not null default '{}',
+  message text not null,
+  with_booking boolean not null default true,
+  recipients int not null default 0,
+  sent int not null default 0,
+  created_by bigint,
+  created_at timestamptz not null default now()
+);
+create table if not exists campaign_recipients (
+  campaign_id bigint not null,
+  client_id bigint not null,
+  sent_at timestamptz,
+  primary key (campaign_id, client_id)
+);
+create table if not exists conversions (
+  id bigserial primary key,
+  event_id text unique not null,
+  client_id bigint not null,
+  event text not null,
+  value numeric,
+  event_at timestamptz not null,
+  status text not null default 'pending',
+  results jsonb,
+  tries int not null default 0,
+  created_at timestamptz not null default now(),
+  sent_at timestamptz
+);
+create index if not exists conversions_pending on conversions(status, created_at);
 `;

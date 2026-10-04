@@ -19,7 +19,8 @@ export default async function Clients({ searchParams }: { searchParams: Promise<
     order by c.id desc limit 100`, term ? [`%${term}%`] : []);
   return (
     <>
-      <div><div className="eyebrow">CLIENTS</div><h1>ลูกค้า</h1></div>
+      <div className="row" style={{ justifyContent: "space-between" }}><div><div className="eyebrow">CLIENTS</div><h1>ลูกค้า</h1></div>
+        {me.role === "BM" && <a className="btn ghost small" href="/staff/clients/duplicates">ตรวจลูกค้าซ้ำ</a>}</div>
       <form className="row"><input name="s" defaultValue={term} className="inp" placeholder="ค้นหาชื่อ ชื่อ LINE หรือเบอร์โทร" style={{ flex: 1, minHeight: 44 }} /><button className="btn small">ค้นหา</button></form>
       <table className="t">
         <thead><tr><th>ลูกค้า</th><th>source</th><th>สถานะ lead</th><th>นัดล่าสุด</th><th>แผนที่รอติดตาม</th>{cam && <th>ภาพ</th>}</tr></thead>

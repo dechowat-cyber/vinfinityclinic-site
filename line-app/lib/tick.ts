@@ -9,6 +9,8 @@ import { isOpen } from "./webhook";
 import { sendReminders, eveningRun } from "./cron";
 import { seedOnce } from "./seed";
 import { recallTick } from "./recall";
+import { sendCampaignBatch } from "./segments";
+import { capiTick } from "./capi";
 import { bkk, parts, todayBkk, addDays, minutes } from "./time";
 
 const APP = () => process.env.APP_URL || "";
@@ -187,6 +189,8 @@ export async function runTick(now = new Date()) {
     ["nurture", async () => (after(now, "10:00") && (await once(`nurture-run:${todayBkk(now)}`)) ? nurture(now) : 0)],
     ["planFollowUp", () => planFollowUp(now)],
     ["recall", () => recallTick(now, s)],
+    ["campaigns", () => sendCampaignBatch(200)],
+    ["capi", () => capiTick(now)],
     ["reminderD1", async () => (after(now, "18:00") && !after(now, "21:00") ? sendReminders(now) : 0)],
     ["evening", async () => (after(now, "20:00") && (await once(`eve-run:${todayBkk(now)}`)) ? eveningRun(now) : 0)],
   ];

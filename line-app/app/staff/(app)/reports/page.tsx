@@ -1,5 +1,5 @@
 import { requireStaff } from "@/lib/session";
-import { REPORT_ROLES, SOURCE_LABEL, PERIODS, periodRange, funnel, periodKpis, monthlyRevenue } from "@/lib/reports";
+import { REPORT_ROLES, SOURCE_LABEL, PERIODS, periodRange, funnel, periodKpis, monthlyRevenue, campaignFunnel } from "@/lib/reports";
 import { METHODS, baht } from "@/lib/payments";
 import { addDays } from "@/lib/time";
 
@@ -15,7 +15,7 @@ export default async function Reports({ searchParams }: { searchParams: Promise<
   await requireStaff(REPORT_ROLES);
   const key = PERIODS[(await searchParams).p || ""] ? (await searchParams).p! : "month";
   const [from, to] = periodRange(key);
-  const [rows, k, months] = await Promise.all([funnel(from, to), periodKpis(from, to), monthlyRevenue(6)]);
+  const [rows, k, months, camps] = await Promise.all([funnel(from, to), periodKpis(from, to), monthlyRevenue(6), campaignFunnel(from, to)]);
   const sum = rows.reduce((a, r) => ({ clients: a.clients + r.clients, booked: a.booked + r.booked, arrived: a.arrived + r.arrived, treated: a.treated + r.treated, paid: a.paid + r.paid, repeat: a.repeat + r.repeat, revenue: a.revenue + r.revenue }),
     { clients: 0, booked: 0, arrived: 0, treated: 0, paid: 0, repeat: 0, revenue: 0 });
 
@@ -56,6 +56,16 @@ export default async function Reports({ searchParams }: { searchParams: Promise<
         </table>
         <p className="muted" style={{ fontSize: 13, marginBottom: 0 }}>% ในแต่ละช่องเทียบกับขั้นก่อนหน้า (ชำระเงิน เทียบกับลูกค้าใหม่) · รายรับ = ทุกบาทที่ลูกค้ากลุ่มนี้จ่ายมาจนถึงวันนี้ · ช่องทาง = จุดแรกที่ลูกค้ารู้จักคลินิก</p>
       </section>
+
+      {camps.length > 0 && <section className="card">
+        <div className="eyebrow">แคมเปญโฆษณา / UTM · ลูกค้าใหม่ที่มาจากเว็บไซต์</div>
+        <table className="t" style={{ marginTop: 10 }}>
+          <thead><tr><th>ช่องทาง</th><th>แคมเปญ</th><th>ลูกค้าใหม่</th><th>จองนัด</th><th>ชำระเงิน</th><th>รายรับ</th></tr></thead>
+          <tbody>{camps.map((c) => (
+            <tr key={c.src + c.campaign}><td><small>{SOURCE_LABEL[c.src] ?? c.src}</small></td><td><b>{c.campaign}</b></td><td>{c.clients}</td>
+              <td>{c.booked} <small className="muted">{pct(c.booked, c.clients)}</small></td><td>{c.paid} <small className="muted">{pct(c.paid, c.clients)}</small></td><td>{baht(c.revenue)}</td></tr>))}</tbody>
+        </table>
+      </section>}
 
       <div className="grid2">
         <section className="card"><div className="eyebrow">รายรับรายเดือน</div>

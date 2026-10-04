@@ -6,6 +6,7 @@ export const REPORT_ROLES = ["BM", "MK"];
 export const SOURCE_LABEL: Record<string, string> = {
   ...Object.fromEntries(Object.entries(SOURCES).map(([k, v]) => [k, v.replace(/^จาก/, "")])),
   walkin: "Walk-in", ref: "เพื่อนแนะนำ", line: "LINE (เพิ่มเพื่อนเอง)", unknown: "ไม่ทราบ",
+  gads: "Google Ads", fbads: "Facebook/IG Ads", ttads: "TikTok Ads", seo: "Google ค้นหา",
 };
 export const PERIODS: Record<string, string> = { month: "เดือนนี้", last: "เดือนที่แล้ว", d90: "90 วัน", year: "ปีนี้" };
 
@@ -90,4 +91,20 @@ export async function monthlyRevenue(months = 6, now = new Date()) {
     out.push({ month: from.slice(0, 7), revenue: Number(r!.revenue), payers: Number(r!.payers) });
   }
   return out;
+}
+
+/** Web campaigns (utm_campaign) for new clients in the period, through to revenue. */
+export async function campaignFunnel(from: string, to: string) {
+  const rows = await q(`
+    with v as (
+      select distinct on (w.client_id) w.client_id, w.src, coalesce(nullif(w.utm_campaign, ''), '(ไม่มีชื่อแคมเปญ)') as campaign
+      from web_visits w join clients c on c.id = w.client_id
+      where w.client_id is not null and c.created_at >= $1 and c.created_at < $2 order by w.client_id, w.created_at
+    )
+    select v.src, v.campaign, count(*)::int as clients,
+      count(*) filter (where exists (select 1 from appointments a where a.client_id = v.client_id))::int as booked,
+      count(*) filter (where exists (select 1 from payments p where p.client_id = v.client_id and p.voided_at is null))::int as paid,
+      coalesce(sum((select sum(p.amount) from payments p where p.client_id = v.client_id and p.voided_at is null)), 0)::float as revenue
+    from v group by v.src, v.campaign order by revenue desc, clients desc`, [iso(from), iso(to)]);
+  return rows.map((r) => ({ src: r.src, campaign: r.campaign, clients: r.clients, booked: r.booked, paid: r.paid, revenue: Number(r.revenue) }));
 }
