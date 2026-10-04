@@ -223,6 +223,16 @@ def footer():
 """
 
 
+def bust(html):
+    """/assets is cached as immutable, so CSS/JS links carry a content hash."""
+    import hashlib, re
+    def rep(m):
+        f = ROOT / m.group(1).lstrip("/")
+        h = hashlib.sha1(f.read_bytes()).hexdigest()[:10] if f.exists() else "0"
+        return '"%s?v=%s"' % (m.group(1), h)
+    return re.sub(r'"(/assets/[^"?]+\.(?:css|js))"', rep, html)
+
+
 def build(out, title, desc, path, keywords, body_file, faqs, extra_ld=(), lang="th"):
     body = (ROOT / "pages" / body_file).read_text(encoding="utf-8")
     for key, part in (("ANATOMY", "_anatomy.html"), ("RESULTS_EYE", "_results_eye.html"),
@@ -236,6 +246,7 @@ def build(out, title, desc, path, keywords, body_file, faqs, extra_ld=(), lang="
     body = body.replace("{{LINE}}", LINE).replace("{{MSG}}", MSG).replace("{{FAQ}}", faq_html(faqs))
     lds = ([faq_ld(faqs)] if faqs else []) + list(extra_ld)
     html = head(title, desc, path, keywords, lds, lang) + body + footer()
+    html = bust(html)
     p = ROOT / out
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(html, encoding="utf-8")
