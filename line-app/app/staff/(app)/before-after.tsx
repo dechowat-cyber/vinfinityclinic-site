@@ -1,5 +1,6 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { prepare, compose, type Prepared } from "@/lib/align";
 
 export type BAAngle = { key: string; label: string; before: number; after: number };
 
@@ -20,7 +21,10 @@ function sweepAt(t: number) {
  * Before & after slider: drag (or swipe) left-right anywhere on the photo. It sweeps once by itself
  * whenever a pair or an angle opens, and stops as soon as someone touches it.
  */
-export function BeforeAfter({ angles, beforeLabel, afterLabel, auto = true }: { angles: BAAngle[]; beforeLabel: string; afterLabel: string; auto?: boolean }) {
+/** tools: shown on the compare page only. exportOk = the client has given marketing consent. */
+export type BATools = { exportOk: boolean };
+
+export function BeforeAfter({ angles, beforeLabel, afterLabel, auto = true, tools }: { angles: BAAngle[]; beforeLabel: string; afterLabel: string; auto?: boolean; tools?: BATools }) {
   const box = useRef<HTMLDivElement>(null);
   const raf = useRef(0);
   const drag = useRef(false);
@@ -28,6 +32,33 @@ export function BeforeAfter({ angles, beforeLabel, afterLabel, auto = true }: { 
   const [i, setI] = useState(0);
   const [full, setFull] = useState(false);
   const a = angles[Math.min(i, angles.length - 1)];
+  const [align, setAlign] = useState(true);
+  const [blur, setBlur] = useState(false);
+  const [prep, setPrep] = useState<Prepared | null>(null);
+  const [busy, setBusy] = useState(false);
+
+  // eye-based alignment (and optional eye blur), computed on this device
+  useEffect(() => {
+    setPrep(null);
+    if (!a || (!align && !blur)) return;
+    let off = false;
+    prepare(a.before, a.after, { align, blur }).then((p) => { if (!off) setPrep(p); else { URL.revokeObjectURL(p.before); URL.revokeObjectURL(p.after); } }).catch(() => {});
+    return () => { off = true; };
+  }, [a?.before, a?.after, align, blur]);
+  useEffect(() => () => { if (prep) { URL.revokeObjectURL(prep.before); URL.revokeObjectURL(prep.after); } }, [prep]);
+
+  async function exportPng(layout: "side" | "stack") {
+    if (!a) return;
+    setBusy(true);
+    try {
+      const p = prep ?? await prepare(a.before, a.after, { align: false, blur: false });
+      const blob = await compose(p, { before: beforeLabel, after: afterLabel, layout });
+      const file = new File([blob], `before-after-${a.key}.png`, { type: "image/png" });
+      const nav: any = navigator;
+      if (nav.canShare?.({ files: [file] })) { await nav.share({ files: [file] }).catch(() => {}); }
+      else { const u = URL.createObjectURL(blob); const l = document.createElement("a"); l.href = u; l.download = file.name; l.click(); setTimeout(() => URL.revokeObjectURL(u), 3000); }
+    } finally { setBusy(false); }
+  }
 
   const stop = () => cancelAnimationFrame(raf.current);
   const sweep = useCallback(() => {
@@ -74,8 +105,8 @@ export function BeforeAfter({ angles, beforeLabel, afterLabel, auto = true }: { 
         onKeyDown={(e) => {
           if (e.key === "ArrowLeft" || e.key === "ArrowRight") { e.preventDefault(); stop(); setX((v) => Math.max(0, Math.min(100, v + (e.key === "ArrowLeft" ? -5 : 5)))); }
         }}>
-        <img src={src(a.after)} alt={`${a.label} หลัง`} draggable={false} />
-        <img src={src(a.before)} alt={`${a.label} ก่อน`} draggable={false} style={{ clipPath: `inset(0 ${100 - x}% 0 0)` }} />
+        <img src={prep?.after ?? src(a.after)} alt={`${a.label} หลัง`} draggable={false} />
+        <img src={prep?.before ?? src(a.before)} alt={`${a.label} ก่อน`} draggable={false} style={{ clipPath: `inset(0 ${100 - x}% 0 0)` }} />
         <div className="ba-bar" style={{ left: `${x}%` }}><span>‹ ›</span></div>
         <span className="ba-lab l" style={{ opacity: x > 12 ? 1 : 0 }}>ก่อน · {beforeLabel}</span>
         <span className="ba-lab r" style={{ opacity: x < 88 ? 1 : 0 }}>หลัง · {afterLabel}</span>
@@ -88,6 +119,15 @@ export function BeforeAfter({ angles, beforeLabel, afterLabel, auto = true }: { 
         <button type="button" className="btn ghost small" onClick={sweep}>เล่นอีกครั้ง</button>
         <button type="button" className="btn ghost small" onClick={() => setFull(!full)}>{full ? "ปิดเต็มจอ" : "เต็มจอ"}</button>
       </div>
+      {tools && !full && <div className="ba-tools">
+        <label><input type="checkbox" checked={align} onChange={(e) => setAlign(e.target.checked)} /> จัดแนวตามดวงตา</label>
+        <label><input type="checkbox" checked={blur} onChange={(e) => setBlur(e.target.checked)} /> ปิดดวงตา</label>
+        {tools.exportOk
+          ? <><button type="button" className="btn small" disabled={busy} onClick={() => exportPng("side")}>{busy ? "กำลังสร้างภาพ…" : "ส่งออกภาพ ซ้าย–ขวา"}</button>
+              <button type="button" className="btn ghost small" disabled={busy} onClick={() => exportPng("stack")}>บน–ล่าง</button></>
+          : <span className="ba-lock">ลูกค้ายังไม่ยินยอมให้ใช้ภาพเพื่อการตลาด — ส่งออกไม่ได้</span>}
+      </div>}
+      {(align || blur) && <div className="ba-note">{prep ? prep.note || (blur ? "ปิดดวงตาแล้ว" : "") : "กำลังหาตำแหน่งดวงตา…"}</div>}
     </div>
   );
 }
