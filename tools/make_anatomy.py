@@ -136,6 +136,7 @@ html = f'''<section class="anatomy grid-bg on-dark" id="layers">
   tabs.forEach(function(t){{t.addEventListener('click',function(){{hold();pick(+t.dataset.layer)}})}});
   layers.forEach(function(l){{l.addEventListener('click',function(){{hold();pick(+l.dataset.layer)}})}});
   pick(0);
+  window.addEventListener('ana:pick',function(e){{hold();sec.classList.add('is-open');pick(+e.detail)}});
   var tg=sec.querySelector('.ana-toggle'); if(tg) tg.addEventListener('click',function(){{hold();var o=sec.classList.toggle('is-open');tg.setAttribute('aria-pressed',String(o))}});
   function start(){{setTimeout(function(){{sec.classList.add('is-open')}},reduce?0:1800);if(!reduce&&!user&&!timer){{timer=setInterval(function(){{pick((cur+1)%5)}},3800)}}}}
   if('IntersectionObserver' in window){{

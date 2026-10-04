@@ -10,6 +10,11 @@
 - ที่อยู่ เวลาทำการ ลิงก์ Google Maps เลขใบอนุญาตสถานพยาบาล
 - ยืนยันข้อความ: เปิดกล่องตรวจสอบต่อหน้า, สแกนหน้า 3D, ฆสพ. ครอบคลุมเนื้อหาเว็บไซต์
 
+## Before / After (branch `before-after`)
+- Source: tools/make_results.py → pages/_results_eye.html, pages/_results_layers.html. Edit the cases, captions and layer tags there, then run `python3 tools/make_results.py && python3 build.py`.
+- Layer tags per case are a draft — the treating doctor must confirm them.
+- Before going to main: get ฆสพ. approval for the before/after content, and confirm written consent from every patient shown.
+- Alignment: `tools/align_ba.py SRC OUT` registers each AFTER photo onto its BEFORE photo (scale, position, tilt only — no retouching) and crops both to the same 450x574 frame. Needs `opencv-python-headless<5`.
 ## Local SEO / AI search (branch `seo`)
 - NAP constants live at the top of build.py (address, hours, Google place id). Keep them identical to Google Business Profile and Facebook.
 - New pages: /filler/tear-trough/ and /articles/choosing-filler-clinic-udon/. robots.txt allows search and AI crawlers; llms.txt summarises the clinic for AI assistants.

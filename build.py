@@ -167,6 +167,7 @@ def head(title, desc, path, keywords, extra_ld=(), lang="th"):
 <nav class="nav" aria-label="เมนูหลัก">
 <a href="/filler/">ฟิลเลอร์</a>
 <a href="/skin-booster/">สกินบูสเตอร์</a>
+<a href="/#results">เคสจริง</a>
 <a href="/#programs">โปรแกรม</a>
 <a href="/articles/">บทความ</a>
 <a href="/#doctor">แพทย์</a>
@@ -214,7 +215,7 @@ def footer():
 <p><a href="{MAPS_URL}" target="_blank" rel="noopener">เปิด Google Maps</a> · <a href="{G_REVIEWS}" target="_blank" rel="noopener">รีวิว</a></p>
 </div>
 </div>
-<div class="legal">วินฟินิตี้ คลินิกเวชกรรม อุดรธานี · ใบอนุญาตประกอบกิจการสถานพยาบาลเลขที่ [เลขใบอนุญาต] · ฆสพ.อด.[เลขที่ ฆสพ. ของเว็บไซต์] · ผลลัพธ์ของการรักษาขึ้นอยู่กับแต่ละบุคคล การทำหัตถการทุกชนิดอาจมีผลข้างเคียง ควรปรึกษาแพทย์ก่อนตัดสินใจ</div>
+<div class="legal">วินฟินิตี้ คลินิกเวชกรรม อุดรธานี · ใบอนุญาตประกอบกิจการสถานพยาบาลเลขที่ [เลขใบอนุญาต] · ฆสพ.อด.100/2568 · ผลลัพธ์ของการรักษาขึ้นอยู่กับแต่ละบุคคล การทำหัตถการทุกชนิดอาจมีผลข้างเคียง ควรปรึกษาแพทย์ก่อนตัดสินใจ</div>
 </div>
 </footer>
 </body>
@@ -224,9 +225,11 @@ def footer():
 
 def build(out, title, desc, path, keywords, body_file, faqs, extra_ld=(), lang="th"):
     body = (ROOT / "pages" / body_file).read_text(encoding="utf-8")
-    anat = ROOT / "pages" / "_anatomy.html"
-    if "{{ANATOMY}}" in body and anat.exists():
-        body = body.replace("{{ANATOMY}}", anat.read_text(encoding="utf-8"))
+    for key, part in (("ANATOMY", "_anatomy.html"), ("RESULTS_EYE", "_results_eye.html"),
+                      ("RESULTS_LAYERS", "_results_layers.html")):
+        f = ROOT / "pages" / part
+        if "{{%s}}" % key in body and f.exists():
+            body = body.replace("{{%s}}" % key, f.read_text(encoding="utf-8"))
     body = (body.replace("{{REVIEWS}}", reviews_html()).replace("{{CLINIC_INFO}}", clinic_info_html())
             .replace("{{MAP}}", map_html()))
     body = body.replace("{{ADDR}}", ADDR_LINE)
