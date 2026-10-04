@@ -185,7 +185,7 @@ export async function runTick(now = new Date()) {
     ["csat", () => csat(now)],
     ["nurture", async () => (after(now, "10:00") && (await once(`nurture-run:${todayBkk(now)}`)) ? nurture(now) : 0)],
     ["planFollowUp", () => planFollowUp(now)],
-    ["reminderD1", async () => (after(now, "18:00") ? sendReminders(now) : 0)],
+    ["reminderD1", async () => (after(now, "18:00") && !after(now, "21:00") ? sendReminders(now) : 0)],
     ["evening", async () => (after(now, "20:00") && (await once(`eve-run:${todayBkk(now)}`)) ? eveningRun(now) : 0)],
   ];
   for (const [k, f] of steps) {
