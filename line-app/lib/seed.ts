@@ -46,6 +46,9 @@ export const CATALOG_SEED: [string, string, string, string, number, string][] = 
   ["CONSULT", "ปรึกษาและวางแผนการรักษา", "ปรึกษา", "ครั้ง", 0, "general"],
 ];
 
+/** Days until the same treatment is usually due again (recall). The branch manager can change these in the catalog. */
+export const RECALL_DAYS: Record<string, number> = { "FIL-HA": 270, "FIL-TT": 270, TOX: 120, SKB: 28, DOUBLO: 180 };
+
 type Run = { query: (t: string, p?: unknown[]) => Promise<Record<string, any>[]> };
 
 /** Runs right after the schema on first connection (see db.ts). */
@@ -56,6 +59,9 @@ export async function seedWith(r: Run) {
   const c = await r.query("select count(*)::int n from catalog");
   if (!c[0]?.n) for (const [code, name, cat, unit, price, ak] of CATALOG_SEED)
     await r.query("insert into catalog(code, name, category, unit, price, aftercare_key) values ($1,$2,$3,$4,$5,$6) on conflict do nothing", [code, name, cat, unit, price, ak]);
+  // recall defaults, once only (so a value the manager clears stays cleared)
+  if ((await r.query("insert into jobs(key) values ('seed:recall_days') on conflict do nothing returning key")).length)
+    for (const [code, days] of Object.entries(RECALL_DAYS)) await r.query("update catalog set recall_days = $2 where code = $1 and recall_days is null", [code, days]);
 }
 
 export async function seedOnce() { /* kept for callers; seeding happens on connect */ }

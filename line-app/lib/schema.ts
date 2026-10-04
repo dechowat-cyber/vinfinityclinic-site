@@ -232,4 +232,40 @@ alter table photos add column if not exists width int;
 alter table photos add column if not exists height int;
 alter table photos add column if not exists meta jsonb;
 create index if not exists photos_session on photos(session_id);
+
+-- ---------- Revenue + recall (CRM full loop) ----------
+create table if not exists payments (
+  id bigserial primary key,
+  receipt_no text unique not null,
+  client_id bigint not null references clients(id),
+  plan_id bigint,
+  amount numeric not null,
+  method text not null default 'transfer',
+  note text,
+  received_by bigint,
+  created_at timestamptz not null default now(),
+  voided_at timestamptz,
+  voided_by bigint,
+  void_reason text
+);
+create index if not exists payments_client on payments(client_id, created_at desc);
+create index if not exists payments_created on payments(created_at);
+alter table catalog add column if not exists recall_days int;
+create table if not exists recalls (
+  id bigserial primary key,
+  client_id bigint not null references clients(id),
+  treatment_id bigint unique not null,
+  catalog_id bigint,
+  name text not null,
+  due_on date not null,
+  status text not null default 'due',
+  sent_at timestamptz,
+  contacted_at timestamptz,
+  contacted_by bigint,
+  appointment_id bigint,
+  note text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+create index if not exists recalls_due on recalls(status, due_on);
 `;

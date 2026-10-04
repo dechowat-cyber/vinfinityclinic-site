@@ -24,6 +24,10 @@ export type ClinicSettings = {
   aftercareApprovedBy?: string | null;
   aftercareApprovedAt?: string | null;
   paused?: boolean;
+  /** recall LINE messages (marketing): off until the manager switches them on */
+  recallAuto?: boolean;
+  /** send the recall message this many days before the due date */
+  recallLeadDays?: number;
 };
 
 // Defaults match the Udon Thani branch as published on Google Maps (closed on Tuesdays).

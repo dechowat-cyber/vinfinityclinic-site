@@ -8,6 +8,8 @@ import { PROTOCOLS, KINDS, sessionsFor, suggestKind, suggestProtocol, autoPairs,
 import { BeforeAfter } from "../../before-after";
 import { QuickShoot } from "../../quick-shoot";
 import { startPhotoSession } from "@/lib/photoActions";
+import { METHODS, CASHIER_ROLES, VOID_ROLES, paidByPlan, clientRevenue, baht } from "@/lib/payments";
+import { takePayment, voidPaymentAction } from "@/lib/crmActions";
 import { PlanBuilder } from "./plan";
 
 export const dynamic = "force-dynamic";
@@ -15,14 +17,17 @@ export const dynamic = "force-dynamic";
 const fmt = (d: string | Date) => `${thaiDate(new Date(d))} ${thaiTime(new Date(d))}`;
 const PLAN_TH: Record<string, string> = { draft: "ร่าง", sent: "ส่งการ์ดแล้ว", booked: "จองแล้ว", done: "ทำแล้ว" };
 
-export default async function ClientPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ photo?: string }> }) {
+const PAY_ERR: Record<string, string> = { bad_amount: "จำนวนเงินไม่ถูกต้อง", bad_method: "เลือกวิธีชำระ", bad_plan: "แผนไม่ตรงกับลูกค้า", receipt_busy: "ระบบออกเลขใบเสร็จไม่ทัน ลองใหม่อีกครั้ง" };
+
+export default async function ClientPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ photo?: string; pay?: string }> }) {
   const me = await requireStaff();
   const id = Number((await params).id);
   const c = await one(`select c.*, r.name as ref_name, r.display_name as ref_display from clients c left join clients r on r.id = c.referred_by where c.id = $1`, [id]);
   if (!c) notFound();
   const health = canSeeHealth(me);
   if (health) await logHealthAccess(me.id, id, "client_page");
-  const photoMsg = (await searchParams).photo;
+  const sp = await searchParams;
+  const photoMsg = sp.photo;
   const [lead, appts, consults, plans, treatments, photos, catalog, consent, touches, sessions, kind, pairs] = await Promise.all([
     one("select * from leads where client_id = $1 order by id desc limit 1", [id]),
     q("select * from appointments where client_id = $1 order by start_at desc limit 10", [id]),
@@ -37,6 +42,12 @@ export default async function ClientPage({ params, searchParams }: { params: Pro
     health ? suggestKind(id) : Promise.resolve("before"),
     health ? autoPairs(id) : Promise.resolve([]),
   ]);
+  const [paidMap, revenue, payments] = await Promise.all([
+    paidByPlan(id), clientRevenue(id),
+    q("select p.*, s.name as staff_name from payments p left join staff s on s.id = p.received_by where p.client_id = $1 order by p.created_at desc limit 30", [id]),
+  ]);
+  const cashier = CASHIER_ROLES.includes(me.role);
+  const due = plans.map((p) => ({ id: Number(p.id), goal: p.goal, balance: Math.max(0, Number(p.total) - (paidMap.get(Number(p.id)) ?? 0)) })).filter((p) => p.balance > 0);
   const pair = pairs[0];
   const protocol = suggestProtocol([appts[0]?.note, lead?.interest].join(" "));
   const day = (d: string) => thaiDate(new Date(d)).replace(/^วัน\S+ /, "");
@@ -54,6 +65,7 @@ export default async function ClientPage({ params, searchParams }: { params: Pro
             {c.ref_name || c.ref_display ? ` · แนะนำโดย ${c.ref_name || c.ref_display}` : ""}{c.ref_code ? ` · รหัสแนะนำของลูกค้า ${c.ref_code}` : ""}</p></div>
         <div className="row">{health && dataOk && <QuickShoot clientId={id} kind={kind} protocol={protocol}
             openSession={sessions.find((x) => !x.completed_at)?.id ?? null} />}
+          {revenue.total > 0 && <a href="#payments" className="tag ok" title={`ชำระ ${revenue.count} ครั้ง`}>ยอดสะสม {baht(revenue.total)}</a>}
           {consent.map((x) => <span key={x.type} className={`tag ${x.granted ? "ok" : "bad"}`}>{x.type === "data" ? "ยินยอมข้อมูล" : "รับข่าวสาร"}: {x.granted ? "ใช่" : "ไม่"}</span>)}
           {lead && <span className="tag">{lead.status}</span>}</div>
       </div>
@@ -118,12 +130,14 @@ export default async function ClientPage({ params, searchParams }: { params: Pro
       {health && dataOk && <PlanBuilder clientId={id} consultId={consult?.id ?? null} catalog={catalog as any} action={savePlan} isBM={me.role === "BM"} />}
 
       {plans.length > 0 && <table className="t">
-        <thead><tr><th>แผน</th><th>รายการ</th><th>ราคา</th><th>สถานะ</th><th></th></tr></thead>
+        <thead><tr><th>แผน</th><th>รายการ</th><th>ราคา</th><th>ชำระแล้ว</th><th>สถานะ</th><th></th></tr></thead>
         <tbody>{plans.map((p) => (
           <tr key={p.id}>
             <td>#{p.id}<br /><small className="muted">{p.goal || ""}</small></td>
             <td><small>{(p.items as any[]).map((i) => `${i.name}${i.qty > 1 ? ` ×${i.qty}` : ""}`).join(", ")}</small></td>
             <td>{Number(p.total).toLocaleString()} บาท{Number(p.discount) > 0 && <><br /><small className="muted">ส่วนลด {Number(p.discount).toLocaleString()} ({p.discount_status === "pending" ? "รออนุมัติ" : p.discount_status === "approved" ? "อนุมัติแล้ว" : p.discount_status})</small></>}</td>
+            <td>{(() => { const paid = paidMap.get(Number(p.id)) ?? 0, bal = Number(p.total) - paid;
+              return <>{baht(paid)}<br />{bal > 0 ? <small className="tag warn">ค้าง {baht(bal)}</small> : Number(p.total) > 0 ? <small className="tag ok">ครบ</small> : null}</>; })()}</td>
             <td><span className="tag">{PLAN_TH[p.status] || p.status}</span>{p.card_sent_at && <><br /><small className="muted">ส่ง {fmt(p.card_sent_at)}</small></>}</td>
             <td><div className="row">
               {p.discount_status === "pending" && me.role === "BM" && <>
@@ -136,6 +150,35 @@ export default async function ClientPage({ params, searchParams }: { params: Pro
             </div></td>
           </tr>))}</tbody>
       </table>}
+
+      <section className="card" id="payments">
+        <div className="row" style={{ justifyContent: "space-between" }}>
+          <div className="eyebrow">การชำระเงิน · ยอดสะสม {baht(revenue.total)}</div>
+        </div>
+        {sp.pay && <p className="err">บันทึกไม่สำเร็จ: {PAY_ERR[sp.pay] ?? sp.pay}</p>}
+        {cashier && <form action={takePayment} className="row" style={{ margin: "12px 0" }}>
+          <input type="hidden" name="client_id" value={id} />
+          <select name="plan_id" className="inp" defaultValue={due[0]?.id ?? ""}>
+            {due.map((p) => <option key={p.id} value={p.id}>แผน #{p.id}{p.goal ? ` ${String(p.goal).slice(0, 24)}` : ""} · ค้าง {baht(p.balance)}</option>)}
+            <option value="">ไม่ผูกกับแผน</option>
+          </select>
+          <input name="amount" className="inp" inputMode="decimal" required placeholder="จำนวนเงิน" defaultValue={due[0]?.balance || ""} style={{ width: 130 }} aria-label="จำนวนเงิน (บาท)" />
+          <select name="method" className="inp" defaultValue="transfer">{Object.entries(METHODS).map(([k, l]) => <option key={k} value={k}>{l}</option>)}</select>
+          <input name="note" className="inp" placeholder="หมายเหตุ เช่น มัดจำ / งวดที่ 2" style={{ flex: 1, minWidth: 140 }} />
+          <button className="btn">รับชำระ + ออกใบเสร็จ</button>
+        </form>}
+        {payments.length === 0 ? <p className="muted" style={{ fontSize: 14 }}>ยังไม่มีการชำระเงิน</p> :
+          <table className="t" style={{ marginTop: 8 }}><thead><tr><th>เลขที่</th><th>วันที่</th><th>จำนวน</th><th>วิธี</th><th>แผน</th><th>ผู้รับ</th><th></th></tr></thead>
+            <tbody>{payments.map((p) => (
+              <tr key={p.id} style={p.voided_at ? { opacity: 0.55 } : undefined}>
+                <td><a href={`/staff/receipts/${p.id}`}>{p.receipt_no}</a></td><td><small>{fmt(p.created_at)}</small></td>
+                <td>{p.voided_at ? <s>{baht(Number(p.amount))}</s> : baht(Number(p.amount))}{p.note ? <><br /><small className="muted">{p.note}</small></> : null}</td>
+                <td><small>{METHODS[p.method] ?? p.method}</small></td><td><small>{p.plan_id ? `#${p.plan_id}` : "-"}</small></td><td><small>{p.staff_name || "-"}</small></td>
+                <td>{p.voided_at ? <span className="tag bad" title={p.void_reason || ""}>ยกเลิกแล้ว</span> : VOID_ROLES.includes(me.role) &&
+                  <form action={voidPaymentAction} className="row"><input type="hidden" name="id" value={p.id} />
+                    <input name="reason" className="inp" placeholder="เหตุผล" required style={{ width: 110 }} /><button className="btn danger small">ยกเลิก</button></form>}</td>
+              </tr>))}</tbody></table>}
+      </section>
 
       <div className="grid2">
         <section className="card"><div className="eyebrow">นัดหมาย</div>

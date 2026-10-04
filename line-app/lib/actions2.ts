@@ -106,10 +106,10 @@ export async function saveCatalog(fd: FormData) {
   await requireStaff(["BM"]);
   const id = Number(fd.get("id")) || null;
   const v = [String(fd.get("name") || "").trim(), String(fd.get("category") || ""), String(fd.get("unit") || "ครั้ง"), Math.max(0, Number(fd.get("price")) || 0),
-    String(fd.get("aftercare_key") || "general"), fd.get("active") === "on"];
+    String(fd.get("aftercare_key") || "general"), fd.get("active") === "on", Math.max(0, Math.round(Number(fd.get("recall_days")) || 0)) || null];
   if (!v[0]) return;
-  if (id) await q("update catalog set name=$2, category=$3, unit=$4, price=$5, aftercare_key=$6, active=$7, updated_at=now() where id=$1", [id, ...v]);
-  else await q("insert into catalog(name, category, unit, price, aftercare_key, active) values ($1,$2,$3,$4,$5,$6)", v);
+  if (id) await q("update catalog set name=$2, category=$3, unit=$4, price=$5, aftercare_key=$6, active=$7, recall_days=$8, updated_at=now() where id=$1", [id, ...v]);
+  else await q("insert into catalog(name, category, unit, price, aftercare_key, active, recall_days) values ($1,$2,$3,$4,$5,$6,$7)", v);
   revalidatePath("/staff/catalog");
 }
 

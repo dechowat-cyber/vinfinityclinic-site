@@ -155,6 +155,15 @@ export function noShow(userId: string | null) {
     ] }, footer: { type: "box", layout: "vertical", contents: [btn("จองเวลาใหม่", { type: "uri", uri: bookUrl(userId, { src: "noshow" }) })] } } };
 }
 
+/** Recall: the same treatment is coming due again. Draft wording, sent only with marketing consent. */
+export function recall(userId: string | null, treatment: string, lastDate: string) {
+  return { type: "flex", altText: `ใกล้ครบรอบ${treatment}แล้วค่ะ จองคิวได้เลย`,
+    contents: { type: "bubble", body: { type: "box", layout: "vertical", spacing: "md", paddingAll: "18px", contents: [
+      txt(`ใกล้ครบรอบ${treatment}แล้วนะคะ`, { weight: "bold", size: "md", color: NAVY }),
+      txt(`ครั้งล่าสุดทำเมื่อ ${lastDate} ถ้าอยากให้ผลต่อเนื่อง คุณหมอแนะนำให้มาประเมินและทำซ้ำตามรอบค่ะ เลือกเวลาที่สะดวกได้เลย`, { size: "sm", color: MUTED }),
+    ] }, footer: { type: "box", layout: "vertical", contents: [btn("จองคิว", { type: "uri", uri: bookUrl(userId, { src: "recall" }) })] } } };
+}
+
 /** FR-09: nurture D1/D3/D7. Gentle, no pressure, stops when the person replies. */
 export function nurture(step: 1 | 3 | 7, userId: string | null) {
   const body = step === 1

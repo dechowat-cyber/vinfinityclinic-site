@@ -4,6 +4,7 @@ import { apptStatus, walkIn } from "@/lib/actions";
 import { bkk, todayBkk, addDays, parts } from "@/lib/time";
 import { bookUrl } from "@/lib/link";
 import { followupsDue, suggestProtocol } from "@/lib/photos";
+import { recallList } from "@/lib/recall";
 import { QuickShoot } from "./quick-shoot";
 import { requireStaff } from "@/lib/session";
 import { HEALTH_ROLES } from "@/lib/health";
@@ -41,7 +42,7 @@ export default async function Today() {
   const today = todayBkk(now);
   const from = bkk(today, "00:00").toISOString(), to = bkk(addDays(today, 1), "00:00").toISOString();
   const tomorrowTo = bkk(addDays(today, 2), "00:00").toISOString();
-  const [rows, unconfirmed, openLeads, care, due] = await Promise.all([
+  const [rows, unconfirmed, openLeads, care, due, recalls] = await Promise.all([
     q(`select a.*, c.name, c.display_name, c.phone, c.line_user_id,
          (select array_agg(distinct s.kind) from photo_sessions s where s.client_id = a.client_id and s.created_at >= $1 and s.created_at < $2
             and exists (select 1 from photos p where p.session_id = s.id)) as shot_kinds,
@@ -53,6 +54,7 @@ export default async function Today() {
     q(`select count(*)::int n from leads where status in ('New','Contacted','Qualified') and (replied_at is null or replied_at < last_inbound_at)`),
     q(`select count(*)::int n from care_requests where status in ('waiting_photo','waiting_review')`),
     followupsDue(now),
+    recallList(now, 7),
   ]);
   const qr = await QRCode.toDataURL(bookUrl(null, { src: "walkin" }), { margin: 1, width: 220, color: { dark: "#0B142E", light: "#FFFFFF" } });
   const arrived = rows.filter((r) => ["arrived", "in_consult", "done"].includes(r.status)).length;
@@ -69,6 +71,7 @@ export default async function Today() {
         <div className="kpi"><b>{openLeads[0].n}</b><small>แชทรอตอบ</small></div>
         <a className="kpi" href="/staff/care" style={{ textDecoration: "none", color: "inherit", borderColor: care[0].n ? "var(--bad)" : undefined }}><b>{care[0].n}</b><small>เคสขอให้หมอดู</small></a>
         <a className="kpi" href="/staff/photos" style={{ textDecoration: "none", color: "inherit", borderColor: due.length ? "var(--warn)" : undefined }}><b>{due.length}</b><small>ถึงรอบถ่ายภาพติดตามผล</small></a>
+        <a className="kpi" href="/staff/recall" style={{ textDecoration: "none", color: "inherit", borderColor: recalls.length ? "var(--warn)" : undefined }}><b>{recalls.length}</b><small>ลูกค้าถึงรอบทำซ้ำ</small></a>
       </div>
       <table className="t">
         <thead><tr><th>เวลา</th><th>ลูกค้า</th><th>เรื่อง</th><th>แพทย์</th><th>สถานะ</th><th>รอ</th><th>ภาพ</th><th></th></tr></thead>

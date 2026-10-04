@@ -9,6 +9,8 @@ const LINKS: { href: string; label: string; bm?: boolean; roles?: string[]; cam?
   { href: "/staff/appointments", label: "นัดหมาย" },
   { href: "/staff/clients", label: "ลูกค้า" },
   { href: "/staff/care", label: "ดูแลหลังทำ" },
+  { href: "/staff/recall", label: "กลับมาทำซ้ำ" },
+  { href: "/staff/reports", label: "รายงาน", roles: ["BM", "MK"] },
   { href: "/staff/links", label: "ลิงก์ช่องทาง" },
   { href: "/staff/catalog", label: "ราคากลาง" },
   { href: "/staff/aftercare", label: "ข้อความหลังทำ" },
