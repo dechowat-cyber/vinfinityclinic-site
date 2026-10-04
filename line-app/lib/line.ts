@@ -1,7 +1,7 @@
 import crypto from "node:crypto";
 
 const API = "https://api.line.me/v2/bot";
-const env = (k: string) => process.env[k] || "";
+const env = (k: string) => (process.env[k] || "").trim();
 
 export function verifySignature(body: string, signature: string | null, secret = env("LINE_CHANNEL_SECRET")) {
   if (!signature || !secret) return false;
@@ -64,7 +64,7 @@ export async function verifyIdToken(idToken: string): Promise<{ sub: string; nam
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: new URLSearchParams({ id_token: idToken, client_id: clientId }),
   });
-  if (!res.ok) return null;
+  if (!res.ok) { console.error("[line] verify id_token", res.status, (await res.text()).slice(0, 200)); return null; }
   const j: any = await res.json();
   return j?.sub ? { sub: j.sub, name: j.name, picture: j.picture } : null;
 }

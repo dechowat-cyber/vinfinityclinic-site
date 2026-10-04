@@ -17,11 +17,13 @@ export async function GET(req: Request) {
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: new URLSearchParams({
       grant_type: "authorization_code", code, redirect_uri: `${base}/api/auth/callback`,
-      client_id: process.env.LINE_LOGIN_CHANNEL_ID || "", client_secret: process.env.LINE_LOGIN_CHANNEL_SECRET || "",
+      client_id: (process.env.LINE_LOGIN_CHANNEL_ID || "").trim(), client_secret: (process.env.LINE_LOGIN_CHANNEL_SECRET || "").trim(),
     }),
   });
   const j: any = await tok.json().catch(() => ({}));
+  if (!tok.ok) console.error("[auth] token exchange failed", tok.status, j.error, j.error_description);
   const who = j.id_token ? await verifyIdToken(j.id_token) : null;
+  if (j.id_token && !who) console.error("[auth] id_token verify failed");
   if (!who) return Response.redirect(`${base}/staff/login?e=login`, 302);
 
   // The very first person to sign in becomes the branch manager (BM). Everyone after
