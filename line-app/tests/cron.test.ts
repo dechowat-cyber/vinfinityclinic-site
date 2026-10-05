@@ -13,6 +13,7 @@ test("reminder targets tomorrow only, skips clients without LINE, evening marks 
   const noLine = await upsertClientByLine("UC1", {}); await q("update clients set line_user_id = null where id = $1", [noLine.id]);
   await book({ clientId: noLine.id, startIso: bkk("2026-10-07", "10:00").toISOString(), s: DEFAULTS, now, skipRules: true }); // Wed = day after tomorrow
   await book({ clientId: noLine.id, startIso: bkk("2026-10-06", "10:00").toISOString(), s: DEFAULTS, now, skipRules: true }); // Tue (staff override) = tomorrow
+  await q("update appointments set created_at = '2026-10-01T03:00:00Z' where client_id = $1", [noLine.id]); // booked days ago (fresh bookings are skipped)
   const r = await sendReminders(now);
   assert.equal(r.due, 1); assert.equal(r.noLine, 1); assert.equal(r.sent, 0);
   await book({ clientId: noLine.id, startIso: bkk("2026-10-05", "13:00").toISOString(), s: DEFAULTS, now, skipRules: true });

@@ -135,3 +135,15 @@ export async function staffApprove(fd: FormData) {
   else await q("update staff set role = $2, active = true where id = $1", [id, String(fd.get("role") || "AD")]);
   revalidatePath("/staff", "layout");
 }
+
+export async function useExecGroup() {
+  await requireStaff(["BM"]);
+  const cand = await one<{ value: { groupId: string } }>("select value from settings where key = 'candidate_group'");
+  if (!cand) return;
+  const s = await getSettings();
+  if (cand.value.groupId === s.staffGroupId) return; // never the whole-team group
+  await saveSettings({ execGroupId: cand.value.groupId });
+  const { notifyExec } = await import("./notify");
+  await notifyExec(`✅ เชื่อมกลุ่มนี้เป็นกลุ่มผู้บริหารของระบบหน้าร้าน Vinfinity แล้ว\nทุกวันเวลา 19:00 จะได้รับสรุปยอดรายวัน + ยอดสัปดาห์ + ยอดเดือน`).catch(() => {});
+  revalidatePath("/staff/settings");
+}

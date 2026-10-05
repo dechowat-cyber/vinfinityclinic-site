@@ -1,5 +1,5 @@
 import { q } from "@/lib/db";
-import { saveClinic, setupRichMenu, useStaffGroup } from "@/lib/actions";
+import { saveClinic, setupRichMenu, useStaffGroup, useExecGroup } from "@/lib/actions";
 import { togglePause } from "@/lib/actions2";
 import { capiStatus } from "@/lib/capi";
 import { getSettings } from "@/lib/settings";
@@ -13,6 +13,8 @@ export default async function Settings() {
   await requireStaff(["BM"]);
   const s = await getSettings();
   const cand = await q("select value from settings where key = 'candidate_group'");
+  const candId = (cand[0]?.value as { groupId?: string } | undefined)?.groupId;
+  const newGroup = !!candId && candId !== s.staffGroupId && candId !== s.execGroupId; // a group the bot joined that isn't linked yet
   const env = (k: string) => !!process.env[k];
   const capi = await capiStatus();
   return (
@@ -28,7 +30,9 @@ export default async function Settings() {
           <tr><td>Cron เตือนนัด</td><td>{ok(env("CRON_SECRET"))}</td></tr>
           <tr><td>Rich menu</td><td>{ok(!!s.richMenuId)} <form action={setupRichMenu} style={{ display: "inline" }}><button className="btn ghost small">ติดตั้ง / อัปเดตเมนู</button></form></td></tr>
           <tr><td>กลุ่ม LINE ของพนักงาน (รับแจ้งเตือนนัดพรุ่งนี้)</td><td>{ok(!!s.staffGroupId)}
-            {cand.length > 0 ? <form action={useStaffGroup} style={{ display: "inline" }}> <button className="btn ghost small">ใช้กลุ่มที่เพิ่งเชิญบอท</button></form> : <small className="muted"> เชิญบอทเข้ากลุ่ม แล้วพิมพ์ในกลุ่มหนึ่งข้อความ</small>}</td></tr>
+            {newGroup ? <form action={useStaffGroup} style={{ display: "inline" }}> <button className="btn ghost small">ใช้กลุ่มที่เพิ่งเชิญบอท</button></form> : !s.staffGroupId && <small className="muted"> เชิญบอทเข้ากลุ่ม แล้วพิมพ์ในกลุ่มหนึ่งข้อความ</small>}</td></tr>
+          <tr><td>กลุ่มผู้บริหาร (รายงานยอดเงิน 19:00)</td><td>{ok(!!s.execGroupId)}
+            {newGroup && s.staffGroupId ? <form action={useExecGroup} style={{ display: "inline" }}> <button className="btn ghost small">ใช้กลุ่มที่เพิ่งเชิญบอทเป็นกลุ่มผู้บริหาร</button></form> : !s.execGroupId && <small className="muted"> สร้างกลุ่มใหม่เฉพาะผู้บริหาร เชิญบอท Vinfinity Clinic เข้ากลุ่ม แล้วกลับมากดปุ่มที่นี่</small>}</td></tr>
         </tbody></table>
       </div>
       <section className="card">

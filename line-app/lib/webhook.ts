@@ -1,4 +1,5 @@
 import { q, one } from "./db";
+import { captureSlip } from "./slips";
 import { getSettings, ClinicSettings, saveSettings } from "./settings";
 import { upsertClientByLine, markInbound, logTouch, recordConsent, consentState, getClientByLine } from "./crm";
 import { setStatus, availableSlots, reschedule, SlotTakenError } from "./booking";
@@ -131,6 +132,15 @@ export async function handleEvent(ev: Ev, now = new Date(), s?: ClinicSettings):
         await alertCare(c.id, "ลูกค้าส่งรูปอาการหลังทำแล้ว รอพยาบาล/แพทย์ดู");
         return { replyToken: ev.replyToken, messages: [M.carePhotoThanks()] };
       }
+      // otherwise it may be a transfer slip: kept for a cashier to confirm (never treated as a health photo)
+      const img = await line.content(ev.message.id).catch(() => null);
+      const kind = img ? await captureSlip(c.id, img, now).catch((e) => { console.error("[slip]", e); return null; }) : null;
+      if (kind === "slip") {
+        await logTouch(c.id, "in", "slip");
+        await notifyStaff(`💳 มีสลิปโอนรอยืนยัน · ${process.env.APP_URL || ""}/staff/finance`, `slip:${c.id}:${Math.floor(now.getTime() / 600000)}`).catch(() => {});
+        return { replyToken: ev.replyToken, messages: [{ type: "text", text: "ได้รับสลิปแล้วค่ะ ขอบคุณนะคะ ทีมจะตรวจสอบยอดและส่งใบเสร็จให้ค่ะ" }] };
+      }
+      if (kind === "duplicate") return { replyToken: ev.replyToken, messages: [{ type: "text", text: "สลิปนี้ได้รับแล้วค่ะ ไม่ต้องส่งซ้ำนะคะ 🙏" }] };
     }
     const msgs: line.Msg[] = [];
     if (/จอง|นัด|คิว|book/i.test(text) && text.length < 40) msgs.push(M.bookingPrompt(userId));

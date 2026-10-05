@@ -16,7 +16,8 @@ async function counts(clinical: boolean) {
       (select count(*)::int from recalls where status in ('due','sent','contacted') and due_on <= $3::date and due_on > ($3::date - 67)) as recall,
       (select count(*)::int from appointments a where a.start_at >= $1 and a.start_at < $2 and a.status in ('arrived','in_consult')
          and not exists (select 1 from photo_sessions s where s.client_id = a.client_id and s.kind = 'before' and s.created_at >= $1)) as photos,
-      (select count(*)::int from staff where not active and role <> 'OFF') as team`,
+      (select count(*)::int from staff where not active and role <> 'OFF') as team,
+      (select count(*)::int from slips where status in ('pending','duplicate')) as slips`,
     [from, to, addDays(today, 7)]);
   return { ...r, photos: clinical ? r.photos : 0 } as Record<string, number>;
 }

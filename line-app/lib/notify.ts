@@ -16,3 +16,12 @@ export async function notifyStaff(text: string, key?: string) {
 export async function alertCare(_clientId: number, what: string) {
   return notifyStaff(`🩺 ${what}\nเปิดดูและรับเรื่อง: ${staffUrl("/staff/care")}`);
 }
+
+/** Posts to the management group (money figures live here only). */
+export async function notifyExec(text: string, key?: string) {
+  const s = await getSettings();
+  if (!s.execGroupId) return false;
+  if (key && !(await once(`exec:${key}`))) return false;
+  try { await push(s.execGroupId, [{ type: "text", text }]); return true; }
+  catch (e) { console.error("[notify exec]", e); return false; }
+}

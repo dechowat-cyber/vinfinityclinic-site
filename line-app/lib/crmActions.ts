@@ -43,3 +43,38 @@ export async function saveRecallSettings(fd: FormData) {
   await saveSettings({ recallAuto: fd.get("auto") === "on", recallLeadDays: Math.min(30, Math.max(0, Number(fd.get("lead")) || 7)) });
   revalidatePath("/staff/recall");
 }
+
+// ---- finance: slips + day close ----
+export async function slipConfirm(fd: FormData) {
+  const me = await requireStaff(CASHIER_ROLES);
+  const { confirmSlip } = await import("./slips");
+  const id = Number(fd.get("id"));
+  try {
+    await confirmSlip(id, { amount: Number(String(fd.get("amount") || "").replace(/,/g, "")), planId: Number(fd.get("plan_id")) || null, staffId: me.id, method: String(fd.get("method") || "transfer") });
+  } catch (e) { redirect(`/staff/finance?err=${encodeURIComponent((e as Error).message)}`); }
+  revalidatePath("/staff/finance");
+}
+
+export async function slipReject(fd: FormData) {
+  const me = await requireStaff(CASHIER_ROLES);
+  const { rejectSlip } = await import("./slips");
+  await rejectSlip(Number(fd.get("id")), me.id);
+  revalidatePath("/staff/finance");
+}
+
+export async function closeDay(fd: FormData) {
+  const me = await requireStaff(CASHIER_ROLES);
+  const { saveDayClose, totals, closeLine, dayClose } = await import("./finance");
+  const { todayBkk } = await import("./time");
+  const num = (k: string) => { const v = String(fd.get(k) ?? "").replace(/,/g, "").trim(); return v === "" ? null : Math.max(0, Number(v) || 0); };
+  const day = todayBkk();
+  await saveDayClose(day, num("edc"), num("cash"), String(fd.get("note") || ""), me.id);
+  // the 19:00 report may already be out: send the close as a short follow-up to the management group
+  const reported = await (await import("./db")).one("select 1 from jobs where key = $1", [`finreport:${day}`]);
+  if (reported) {
+    const { notifyExec } = await import("./notify");
+    const t = await totals(day, day);
+    await notifyExec(`🔒 ปิดยอดวันนี้แล้ว (${me.name ?? "พนักงาน"})\n${closeLine(await dayClose(day), t)}${String(fd.get("note") || "").trim() ? `\nหมายเหตุ: ${String(fd.get("note")).trim().slice(0, 200)}` : ""}`).catch(() => {});
+  }
+  revalidatePath("/staff/finance");
+}

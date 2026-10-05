@@ -18,6 +18,7 @@ const GROUPS: { title: string; items: Item[] }[] = [
     { href: "/staff/recall", label: "กลับมาทำซ้ำ", icon: "repeat", badge: "recall" },
   ] },
   { title: "ธุรกิจ", items: [
+    { href: "/staff/finance", label: "การเงิน / ปิดยอด", icon: "wallet", roles: ["BM", "FD", "CS"], badge: "slips" },
     { href: "/staff/reports", label: "รายงาน", icon: "chart", roles: ["BM", "MK"] },
     { href: "/staff/segments", label: "กลุ่มลูกค้า / แคมเปญ", icon: "target", roles: ["BM", "MK"] },
     { href: "/staff/catalog", label: "ราคากลาง", icon: "tag" },

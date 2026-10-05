@@ -15,6 +15,8 @@ export type ClinicSettings = {
   doctors: string[];
   closedDates: string[];
   staffGroupId: string | null;
+  /** management group: daily money report at 19:00 */
+  execGroupId?: string | null;
   consentVersion: string;
   phone: string;
   mapsUrl: string;

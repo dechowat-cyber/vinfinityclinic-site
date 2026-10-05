@@ -334,4 +334,30 @@ create table if not exists conversions (
   sent_at timestamptz
 );
 create index if not exists conversions_pending on conversions(status, created_at);
+
+-- transfer slips customers send to the OA; staff confirm the amount, then a receipt is issued
+create table if not exists slips (
+  id bigserial primary key,
+  client_id bigint not null references clients(id),
+  mime text not null default 'image/jpeg',
+  data bytea not null,
+  qr_ref text,
+  bank text,
+  status text not null default 'pending',
+  payment_id bigint,
+  decided_by bigint,
+  decided_at timestamptz,
+  created_at timestamptz not null default now()
+);
+create index if not exists slips_status on slips(status, created_at);
+create unique index if not exists slips_ref on slips(qr_ref) where qr_ref is not null and status <> 'duplicate';
+-- end-of-day close: what the card terminal and the cash drawer say, against the receipts issued
+create table if not exists day_closes (
+  day date primary key,
+  edc numeric,
+  cash numeric,
+  note text,
+  closed_by bigint,
+  closed_at timestamptz not null default now()
+);
 `;

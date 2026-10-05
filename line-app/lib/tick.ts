@@ -9,6 +9,8 @@ import { isOpen } from "./webhook";
 import { sendReminders, eveningRun } from "./cron";
 import { seedOnce } from "./seed";
 import { cardFor, careFlex, CARE_VERSION } from "./careCards";
+import { dailyReport } from "./finance";
+import { notifyExec } from "./notify";
 import { recallTick } from "./recall";
 import { sendCampaignBatch } from "./segments";
 import { capiTick } from "./capi";
@@ -180,6 +182,14 @@ export async function planFollowUp(now: Date) {
   return rows.length;
 }
 
+/** 19:00 money report (day + week + month) to the management group, once a day. */
+export async function financeReport(now: Date, s: ClinicSettings) {
+  if (!s.execGroupId || !after(now, "19:00")) return 0;
+  const day = todayBkk(now);
+  if (!(await once(`finreport:${day}`))) return 0;
+  return (await notifyExec(await dailyReport(now))) ? 1 : 0;
+}
+
 /** One entry point, called every 5 minutes. Every step is idempotent and isolated. */
 export async function runTick(now = new Date()) {
   const s = (await getSettings()) as ClinicSettings & { aftercareApproved?: boolean; paused?: boolean };
@@ -196,6 +206,7 @@ export async function runTick(now = new Date()) {
     ["csat", () => csat(now)],
     ["nurture", async () => (after(now, "10:00") && (await once(`nurture-run:${todayBkk(now)}`)) ? nurture(now) : 0)],
     ["planFollowUp", () => planFollowUp(now)],
+    ["financeReport", () => financeReport(now, s)],
     ["recall", () => recallTick(now, s)],
     ["campaigns", () => sendCampaignBatch(200)],
     ["capi", () => capiTick(now)],
