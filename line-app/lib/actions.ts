@@ -1,5 +1,6 @@
 "use server";
 import { revalidatePath } from "next/cache";
+import { notifyStaff } from "./notify";
 import { q, one } from "./db";
 import { requireStaff } from "./session";
 import { getSettings, saveSettings, ClinicSettings } from "./settings";
@@ -99,7 +100,13 @@ export async function saveClinic(fd: FormData) {
 
 export async function useStaffGroup() {
   await requireStaff(["BM"]);
-  await confirmStaffGroup();
+  const gid = await confirmStaffGroup();
+  if (gid) {
+    // confirmation in the group itself, so the team sees the link works
+    const waiting = (await q("select count(*)::int n from staff where not active and role <> 'OFF'"))[0]?.n ?? 0;
+    const base = process.env.APP_URL || "";
+    await notifyStaff(`✅ เชื่อมกลุ่มนี้กับระบบหน้าร้าน Vinfinity แล้ว\nกลุ่มนี้จะได้รับแจ้งเตือน: แชทรอตอบ · เคสขอให้หมอดู · นัดพรุ่งนี้ · พนักงานใหม่รออนุมัติ (ไม่มีข้อมูลสุขภาพลูกค้า)\nเข้าระบบ: ${base}/staff${waiting ? `\n\n👤 ตอนนี้มีพนักงานรออนุมัติ ${waiting} คน · ${base}/staff/team` : ""}`).catch(() => {});
+  }
   revalidatePath("/staff/settings");
 }
 
