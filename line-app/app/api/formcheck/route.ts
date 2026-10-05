@@ -5,9 +5,16 @@ const IMG = "/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAAB
 export async function GET(req: Request) {
   if (new URL(req.url).searchParams.get("k") !== "5be95af4ef238b1a3348334d") return new Response("no", { status: 404 });
   const act = new URL(req.url).searchParams.get("do");
+  if (act === "void9") {
+    const { q } = await import("@/lib/db");
+    const rows = await q(`update payments set voided_at = now(), void_reason = 'ยอดทดสอบระบบ (คุณหมอยืนยัน 5 ต.ค.)' where amount = 9 and voided_at is null
+      and created_at >= '2026-10-04T17:00:00Z' and created_at < '2026-10-05T17:00:00Z' returning id, receipt_no`);
+    await q("update slips set status = 'rejected' where status = 'confirmed' and payment_id = any($1::bigint[])", [rows.map((r: any) => r.id)]).catch(() => {});
+    return Response.json({ voided: rows });
+  }
   if (act === "report" || act === "send") {
     const { dailyReport } = await import("@/lib/finance");
-    const text = "🔁 สรุปใหม่ (รวมยอดจากฟอร์ม 1–4 ต.ค. ก่อนใช้บอท)\n\n" + (await dailyReport(new Date()));
+    const text = "🔁 สรุปใหม่ (รวมยอดจากฟอร์ม 1–4 ต.ค. ก่อนใช้บอท · ตัดยอดทดสอบ 9 บาทออกแล้ว)\n\n" + (await dailyReport(new Date()));
     if (act === "send") { const { notifyExec } = await import("@/lib/notify"); return Response.json({ sent: await notifyExec(text, "resummary-2026-10-05"), text }); }
     return Response.json({ text });
   }
