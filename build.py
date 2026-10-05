@@ -366,10 +366,10 @@ BOOSTER_FAQ = [
 ]
 
 
-def article_ld(path, headline, desc, cites):
+def article_ld(path, headline, desc, cites, date="2026-10-03"):
     return {"@context": "https://schema.org", "@type": ["MedicalWebPage", "Article"],
             "headline": headline, "description": desc, "inLanguage": "th",
-            "url": SITE + path, "datePublished": "2026-10-03", "dateModified": "2026-10-03",
+            "url": SITE + path, "datePublished": date, "dateModified": date,
             "author": {"@id": SITE + "/#dr-dechowat"}, "reviewedBy": {"@id": SITE + "/#dr-dechowat"},
             "publisher": {"@id": SITE + "/#clinic"}, "image": SITE + "/assets/img/og.jpg",
             "citation": cites}
@@ -462,6 +462,24 @@ if __name__ == "__main__":
           "ฟิลเลอร์คาง อุดร ปรับความยาวและรูปทรงคางให้สมดุลกับโครงหน้า ไม่ต้องผ่าตัด เห็นผลทันที ฉีดโดยแพทย์ทุกเคส ราคาเริ่มต้น 9,990 บาท/cc ที่ Vinfinity Clinic อุดรธานี",
           "/filler/chin/", "ฟิลเลอร์คาง อุดร, ฟิลเลอร์คาง อุดรธานี, ฉีดคาง อุดร, เสริมคาง ไม่ผ่าตัด, คางสั้น, ฟิลเลอร์คาง ราคา",
           "filler-chin.html", CHIN_FAQ, [crumb_ld(("ฟิลเลอร์", "/filler/"), ("ฟิลเลอร์คาง", "/filler/chin/")), {"@context": "https://schema.org", "@type": "MedicalWebPage", "name": 'ฟิลเลอร์คาง อุดรธานี', "url": SITE + '/filler/chin/', "inLanguage": "th", "lastReviewed": "2026-10-06", "reviewedBy": {"@id": SITE + "/#dr-dechowat"}, "about": {"@type": "MedicalProcedure", "name": 'Chin filler', "alternateName": 'ฟิลเลอร์คาง อุดรธานี', "procedureType": 'https://schema.org/NoninvasiveProcedure'}}])
+    a4 = "PN โมเลกุลใหญ่ (HMW) กับโมเลกุลเล็ก (LMW) ต่างกันอย่างไร"
+    d4 = "PN กับ PDRN ต่างกันที่ความยาวสาย DNA ขนาดโมเลกุลเปลี่ยนความชุ่มชื้น ความหนืด และเวลาที่อยู่ในผิวอย่างไร หลักฐานที่มีแล้วและที่ยังไม่มี เรียบเรียงจากงานวิจัยปี 2018–2026 โดย นพ.เดโชวัต พรมดา"
+    build("articles/pn-molecular-weight/index.html", a4 + " | Vinfinity Clinic", d4,
+          "/articles/pn-molecular-weight/", "PN HMW LMW, polynucleotide molecular weight, PN กับ PDRN ต่างกัน, สกินบูสเตอร์ PN, PN โมเลกุลใหญ่, PDRN อุดร, PN อุดรธานี",
+          "article-pn-molecular-weight.html", [], [article_ld("/articles/pn-molecular-weight/", a4, d4, [
+              "https://doi.org/10.3390/biom15010148", "https://doi.org/10.3892/mmr.2018.9539", "https://doi.org/10.3390/ijms27010220",
+              "https://doi.org/10.3390/app151910437", "https://doi.org/10.1111/srt.13667", "https://doi.org/10.2147/CCID.S437942",
+              "https://doi.org/10.2147/CCID.S557226", "https://doi.org/10.25259/JCAS_65_2025"], "2026-10-06"),
+              crumb_ld(("บทความ", "/articles/"), ("PN โมเลกุลใหญ่กับโมเลกุลเล็ก", "/articles/pn-molecular-weight/"))])
+    a5 = "ฟิลเลอร์อยู่นานกว่าที่คิด 5 เรื่องที่ไม่ค่อยมีใครบอกก่อนฉีด"
+    d5 = "MRI พบฟิลเลอร์อยู่ในหน้าอย่างน้อย 2 ปีและนานถึง 15 ปี การเติมซ้ำทับของเดิม ฟิลเลอร์ดูดน้ำทำให้ใต้ตาบวม หน้าเต็มเกิน และอาการที่มาทีหลัง สรุปจากงานวิจัยโดย นพ.เดโชวัต พรมดา"
+    build("articles/filler-long-term/index.html", a5 + " | Vinfinity Clinic", d5,
+          "/articles/filler-long-term/", "ฟิลเลอร์อยู่ได้นานแค่ไหน, ฟิลเลอร์ไม่สลาย, ฟิลเลอร์ MRI, หน้าเต็มเกิน, overfilled face, ฟิลเลอร์ใต้ตาบวม, ฟิลเลอร์เคลื่อน, ฟิลเลอร์ อุดรธานี",
+          "article-filler-hidden-truths.html", [], [article_ld("/articles/filler-long-term/", a5, d5, [
+              "https://doi.org/10.1097/GOX.0000000000005934", "https://doi.org/10.1111/jocd.70879", "https://eyewiki.org/Complications_of_Hyaluronic_Acid_Fillers",
+              "https://doi.org/10.2147/CCID.S539888", "https://doi.org/10.1177/30499240251376908", "https://pubmed.ncbi.nlm.nih.gov/40972126/",
+              "https://doi.org/10.1111/jocd.15071"], "2026-10-06"),
+              crumb_ld(("บทความ", "/articles/"), ("ฟิลเลอร์อยู่นานกว่าที่คิด", "/articles/filler-long-term/"))])
     build("articles/index.html", "บทความ Advanced Injection อ้างอิงงานวิจัย | Vinfinity Clinic",
           "บทความเรื่องฟิลเลอร์ สกินบูสเตอร์ และกายวิภาคใบหน้า เขียนจากงานวิจัยล่าสุดพร้อมเอกสารอ้างอิง โดย นพ.เดโชวัต พรมดา",
           "/articles/", "บทความ ฟิลเลอร์, advanced injection, evidence-based, Vinfinity", "articles.html", [])
