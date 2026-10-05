@@ -480,6 +480,14 @@ if __name__ == "__main__":
               "https://doi.org/10.2147/CCID.S539888", "https://doi.org/10.1177/30499240251376908", "https://pubmed.ncbi.nlm.nih.gov/40972126/",
               "https://doi.org/10.1111/jocd.15071"], "2026-10-06"),
               crumb_ld(("บทความ", "/articles/"), ("ฟิลเลอร์อยู่นานกว่าที่คิด", "/articles/filler-long-term/"))])
+    a6 = "สลายฟิลเลอร์แล้ว ผิวเดิมจะเสียไหม สิ่งที่งานวิจัยบอก"
+    d6 = "เอนไซม์สลายฟิลเลอร์ (hyaluronidase) ทำงานอย่างไร ไฮยาลูรอนิกของร่างกายกลับมาเองไหม ทำไมบางคนดูโทรมหลังสลาย ทำไมบางเคสสลายยาก โอกาสแพ้ และควรรอนานแค่ไหนก่อนฉีดใหม่ โดย นพ.เดโชวัต พรมดา"
+    build("articles/dissolve-filler-native-tissue/index.html", a6 + " | Vinfinity Clinic", d6,
+          "/articles/dissolve-filler-native-tissue/", "สลายฟิลเลอร์ ผิวเสียไหม, hyaluronidase, สลายฟิลเลอร์ หน้าตอบ, สลายฟิลเลอร์ แพ้, สลายฟิลเลอร์ อุดร, เอนไซม์สลายฟิลเลอร์",
+          "article-dissolve-native.html", [], [article_ld("/articles/dissolve-filler-native-tissue/", a6, d6, [
+              "https://uk.acegroup.online/wp-content/uploads/2024/01/ACE-Group-Hyaluronidase-v3.1.pdf", "https://doi.org/10.1159/000446699",
+              "https://doi.org/10.1111/jocd.70870", "https://doi.org/10.1093/asjof/ojaf108", "https://doi.org/10.1093/asj/sjaf127"], "2026-10-06"),
+              crumb_ld(("บทความ", "/articles/"), ("สลายฟิลเลอร์แล้วผิวเดิมเสียไหม", "/articles/dissolve-filler-native-tissue/"))])
     build("articles/index.html", "บทความ Advanced Injection อ้างอิงงานวิจัย | Vinfinity Clinic",
           "บทความเรื่องฟิลเลอร์ สกินบูสเตอร์ และกายวิภาคใบหน้า เขียนจากงานวิจัยล่าสุดพร้อมเอกสารอ้างอิง โดย นพ.เดโชวัต พรมดา",
           "/articles/", "บทความ ฟิลเลอร์, advanced injection, evidence-based, Vinfinity", "articles.html", [])
