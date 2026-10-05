@@ -13,7 +13,7 @@ export const PACKAGES = [
   { key: "gold", name: "Gold", pay: 75_000, get: 82_500 },
   { key: "platinum", name: "Platinum", pay: 150_000, get: 172_500 },
 ] as const;
-export const CASHBACK: Record<Tier, number> = { member: 0, silver: 0.03, gold: 0.04, platinum: 0.05 };
+export const CASHBACK: Record<Tier, number> = { member: 0, silver: 0.01, gold: 0.02, platinum: 0.03 };
 export const REFERRAL_CREDIT = 1_000;
 export const REFERRAL_MIN_PAYMENT = 5_000;
 export const VALID_YEARS = 2;

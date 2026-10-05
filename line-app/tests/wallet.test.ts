@@ -22,14 +22,14 @@ test("wallet: top-up, tier, pay with wallet (not counted twice), cashback, void 
   assert.equal((await creditsFor(w.id)).cashback, 0);
   await assert.rejects(payWithWallet({ clientId: c.id, amount: 100_000, staffId: 1 }), /wallet_low/);
   const cash = await recordPayment({ clientId: c.id, amount: 10_000, method: "cash", staffId: 1 });
-  assert.equal((await creditsFor(cash.id)).cashback, 400); // gold 4%
+  assert.equal((await creditsFor(cash.id)).cashback, 200); // gold 2%
   assert.equal((await creditsFor(cash.id)).cashback, 0); // once per payment
-  assert.equal(await balance(c.id), 72_900);
+  assert.equal(await balance(c.id), 72_700);
   const after = await totals(day, day);
   assert.equal(after.total - before.total, 85_000); // 75k top-up + 10k cash; the 10k wallet use is not money received
   await assert.rejects(reverseForVoid(t.id, 1), /wallet_used/); // top-up partly used
   await reverseForVoid(w.id, 1); // voiding a wallet receipt gives the credit back
-  assert.equal(await balance(c.id), 82_900);
+  assert.equal(await balance(c.id), 82_700);
   await q("update clients set wallet_expires_at = now() - interval '1 day' where id = $1", [c.id]);
   assert.equal(await expireWallets(), 1);
   assert.equal(await balance(c.id), 0);
