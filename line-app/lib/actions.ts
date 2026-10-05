@@ -112,8 +112,8 @@ export async function useStaffGroup() {
 
 export async function setupRichMenu() {
   await requireStaff(["BM"]);
-  const png = await fs.readFile(path.join(process.cwd(), "public", "richmenu.png"));
-  const id = await installRichMenu(richMenuDefinition(), png);
+  const img = await fs.readFile(path.join(process.cwd(), "public", "richmenu.jpg"));
+  const id = await installRichMenu(richMenuDefinition(), img, "image/jpeg", (await getSettings()).richMenuId);
   await saveSettings({ richMenuId: id });
   revalidatePath("/staff/settings");
 }

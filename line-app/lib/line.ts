@@ -86,15 +86,17 @@ export async function content(messageId: string): Promise<{ data: Buffer; mime: 
 }
 
 // ---- rich menu (run once from the staff settings page) ----
-export async function installRichMenu(menu: Msg, png: Buffer) {
+export async function installRichMenu(menu: Msg, img: Buffer, mime = "image/jpeg", replaceId?: string | null) {
   const created: any = await call("/richmenu", { json: menu });
   const id = created.richMenuId as string;
   const token = await accessToken();
   const up = await fetch(`https://api-data.line.me/v2/bot/richmenu/${id}/content`, {
-    method: "POST", headers: { Authorization: `Bearer ${token}`, "Content-Type": "image/png" }, body: new Uint8Array(png),
+    method: "POST", headers: { Authorization: `Bearer ${token}`, "Content-Type": mime }, body: new Uint8Array(img),
   });
   if (!up.ok) throw new Error(`richmenu_upload_${up.status}: ${await up.text()}`);
   await call(`/user/all/richmenu/${id}`, { method: "POST" });
+  // the previous menu is no longer the default: remove it so only one stays on the account
+  if (replaceId && replaceId !== id) await call(`/richmenu/${replaceId}`, { method: "DELETE" }).catch(() => {});
   return id;
 }
 

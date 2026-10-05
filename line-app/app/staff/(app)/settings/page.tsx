@@ -28,7 +28,8 @@ export default async function Settings() {
           <tr><td>LINE Login (พนักงานเข้าระบบ)</td><td>{ok(env("LINE_LOGIN_CHANNEL_ID") && env("LINE_LOGIN_CHANNEL_SECRET"))}</td></tr>
           <tr><td>ฐานข้อมูล</td><td>{ok(env("DATABASE_URL"))}</td></tr>
           <tr><td>Cron เตือนนัด</td><td>{ok(env("CRON_SECRET"))}</td></tr>
-          <tr><td>Rich menu</td><td>{ok(!!s.richMenuId)} <form action={setupRichMenu} style={{ display: "inline" }}><button className="btn ghost small">ติดตั้ง / อัปเดตเมนู</button></form></td></tr>
+          <tr><td>Rich menu</td><td>{ok(!!s.richMenuId)} <form action={setupRichMenu} style={{ display: "inline" }}><button className="btn ghost small">ติดตั้ง / อัปเดตเมนู</button></form>
+            <div style={{ marginTop: 8 }}><img src="/richmenu.jpg" alt="ตัวอย่างเมนู LINE" width={300} style={{ borderRadius: 8, display: "block" }} /><small className="muted">เมนูชุดนี้ (v2) · กดปุ่มด้านบนเพื่อเปลี่ยนเมนูใน LINE ให้ลูกค้าทุกคน</small></div></td></tr>
           <tr><td>กลุ่ม LINE ของพนักงาน (รับแจ้งเตือนนัดพรุ่งนี้)</td><td>{ok(!!s.staffGroupId)}
             {newGroup ? <form action={useStaffGroup} style={{ display: "inline" }}> <button className="btn ghost small">ใช้กลุ่มที่เพิ่งเชิญบอท</button></form> : !s.staffGroupId && <small className="muted"> เชิญบอทเข้ากลุ่ม แล้วพิมพ์ในกลุ่มหนึ่งข้อความ</small>}</td></tr>
           <tr><td>กลุ่มผู้บริหาร (รายงานยอดเงิน 19:00)</td><td>{ok(!!s.execGroupId)}

@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Treatment Menu · Vinfinity Clinic อุดรธานี</title>
+<meta name="description" content="เมนูโปรแกรมและราคา Vinfinity Clinic อุดรธานี: The Architect Rebuild, New Doublo 2.0, ฟิลเลอร์, สกินบูสเตอร์, ท็อกซิน, ทรีตเมนต์ผิว, IV Drip และ Vinfinity Wallet">
+<meta name="robots" content="noindex, follow">
+<meta name="theme-color" content="#0B142E">
+<meta property="og:title" content="Treatment Menu · Vinfinity Clinic">
+<meta property="og:image" content="https://vinfinityclinic.com/assets/img/menu/th-01.webp">
+<link rel="icon" href="/favicon.svg">
+<link rel="stylesheet" href="/assets/fonts.css">
+<style>
+:root{--navy:#0B142E;--navy-2:#1A326B;--royal:#1E3470;--sapphire:#3A5496;--silver:#D5DDEE;--mist:#EEF2F8;--muted:#8698B5;
+  --display:"Montserrat","Kanit",system-ui,sans-serif;--body:"Kanit",system-ui,sans-serif}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:radial-gradient(120% 80% at 50% 0%,#1A326B 0%,#0B142E 60%);color:#fff;font-family:var(--body);font-weight:300;
+  display:grid;grid-template-rows:auto 1fr auto;min-height:100dvh;overflow:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+header{display:flex;align-items:center;gap:12px;padding:calc(10px + env(safe-area-inset-top)) 16px 8px}
+header img{height:22px;width:auto}
+header .t{font:600 11px var(--display);letter-spacing:.22em;color:var(--silver);opacity:.85;flex:1}
+.langs{display:flex;gap:4px;background:rgba(255,255,255,.08);border-radius:999px;padding:3px}
+.langs button{all:unset;cursor:pointer;font:600 12px var(--display);letter-spacing:.06em;padding:6px 11px;border-radius:999px;color:var(--silver)}
+.langs button[aria-pressed=true]{background:#fff;color:var(--navy)}
+
+/* the book: one page per slide on phones, a two-page spread on wide screens */
+.stage{position:relative;min-height:0;display:grid;align-items:center}
+.track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;height:100%;overscroll-behavior-x:contain;perspective:1600px}
+.track::-webkit-scrollbar{display:none}
+.slide{flex:0 0 100%;min-width:0;scroll-snap-align:center;scroll-snap-stop:always;display:flex;justify-content:center;align-items:center;padding:6px 16px 10px;height:100%;overflow:hidden}
+.leaf{display:flex;width:min(100%,calc((100dvh - 168px) * var(--ar)));aspect-ratio:var(--ar);transform-origin:center;will-change:transform;transition:transform .08s linear}
+.leaf .pg{position:relative;flex:1;background:#fff;overflow:hidden;cursor:zoom-in}
+.leaf .pg img{display:block;width:100%;height:100%;object-fit:contain;background:#fff}
+.leaf.one .pg{border-radius:6px;box-shadow:0 30px 60px -20px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.06)}
+.leaf.two{box-shadow:0 30px 60px -20px rgba(0,0,0,.65);border-radius:6px;overflow:hidden}
+.leaf.two .pg:first-child::after{content:"";position:absolute;inset:0 0 0 auto;width:28px;background:linear-gradient(90deg,transparent,rgba(11,20,46,.18))}
+.leaf.two .pg:last-child::before{content:"";position:absolute;inset:0 auto 0 0;width:28px;background:linear-gradient(270deg,transparent,rgba(11,20,46,.14));z-index:1}
+.nav{position:absolute;top:50%;transform:translateY(-50%);all:unset;position:absolute;top:calc(50% - 24px);width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.12);
+  display:grid;place-items:center;cursor:pointer;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.nav:hover{background:rgba(255,255,255,.22)}.nav.prev{left:14px}.nav.next{right:14px}
+.nav svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:2}
+.nav[disabled]{opacity:.25;pointer-events:none}
+@media (hover:none){.nav{display:none}}
+
+footer{padding:6px 16px calc(12px + env(safe-area-inset-bottom));display:grid;gap:10px;width:100%;max-width:760px;margin:0 auto}
+.bar{display:flex;align-items:center;gap:10px}
+.bar select{flex:1;min-width:0;appearance:none;background:rgba(255,255,255,.08) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23D5DDEE' fill='none' stroke-width='1.6'/%3E%3C/svg%3E") no-repeat right 14px center;
+  color:#fff;border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:10px 36px 10px 14px;font:400 14px var(--body)}
+.bar select option{color:#0B142E}
+.count{font:500 13px var(--display);color:var(--silver);min-width:56px;text-align:right}
+.progress{height:2px;background:rgba(255,255,255,.12);border-radius:2px;overflow:hidden}
+.progress i{display:block;height:100%;background:var(--silver);width:0;transition:width .25s}
+.cta{display:flex;gap:10px}
+.cta a{flex:1;text-align:center;text-decoration:none;font:500 15px var(--body);padding:13px 10px;border-radius:999px}
+.cta .line{background:#06C755;color:#fff}
+.cta .ghost{border:1px solid rgba(255,255,255,.3);color:#fff;flex:0 0 auto;padding-inline:18px}
+.hint{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);font-size:13px;color:var(--silver);background:rgba(11,20,46,.7);padding:6px 14px;border-radius:999px;pointer-events:none;transition:opacity .6s}
+
+/* zoom: full page, pinch or drag to read the small print */
+.zoom{position:fixed;inset:0;background:#0B142E;z-index:10;overflow:auto;display:none;-webkit-overflow-scrolling:touch}
+.zoom.on{display:block}
+.zoom img{display:block;width:min(100%,1109px);margin:0 auto;background:#fff}
+.zoom.big img{width:200%;max-width:none}
+.zoom .x{position:fixed;top:calc(12px + env(safe-area-inset-top));right:12px;all:unset;position:fixed;top:calc(12px + env(safe-area-inset-top));right:12px;width:44px;height:44px;border-radius:50%;background:rgba(11,20,46,.8);
+  display:grid;place-items:center;cursor:pointer;color:#fff;font-size:22px}
+@media (prefers-reduced-motion:reduce){.leaf{transition:none}}
+</style>
+</head>
+<body>
+<header>
+  <a href="/" aria-label="Vinfinity Clinic หน้าแรก"><img src="/assets/vinfinity-logo-h.svg" alt="Vinfinity Clinic"></a>
+  <span class="t">TREATMENT MENU</span>
+  <div class="langs" role="group" aria-label="ภาษา">
+    <button data-l="th" aria-pressed="true">TH</button><button data-l="en" aria-pressed="false">EN</button><button data-l="lo" aria-pressed="false">LO</button>
+  </div>
+</header>
+
+<main class="stage">
+  <div class="track" id="track" tabindex="0" aria-label="เมนูโปรแกรม ปัดซ้าย-ขวาเพื่อเปิดหน้า"></div>
+  <button class="nav prev" id="prev" aria-label="หน้าก่อนหน้า"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+  <button class="nav next" id="next" aria-label="หน้าถัดไป"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>
+  <div class="hint" id="hint">ปัดเพื่อเปิดหน้า · แตะหน้าเพื่อขยาย</div>
+</main>
+
+<footer>
+  <div class="progress"><i id="prog"></i></div>
+  <div class="bar">
+    <select id="toc" aria-label="ไปที่หมวด"></select>
+    <span class="count" id="count">1 / 16</span>
+  </div>
+  <div class="cta">
+    <a class="line" id="book" href="https://line.me/R/oaMessage/%40230eeqvl/?%E0%B8%AA%E0%B8%99%E0%B9%83%E0%B8%88%E0%B8%9B%E0%B8%A3%E0%B8%B6%E0%B8%81%E0%B8%A9%E0%B8%B2%E0%B8%84%E0%B8%B8%E0%B8%93%E0%B8%AB%E0%B8%A1%E0%B8%AD%20(%E0%B8%88%E0%B8%B2%E0%B8%81%E0%B9%80%E0%B8%A1%E0%B8%99%E0%B8%B9)">นัดปรึกษาคุณหมอ</a>
+    <a class="ghost" href="tel:0824622963" aria-label="โทรหาคลินิก">โทร</a>
+  </div>
+</footer>
+
+<div class="zoom" id="zoom" role="dialog" aria-label="ขยายหน้า"><button class="x" id="zx" aria-label="ปิด">×</button><img id="zimg" alt=""></div>
+
+<script>
+(function () {
+  var N = 16, AR = 1109 / 1573;
+  // sections of the printed book (page numbers), and short names for deep links: /menu/#wallet
+  var TOC = [
+    [1, "ปก", "cover"], [2, "แพทย์ผู้ดูแล", "doctor"], [3, "ยินดีต้อนรับ · สารบัญ", "welcome"],
+    [4, "The Architect Rebuild", "architect"], [5, "คอร์สใหม่แรงบันดาลใจจากเกาหลี", "korea"], [6, "เลือกระดับการยกกระชับ", "lifting-guide"],
+    [7, "New Doublo 2.0", "doublo"], [8, "สกินบูสเตอร์", "booster"], [9, "ฟิลเลอร์และกระตุ้นคอลลาเจน", "filler"],
+    [10, "ท็อกซิน", "toxin"], [11, "ทรีตเมนต์ผิวและเลเซอร์", "treatment"], [12, "IV Drip วิตามินทางหลอดเลือด", "iv"],
+    [13, "Vinfinity Wallet · สมาชิก", "wallet"], [14, "สิทธิพิเศษ", "privileges"], [15, "การดูแลก่อนและหลังทำ", "care"], [16, "ปกหลัง · ติดต่อ", "contact"]
+  ];
+  var LABEL_EN = ["Cover", "The Doctor", "Welcome · Contents", "The Architect Rebuild", "Korean-inspired courses", "Lifting guide", "New Doublo 2.0", "Skin boosters", "Fillers & collagen", "Toxin", "Skin treatments", "IV Drip", "Vinfinity Wallet", "Privileges", "Before & after care", "Contact"];
+  var track = document.getElementById("track"), toc = document.getElementById("toc"), count = document.getElementById("count"), prog = document.getElementById("prog");
+  var lang = "th", spread = false, page = 1, ticking = false;
+  try { var saved = localStorage.getItem("vf-menu-lang"); if (/^(th|en|lo)$/.test(saved)) lang = saved; } catch (e) {}
+  var q = new URLSearchParams(location.search).get("lang"); if (/^(th|en|lo)$/.test(q || "")) lang = q;
+
+  var src = function (p, t) { return "/assets/img/menu/" + lang + "-" + String(p).padStart(2, "0") + (t ? "-t" : "") + ".webp"; };
+  // slides: phone = [1],[2]…; spread = [1],[2,3],[4,5]…[14,15],[16]
+  function slides() {
+    if (!spread) return Array.from({ length: N }, function (_, i) { return [i + 1]; });
+    var s = [[1]]; for (var p = 2; p < N; p += 2) s.push([p, p + 1]); s.push([N]); return s;
+  }
+  function slideOf(p) { var s = slides(); for (var i = 0; i < s.length; i++) if (s[i].indexOf(p) >= 0) return i; return 0; }
+
+  function render(keep) {
+    spread = window.innerWidth >= 900 && window.innerWidth / window.innerHeight > 1.15;
+    var s = slides();
+    track.innerHTML = s.map(function (pp, i) {
+      var two = pp.length === 2;
+      return '<div class="slide" data-i="' + i + '"><div class="leaf ' + (two ? "two" : "one") + '" style="--ar:' + (two ? 2 * AR : AR) + '">' +
+        pp.map(function (p) { return '<div class="pg" data-p="' + p + '"><img src="' + src(p) + '" alt="หน้า ' + p + " " + TOC[p - 1][1] + '" ' + (Math.abs(p - page) <= 2 ? 'loading="eager"' : 'loading="lazy"') + ' decoding="async"></div>'; }).join("") +
+        "</div></div>";
+    }).join("");
+    toc.innerHTML = TOC.map(function (t, i) { return '<option value="' + t[0] + '">' + String(t[0]).padStart(2, "0") + " · " + (lang === "th" ? t[1] : LABEL_EN[i]) + "</option>"; }).join("");
+    document.querySelectorAll(".langs button").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.l === lang)); });
+    document.documentElement.lang = lang;
+    go(keep || page, true);
+  }
+
+  function go(p, instant) {
+    p = Math.max(1, Math.min(N, p));
+    var i = slideOf(p), el = track.children[i];
+    if (el) track.scrollTo({ left: el.offsetLeft, behavior: instant ? "auto" : "smooth" });
+    setPage(p);
+  }
+  function setPage(p) {
+    page = p;
+    var pp = slides()[slideOf(p)];
+    count.textContent = (pp.length === 2 ? pp[0] + "–" + pp[1] : pp[0]) + " / " + N;
+    toc.value = String(TOC.filter(function (t) { return t[0] <= pp[pp.length - 1]; }).pop()[0]);
+    prog.style.width = (pp[pp.length - 1] / N) * 100 + "%";
+    document.getElementById("prev").disabled = pp[0] === 1;
+    document.getElementById("next").disabled = pp[pp.length - 1] === N;
+    var key = TOC[(pp.indexOf(p) >= 0 ? p : pp[0]) - 1][2];
+    history.replaceState(null, "", location.pathname + location.search + (pp[0] === 1 ? "" : "#" + key));
+  }
+
+  // page-turn feel: the leaf leaving rotates away a little, the one arriving settles flat
+  function onScroll() {
+    if (ticking) return; ticking = true;
+    requestAnimationFrame(function () {
+      ticking = false;
+      var w = track.clientWidth, x = track.scrollLeft;
+      Array.prototype.forEach.call(track.children, function (sl) {
+        var d = (sl.offsetLeft - x) / w; // -1 … 0 … 1
+        var leaf = sl.firstChild;
+        if (Math.abs(d) > 1.2) { leaf.style.transform = ""; return; }
+        leaf.style.transform = "rotateY(" + (-d * 28) + "deg) scale(" + (1 - Math.abs(d) * 0.08) + ")";
+        leaf.style.transformOrigin = d < 0 ? "right center" : "left center";
+      });
+      var i = Math.round(x / w), pp = slides()[i];
+      if (pp && pp[0] !== page && pp.indexOf(page) < 0) setPage(pp[0]);
+    });
+  }
+  track.addEventListener("scroll", onScroll, { passive: true });
+  track.addEventListener("scroll", function () { document.getElementById("hint").style.opacity = 0; }, { once: true, passive: true });
+  setTimeout(function () { document.getElementById("hint").style.opacity = 0; }, 4500);
+
+  document.getElementById("prev").onclick = function () { var pp = slides()[slideOf(page)]; go(pp[0] - 1); };
+  document.getElementById("next").onclick = function () { var pp = slides()[slideOf(page)]; go(pp[pp.length - 1] + 1); };
+  toc.onchange = function () { go(Number(toc.value)); };
+  document.addEventListener("keydown", function (e) {
+    if (document.getElementById("zoom").classList.contains("on")) { if (e.key === "Escape") closeZoom(); return; }
+    if (e.key === "ArrowRight") document.getElementById("next").click();
+    if (e.key === "ArrowLeft") document.getElementById("prev").click();
+  });
+  document.querySelectorAll(".langs button").forEach(function (b) {
+    b.onclick = function () { lang = b.dataset.l; try { localStorage.setItem("vf-menu-lang", lang); } catch (e) {} render(page); };
+  });
+
+  // tap a page: open it full size; tap again to zoom in further
+  var zoom = document.getElementById("zoom"), zimg = document.getElementById("zimg");
+  track.addEventListener("click", function (e) {
+    var pg = e.target.closest && e.target.closest(".pg"); if (!pg) return;
+    zimg.src = src(Number(pg.dataset.p)); zimg.alt = "หน้า " + pg.dataset.p; zoom.classList.add("on"); zoom.classList.remove("big"); zoom.scrollTo(0, 0);
+  });
+  zimg.onclick = function (e) {
+    var big = zoom.classList.toggle("big");
+    if (big) { var r = zimg.getBoundingClientRect(); zoom.scrollTo((e.clientX - r.left) * 2 - window.innerWidth / 2, (e.clientY - r.top) * 2 - window.innerHeight / 2 + zoom.scrollTop); }
+  };
+  function closeZoom() { zoom.classList.remove("on"); }
+  document.getElementById("zx").onclick = closeZoom;
+
+  // start page from the link: /menu/#wallet or /menu/#p13
+  var h = location.hash.slice(1), start = 1;
+  if (/^p\d+$/.test(h)) start = Number(h.slice(1)); else TOC.forEach(function (t) { if (t[2] === h) start = t[0]; });
+  page = start;
+  var rt; window.addEventListener("resize", function () { clearTimeout(rt); rt = setTimeout(function () { var was = spread; spread = window.innerWidth >= 900 && window.innerWidth / window.innerHeight > 1.15; if (was !== spread) render(page); else go(page, true); }, 150); });
+  render(start);
+})();
+</script>
+<script>window.VF={app:"https://vinfinity-line.vercel.app",ga4:"",meta:"",tiktok:""};</script>
+<script src="/assets/track.js" defer></script>
+</body>
+</html>
