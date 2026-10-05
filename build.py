@@ -246,7 +246,7 @@ def bust(html):
 
 def build(out, title, desc, path, keywords, body_file, faqs, extra_ld=(), lang="th"):
     body = (ROOT / "pages" / body_file).read_text(encoding="utf-8")
-    for key, part in (("ANATOMY", "_anatomy.html"), ("RESULTS_EYE", "_results_eye.html"),
+    for key, part in (("ANATOMY", "_anatomy.html"), ("RESULTS_EYE", "_results_eye.html"), ("RESULTS_MEN", "_results_men.html"),
                       ("RESULTS_LAYERS", "_results_layers.html")):
         f = ROOT / "pages" / part
         if "{{%s}}" % key in body and f.exists():
