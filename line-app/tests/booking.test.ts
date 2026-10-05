@@ -30,7 +30,7 @@ test("booking locks a slot, double booking rejected, reschedule frees old slot",
   assert.equal(lead[0].status, "Consult-Booked");
   const slots = await availableSlots("2026-10-05", DEFAULTS, undefined, now);
   assert.equal(slots.find((s) => s.time === "14:00")!.available, false);
-  const newId = await reschedule(id, c1.id, bkk("2026-10-05", "15:00").toISOString(), DEFAULTS);
+  const newId = await reschedule(id, c1.id, bkk("2026-10-05", "15:00").toISOString(), DEFAULTS, now);
   const taken = await takenFor("2026-10-05");
   assert.equal(taken.size, 1);
   assert.ok(newId !== id);

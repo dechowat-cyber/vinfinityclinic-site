@@ -248,3 +248,44 @@ export function csat(treatmentId: number, reviewUrl: string) {
 export const csatThanks = (score: number, refCode: string | null) => txt(score <= 3
   ? "ขอบคุณที่บอกเรานะคะ ทีมจะติดต่อกลับเพื่อดูแลเรื่องนี้ให้เร็วที่สุดค่ะ"
   : `ขอบคุณมากค่ะ${refCode ? `\n\nรหัสแนะนำเพื่อนของคุณคือ ${refCode} ส่งให้เพื่อนพิมพ์รหัสนี้ตอนทักแชทได้เลยค่ะ` : ""}`);
+
+// ---------- Vinfinity Circle ----------
+export const cardUrl = (userId: string | null | undefined) => bookUrl(userId, { view: "card" });
+export function cardPrompt(userId: string) {
+  return { type: "flex", altText: "บัตรสมาชิก Vinfinity Circle", contents: { type: "bubble", body: { type: "box", layout: "vertical", paddingAll: "18px", contents: [
+    txt("VINFINITY CIRCLE", { size: "xxs", color: MUTED, weight: "bold" }),
+    txt("บัตรสมาชิกของคุณ", { weight: "bold", size: "md", color: NAVY, margin: "sm" }),
+    txt("ดูระดับสมาชิก สิทธิพิเศษ และโปรลับที่ใช้ได้ตอนนี้", { size: "sm", color: MUTED })] },
+    footer: { type: "box", layout: "vertical", contents: [btn("เปิดบัตรสมาชิก", { type: "uri", uri: cardUrl(userId) })] } } };
+}
+
+export function tierUp(userId: string | null, tierName: string, perks: string[]) {
+  return { type: "flex", altText: `ยินดีด้วยค่ะ คุณเป็นสมาชิกระดับ ${tierName} แล้ว`,
+    contents: { type: "bubble",
+      header: { type: "box", layout: "vertical", backgroundColor: NAVY, paddingAll: "18px", contents: [
+        txt("VINFINITY CIRCLE", { size: "xxs", color: SILVER, weight: "bold" }),
+        txt(`ยินดีต้อนรับสู่ระดับ ${tierName}`, { size: "lg", color: "#FFFFFF", weight: "bold", margin: "sm" })] },
+      body: { type: "box", layout: "vertical", spacing: "sm", paddingAll: "18px", contents: [
+        txt("ขอบคุณที่ไว้วางใจ Vinfinity Clinic นะคะ สิทธิ์ของคุณตอนนี้", { size: "sm", color: MUTED }),
+        ...perks.map((p) => txt(`• ${p}`, { size: "sm", color: NAVY }))] },
+      footer: { type: "box", layout: "vertical", contents: [btn("เปิดบัตรสมาชิก", { type: "uri", uri: cardUrl(userId) })] } } };
+}
+
+/** A members-only offer with the client's own one-time code. */
+export function offerCard(userId: string | null, title: string, detail: string, code: string, expires: Date) {
+  return { type: "flex", altText: `โปรลับสำหรับสมาชิก: ${title}`,
+    contents: { type: "bubble",
+      header: { type: "box", layout: "vertical", backgroundColor: NAVY, paddingAll: "18px", contents: [
+        txt("MEMBERS ONLY · โปรลับเฉพาะคุณ", { size: "xxs", color: SILVER, weight: "bold" }),
+        txt(title, { size: "lg", color: "#FFFFFF", weight: "bold", margin: "sm" })] },
+      body: { type: "box", layout: "vertical", spacing: "md", paddingAll: "18px", contents: [
+        txt(detail, { size: "sm", color: NAVY }),
+        { type: "box", layout: "vertical", backgroundColor: "#EEF2F8", cornerRadius: "10px", paddingAll: "12px", contents: [
+          txt("รหัสของคุณ (ใช้ได้ 1 ครั้ง)", { size: "xxs", color: MUTED, align: "center" }),
+          txt(code, { size: "xl", weight: "bold", color: ROYAL, align: "center" }),
+          txt(`ใช้ได้ถึง ${thaiDate(expires)}`, { size: "xxs", color: MUTED, align: "center" })] },
+        txt("แจ้งรหัสนี้ที่เคาน์เตอร์ · ส่งต่อให้ผู้อื่นไม่ได้ · เงื่อนไขเป็นไปตามที่คลินิกกำหนด", { size: "xxs", color: MUTED, wrap: true })] },
+      footer: { type: "box", layout: "vertical", spacing: "sm", contents: [
+        btn("จองคิว", { type: "uri", uri: bookUrl(userId, { src: "offer" }) }),
+        btn("บัตรสมาชิกของฉัน", { type: "uri", uri: cardUrl(userId) }, "secondary")] } } };
+}

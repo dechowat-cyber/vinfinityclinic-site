@@ -10,6 +10,9 @@ import { sendReminders, eveningRun } from "./cron";
 import { seedOnce } from "./seed";
 import { cardFor, careFlex, CARE_VERSION } from "./careCards";
 import { dailyReport } from "./finance";
+import { expireTiers } from "./loyalty";
+/** marketing messages only between 09:00 and 20:00 */
+const isQuiet = (now: Date) => { const m = minutes(parts(now).time); return m < 9 * 60 || m > 20 * 60; };
 import { notifyExec } from "./notify";
 import { recallTick } from "./recall";
 import { sendCampaignBatch } from "./segments";
@@ -182,6 +185,22 @@ export async function planFollowUp(now: Date) {
   return rows.length;
 }
 
+/** Members-only offers: sends the personal codes of recent offers, consent re-checked at send time. */
+export async function sendOfferBatch(limit = 150, now = new Date()) {
+  const rows = await q(`select oc.id, oc.code, oc.expires_at, o.title, o.detail, c.id as client_id, c.line_user_id, c.followed,
+      (select k.granted from consents k where k.client_id = c.id and k.type = 'marketing' order by k.created_at desc, k.id desc limit 1) as mk
+    from offer_codes oc join offers o on o.id = oc.offer_id join clients c on c.id = oc.client_id
+    where oc.sent_at is null and oc.expires_at > $2 order by oc.id limit $1`, [limit, now.toISOString()]);
+  let sent = 0;
+  for (const r of rows) {
+    const ok = r.line_user_id && r.followed && r.mk === true;
+    if (ok && !(await safePush(r.line_user_id, [M.offerCard(r.line_user_id, r.title, r.detail, r.code, new Date(r.expires_at))], `offer:${r.id}`))) continue;
+    await q("update offer_codes set sent_at = now() where id = $1", [r.id]);
+    if (ok) { await logTouch(Number(r.client_id), "out", "offer", String(r.id), "system"); sent++; }
+  }
+  return sent;
+}
+
 /** 19:00 money report (day + week + month) to the management group, once a day. */
 export async function financeReport(now: Date, s: ClinicSettings) {
   if (!s.execGroupId || !after(now, "19:00")) return 0;
@@ -207,6 +226,8 @@ export async function runTick(now = new Date()) {
     ["nurture", async () => (after(now, "10:00") && (await once(`nurture-run:${todayBkk(now)}`)) ? nurture(now) : 0)],
     ["planFollowUp", () => planFollowUp(now)],
     ["financeReport", () => financeReport(now, s)],
+    ["offers", () => (isQuiet(now) ? Promise.resolve(0) : sendOfferBatch(150, now))],
+    ["tierExpiry", async () => ((await once(`tiers:${todayBkk(now)}`)) ? expireTiers(now) : 0)],
     ["recall", () => recallTick(now, s)],
     ["campaigns", () => sendCampaignBatch(200)],
     ["capi", () => capiTick(now)],

@@ -13,15 +13,15 @@ export const RICH_MENU_ITEMS = [
   { label: "นัดของฉัน", bounds: [0, 900, 625, 786], action: () => (useLiff() ? { type: "uri", uri: bookUrl(null, { view: "my" }) } : { type: "postback", data: "menu=my", displayText: "นัดของฉัน" }) },
   { label: "คุยกับทีมคลินิก", bounds: [625, 900, 625, 786], action: () => ({ type: "message", text: "อยากปรึกษาค่ะ" }) },
   { label: "แผนที่และเวลาเปิด", bounds: [1250, 900, 625, 786], action: () => ({ type: "uri", uri: `${SITE}/?${utm}#clinic` }) },
-  // Wallet: opens the membership page of the menu book until the VIP wallet app is ready
-  { label: "Vinfinity Wallet", bounds: [1875, 900, 625, 786], action: () => ({ type: "uri", uri: `${SITE}/menu/?${utm}#wallet` }) },
+  // Vinfinity Circle member card: tier, perks, secret offers (later also Wallet credit)
+  { label: "บัตรสมาชิก", bounds: [1875, 900, 625, 786], action: () => (useLiff() ? { type: "uri", uri: bookUrl(null, { view: "card" }) } : { type: "postback", data: "menu=card", displayText: "บัตรสมาชิกของฉัน" }) },
 ];
 
 export function richMenuDefinition() {
   return {
     size: { width: 2500, height: 1686 },
     selected: true,
-    name: "Vinfinity main v2",
+    name: "Vinfinity main v3",
     chatBarText: "เมนู · จองคิว",
     areas: RICH_MENU_ITEMS.map((it) => {
       const [x, y, width, height] = it.bounds;

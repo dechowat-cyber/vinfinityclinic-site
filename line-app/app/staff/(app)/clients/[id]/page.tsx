@@ -9,11 +9,12 @@ import { BeforeAfter } from "../../before-after";
 import { QuickShoot } from "../../quick-shoot";
 import { startPhotoSession } from "@/lib/photoActions";
 import { METHODS, CASHIER_ROLES, VOID_ROLES, paidByPlan, clientRevenue, baht } from "@/lib/payments";
-import { takePayment, voidPaymentAction } from "@/lib/crmActions";
+import { takePayment, voidPaymentAction, setTierAction } from "@/lib/crmActions";
 import { possibleDuplicates } from "@/lib/identity";
 import { mergeAction } from "@/lib/cdpActions";
 import { SOURCE_LABEL } from "@/lib/reports";
 import { PlanBuilder } from "./plan";
+import { activeCodes, tierInfo, spend12m } from "@/lib/loyalty";
 import { Chips } from "@/app/ui/chips";
 import { CONCERNS, GOALS, ASSESS } from "@/lib/options";
 
@@ -55,6 +56,8 @@ export default async function ClientPage({ params, searchParams }: { params: Pro
     one("select src, utm_source, utm_medium, utm_campaign, gclid is not null as g, fbclid is not null as f, ttclid is not null as t, landing, created_at from web_visits where client_id = $1 order by created_at limit 1", [id]),
   ]);
   const cashier = CASHIER_ROLES.includes(me.role);
+  const [codes, spend] = await Promise.all([activeCodes(id), spend12m(id)]);
+  const tier = tierInfo(c.tier);
   const due = plans.map((p) => ({ id: Number(p.id), goal: p.goal, balance: Math.max(0, Number(p.total) - (paidMap.get(Number(p.id)) ?? 0)) })).filter((p) => p.balance > 0);
   const pair = pairs[0];
   const protocol = suggestProtocol([appts[0]?.note, lead?.interest].join(" "));
@@ -74,11 +77,16 @@ export default async function ClientPage({ params, searchParams }: { params: Pro
             {c.ref_name || c.ref_display ? ` · แนะนำโดย ${c.ref_name || c.ref_display}` : ""}{c.ref_code ? ` · รหัสแนะนำของลูกค้า ${c.ref_code}` : ""}</p></div>
         <div className="row">{health && dataOk && <QuickShoot clientId={id} kind={kind} protocol={protocol}
             openSession={sessions.find((x) => !x.completed_at)?.id ?? null} />}
+          <span className="tag" style={{ background: tier.color, color: "#fff", borderColor: tier.color }} title={`ยอด 12 เดือน ${baht(spend)}${c.tier_until ? ` · คงระดับถึง ${thaiDate(new Date(c.tier_until))}` : ""}`}>Circle · {tier.name}</span>
           {revenue.total > 0 && <a href="#payments" className="tag ok" title={`ชำระ ${revenue.count} ครั้ง`}>ยอดสะสม {baht(revenue.total)}</a>}
           {consent.map((x) => <span key={x.type} className={`tag ${x.granted ? "ok" : "bad"}`}>{x.type === "data" ? "ยินยอมข้อมูล" : "รับข่าวสาร"}: {x.granted ? "ใช่" : "ไม่"}</span>)}
           {lead && <span className="tag">{lead.status}</span>}</div>
       </div>
 
+      {me.role === "BM" && <details className="card" style={{ padding: "10px 16px" }}><summary className="muted" style={{ fontSize: 14, cursor: "pointer" }}>ระดับสมาชิก Circle: <b>{tier.name}</b> · ยอด 12 เดือนในระบบ {baht(spend)} · ตั้งระดับเอง (ลูกค้าเก่าก่อนมีระบบ / ถือ Wallet)</summary>
+        <form action={setTierAction} className="row" style={{ marginTop: 10 }}><input type="hidden" name="client_id" value={id} />
+          <select name="tier" className="inp" defaultValue={c.tier || "member"}><option value="member">Member</option><option value="silver">Silver</option><option value="gold">Gold</option><option value="platinum">Platinum</option></select>
+          <button className="btn small">บันทึก · คงระดับ 12 เดือน</button><small className="muted">ขึ้นระดับแล้วลูกค้าได้ข้อความแสดงความยินดีทาง LINE</small></form></details>}
       {sp.merged && <div className="card" style={{ borderColor: "var(--ok)" }}>รวมรายการ #{sp.merged} เข้ากับลูกค้ารายนี้แล้ว</div>}
       {dups.length > 0 && <div className="card warn-card">
         <b>อาจเป็นลูกค้าคนเดียวกัน (เบอร์โทรตรงกัน):</b> {dups.map((d) => <a key={d.id} href={`/staff/clients/${d.id}`} style={{ marginLeft: 8 }}>#{d.id} {d.name || d.display_name || ""}{d.line_user_id ? " (LINE)" : ""}</a>)}
@@ -211,6 +219,9 @@ export default async function ClientPage({ params, searchParams }: { params: Pro
           <input name="amount" className="inp" inputMode="decimal" required placeholder="จำนวนเงิน" defaultValue={due[0]?.balance || ""} style={{ width: 130 }} aria-label="จำนวนเงิน (บาท)" />
           <select name="method" className="inp" defaultValue="transfer">{Object.entries(METHODS).map(([k, l]) => <option key={k} value={k}>{l}</option>)}</select>
           <input name="note" className="inp" placeholder="หมายเหตุ เช่น มัดจำ / งวดที่ 2" style={{ flex: 1, minWidth: 140 }} />
+          {codes.length > 0 && <select name="code_id" className="inp" defaultValue="" aria-label="ใช้โปรลับ">
+            <option value="">ไม่ใช้โปรลับ</option>
+            {codes.map((k) => <option key={k.id} value={k.id}>ใช้โปรลับ: {k.title} ({k.code})</option>)}</select>}
           <button className="btn">รับชำระ + ออกใบเสร็จ</button>
         </form>}
         {payments.length === 0 ? <p className="muted" style={{ fontSize: 14 }}>ยังไม่มีการชำระเงิน</p> :

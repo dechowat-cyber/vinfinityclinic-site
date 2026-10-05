@@ -360,4 +360,34 @@ create table if not exists day_closes (
   closed_by bigint,
   closed_at timestamptz not null default now()
 );
+
+-- Vinfinity Circle: tier from 12-month spend, held for 12 months once reached
+alter table clients add column if not exists tier text not null default 'member';
+alter table clients add column if not exists tier_until timestamptz;
+-- members-only offers: every recipient gets a personal one-time code
+create table if not exists offers (
+  id bigserial primary key,
+  title text not null,
+  detail text not null,
+  min_tier text not null default 'member',
+  lapsed_days int,
+  valid_days int not null default 30,
+  issued int not null default 0,
+  created_by bigint,
+  created_at timestamptz not null default now()
+);
+create table if not exists offer_codes (
+  id bigserial primary key,
+  offer_id bigint not null references offers(id),
+  client_id bigint not null references clients(id),
+  code text unique not null,
+  expires_at timestamptz not null,
+  sent_at timestamptz,
+  redeemed_at timestamptz,
+  payment_id bigint,
+  redeemed_by bigint,
+  unique (offer_id, client_id)
+);
+create index if not exists offer_codes_client on offer_codes(client_id, expires_at);
+create index if not exists offer_codes_unsent on offer_codes(sent_at) where sent_at is null;
 `;

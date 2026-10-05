@@ -65,6 +65,7 @@ export async function handleEvent(ev: Ev, now = new Date(), s?: ClinicSettings):
     }
     if (p.get("menu") === "book") return { replyToken: ev.replyToken, messages: [M.bookingPrompt(userId)] };
     if (p.get("menu") === "my") return { replyToken: ev.replyToken, messages: [M.myPrompt(userId)] };
+    if (p.get("menu") === "card") return { replyToken: ev.replyToken, messages: [M.cardPrompt(userId)] };
     if (p.get("resched")) {
       const a = await one(`select * from appointments where id = $1 and client_id = $2 and status in ('booked','confirmed')`, [Number(p.get("resched")), c.id]);
       if (!a) return { replyToken: ev.replyToken, messages: [{ type: "text", text: "ไม่พบนัดนี้แล้วค่ะ ดูนัดล่าสุดได้ที่เมนู นัดของฉัน นะคะ" }] };

@@ -20,6 +20,7 @@ const GROUPS: { title: string; items: Item[] }[] = [
   { title: "ธุรกิจ", items: [
     { href: "/staff/finance", label: "การเงิน / ปิดยอด", icon: "wallet", roles: ["BM", "FD", "CS"], badge: "slips" },
     { href: "/staff/reports", label: "รายงาน", icon: "chart", roles: ["BM", "MK"] },
+    { href: "/staff/loyalty", label: "Circle · โปรลับ", icon: "star", roles: ["BM", "MK"] },
     { href: "/staff/segments", label: "กลุ่มลูกค้า / แคมเปญ", icon: "target", roles: ["BM", "MK"] },
     { href: "/staff/catalog", label: "ราคากลาง", icon: "tag" },
     { href: "/staff/links", label: "ลิงก์ช่องทาง", icon: "link" },

@@ -33,7 +33,7 @@ export default function Liff() {
   const [ready, setReady] = useState(false);
   const [fatal, setFatal] = useState("");
   const [token, setToken] = useState<string | null>(null);
-  const [view, setView] = useState(params.get("view") === "my" ? "my" : params.get("view") === "form" ? "form" : "book");
+  const [view, setView] = useState(["my", "form", "card"].includes(params.get("view") || "") ? (params.get("view") as string) : "book");
   const plan = params.get("plan");
   const devUser = params.get("dev_user");
   const link = params.get("t");
@@ -66,6 +66,7 @@ export default function Liff() {
   if (fatal) return <main className="liff"><div className="done"><div className="big">{fatal}</div><a className="btn" href="https://line.me/R/ti/p/@230eeqvl">เปิด LINE Vinfinity Clinic</a></div></main>;
   if (!ready) return <main className="liff"><div className="done muted">กำลังโหลด…</div></main>;
   if (view === "form") return <Form api={api} onMy={() => setView("my")} />;
+  if (view === "card") return <Card api={api} onBook={() => setView("book")} />;
   return view === "my" ? <My api={api} onBook={() => setView("book")} onForm={() => setView("form")} /> : <Book api={api} src={src} plan={plan} onMy={() => setView("my")} />;
 }
 
@@ -242,6 +243,56 @@ function Form({ api, onMy }: { api: any; onMy: () => void }) {
           </section>)}
       </div>
       {state !== "consent" && state !== "load" && <div className="sticky"><button className="btn" disabled={state === "saving"} onClick={save}>{state === "saving" ? "กำลังบันทึก…" : "บันทึก"}</button></div>}
+    </main>
+  );
+}
+
+/** Vinfinity Circle member card: the client's tier, progress, perks and personal secret offers. */
+function Card({ api, onBook }: { api: any; onBook: () => void }) {
+  const [d, setD] = useState<any>(null);
+  useEffect(() => { api("/api/liff/card").then(setD); }, [api]);
+  const baht = (n: number) => Number(n).toLocaleString("th-TH", { maximumFractionDigits: 0 });
+  const day = (s: string) => new Date(s).toLocaleDateString("th-TH", { timeZone: "Asia/Bangkok", day: "numeric", month: "short", year: "numeric" });
+  if (!d) return <main className="liff"><div className="done muted">กำลังโหลด…</div></main>;
+  if (d.error) return <main className="liff"><div className="done"><div className="big">เปิดหน้านี้จากเมนูใน LINE นะคะ</div></div></main>;
+  const metal: Record<string, string> = {
+    member: "linear-gradient(135deg,#1E3470,#3A5496 60%,#1A326B)",
+    silver: "linear-gradient(125deg,#F4F7FC,#C3CDE0 38%,#EEF2F8 55%,#9FB0CE)",
+    gold: "linear-gradient(125deg,#F6EBD3,#CDAE72 40%,#F3E4C2 58%,#B8975A)",
+    platinum: "linear-gradient(125deg,#2A3350,#0B142E 45%,#3B4566 70%,#0B142E)",
+  };
+  const dark = d.tier === "member" || d.tier === "platinum";
+  return (
+    <main className="liff">
+      <Header title="บัตรสมาชิก" sub="Vinfinity Circle · สิทธิพิเศษสำหรับคนในบ้าน Vinfinity" />
+      <div className="liff-body">
+        <div className="vc-card" style={{ background: metal[d.tier], color: dark ? "#fff" : "#0B142E" }}>
+          <div className="vc-top"><span>VINFINITY CIRCLE</span><b>{d.tierName.toUpperCase()}</b></div>
+          <div className="vc-name">{d.name || "สมาชิก"}</div>
+          <div className="vc-bot"><span>{d.until ? `คงระดับถึง ${day(d.until)}` : "สมาชิกตั้งแต่ " + (d.since ? day(d.since) : "")}</span>{d.refCode && <span>รหัสแนะนำ {d.refCode}</span>}</div>
+        </div>
+        {d.progress ? <section className="card">
+          <div className="row" style={{ justifyContent: "space-between" }}><b>อีก {baht(d.progress.need)} บาท ขึ้นระดับ {d.progress.next}</b><small className="muted">ยอด 12 เดือน {baht(d.spend)}</small></div>
+          <div className="vc-bar"><i style={{ width: `${d.progress.pct}%` }} /></div>
+          <small className="muted">นับจากยอดชำระจริงย้อนหลัง 12 เดือน · ขึ้นระดับแล้วคงระดับ 12 เดือน · เติม Vinfinity Wallet ก็นับด้วย</small>
+        </section> : <section className="card"><b>คุณอยู่ระดับสูงสุดแล้ว ขอบคุณที่ไว้วางใจค่ะ</b></section>}
+
+        <section className="card">
+          <div className="eyebrow">โปรลับของคุณ</div>
+          {d.offers.length === 0 ? <p className="muted" style={{ margin: "8px 0 0" }}>ตอนนี้ยังไม่มีโปรลับ เมื่อมีเราจะส่งรหัสเข้าแชทนี้ค่ะ</p> :
+            d.offers.map((o: any) => <div key={o.code} className="vc-offer"><b>{o.title}</b><p>{o.detail}</p>
+              <div className="vc-code"><span>{o.code}</span><small>ใช้ได้ถึง {day(o.expires)}</small></div></div>)}
+        </section>
+
+        <section className="card">
+          <div className="eyebrow">สิทธิ์ระดับ {d.tierName}</div>
+          <ul className="vc-perks">{d.perks.map((p: string) => <li key={p}>{p}</li>)}</ul>
+          <details><summary className="muted" style={{ fontSize: 13 }}>ดูทุกระดับ</summary>
+            <ul className="vc-perks" style={{ marginTop: 8 }}>{d.tiers.map((t: any) => <li key={t.key}><b>{t.name}</b> · {t.min ? `ยอด 12 เดือน ${baht(t.min)} บาทขึ้นไป` : "ทุกคนที่เป็นเพื่อน LINE"}</li>)}</ul></details>
+        </section>
+        <button className="btn" onClick={onBook}>จองคิวปรึกษาคุณหมอ</button>
+        <a className="btn ghost" href="https://vinfinityclinic.com/menu/#wallet">ดู Vinfinity Wallet ในเมนู</a>
+      </div>
     </main>
   );
 }
