@@ -147,7 +147,25 @@ export async function aftercare(now: Date, s: ClinicSettings & { aftercareApprov
   return sent;
 }
 
-/** FR-34/35: D14 CSAT + review link to everyone, from 09:30. */
+/** Day 3 after a visit, 11:00–20:00: ask for a Google review about the visit. Once per visit day, at most every 120 days per client. */
+export async function reviewAsk(now: Date) {
+  if (!after(now, "11:00") || after(now, "20:00")) return 0;
+  const today = todayBkk(now);
+  const rows = await q(`select distinct on (t.client_id) t.id, t.client_id, t.done_at, c.line_user_id, c.followed
+    from treatments t join clients c on c.id = t.client_id
+    where t.done_at between $1 and $2 and c.line_user_id is not null
+      and not exists (select 1 from touchpoints p where p.client_id = t.client_id and p.kind = 'review_ask' and p.created_at > $3)
+    order by t.client_id, t.done_at desc`,
+    [bkk(addDays(today, -5), "00:00").toISOString(), bkk(addDays(today, -2), "00:00").toISOString(), new Date(now.getTime() - 120 * 86400_000).toISOString()]);
+  let sent = 0;
+  for (const t of rows) {
+    if (!t.followed || !(await once(`review:${t.client_id}:${parts(new Date(t.done_at)).date}`))) continue;
+    if (await safePush(t.line_user_id, [M.reviewAsk(REVIEW_URL)], `review:${t.id}`)) { await logTouch(t.client_id, "out", "review_ask", String(t.id), "system"); sent++; }
+  }
+  return sent;
+}
+
+/** FR-34/35: D14 CSAT to everyone, from 09:30. The review link rides along only if the day-3 ask was not sent. */
 export async function csat(now: Date) {
   if (!after(now, "09:30")) return 0;
   const today = todayBkk(now);
@@ -159,7 +177,8 @@ export async function csat(now: Date) {
   let sent = 0;
   for (const t of rows) {
     if (!t.followed || !(await once(`csat:${t.client_id}:${parts(new Date(t.done_at)).date}`))) continue;
-    if (await safePush(t.line_user_id, [M.csat(t.id, REVIEW_URL)], `csat:${t.id}`)) { await logTouch(t.client_id, "out", "csat_d14", String(t.id), "system"); sent++; }
+    const asked = await one("select 1 from touchpoints where client_id = $1 and kind = 'review_ask' and created_at > $2 limit 1", [t.client_id, new Date(now.getTime() - 30 * 86400_000).toISOString()]);
+    if (await safePush(t.line_user_id, [M.csat(t.id, asked ? null : REVIEW_URL)], `csat:${t.id}`)) { await logTouch(t.client_id, "out", "csat_d14", String(t.id), "system"); sent++; }
   }
   return sent;
 }
@@ -222,6 +241,7 @@ export async function runTick(now = new Date()) {
     ["noShow", () => noShows(now)],
     ["careEscalation", () => careEscalation(now)],
     ["aftercare", () => aftercare(now, s)],
+    ["reviewAsk", () => reviewAsk(now)],
     ["csat", () => csat(now)],
     ["nurture", async () => (after(now, "10:00") && (await once(`nurture-run:${todayBkk(now)}`)) ? nurture(now) : 0)],
     ["planFollowUp", () => planFollowUp(now)],

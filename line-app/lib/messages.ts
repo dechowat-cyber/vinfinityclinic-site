@@ -235,15 +235,25 @@ export const carePhotoThanks = () => txt("ขอบคุณที่ส่ง�
 export const careOk = () => txt("ดีใจด้วยค่ะ ดูแลตามคำแนะนำต่อได้เลย มีอะไรทักมาได้ตลอดนะคะ");
 
 /** FR-34/35 (L10): CSAT + review link for everyone (no review gating). */
-export function csat(treatmentId: number, reviewUrl: string) {
+/** Day-3 Google review ask: about the visit itself (care, explanation, cleanliness), not results. Optional, no incentive. */
+export function reviewAsk(reviewUrl: string) {
+  return { type: "flex", altText: "ช่วยเล่าประสบการณ์ที่ Vinfinity บน Google หน่อยนะคะ",
+    contents: { type: "bubble", body: { type: "box", layout: "vertical", spacing: "md", paddingAll: "18px", contents: [
+      txt("ขอบคุณที่ไว้ใจให้ Vinfinity ดูแลนะคะ", { weight: "bold", size: "md", color: NAVY }),
+      txt("ถ้าวันที่มาคลินิก การอธิบายของคุณหมอ ความสะอาด หรือการดูแลของทีมทำให้คุณสบายใจ ช่วยเล่าบน Google สั้นๆ ได้ไหมคะ รีวิวจริงจากคุณช่วยให้คนในอุดรที่กำลังหาคลินิกตัดสินใจได้ง่ายขึ้นค่ะ", { size: "sm", color: MUTED }),
+      txt("ไม่ต้องระบุชื่อหัตถการหรือแนบรูปก็ได้นะคะ ถ้ามีอะไรที่อยากให้ปรับปรุง ทักในแชทนี้ได้เลยค่ะ", { size: "xs", color: MUTED, margin: "md" }),
+    ] }, footer: { type: "box", layout: "vertical", contents: [btn("เขียนรีวิวบน Google", { type: "uri", uri: reviewUrl })] } } };
+}
+
+export function csat(treatmentId: number, reviewUrl: string | null) {
   return { type: "flex", altText: "ครบ 2 สัปดาห์แล้ว ให้คะแนนการดูแลของเราหน่อยนะคะ",
     contents: { type: "bubble", body: { type: "box", layout: "vertical", spacing: "md", paddingAll: "18px", contents: [
       txt("ครบ 2 สัปดาห์แล้วค่ะ", { weight: "bold", size: "md", color: NAVY }),
       txt("ให้คะแนนการดูแลของเราโดยรวมหน่อยนะคะ (1 = ต้องปรับปรุง, 5 = ดีมาก)", { size: "sm", color: MUTED }),
       { type: "box", layout: "horizontal", spacing: "sm", contents: [1, 2, 3, 4, 5].map((n) => ({ type: "button", style: "secondary", height: "sm",
         action: { type: "postback", label: String(n), data: `csat=${n}&t=${treatmentId}`, displayText: `ให้ ${n} คะแนน` } })) },
-      txt("ถ้าสะดวก ช่วยเล่าประสบการณ์บน Google ได้ด้วยนะคะ รีวิวของคุณช่วยให้คนที่กำลังเลือกคลินิกตัดสินใจได้ง่ายขึ้น", { size: "xs", color: MUTED, margin: "md" }),
-    ] }, footer: { type: "box", layout: "vertical", contents: [btn("เขียนรีวิวบน Google", { type: "uri", uri: reviewUrl }, "secondary")] } } };
+      ...(reviewUrl ? [txt("ถ้าสะดวก ช่วยเล่าประสบการณ์บน Google ได้ด้วยนะคะ รีวิวของคุณช่วยให้คนที่กำลังเลือกคลินิกตัดสินใจได้ง่ายขึ้น", { size: "xs", color: MUTED, margin: "md" })] : []),
+    ] }, ...(reviewUrl ? { footer: { type: "box", layout: "vertical", contents: [btn("เขียนรีวิวบน Google", { type: "uri", uri: reviewUrl }, "secondary")] } } : {}) } };
 }
 export const csatThanks = (score: number, refCode: string | null) => txt(score <= 3
   ? "ขอบคุณที่บอกเรานะคะ ทีมจะติดต่อกลับเพื่อดูแลเรื่องนี้ให้เร็วที่สุดค่ะ"
