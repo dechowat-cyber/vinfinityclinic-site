@@ -173,17 +173,28 @@ export default async function ClientPage({ params, searchParams }: { params: Pro
                 <form action={decideDiscount}><input type="hidden" name="id" value={p.id} /><input type="hidden" name="ok" value="1" /><button className="btn small">อนุมัติส่วนลด</button></form>
                 <form action={decideDiscount}><input type="hidden" name="id" value={p.id} /><input type="hidden" name="ok" value="0" /><button className="btn danger small">ไม่อนุมัติ</button></form></>}
               {p.discount_status !== "pending" && c.line_user_id && health && <form action={sendPlan}><input type="hidden" name="id" value={p.id} /><button className="btn ghost small">{p.card_sent_at ? "ส่งการ์ดอีกครั้ง" : "ส่งการ์ดสรุปแผนทาง LINE"}</button></form>}
-              {["BM", "DR", "NS"].includes(me.role) && p.status !== "done" && (p.items as any[]).length > 0 && (
+              {["BM", "DR", "NS"].includes(me.role) && p.status !== "done" && (() => {
+                const left = (p.items as any[]).filter((i) => !treatments.some((t) => Number(t.plan_id) === Number(p.id) && Number(t.catalog_id) === Number(i.catalog_id)));
+                return left.length > 0 && (
                 <form action={markDone} className="row"><input type="hidden" name="client_id" value={id} /><input type="hidden" name="plan_id" value={p.id} />
-                  {(p.items as any[]).length > 1
-                    ? <select name="catalog_id" className="inp" aria-label="หัตถการที่ทำ">{(p.items as any[]).map((i) => <option key={i.catalog_id} value={i.catalog_id}>{i.name}</option>)}</select>
-                    : <input type="hidden" name="catalog_id" value={(p.items as any[])[0].catalog_id} />}
-                  <button className="btn small" title="บันทึกหัตถการ และส่งการ์ดดูแลตัวเองทาง LINE อัตโนมัติ">ทำแล้ว{(p.items as any[]).length === 1 ? `: ${(p.items as any[])[0].name}` : ""} · ส่งการ์ดดูแล</button>
-                </form>)}
+                  {left.length > 1
+                    ? <select name="catalog_id" className="inp" aria-label="หัตถการที่ทำ">{left.map((i) => <option key={i.catalog_id} value={i.catalog_id}>{i.name}</option>)}</select>
+                    : <input type="hidden" name="catalog_id" value={left[0].catalog_id} />}
+                  <button className="btn small" title="บันทึกหัตถการ และส่งการ์ดดูแลตัวเองของหัตถการนั้นทาง LINE อัตโนมัติ">ทำแล้ว{left.length === 1 ? `: ${left[0].name}` : ""} · ส่งการ์ดดูแล</button>
+                </form>);
+              })()}
             </div></td>
           </tr>))}</tbody>
       </table>}
 
+      {["BM", "DR", "NS"].includes(me.role) && dataOk && <form action={markDone} className="card row" style={{ alignItems: "center" }}>
+        <input type="hidden" name="client_id" value={id} />
+        <span className="eyebrow" style={{ margin: 0 }}>ทำหัตถการที่ไม่มีในแผน</span>
+        <select name="catalog_id" className="inp" required defaultValue="" style={{ flex: 1, minWidth: 200 }} aria-label="หัตถการที่ทำ">
+          <option value="" disabled>เลือกหัตถการที่ทำวันนี้…</option>
+          {catalog.filter((x) => x.category !== "ปรึกษา").map((x) => <option key={x.id} value={x.id}>{x.name}</option>)}</select>
+        <button className="btn small">ทำแล้ว · ส่งการ์ดดูแล</button>
+      </form>}
       </div>
 
       <section className="card" id="payments">

@@ -75,7 +75,11 @@ export async function markDone(fd: FormData) {
   if (!c) return;
   await q("insert into treatments(client_id, plan_id, catalog_id, name, aftercare_key, done_by) values ($1,$2,$3,$4,$5,$6)",
     [clientId, Number(fd.get("plan_id")) || null, c.id, c.name, c.aftercare_key, me.id]);
-  await q("update plans set status = 'done' where id = $1", [Number(fd.get("plan_id")) || 0]);
+  // the plan is done only when every item in it has been recorded
+  const planId = Number(fd.get("plan_id")) || 0;
+  if (planId) await q(`update plans p set status = 'done' where p.id = $1 and not exists (
+      select 1 from jsonb_array_elements(p.items) i where not exists (
+        select 1 from treatments t where t.plan_id = p.id and t.catalog_id = (i->>'catalog_id')::bigint))`, [planId]);
   await q("update appointments set status = 'done' where client_id = $1 and status in ('arrived','in_consult') ", [clientId]);
   back(clientId);
 }

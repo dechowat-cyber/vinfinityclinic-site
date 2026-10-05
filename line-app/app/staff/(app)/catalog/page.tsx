@@ -3,7 +3,7 @@ import { requireStaff } from "@/lib/session";
 import { saveCatalog } from "@/lib/actions2";
 
 export const dynamic = "force-dynamic";
-const KEYS = ["general", "filler", "toxin", "skinbooster", "energy"];
+const KEYS: [string, string][] = [["filler", "การ์ดฟิลเลอร์"], ["toxin", "การ์ดโบท็อกซ์"], ["sculptra", "การ์ด Sculptra"], ["hifu", "การ์ด HIFU"], ["microneedle", "การ์ด Microneedle"], ["skinbooster", "ข้อความสกินบูสเตอร์"], ["energy", "การ์ด HIFU (เครื่องอื่น)"], ["general", "ข้อความทั่วไป"]];
 
 export default async function Catalog() {
   const me = await requireStaff();
@@ -16,7 +16,7 @@ export default async function Catalog() {
       <input name="category" className="inp" defaultValue={r?.category ?? ""} placeholder="หมวด" style={{ width: 120 }} disabled={!bm} />
       <input name="unit" className="inp" defaultValue={r?.unit ?? "ครั้ง"} style={{ width: 80 }} disabled={!bm} />
       <input name="price" type="number" className="inp" defaultValue={r ? Number(r.price) : 0} style={{ width: 110 }} disabled={!bm} aria-label="ราคา" />
-      <select name="aftercare_key" className="inp" defaultValue={r?.aftercare_key ?? "general"} disabled={!bm}>{KEYS.map((k) => <option key={k}>{k}</option>)}</select>
+      <select name="aftercare_key" className="inp" defaultValue={r?.aftercare_key ?? "general"} disabled={!bm}>{KEYS.map(([k, l]) => <option key={k} value={k}>{l}</option>)}</select>
       <label className="row" style={{ gap: 4, fontSize: 13 }} title="เตือนลูกค้าให้กลับมาทำซ้ำหลังจากกี่วัน (เว้นว่าง = ไม่เตือน)">รอบ
         <input name="recall_days" type="number" min={0} className="inp" defaultValue={r?.recall_days ?? ""} style={{ width: 70 }} disabled={!bm} aria-label="รอบทำซ้ำ (วัน)" />วัน</label>
       <label className="check" style={{ margin: 0 }}><input type="checkbox" name="active" defaultChecked={r ? r.active : true} disabled={!bm} /> ใช้งาน</label>
