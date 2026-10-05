@@ -22,6 +22,7 @@ export type ClinicSettings = {
   mapsUrl: string;
   website: string;
   richMenuId?: string;
+  richMenuAt?: string;
   aftercareApproved?: boolean;
   aftercareApprovedBy?: string | null;
   aftercareApprovedAt?: string | null;

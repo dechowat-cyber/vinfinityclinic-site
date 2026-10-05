@@ -1,5 +1,6 @@
 "use server";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { notifyStaff } from "./notify";
 import { q, one } from "./db";
 import { requireStaff } from "./session";
@@ -112,10 +113,18 @@ export async function useStaffGroup() {
 
 export async function setupRichMenu() {
   await requireStaff(["BM"]);
-  const img = await fs.readFile(path.join(process.cwd(), "public", "richmenu.jpg"));
-  const id = await installRichMenu(richMenuDefinition(), img, "image/jpeg", (await getSettings()).richMenuId);
-  await saveSettings({ richMenuId: id });
+  let result = "ok";
+  try {
+    const img = await fs.readFile(path.join(process.cwd(), "public", "richmenu.jpg"));
+    const id = await installRichMenu(richMenuDefinition(), img, "image/jpeg", (await getSettings()).richMenuId);
+    await saveSettings({ richMenuId: id, richMenuAt: new Date().toISOString() } as Partial<ClinicSettings>);
+    console.info("[richmenu] installed", id);
+  } catch (e) {
+    console.error("[richmenu] install failed", e);
+    result = (e as Error).message.slice(0, 120);
+  }
   revalidatePath("/staff/settings");
+  redirect(`/staff/settings?rm=${encodeURIComponent(result)}#richmenu`);
 }
 
 export async function staffUpdate(fd: FormData) {
