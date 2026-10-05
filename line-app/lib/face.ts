@@ -62,47 +62,6 @@ export async function detect(input: HTMLVideoElement | HTMLImageElement | HTMLCa
   return poseFrom(r.landmarks.positions.map((p: any) => ({ x: p.x, y: p.y })), w, h);
 }
 
-export type Check = { ok: boolean; hints: string[]; score: number };
-
-/** Compares the live pose with the target (the previous photo, or a generic target for the angle). */
-export function compare(cur: Pose, target: Partial<Pose>, tol = { pos: 0.03, scale: 0.08, roll: 3, yaw: 0.035, pitch: 0.04 }): Check {
-  const hints: string[] = [];
-  let bad = 0;
-  if (target.cx !== undefined) {
-    const d = cur.cx - target.cx;
-    if (Math.abs(d) > tol.pos) { bad++; hints.push(d > 0 ? "เลื่อนกล้องไปทางขวา" : "เลื่อนกล้องไปทางซ้าย"); }
-  }
-  if (target.cy !== undefined) {
-    const d = cur.cy - target.cy;
-    if (Math.abs(d) > tol.pos) { bad++; hints.push(d > 0 ? "ยกกล้องขึ้นเล็กน้อย" : "ลดกล้องลงเล็กน้อย"); }
-  }
-  if (target.scale !== undefined) {
-    const r = cur.scale / target.scale - 1;
-    if (Math.abs(r) > tol.scale) { bad++; hints.push(r > 0 ? "ถอยกล้องออกอีกนิด" : "เข้าใกล้อีกนิด"); }
-  }
-  if (target.roll !== undefined) {
-    const d = cur.roll - target.roll;
-    if (Math.abs(d) > tol.roll) { bad++; hints.push(d > 0 ? "ให้ลูกค้าเอียงศีรษะไปทางซ้ายของจอเล็กน้อย" : "ให้ลูกค้าเอียงศีรษะไปทางขวาของจอเล็กน้อย"); }
-  }
-  if (target.yaw !== undefined) {
-    const d = cur.yaw - target.yaw;
-    if (Math.abs(d) > tol.yaw) { bad++; hints.push(d > 0 ? "ให้ลูกค้าหันหน้าไปทางซ้ายของจออีกนิด" : "ให้ลูกค้าหันหน้าไปทางขวาของจออีกนิด"); }
-  }
-  if (target.pitch !== undefined) {
-    const d = cur.pitch - target.pitch;
-    if (Math.abs(d) > tol.pitch) { bad++; hints.push(d > 0 ? "ให้ลูกค้าเงยหน้าขึ้นเล็กน้อย" : "ให้ลูกค้าก้มหน้าลงเล็กน้อย"); }
-  }
-  return { ok: bad === 0, hints, score: bad };
-}
-
-/** Similarity transform (scale + rotate + translate) that maps pose b's eyes onto pose a's eyes. */
-export function eyeTransform(a: Pose, b: Pose) {
-  const ea = eyes(a.points), eb = eyes(b.points);
-  const va = { x: ea.r.x - ea.l.x, y: ea.r.y - ea.l.y }, vb = { x: eb.r.x - eb.l.x, y: eb.r.y - eb.l.y };
-  const s = Math.hypot(va.x, va.y) / Math.max(1e-6, Math.hypot(vb.x, vb.y));
-  const ang = Math.atan2(va.y, va.x) - Math.atan2(vb.y, vb.x);
-  return { s, ang, from: { x: (eb.l.x + eb.r.x) / 2, y: (eb.l.y + eb.r.y) / 2 }, to: { x: (ea.l.x + ea.r.x) / 2, y: (ea.l.y + ea.r.y) / 2 } };
-}
 export function eyes(p: Pt[]) { return { l: mean(p.slice(36, 42)), r: mean(p.slice(42, 48)) }; }
 
 /** 68 landmarks in the image's own pixel space (no crop), or null when no face is found. */

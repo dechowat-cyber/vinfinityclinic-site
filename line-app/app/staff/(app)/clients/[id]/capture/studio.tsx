@@ -1,6 +1,8 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Angle, Guide } from "@/lib/photos";
+import type { Pose } from "@/lib/face";
+import { genericTarget, targetFromRef, judge, type Target, type Verdict } from "@/lib/assist";
 
 type Ref = { id: number; at: string; kind: string | null };
 type Props = {
@@ -46,6 +48,29 @@ function Guides({ g }: { g: Guide }) {
   );
 }
 
+const HOLD_MS = 900;   // aligned this long → auto shot
+const SLOW_MS = 700;   // slower than this per frame → assistant switches itself off
+
+/** Target and live eye markers (frame fractions → 300×400 viewBox). */
+function Marks({ t, cur, ok, mirror }: { t: Target | null; cur: Pose | null; ok: boolean; mirror: boolean }) {
+  const X = (x: number) => (mirror ? 1 - x : x) * 300;
+  const eyes = (p: { cx: number; cy: number; scale: number; roll: number }) => {
+    const r = (p.roll * Math.PI) / 180, h = (p.scale * 300) / 2;
+    const dx = Math.cos(r) * h * (mirror ? -1 : 1), dy = Math.sin(r) * h * (mirror ? -1 : 1);
+    return [{ x: X(p.cx) - dx, y: p.cy * 400 - dy }, { x: X(p.cx) + dx, y: p.cy * 400 + dy }];
+  };
+  const tgt = t && t.cx !== undefined && t.cy !== undefined && t.scale !== undefined ? eyes({ cx: t.cx, cy: t.cy, scale: t.scale, roll: t.roll ?? 0 }) : null;
+  const now = cur ? eyes(cur) : null;
+  const col = ok ? "#3DDC97" : "#FFB547";
+  return (
+    <svg className="guides" viewBox="0 0 300 400" preserveAspectRatio="none" aria-hidden>
+      {tgt && tgt.map((e, k) => <circle key={k} cx={e.x} cy={e.y} r="7" fill="none" stroke="#fff" strokeWidth="1.5" vectorEffect="non-scaling-stroke" />)}
+      {now && <line x1={now[0].x} y1={now[0].y} x2={now[1].x} y2={now[1].y} stroke={col} strokeWidth="2" vectorEffect="non-scaling-stroke" />}
+      {now && now.map((e, k) => <circle key={k} cx={e.x} cy={e.y} r="3.5" fill={col} />)}
+    </svg>
+  );
+}
+
 /** Next Motion style capture: live camera, ghost of the earlier photo, alignment guides, fixed angle order. */
 export function Studio({ sessionId, clientId, title, angles, shots: initial, refs, complete, discard }: Props) {
   const video = useRef<HTMLVideoElement>(null);
@@ -64,6 +89,14 @@ export function Studio({ sessionId, clientId, title, angles, shots: initial, ref
   const [peek, setPeek] = useState(false);
   const [flash, setFlash] = useState(false);
   const [err, setErr] = useState("");
+  const [assist, setAssist] = useState(true);
+  const [autoShot, setAutoShot] = useState(true);
+  const [aiState, setAiState] = useState<"loading" | "on" | "slow" | "fail">("loading");
+  const [pose, setPose] = useState<Pose | null>(null);
+  const [verdict, setVerdict] = useState<Verdict | null>(null);
+  const [target, setTarget] = useState<Target | null>(null);
+  const [hold, setHold] = useState(0);
+  const okSince = useRef<number | null>(null);
   const a = angles[i];
   const ref = refs[a.key];
   const shot = shots[a.key];
@@ -88,6 +121,60 @@ export function Studio({ sessionId, clientId, title, angles, shots: initial, ref
     return () => { off = true; stream.current?.getTracks().forEach((t) => t.stop()); };
   }, [facing]);
 
+  // target pose for this angle: from the reference photo when there is one, otherwise from the guide
+  useEffect(() => {
+    let off = false;
+    setTarget(null); okSince.current = null; setHold(0);
+    if (!assist) return;
+    (async () => {
+      const g = angles[i].guide, r = refs[angles[i].key];
+      if (r && g !== "profile") {
+        try {
+          const { detect } = await import("@/lib/face");
+          const im = new Image(); im.src = img(r.id); await im.decode();
+          const p = await detect(im);
+          if (!off && p) return setTarget(targetFromRef(p, g));
+        } catch { /* fall through to generic */ }
+      }
+      if (!off) setTarget(genericTarget(g));
+    })();
+    return () => { off = true; };
+  }, [i, assist, angles, refs]);
+
+  // live loop: one detection at a time, so a slow iPad simply runs fewer frames
+  useEffect(() => {
+    if (!assist || !live || review || a.guide === "profile") { setPose(null); setVerdict(null); return; }
+    let off = false, slow = 0;
+    (async () => {
+      let face: typeof import("@/lib/face");
+      try { face = await import("@/lib/face"); await face.loadFace(); setAiState("on"); }
+      catch { setAiState("fail"); return; }
+      while (!off) {
+        const v = video.current;
+        if (v && v.videoWidth) {
+          const t0 = performance.now();
+          const p = await face.detect(v).catch(() => null);
+          const dt = performance.now() - t0;
+          slow = dt > SLOW_MS ? slow + 1 : 0;
+          if (slow >= 5) { setAiState("slow"); setAssist(false); return; }
+          if (off) return;
+          setPose(p);
+        }
+        await new Promise((r) => setTimeout(r, 60));
+      }
+    })();
+    return () => { off = true; };
+  }, [assist, live, review, a.guide]);
+
+  useEffect(() => {
+    if (!pose || !target) { setVerdict(pose ? null : null); okSince.current = null; setHold(0); return; }
+    const v = judge(pose, target, facing === "user");
+    setVerdict(v);
+    if (!v.ok) { okSince.current = null; setHold(0); return; }
+    okSince.current ??= performance.now();
+    setHold(Math.min(1, (performance.now() - okSince.current) / HOLD_MS));
+  }, [pose, target, facing]);
+
   const upload = useCallback(async (blob: Blob, w: number, h: number, meta: Record<string, unknown>) => {
     setBusy(true); setErr("");
     try {
@@ -109,8 +196,13 @@ export function Studio({ sessionId, clientId, title, angles, shots: initial, ref
     const st = (t?.getSettings?.() ?? {}) as MediaTrackSettings & { zoom?: number };
     const { blob, w, h } = await crop(v, v.videoWidth, v.videoHeight);
     setFlash(true); setTimeout(() => setFlash(false), 180);
-    await upload(blob, w, h, { source: "live", facing, zoom: st.zoom ?? null, camera: t?.label ?? null, src: [v.videoWidth, v.videoHeight], ghost: ref?.id ?? null });
-  }, [live, busy, review, upload, facing, ref]);
+    await upload(blob, w, h, { source: "live", facing, zoom: st.zoom ?? null, camera: t?.label ?? null, src: [v.videoWidth, v.videoHeight], ghost: ref?.id ?? null,
+      assist: verdict ? { ok: verdict.ok, off: Math.round(verdict.off * 10) / 10, target: target?.fromRef ? "ref" : target ? "generic" : null, auto: autoShot } : null });
+  }, [live, busy, review, upload, facing, ref, verdict, target, autoShot]);
+
+  useEffect(() => {
+    if (autoShot && assist && hold >= 1 && !count && !busy && !review) { okSince.current = null; setHold(0); shoot(); }
+  }, [hold, autoShot, assist, count, busy, review, shoot]);
 
   const trigger = useCallback(() => {
     if (!timer) return void shoot();
@@ -144,6 +236,16 @@ export function Studio({ sessionId, clientId, title, angles, shots: initial, ref
           {review && shot && <img className="still" src={peek && ref ? img(ref.id) : img(shot)} alt={a.label} />}
           {!review && ref && ghostOn && <img className="ghost" src={img(ref.id)} alt="" style={{ opacity: ghost }} />}
           {!review && guides && <Guides g={a.guide} />}
+          {!review && assist && <Marks t={target} cur={pose} ok={!!verdict?.ok} mirror={facing === "user"} />}
+          {!review && assist && aiState === "on" && a.guide !== "profile" && (
+            <div className={`coach ${verdict?.ok ? "ok" : ""}`}>
+              {!target ? "ไม่มีภาพเดิมของมุมนี้ ใช้เส้นช่วยจัดเอง"
+                : !pose ? "หาใบหน้าไม่พบ ให้ลูกค้าอยู่กลางจอ แสงพอ"
+                : verdict?.ok ? (autoShot ? "ตรงแล้ว ค้างไว้…" : "ตรงแล้ว กดถ่ายได้")
+                : verdict?.hints.join(" · ")}
+              {verdict?.ok && autoShot && <i style={{ transform: `scaleX(${hold})` }} />}
+            </div>)}
+          {!review && assist && aiState === "loading" && <div className="coach">กำลังเตรียมตัวช่วยจัดหน้า…</div>}
           {count > 0 && <div className="count">{count}</div>}
           {flash && <div className="flash" />}
           <div className="badge">{a.label}{review && peek && ref ? ` · ภาพอ้างอิง ${d(ref.at)}` : ""}</div>
@@ -182,6 +284,8 @@ export function Studio({ sessionId, clientId, title, angles, shots: initial, ref
             <div className="row">
               <button type="button" className="btn ghost small" aria-pressed={ghostOn} onClick={() => setGhostOn(!ghostOn)} disabled={!ref}>เงา {ghostOn ? "เปิด" : "ปิด"}</button>
               <button type="button" className="btn ghost small" aria-pressed={guides} onClick={() => setGuides(!guides)}>เส้นช่วย {guides ? "เปิด" : "ปิด"}</button>
+              <button type="button" className="btn ghost small" aria-pressed={assist} onClick={() => { setAssist(!assist); if (aiState === "slow") setAiState("loading"); }}>ช่วยจัดหน้า {assist ? "เปิด" : "ปิด"}</button>
+              <button type="button" className="btn ghost small" aria-pressed={autoShot} disabled={!assist} onClick={() => setAutoShot(!autoShot)}>ถ่ายอัตโนมัติ {autoShot ? "เปิด" : "ปิด"}</button>
               <button type="button" className="btn ghost small" onClick={() => setTimer(timer ? 0 : 3)}>ตั้งเวลา {timer ? "3 วิ" : "ปิด"}</button>
               <button type="button" className="btn ghost small" onClick={() => setFacing(facing === "environment" ? "user" : "environment")}>สลับกล้อง</button>
             </div>
@@ -191,6 +295,8 @@ export function Studio({ sessionId, clientId, title, angles, shots: initial, ref
         )}
 
         {err && <p className="err">{err}</p>}
+        {aiState === "slow" && <p className="muted" style={{ fontSize: 12, margin: 0 }}>เครื่องนี้ประมวลผลใบหน้าช้า จึงปิดตัวช่วยจัดหน้าให้อัตโนมัติ ใช้ภาพเงาและเส้นช่วยแทน</p>}
+        {aiState === "fail" && <p className="muted" style={{ fontSize: 12, margin: 0 }}>โหลดตัวช่วยจัดหน้าไม่สำเร็จ ใช้ภาพเงาและเส้นช่วยแทน</p>}
 
         <div className="ctrl end">
           <form action={complete}><input type="hidden" name="id" value={sessionId} />
