@@ -7,6 +7,7 @@ import { upsertClientByLine, ensureLead, recordConsent } from "../lib/crm";
 import { book } from "../lib/booking";
 import { sla, nurture, aftercare, csat, reminder2h, noShows, careEscalation } from "../lib/tick";
 import { seedOnce } from "../lib/seed";
+import { CARE_VERSION } from "../lib/careCards";
 import { q, one } from "../lib/db";
 import { bkk } from "../lib/time";
 
@@ -87,8 +88,9 @@ test("FR-32-35 aftercare only after approval, care request, CSAT ≤3 opens an i
   const t = await one("insert into treatments(client_id, catalog_id, name, aftercare_key, done_at) values ($1,$2,'ฟิลเลอร์ใต้ตา','filler',$3) returning id", [c.id, cat!.id, "2026-10-04T05:00:00Z"]);
   const day1 = new Date("2026-10-05T03:30:00Z");
   assert.equal(await aftercare(day1, DEFAULTS), 0); // not approved yet
-  assert.equal(await aftercare(day1, { ...DEFAULTS, aftercareApproved: true }), 1);
-  assert.equal(await aftercare(day1, { ...DEFAULTS, aftercareApproved: true }), 0);
+  assert.equal(await aftercare(day1, { ...DEFAULTS, aftercareApproved: true }), 0); // approved an older version
+  assert.equal(await aftercare(day1, { ...DEFAULTS, aftercareApproved: true, aftercareVersion: CARE_VERSION }), 1);
+  assert.equal(await aftercare(day1, { ...DEFAULTS, aftercareApproved: true, aftercareVersion: CARE_VERSION }), 0);
   const ask = await handleEvent(pb("UAC", `care=ask&t=${t!.id}`), day1, DEFAULTS);
   assert.ok(JSON.stringify(ask).includes("ส่งรูป"));
   assert.equal((await one("select status from care_requests where client_id = $1", [c.id]))!.status, "waiting_photo");

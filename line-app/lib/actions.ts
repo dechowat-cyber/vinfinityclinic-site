@@ -114,7 +114,17 @@ export async function setupRichMenu() {
 export async function staffUpdate(fd: FormData) {
   const me = await requireStaff(["BM"]);
   const id = Number(fd.get("id"));
-  if (id === me.id && fd.get("active") !== "on") return; // a manager cannot lock themselves out
-  await q("update staff set role = $2, active = $3 where id = $1", [id, String(fd.get("role")), fd.get("active") === "on"]);
+  const active = fd.getAll("active").includes("off") ? false : fd.get("active") === "on";
+  if (id === me.id && !active) return; // a manager cannot lock themselves out
+  await q("update staff set role = $2, active = $3 where id = $1", [id, String(fd.get("role")), active]);
   revalidatePath("/staff/team");
+}
+
+/** One tap: approve a waiting staff member with the chosen role (or decline = keep locked and hide). */
+export async function staffApprove(fd: FormData) {
+  await requireStaff(["BM"]);
+  const id = Number(fd.get("id"));
+  if (fd.get("decline")) await q("update staff set active = false, role = 'OFF' where id = $1", [id]);
+  else await q("update staff set role = $2, active = true where id = $1", [id, String(fd.get("role") || "AD")]);
+  revalidatePath("/staff", "layout");
 }

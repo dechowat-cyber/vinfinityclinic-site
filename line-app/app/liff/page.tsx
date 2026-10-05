@@ -1,5 +1,7 @@
 "use client";
 import { useEffect, useMemo, useState, useCallback } from "react";
+import { Chips } from "@/app/ui/chips";
+import { CONCERNS, GOALS, PREVIOUS, MEDS, CONDITIONS, ALLERGIES, birthYears } from "@/lib/options";
 
 declare global { interface Window { liff: any } }
 
@@ -138,7 +140,7 @@ function Book({ api, src, plan, onMy }: { api: any; src: string; plan: string | 
             <p style={{ margin: "8px 0 16px" }}><b>{start && fmt(start)}</b> <button className="btn ghost small" onClick={() => setStep("pick")}>เปลี่ยน</button></p>
             <div className="field"><label htmlFor="n">ชื่อ-นามสกุล</label><input id="n" autoComplete="name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></div>
             <div className="field"><label htmlFor="p">เบอร์โทร</label><input id="p" inputMode="tel" autoComplete="tel" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} /></div>
-            <div className="field"><label htmlFor="i">อยากปรึกษาเรื่องอะไร (ไม่บังคับ)</label><textarea id="i" rows={3} placeholder="เช่น ใต้ตาดูเหนื่อย อยากให้หน้าดูสดชื่นขึ้น" value={form.interest} onChange={(e) => setForm({ ...form, interest: e.target.value })} /></div>
+            <div className="field"><label>อยากปรึกษาเรื่องไหน (เลือกได้หลายข้อ ไม่บังคับ)</label><Chips options={CONCERNS} value={form.interest} onChange={(v) => setForm({ ...form, interest: v })} /></div>
             {!known && <label className="check"><input type="checkbox" checked={form.consentData} onChange={(e) => setForm({ ...form, consentData: e.target.checked })} />
               <span>ยินยอมให้ Vinfinity Clinic เก็บและใช้ชื่อ เบอร์โทร และข้อมูลที่แจ้ง เพื่อการนัดหมาย ปรึกษา และดูแลการรักษา (จำเป็นสำหรับการจอง)</span></label>}
             <label className="check"><input type="checkbox" checked={form.consentMarketing} onChange={(e) => setForm({ ...form, consentMarketing: e.target.checked })} />
@@ -198,14 +200,14 @@ function My({ api, onBook, onForm }: { api: any; onBook: () => void; onForm: () 
   );
 }
 
-const FIELDS: [string, string, string][] = [
-  ["birthYear", "ปีเกิด (พ.ศ.)", "เช่น 2535"],
-  ["allergies", "แพ้ยา แพ้อาหาร หรือแพ้สารใดไหม", "ถ้าไม่มี พิมพ์ ไม่มี"],
-  ["conditions", "โรคประจำตัว", "ถ้าไม่มี พิมพ์ ไม่มี"],
-  ["medications", "ยาหรืออาหารเสริมที่ใช้อยู่", "เช่น ยาละลายลิ่มเลือด วิตามินอี น้ำมันปลา"],
-  ["previous", "เคยทำหัตถการความงามอะไรมาบ้าง และประมาณเมื่อไหร่", "เช่น ฟิลเลอร์ใต้ตา ปี 2567"],
-  ["concerns", "เรื่องที่กังวลหรืออยากปรึกษา", ""],
-  ["goals", "อยากให้ผลลัพธ์ออกมาแบบไหน", "เช่น ดูสดชื่นขึ้นแต่ยังเป็นธรรมชาติ"],
+// every question is tap-to-pick; "อื่นๆ" opens a short text box only when needed
+const FIELDS: [string, string, string[], string][] = [
+  ["allergies", "แพ้ยา แพ้อาหาร หรือแพ้สารใดไหม", ALLERGIES, "แพ้อย่างอื่น (พิมพ์)"],
+  ["conditions", "โรคประจำตัว", CONDITIONS, "โรคอื่น (พิมพ์)"],
+  ["medications", "ยาหรืออาหารเสริมที่ใช้อยู่", MEDS, "ยาอื่น (พิมพ์)"],
+  ["previous", "เคยทำหัตถการความงามอะไรมาบ้าง", PREVIOUS, "เมื่อไหร่ / รายละเอียด เช่น ฟิลเลอร์ใต้ตา ปี 2567"],
+  ["concerns", "เรื่องที่กังวลหรืออยากปรึกษา", CONCERNS, "เรื่องอื่น (พิมพ์)"],
+  ["goals", "อยากให้ผลลัพธ์ออกมาแบบไหน", GOALS, "อื่นๆ (พิมพ์)"],
 ];
 
 function Form({ api, onMy }: { api: any; onMy: () => void }) {
@@ -225,7 +227,7 @@ function Form({ api, onMy }: { api: any; onMy: () => void }) {
     <div className="done"><button className="btn" onClick={() => window.liff?.isInClient?.() ? window.liff.closeWindow() : onMy()}>เสร็จสิ้น</button></div></main>;
   return (
     <main className="liff">
-      <Header title="แบบฟอร์มก่อนมา" sub="ใช้เวลาประมาณ 2 นาที ข้อมูลนี้เห็นเฉพาะแพทย์และทีมดูแลการรักษา" />
+      <Header title="แบบฟอร์มก่อนมา" sub="กดเลือกเป็นส่วนใหญ่ ใช้เวลาไม่ถึง 1 นาที ข้อมูลนี้เห็นเฉพาะแพทย์และทีมดูแลการรักษา" />
       <div className="liff-body">
         {state === "load" ? <div className="muted">กำลังโหลด…</div> : state === "consent" ? <div className="card">ต้องยินยอมเรื่องข้อมูลส่วนตัวก่อนนะคะ ตอบ "ยินยอม" ในแชท หรือจองคิวผ่านปุ่มจองคิวก่อนค่ะ</div> : (
           <section className="card">
@@ -233,9 +235,10 @@ function Form({ api, onMy }: { api: any; onMy: () => void }) {
             <div className="field"><label htmlFor="fp">เบอร์โทร</label><input id="fp" inputMode="tel" value={f.phone || ""} onChange={set("phone")} /></div>
             <div className="field"><label htmlFor="pg">ตั้งครรภ์หรือให้นมบุตรอยู่ไหม</label>
               <select id="pg" value={f.pregnant || ""} onChange={set("pregnant")}><option value="">เลือก</option><option>ไม่ใช่</option><option>ตั้งครรภ์</option><option>ให้นมบุตร</option><option>ไม่แน่ใจ</option></select></div>
-            {FIELDS.map(([k, l, ph]) => <div className="field" key={k}><label htmlFor={k}>{l}</label>
-              {k === "birthYear" ? <input id={k} inputMode="numeric" placeholder={ph} value={f[k] || ""} onChange={set(k)} /> :
-                <textarea id={k} rows={2} placeholder={ph} value={f[k] || ""} onChange={set(k)} />}</div>)}
+            <div className="field"><label htmlFor="by">ปีเกิด (พ.ศ.)</label>
+              <select id="by" value={f.birthYear || ""} onChange={set("birthYear")}><option value="">เลือก</option>{birthYears().map((y) => <option key={y}>{y}</option>)}</select></div>
+            {FIELDS.map(([k, l, opts, ph]) => <div className="field" key={k}><label>{l}</label>
+              <Chips options={opts} value={f[k] || ""} otherLabel={ph} onChange={(v) => setF((x) => ({ ...x, [k]: v }))} /></div>)}
           </section>)}
       </div>
       {state !== "consent" && state !== "load" && <div className="sticky"><button className="btn" disabled={state === "saving"} onClick={save}>{state === "saving" ? "กำลังบันทึก…" : "บันทึก"}</button></div>}

@@ -1,4 +1,6 @@
 import QRCode from "qrcode";
+import { Chips } from "@/app/ui/chips";
+import { CONCERNS } from "@/lib/options";
 import { q } from "@/lib/db";
 import { apptStatus, walkIn } from "@/lib/actions";
 import { bkk, todayBkk, addDays, parts } from "@/lib/time";
@@ -56,6 +58,7 @@ export default async function Today() {
     followupsDue(now),
     recallList(now, 7),
   ]);
+  const waitingStaff = me.role === "BM" ? (await q("select count(*)::int n from staff where not active and role <> 'OFF'"))[0].n : 0;
   const qr = await QRCode.toDataURL(bookUrl(null, { src: "walkin" }), { margin: 1, width: 220, color: { dark: "#0B142E", light: "#FFFFFF" } });
   const arrived = rows.filter((r) => ["arrived", "in_consult", "done"].includes(r.status)).length;
 
@@ -64,6 +67,7 @@ export default async function Today() {
       <div className="row" style={{ justifyContent: "space-between" }}>
         <div><div className="eyebrow">TODAY BOARD</div><h1>วันนี้ · {today.split("-").reverse().join("/")}</h1></div>
       </div>
+      {waitingStaff > 0 && <a href="/staff/team" className="card warn-card" style={{ display: "block", textDecoration: "none", color: "inherit" }}>👤 มีพนักงาน {waitingStaff} คนรออนุมัติเข้าระบบ · <b>กดเพื่ออนุมัติ</b></a>}
       <div className="kpis">
         <div className="kpi"><b>{rows.length}</b><small>นัดวันนี้</small></div>
         <div className="kpi"><b>{arrived}</b><small>มาถึงแล้ว</small></div>
@@ -102,7 +106,7 @@ export default async function Today() {
           <h3 style={{ fontWeight: 500, margin: "6px 0 14px" }}>ลูกค้า walk-in มาถึงตอนนี้</h3>
           <div className="field"><label>ชื่อ</label><input name="name" required /></div>
           <div className="field"><label>เบอร์โทร</label><input name="phone" inputMode="tel" /></div>
-          <div className="field"><label>อยากให้คุณหมอดูเรื่องไหน</label><input name="interest" /></div>
+          <div className="field"><label>อยากให้คุณหมอดูเรื่องไหน</label><Chips name="interest" options={CONCERNS} /></div>
           <label className="check"><input type="checkbox" name="consent" /> ลูกค้ายินยอมให้เก็บข้อมูลเพื่อการรักษา (ขอด้วยวาจาแล้ว)</label>
           <button className="btn">บันทึก · มาถึงแล้ว</button>
         </form>

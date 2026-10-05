@@ -14,6 +14,8 @@ import { possibleDuplicates } from "@/lib/identity";
 import { mergeAction } from "@/lib/cdpActions";
 import { SOURCE_LABEL } from "@/lib/reports";
 import { PlanBuilder } from "./plan";
+import { Chips } from "@/app/ui/chips";
+import { CONCERNS, GOALS, ASSESS } from "@/lib/options";
 
 export const dynamic = "force-dynamic";
 
@@ -108,10 +110,10 @@ export default async function ClientPage({ params, searchParams }: { params: Pro
             <input type="hidden" name="client_id" value={id} />
             <input type="hidden" name="id" value={consult?.id ?? ""} />
             <input type="hidden" name="appointment_id" value={appts.find((a) => ["arrived", "in_consult"].includes(a.status))?.id ?? ""} />
-            <div className="field" style={{ marginTop: 12 }}><label>เรื่องที่กังวล</label><textarea name="concerns" rows={2} defaultValue={consult?.concerns ?? h.concerns ?? ""} /></div>
-            <div className="field"><label>เป้าหมาย</label><textarea name="goals" rows={2} defaultValue={consult?.goals ?? h.goals ?? ""} /></div>
-            <div className="field"><label>การประเมินของแพทย์</label><textarea name="assessment" rows={3} defaultValue={consult?.assessment ?? ""} /></div>
-            <div className="field"><label>บันทึกเพิ่มเติม</label><textarea name="notes" rows={2} defaultValue={consult?.notes ?? ""} /></div>
+            <div className="field" style={{ marginTop: 12 }}><label>เรื่องที่กังวล</label><Chips name="concerns" options={CONCERNS} defaultValue={consult?.concerns ?? h.concerns ?? ""} /></div>
+            <div className="field"><label>เป้าหมาย</label><Chips name="goals" options={GOALS} defaultValue={consult?.goals ?? h.goals ?? ""} /></div>
+            <div className="field"><label>การประเมินของแพทย์</label><Chips name="assessment" options={ASSESS} single otherLabel="รายละเอียดการประเมิน (ถ้ามี)" defaultValue={consult?.assessment ?? ""} /></div>
+            <input type="hidden" name="notes" value={consult?.notes ?? ""} />
             <button className="btn" disabled={!dataOk}>{consult ? "บันทึกการแก้ไข" : "บันทึกการปรึกษา"}</button>
           </form>
         </div>
@@ -128,13 +130,14 @@ export default async function ClientPage({ params, searchParams }: { params: Pro
             angles={pair.angles.map((k) => ({ key: k, label: angleLabel(k), before: pair.before.shots[k], after: pair.after.shots[k] }))} />
         </div>}
         {photoMsg === "consent" && <p className="err">ลูกค้ายังไม่ยินยอมให้เก็บข้อมูล ถ่ายภาพไม่ได้</p>}
-        <form action={startPhotoSession} className="row" style={{ margin: "12px 0 4px" }}>
+        <details style={{ margin: "12px 0 4px" }}><summary className="muted" style={{ fontSize: 14, cursor: "pointer" }}>เปิดกล้องแบบเลือกชุดภาพเอง (ปกติใช้ปุ่ม “ถ่ายภาพ” ด้านบนได้เลย)</summary>
+        <form action={startPhotoSession} className="row" style={{ marginTop: 10 }}>
           <input type="hidden" name="client_id" value={id} />
           <select name="kind" className="inp" defaultValue={kind}>{Object.entries(KINDS).map(([k, l]) => <option key={k} value={k}>{l}</option>)}</select>
           <select name="protocol" className="inp" defaultValue={protocol}>{Object.entries(PROTOCOLS).map(([k, p]) => <option key={k} value={k}>{p.label} · {p.angles.length} ภาพ</option>)}</select>
           <input name="note" className="inp" placeholder="หมายเหตุ เช่น หลังฉีด 1 cc" style={{ flex: 1, minWidth: 160 }} />
           <button className="btn">เปิดกล้อง</button>
-        </form>
+        </form></details>
         {sessions.length === 0 ? <p className="muted" style={{ fontSize: 14 }}>ยังไม่มีชุดภาพ · ถ่ายชุด “ก่อนทำ” ก่อนเริ่มหัตถการทุกครั้ง</p> :
           <ul className="sessions">{sessions.map((s) => (
             <li key={s.id}>
@@ -153,7 +156,7 @@ export default async function ClientPage({ params, searchParams }: { params: Pro
         <div className="photos" style={{ marginTop: 10 }}>{care.map((p) => <a key={p.id} className="shot" href={`/api/staff/photo/${p.id}`} target="_blank"><img src={`/api/staff/photo/${p.id}`} alt="รูปอาการ" /><small>{fmt(p.created_at)}</small></a>)}</div></section>}
 
       <div id="plans" style={{ display: "grid", gap: 18 }}>
-      {health && dataOk && <PlanBuilder clientId={id} consultId={consult?.id ?? null} catalog={catalog as any} action={savePlan} isBM={me.role === "BM"} />}
+      {health && dataOk && <PlanBuilder clientId={id} consultId={consult?.id ?? null} catalog={catalog as any} action={savePlan} isBM={me.role === "BM"} goal={consult?.goals ?? h.goals ?? ""} />}
 
       {plans.length > 0 && <table className="t">
         <thead><tr><th>แผน</th><th>รายการ</th><th>ราคา</th><th>ชำระแล้ว</th><th>สถานะ</th><th></th></tr></thead>
@@ -170,9 +173,13 @@ export default async function ClientPage({ params, searchParams }: { params: Pro
                 <form action={decideDiscount}><input type="hidden" name="id" value={p.id} /><input type="hidden" name="ok" value="1" /><button className="btn small">อนุมัติส่วนลด</button></form>
                 <form action={decideDiscount}><input type="hidden" name="id" value={p.id} /><input type="hidden" name="ok" value="0" /><button className="btn danger small">ไม่อนุมัติ</button></form></>}
               {p.discount_status !== "pending" && c.line_user_id && health && <form action={sendPlan}><input type="hidden" name="id" value={p.id} /><button className="btn ghost small">{p.card_sent_at ? "ส่งการ์ดอีกครั้ง" : "ส่งการ์ดสรุปแผนทาง LINE"}</button></form>}
-              {["BM", "DR", "NS"].includes(me.role) && p.status !== "done" && (p.items as any[]).map((i) => (
-                <form key={i.catalog_id} action={markDone}><input type="hidden" name="client_id" value={id} /><input type="hidden" name="plan_id" value={p.id} /><input type="hidden" name="catalog_id" value={i.catalog_id} />
-                  <button className="btn small" title="เริ่มข้อความ aftercare อัตโนมัติ">ทำแล้ว: {i.name}</button></form>))}
+              {["BM", "DR", "NS"].includes(me.role) && p.status !== "done" && (p.items as any[]).length > 0 && (
+                <form action={markDone} className="row"><input type="hidden" name="client_id" value={id} /><input type="hidden" name="plan_id" value={p.id} />
+                  {(p.items as any[]).length > 1
+                    ? <select name="catalog_id" className="inp" aria-label="หัตถการที่ทำ">{(p.items as any[]).map((i) => <option key={i.catalog_id} value={i.catalog_id}>{i.name}</option>)}</select>
+                    : <input type="hidden" name="catalog_id" value={(p.items as any[])[0].catalog_id} />}
+                  <button className="btn small" title="บันทึกหัตถการ และส่งการ์ดดูแลตัวเองทาง LINE อัตโนมัติ">ทำแล้ว{(p.items as any[]).length === 1 ? `: ${(p.items as any[])[0].name}` : ""} · ส่งการ์ดดูแล</button>
+                </form>)}
             </div></td>
           </tr>))}</tbody>
       </table>}

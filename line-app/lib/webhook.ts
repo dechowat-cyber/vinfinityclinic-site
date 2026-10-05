@@ -71,7 +71,7 @@ export async function handleEvent(ev: Ev, now = new Date(), s?: ClinicSettings):
     }
     if (p.get("resched_to")) {
       try {
-        const newId = await reschedule(Number(p.get("resched_to")), c.id, String(p.get("t")), s);
+        const newId = await reschedule(Number(p.get("resched_to")), c.id, String(p.get("t")), s, now);
         const appt = await one("select * from appointments where id = $1", [newId]);
         await logTouch(c.id, "in", "appt_reschedule", `${p.get("resched_to")} -> ${newId}`);
         return { replyToken: ev.replyToken, messages: [M.confirmation(appt as any, s, userId)] };

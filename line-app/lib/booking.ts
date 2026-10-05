@@ -76,11 +76,11 @@ export async function setStatus(id: number, status: string, extra: "confirmed_at
 }
 
 /** Moves a booking: books the new slot first, then cancels the old one, so the client never ends with nothing. */
-export async function reschedule(apptId: number, clientId: number, newStartIso: string, s: ClinicSettings) {
+export async function reschedule(apptId: number, clientId: number, newStartIso: string, s: ClinicSettings, now = new Date()) {
   const old = await one<{ id: number; client_id: number; doctor: string; source: string | null }>(
     "select * from appointments where id = $1 and client_id = $2 and status in ('booked','confirmed')", [apptId, clientId]);
   if (!old) throw new Error("not_found");
-  const id = await book({ clientId, startIso: newStartIso, s, doctor: old.doctor, source: old.source, note: `rescheduled from #${apptId}` });
+  const id = await book({ clientId, startIso: newStartIso, s, doctor: old.doctor, source: old.source, note: `rescheduled from #${apptId}`, now });
   await q("update appointments set status = 'cancelled' where id = $1", [apptId]);
   return id;
 }

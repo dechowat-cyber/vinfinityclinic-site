@@ -8,6 +8,7 @@ import { notifyStaff } from "./notify";
 import { isOpen } from "./webhook";
 import { sendReminders, eveningRun } from "./cron";
 import { seedOnce } from "./seed";
+import { cardFor, careFlex, CARE_VERSION } from "./careCards";
 import { recallTick } from "./recall";
 import { sendCampaignBatch } from "./segments";
 import { capiTick } from "./capi";
@@ -110,8 +111,11 @@ export async function nurture(now: Date) {
 }
 
 /** FR-32: aftercare D0 (3 h after), D1, D3, D7 per treatment type. Off until the doctor approves the texts. */
-export async function aftercare(now: Date, s: ClinicSettings & { aftercareApproved?: boolean }) {
-  if (!s.aftercareApproved) return 0;
+export const aftercareLive = (s: { aftercareApproved?: boolean; aftercareVersion?: string }) => !!s.aftercareApproved && s.aftercareVersion === CARE_VERSION;
+
+/** FR-32 + self-care card: the card goes out as soon as the treatment is marked done; texts D0 (3 h, only without a card), D1, D3, D7. */
+export async function aftercare(now: Date, s: ClinicSettings & { aftercareApproved?: boolean; aftercareVersion?: string }) {
+  if (!aftercareLive(s)) return 0;
   const today = todayBkk(now);
   const rows = await q(`select t.id, t.client_id, t.aftercare_key, t.done_at, c.line_user_id, c.followed from treatments t
     join clients c on c.id = t.client_id where t.done_at > $1 and c.line_user_id is not null`, [new Date(now.getTime() - 9 * 86400_000).toISOString()]);
@@ -123,7 +127,11 @@ export async function aftercare(now: Date, s: ClinicSettings & { aftercareApprov
     const doneDate = parts(new Date(t.done_at)).date;
     const days = daysBetween(doneDate, today);
     const due: number[] = [];
-    if (days === 0 && now.getTime() - new Date(t.done_at).getTime() >= 3 * 3600_000 && minutes(parts(now).time) <= minutes("21:00")) due.push(0);
+    const card = cardFor(t.aftercare_key);
+    if (days === 0 && card && minutes(parts(now).time) <= minutes("21:30") && await once(`card:${t.id}`)) {
+      if (await safePush(t.line_user_id, [careFlex(card, s.phone)], `card:${t.id}`)) { await logTouch(t.client_id, "out", "aftercare_card", String(t.id), "system"); sent++; }
+    }
+    if (days === 0 && !card && now.getTime() - new Date(t.done_at).getTime() >= 3 * 3600_000 && minutes(parts(now).time) <= minutes("21:00")) due.push(0);
     if (after(now, "10:00")) for (const d of [1, 3, 7]) if (days === d || days === d + 1) due.push(d);
     for (const d of due) {
       const b = body(t.aftercare_key, d);

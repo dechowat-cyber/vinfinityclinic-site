@@ -1,6 +1,15 @@
 import { one } from "@/lib/db";
 import { verifyIdToken } from "@/lib/line";
-import { sessionCookie } from "@/lib/session";
+import { sessionCookie, unsign } from "@/lib/session";
+import { notifyStaff } from "@/lib/notify";
+
+function stateOk(state: string | null, cookie: string | undefined) {
+  if (!state) return false;
+  if (cookie && state === cookie) return true;
+  const v = unsign(state);
+  const ts = Number(v?.split("-")[1]);
+  return !!ts && Date.now() / 1000 - ts < 900;
+}
 
 export const dynamic = "force-dynamic";
 
@@ -10,7 +19,14 @@ export async function GET(req: Request) {
   const code = url.searchParams.get("code");
   const state = url.searchParams.get("state");
   const cookieState = /(?:^|;\s*)vf_state=([^;]+)/.exec(req.headers.get("cookie") || "")?.[1];
-  if (!code || !state || state !== cookieState) return Response.redirect(`${base}/staff/login?e=state`, 302);
+  if (url.searchParams.get("error")) {
+    console.warn("[auth] LINE returned error", url.searchParams.get("error"), url.searchParams.get("error_description"));
+    return Response.redirect(`${base}/staff/login?e=cancel`, 302);
+  }
+  if (!code || !stateOk(state, cookieState)) {
+    console.warn("[auth] state rejected", { hasCode: !!code, hasCookie: !!cookieState });
+    return Response.redirect(`${base}/staff/login?e=state`, 302);
+  }
 
   const tok = await fetch("https://api.line.me/oauth2/v2.1/token", {
     method: "POST",
@@ -35,7 +51,12 @@ export async function GET(req: Request) {
      on conflict (line_user_id) do update set name = excluded.name, picture_url = excluded.picture_url
      returning id, active`,
     [who.sub, who.name ?? null, who.picture ?? null, first ? "BM" : "AD", first]);
-  if (!s!.active) return Response.redirect(`${base}/staff/login?e=pending`, 302);
+  if (!s!.active) {
+    console.info("[auth] pending approval", s!.id);
+    await notifyStaff(`👤 ${who.name ?? "พนักงานใหม่"} ขอเข้าใช้ระบบหน้าร้าน\nผู้จัดการสาขากดอนุมัติได้ที่ ${base}/staff/team`, `staff-pending:${s!.id}`).catch(() => {});
+    return Response.redirect(`${base}/staff/login?e=pending&n=${encodeURIComponent((who.name ?? "").slice(0, 40))}`, 302);
+  }
+  console.info("[auth] signed in", s!.id);
 
   const c = sessionCookie(s!.id);
   return new Response(null, { status: 302, headers: [

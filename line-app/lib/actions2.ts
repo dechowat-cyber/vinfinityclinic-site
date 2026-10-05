@@ -126,7 +126,8 @@ export async function saveTemplate(fd: FormData) {
 export async function approveAftercare(fd: FormData) {
   const me = await requireStaff(["DR", "BM"]);
   const on = fd.get("on") === "1";
-  await saveSettings({ aftercareApproved: on, aftercareApprovedBy: on ? me.name : null, aftercareApprovedAt: on ? new Date().toISOString() : null });
+  const { CARE_VERSION } = await import("./careCards");
+  await saveSettings({ aftercareApproved: on, aftercareApprovedBy: on ? me.name : null, aftercareApprovedAt: on ? new Date().toISOString() : null, aftercareVersion: on ? CARE_VERSION : undefined });
   revalidatePath("/staff/aftercare");
 }
 
@@ -136,3 +137,19 @@ export async function togglePause(fd: FormData) {
   revalidatePath("/staff/settings");
 }
 
+
+/** Saves all four days of one treatment type at once (only the ones that changed reset the approval). */
+export async function saveTemplates(fd: FormData) {
+  await requireStaff(["BM", "DR", "NS"]);
+  const key = String(fd.get("key"));
+  if (!key) return;
+  let changed = false;
+  for (const d of [0, 1, 3, 7]) {
+    const body = String(fd.get(`body_${d}`) ?? "").trim();
+    if (!body) continue;
+    const r = await q("insert into aftercare_templates(key, day, body) values ($1,$2,$3) on conflict (key, day) do update set body = excluded.body, updated_at = now() where aftercare_templates.body <> excluded.body returning key", [key, d, body]);
+    if (r.length) changed = true;
+  }
+  if (changed) await saveSettings({ aftercareApproved: false });
+  revalidatePath("/staff/aftercare");
+}

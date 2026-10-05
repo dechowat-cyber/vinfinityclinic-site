@@ -23,6 +23,8 @@ export type ClinicSettings = {
   aftercareApproved?: boolean;
   aftercareApprovedBy?: string | null;
   aftercareApprovedAt?: string | null;
+  /** CARE_VERSION the doctor approved; a newer card text needs a fresh approval */
+  aftercareVersion?: string;
   paused?: boolean;
   /** recall LINE messages (marketing): off until the manager switches them on */
   recallAuto?: boolean;

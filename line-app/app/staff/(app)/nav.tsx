@@ -26,7 +26,7 @@ const GROUPS: { title: string; items: Item[] }[] = [
   { title: "ตั้งค่า", items: [
     { href: "/staff/aftercare", label: "ข้อความหลังทำ", icon: "message" },
     { href: "/staff/settings", label: "ตั้งค่า", icon: "gear", roles: ["BM"] },
-    { href: "/staff/team", label: "ทีม", icon: "team", roles: ["BM"] },
+    { href: "/staff/team", label: "ทีม", icon: "team", roles: ["BM"], badge: "team" },
   ] },
 ];
 

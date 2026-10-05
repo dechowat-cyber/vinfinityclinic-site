@@ -245,3 +245,18 @@ details.card summary{cursor:pointer;color:var(--royal)}
 .stage .coach{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);max-width:calc(100% - 24px);background:rgba(5,9,26,.72);color:#FFD08A;padding:8px 16px;border-radius:999px;font-size:15px;text-align:center;overflow:hidden;pointer-events:none}
 .stage .coach.ok{color:#3DDC97}
 .stage .coach i{position:absolute;left:0;bottom:0;height:3px;width:100%;background:#3DDC97;transform-origin:left;transition:transform .12s linear}
+/* aftercare self-care card preview (mirrors the LINE flex card) */
+.cc-grid{display:grid;grid-template-columns:minmax(260px,340px) 1fr;gap:20px;align-items:start;margin-top:10px}
+@media (max-width:900px){.cc-grid{grid-template-columns:1fr}}
+.cc{border-radius:16px;overflow:hidden;border:1px solid var(--line);background:#fff;font-size:14px}
+.cc-h{background:var(--navy);color:#fff;padding:14px 16px}.cc-h small{color:var(--silver);font-size:10px;letter-spacing:.08em}.cc-h div{font-size:17px;font-weight:500;margin-top:4px}
+.cc-b{padding:12px 16px 16px}.cc-b p{margin:0 0 8px;font-size:13px}
+.cc-sec{margin-top:10px}.cc-sec b{font-size:13px}.cc-sec ul,.cc-special ul{margin:4px 0 0;padding-left:18px}.cc-sec li,.cc-special li{margin:2px 0}
+.cc-sec.do b{color:var(--royal)}.cc-sec.bad b{color:var(--bad)}.cc-sec.muted b{color:var(--muted)}
+.cc-special{background:var(--mist);border-radius:10px;padding:10px 12px;margin-top:8px}.cc-special b{color:var(--royal)}
+/* tap-to-pick chips (forms) */
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:#fff;color:var(--navy);border-radius:999px;padding:8px 14px;font:inherit;font-size:14px;cursor:pointer;min-height:40px;line-height:1.2}
+.chip[aria-pressed=true]{background:var(--royal);border-color:var(--royal);color:#fff}
+.chip-other{margin-top:8px;width:100%;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font:inherit;font-size:14px;background:#fff}
+.chips-wrap{display:grid}
