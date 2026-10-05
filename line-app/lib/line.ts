@@ -86,7 +86,7 @@ export async function content(messageId: string): Promise<{ data: Buffer; mime: 
 }
 
 // ---- rich menu (run once from the staff settings page) ----
-export async function installRichMenu(menu: Msg, img: Buffer, mime = "image/jpeg", replaceId?: string | null) {
+export async function installRichMenu(menu: Msg, img: Buffer, mime = "image/jpeg", replaceId?: string | null, unlinkUsers?: string[]) {
   const created: any = await call("/richmenu", { json: menu });
   const id = created.richMenuId as string;
   const token = await accessToken();
@@ -95,6 +95,9 @@ export async function installRichMenu(menu: Msg, img: Buffer, mime = "image/jpeg
   });
   if (!up.ok) throw new Error(`richmenu_upload_${up.status}: ${await up.text()}`);
   await call(`/user/all/richmenu/${id}`, { method: "POST" });
+  // a per-user menu (e.g. linked by a previous agency tool) would hide the default: clear those links
+  for (let i = 0; i < (unlinkUsers?.length ?? 0); i += 500)
+    await call("/richmenu/bulk/unlink", { json: { userIds: unlinkUsers!.slice(i, i + 500) } }).catch((e) => console.warn("[richmenu] unlink", e));
   // the previous menu is no longer the default: remove it so only one stays on the account
   if (replaceId && replaceId !== id) await call(`/richmenu/${replaceId}`, { method: "DELETE" }).catch(() => {});
   return id;

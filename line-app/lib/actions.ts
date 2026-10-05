@@ -116,9 +116,10 @@ export async function setupRichMenu() {
   let result = "ok";
   try {
     const img = await fs.readFile(path.join(process.cwd(), "public", "richmenu.jpg"));
-    const id = await installRichMenu(richMenuDefinition(), img, "image/jpeg", (await getSettings()).richMenuId);
+    const users = (await q("select line_user_id from clients where line_user_id is not null")).map((r) => String(r.line_user_id));
+    const id = await installRichMenu(richMenuDefinition(), img, "image/jpeg", (await getSettings()).richMenuId, users);
     await saveSettings({ richMenuId: id, richMenuAt: new Date().toISOString() } as Partial<ClinicSettings>);
-    console.info("[richmenu] installed", id);
+    console.info("[richmenu] installed", id, "unlinked", users.length);
   } catch (e) {
     console.error("[richmenu] install failed", e);
     result = (e as Error).message.slice(0, 120);
