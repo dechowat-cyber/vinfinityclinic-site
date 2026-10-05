@@ -488,6 +488,14 @@ if __name__ == "__main__":
               "https://uk.acegroup.online/wp-content/uploads/2024/01/ACE-Group-Hyaluronidase-v3.1.pdf", "https://doi.org/10.1159/000446699",
               "https://doi.org/10.1111/jocd.70870", "https://doi.org/10.1093/asjof/ojaf108", "https://doi.org/10.1093/asj/sjaf127"], "2026-10-06"),
               crumb_ld(("บทความ", "/articles/"), ("สลายฟิลเลอร์แล้วผิวเดิมเสียไหม", "/articles/dissolve-filler-native-tissue/"))])
+    a7 = "ฟิลเลอร์ยี่ห้อเดียวกัน ทำไมให้ผลต่างกันในแต่ละคน"
+    d7 = "ความแข็ง G′ ความเกาะตัว และการดูดน้ำของเจล เนื้อเยื่อของแต่ละคน ตำแหน่งที่ฉีด และชั้นที่วาง ทำให้ฟิลเลอร์ตัวเดียวกันให้ผลต่างกัน สรุปจากงานวิจัยโดย นพ.เดโชวัต พรมดา"
+    build("articles/same-filler-different-results/index.html", a7 + " | Vinfinity Clinic", d7,
+          "/articles/same-filler-different-results/", "ฟิลเลอร์ยี่ห้อไหนดี, ฟิลเลอร์ G prime, rheology filler, ฟิลเลอร์ยุบเร็ว, ฟิลเลอร์ปากอยู่ได้กี่เดือน, เลือกฟิลเลอร์, ฟิลเลอร์ อุดรธานี",
+          "article-filler-individual.html", [], [article_ld("/articles/same-filler-different-results/", a7, d7, [
+              "https://doi.org/10.3390/ijms231810518", "https://doaj.org/article/26e13299973e41ceaf1f5923a06a24d6", "https://doi.org/10.3390/polym16162386",
+              "https://doi.org/10.1093/asjof/ojag030", "https://doi.org/10.1097/GOX.0000000000005934"], "2026-10-06"),
+              crumb_ld(("บทความ", "/articles/"), ("ฟิลเลอร์ตัวเดียวกัน ผลไม่เหมือนกัน", "/articles/same-filler-different-results/"))])
     build("articles/index.html", "บทความ Advanced Injection อ้างอิงงานวิจัย | Vinfinity Clinic",
           "บทความเรื่องฟิลเลอร์ สกินบูสเตอร์ และกายวิภาคใบหน้า เขียนจากงานวิจัยล่าสุดพร้อมเอกสารอ้างอิง โดย นพ.เดโชวัต พรมดา",
           "/articles/", "บทความ ฟิลเลอร์, advanced injection, evidence-based, Vinfinity", "articles.html", [])
