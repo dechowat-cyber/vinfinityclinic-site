@@ -19,7 +19,12 @@ export async function totals(from: string, toIncl: string) {
   // money received: Wallet use is paid out of a top-up that was already counted when it was sold
   const cashRows = rows.filter((r) => r.method !== "wallet");
   const total = cashRows.reduce((s, r) => s + Number(r.amt), 0), n = cashRows.reduce((s, r) => s + Number(r.n), 0);
-  return { by, total, n, voids: { n: Number(voids?.n ?? 0), amt: Number(voids?.amt ?? 0) } };
+  // sales written on the staff form (pre-bot days, or posted in the group) that are not already a receipt here
+  const { manualTotals } = await import("./salesForm");
+  const man = await manualTotals(from, toIncl).catch(() => []);
+  let mt = 0, mn = 0;
+  for (const r of man) { const b0 = by[r.method] ?? { n: 0, amt: 0 }; by[r.method] = { n: b0.n + r.n, amt: b0.amt + r.amt }; mt += r.amt; mn += r.n; }
+  return { by, total: total + mt, n: n + mn, manual: { n: mn, amt: mt }, voids: { n: Number(voids?.n ?? 0), amt: Number(voids?.amt ?? 0) } };
 }
 
 export async function dayClose(day: string) {
@@ -45,6 +50,18 @@ export function closeLine(c: { edc: string | null; cash: string | null } | null,
   return `ปิดยอด: ${parts.join(" · ") || "-"}`;
 }
 
+/** Daily sales target (settings.salesTargetDay, default 50,000) over the days the clinic is open. */
+export async function salesTarget(day: string) {
+  const { getSettings } = await import("./settings");
+  const s: any = await getSettings();
+  const perDay = Number(s.salesTargetDay ?? 50000);
+  if (!perDay) return { day: 0, month: 0, soFar: 0 };
+  const open = (d: string) => !!s.hours?.[new Date(`${d}T12:00:00+07:00`).getUTCDay()] && !(s.closedDates ?? []).includes(d);
+  let month = 0, soFar = 0;
+  for (let d = monthStart(day); d.slice(0, 7) === day.slice(0, 7); d = addDays(d, 1)) { if (open(d)) { month += perDay; if (d <= day) soFar += perDay; } }
+  return { day: open(day) ? perDay : 0, month, soFar };
+}
+
 /** The 19:00 message for the management group. */
 export async function dailyReport(now = new Date()) {
   const day = todayBkk(now);
@@ -56,6 +73,12 @@ export async function dailyReport(now = new Date()) {
   const lmEnd = (() => { const [y, mo, d] = day.split("-").map(Number); const pm = mo === 1 ? 12 : mo - 1, py = mo === 1 ? y - 1 : y;
     const last = new Date(Date.UTC(py, pm, 0)).getUTCDate(); return `${py}-${String(pm).padStart(2, "0")}-${String(Math.min(d, last)).padStart(2, "0")}`; })();
   const lm = await totals(monthStart(lmEnd), lmEnd);
+  const target = await salesTarget(day);
+  const { sellerTotals } = await import("./salesForm");
+  const st = await sellerTotals(monthStart(day), day).catch(() => []);
+  const bySeller: Record<string, number> = {};
+  for (const r of st) bySeller[r.seller] = (bySeller[r.seller] ?? 0) + Number(r.amt);
+  const sellers = Object.entries(bySeller).map(([k, v]) => `${k} ${fmt(v)}`);
   const wd = new Date(`${day}T12:00:00+07:00`).getUTCDay();
   const isLastOfMonth = addDays(day, 1).slice(8) === "01";
   const head = isLastOfMonth ? "📊 สรุปยอดประจำเดือน" : wd === 0 ? "📊 สรุปยอดประจำสัปดาห์" : "📊 สรุปยอดรายวัน";
@@ -66,7 +89,9 @@ export async function dailyReport(now = new Date()) {
   return [
     `${head} · ${thaiDate(new Date(`${day}T12:00:00+07:00`))}`,
     "",
-    `วันนี้ ${baht(t.total)} · ${t.n} ใบเสร็จ`,
+    `วันนี้ ${baht(t.total)} · ${t.n} รายการ`,
+    ...(t.manual.n ? [`  (รวมยอดจากฟอร์มพนักงาน ${t.manual.n} รายการ ${fmt(t.manual.amt)})`] : []),
+    ...(target.day ? [`  เป้าวันนี้ ${fmt(target.day)} · ทำได้ ${Math.round((t.total / target.day) * 100)}%`] : []),
     `  ${methods}`,
     ...(t.voids.n ? [`  ยกเลิกใบเสร็จ ${t.voids.n} ใบ (${fmt(t.voids.amt)})`] : []),
     ...(Number(topups?.n) ? [`  ในยอดนี้เป็นการเติม Wallet ${topups!.n} รายการ ${fmt(Number(topups!.a))} (เงินรับล่วงหน้า)`] : []),
@@ -76,6 +101,8 @@ export async function dailyReport(now = new Date()) {
     "",
     `สัปดาห์นี้ (${shortDate(weekStart(day))} – ${shortDate(day)}) ${baht(w.total)}`,
     `เดือนนี้ (${shortDate(monthStart(day))} – ${shortDate(day)}) ${baht(m.total)}${pct}`,
+    ...(target.month ? [`  เป้าเดือน ${fmt(target.month)} · ถึงวันนี้ ${Math.round((m.total / target.month) * 100)}% (ควรถึง ${fmt(target.soFar)})`] : []),
+    ...(sellers.length ? ["  แยกคน (จากตารางรายวัน): " + sellers.join(" · ")] : []),
     "",
     `ยอดที่รับหลังส่งรายงานนี้ จะนับในยอดสัปดาห์/เดือนของรายงานพรุ่งนี้ · ${process.env.APP_URL || ""}/staff/finance`,
   ].join("\n");

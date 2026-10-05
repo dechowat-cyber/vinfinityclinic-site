@@ -426,4 +426,36 @@ create table if not exists event_rsvps (
   primary key (event_id, client_id)
 );
 alter table payments add column if not exists kind text not null default 'service';
+
+-- ---------- Sales form (paper/Excel form staff post in the group; also pre-bot October 2569 data) ----------
+create table if not exists manual_sales (
+  id bigserial primary key,
+  day date not null,
+  hn text, name text, item text,
+  method text not null,
+  amount numeric not null,
+  seller text, channel text, note text,
+  source text not null default 'form',
+  form_id bigint,
+  payment_id bigint,
+  created_by bigint,
+  created_at timestamptz not null default now(),
+  voided_at timestamptz,
+  dedupe text unique not null
+);
+create index if not exists manual_sales_day on manual_sales(day);
+create table if not exists sales_matrix (
+  day date not null, seller text not null, channel text not null, amount numeric not null,
+  updated_at timestamptz not null default now(),
+  primary key (day, seller, channel)
+);
+create table if not exists sales_forms (
+  id bigserial primary key,
+  message_id text unique not null,
+  group_id text,
+  kind text,
+  parsed jsonb,
+  summary text,
+  created_at timestamptz not null default now()
+);
 `;

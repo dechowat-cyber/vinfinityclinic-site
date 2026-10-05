@@ -3,18 +3,19 @@ import { requireStaff } from "@/lib/session";
 import { CASHIER_ROLES, METHODS, baht } from "@/lib/payments";
 import { totals, dayClose, weekStart, monthStart } from "@/lib/finance";
 import { todayBkk, thaiDate, thaiTime } from "@/lib/time";
-import { slipConfirm, slipReject, closeDay } from "@/lib/crmActions";
+import { slipConfirm, slipReject, closeDay, manualSaleAdd, manualSaleVoid, salesFormUpload } from "@/lib/crmActions";
+import { listManual } from "@/lib/salesForm";
 
 export const dynamic = "force-dynamic";
 
-const ERR: Record<string, string> = { bad_amount: "ใส่ยอดเงินให้ถูกต้อง", slip_done: "สลิปนี้มีคนยืนยันไปแล้ว", bad_plan: "แผนไม่ตรงกับลูกค้า" };
+const ERR: Record<string, string> = { bad_amount: "ใส่ยอดเงินให้ถูกต้อง", slip_done: "สลิปนี้มีคนยืนยันไปแล้ว", bad_plan: "แผนไม่ตรงกับลูกค้า", no_file: "เลือกรูปฟอร์มก่อน", form_read: "อ่านรูปไม่สำเร็จ ลองรูปที่ชัดขึ้น หรือเพิ่มรายการเอง", not_form: "รูปนี้ไม่ใช่ฟอร์มยอดขาย" };
 const n = (v: number) => Number(v).toLocaleString("th-TH", { maximumFractionDigits: 2 });
 
 export default async function Finance({ searchParams }: { searchParams: Promise<{ err?: string }> }) {
   const me = await requireStaff(CASHIER_ROLES);
   const { err } = await searchParams;
   const day = todayBkk();
-  const [slips, t, w, m, close, recent] = await Promise.all([
+  const [slips, t, w, m, close, recent, manual] = await Promise.all([
     q(`select s.id, s.client_id, s.status, s.qr_ref, s.created_at, c.name, c.display_name,
          coalesce((select json_agg(json_build_object('id', p.id, 'goal', p.goal, 'due', greatest(p.total - coalesce((select sum(amount) from payments x where x.plan_id = p.id and x.voided_at is null), 0), 0)) order by p.id desc)
            from plans p where p.client_id = s.client_id and p.created_at > now() - interval '60 days'), '[]') as plans
@@ -22,6 +23,7 @@ export default async function Finance({ searchParams }: { searchParams: Promise<
     totals(day, day), totals(weekStart(day), day), totals(monthStart(day), day), dayClose(day),
     q(`select p.id, p.receipt_no, p.amount, p.method, p.created_at, p.voided_at, c.name, c.display_name from payments p join clients c on c.id = p.client_id
        where p.created_at >= now() - interval '1 day' order by p.created_at desc limit 30`),
+    listManual(monthStart(day), day),
   ]);
   const card = t.by.card?.amt ?? 0, cash = t.by.cash?.amt ?? 0;
   return (
@@ -62,7 +64,7 @@ export default async function Finance({ searchParams }: { searchParams: Promise<
       </section>
 
       <div className="kpis">
-        <div className="kpi"><b>{n(t.total)}</b><small>วันนี้ (บาท) · {t.n} ใบเสร็จ</small></div>
+        <div className="kpi"><b>{n(t.total)}</b><small>วันนี้ (บาท) · {t.n} รายการ</small></div>
         <div className="kpi"><b>{n(w.total)}</b><small>สัปดาห์นี้</small></div>
         <div className="kpi"><b>{n(m.total)}</b><small>เดือนนี้</small></div>
       </div>
@@ -90,6 +92,36 @@ export default async function Finance({ searchParams }: { searchParams: Promise<
         </form>
       </div>
 
+
+      <section className="card" id="form">
+        <div className="eyebrow">ยอดจากฟอร์มพนักงาน · เดือนนี้</div>
+        <p className="muted" style={{ fontSize: 13, margin: "6px 0 10px" }}>รูปฟอร์มยอดขายที่พนักงานส่งในกลุ่ม ระบบอ่านและใส่ให้เอง · ถ้ายอดตรงกับใบเสร็จในระบบ (วันเดียวกัน ยอดเท่ากัน) จะไม่นับซ้ำ</p>
+        {manual.length === 0 ? <p className="muted">-</p> : <table className="t"><tbody>{manual.map((r: any) => (
+          <tr key={r.id} style={r.voided_at ? { opacity: 0.45 } : undefined}>
+            <td><small>{r.day.slice(8)}/{r.day.slice(5, 7)}</small></td><td><small>{r.hn ?? ""}</small> {r.name ?? ""}</td>
+            <td><small>{r.item ?? ""}{r.note ? ` · ${r.note}` : ""}</small></td><td><small>{METHODS[r.method] ?? r.method}{r.seller ? ` · ${r.seller}` : ""}</small></td>
+            <td style={{ textAlign: "right" }}>{r.voided_at ? <s>{n(r.amount)}</s> : n(r.amount)}</td>
+            <td><small className="muted">{r.voided_at ? "ยกเลิก" : r.payment_id ? "ตรงใบเสร็จ · ไม่นับซ้ำ" : "นับในยอด"}</small></td>
+            <td>{me.role === "BM" && !r.voided_at && <form action={manualSaleVoid}><input type="hidden" name="id" value={r.id} /><button className="btn ghost small">ลบ</button></form>}</td>
+          </tr>))}</tbody></table>}
+        <form action={salesFormUpload} className="row" style={{ marginTop: 10, alignItems: "center" }}>
+          <input type="file" name="file" accept="image/*" className="inp" aria-label="รูปฟอร์มยอดขาย" />
+          <button className="btn small">อ่านรูปฟอร์ม</button>
+        </form>
+        <details style={{ marginTop: 10 }}><summary>เพิ่มรายการเอง (ถ้าระบบอ่านรูปไม่ได้)</summary>
+          <form action={manualSaleAdd} className="row" style={{ flexWrap: "wrap", alignItems: "flex-end", marginTop: 10 }}>
+            <input type="date" name="day" className="inp" defaultValue={day} aria-label="วันที่" />
+            <input name="hn" className="inp" placeholder="HN" style={{ width: 90 }} />
+            <input name="name" className="inp" placeholder="ชื่อ" style={{ width: 130 }} />
+            <input name="item" className="inp" placeholder="หัตถการ / มัดจำ" style={{ width: 180 }} />
+            <select name="method" className="inp" defaultValue="transfer"><option value="transfer">โอน</option><option value="cash">เงินสด</option><option value="card">บัตร</option></select>
+            <input name="amount" className="inp" inputMode="decimal" placeholder="ยอด" required style={{ width: 100 }} />
+            <select name="seller" className="inp" defaultValue=""><option value="">ผู้ขาย</option><option>คุณหมอ</option><option>ยุ</option><option>เพลง</option></select>
+            <select name="channel" className="inp" defaultValue=""><option value="">ช่องทาง</option><option>Walk in</option><option>Line OA</option><option>Online</option></select>
+            <input name="note" className="inp" placeholder="หมายเหตุ" style={{ width: 160 }} />
+            <button className="btn small">เพิ่ม</button>
+          </form></details>
+      </section>
       <section className="card">
         <div className="eyebrow">ใบเสร็จ 24 ชม.ล่าสุด</div>
         {recent.length === 0 ? <p className="muted">-</p> : <table className="t" style={{ marginTop: 8 }}><tbody>{recent.map((p) => (

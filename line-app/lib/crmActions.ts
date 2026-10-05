@@ -91,6 +91,49 @@ export async function closeDay(fd: FormData) {
   revalidatePath("/staff/finance");
 }
 
+// ---- Sales form entries (pre-bot / paper form) ----
+export async function manualSaleAdd(fd: FormData) {
+  const me = await requireStaff(CASHIER_ROLES);
+  const { addRows, reconcile } = await import("./salesForm");
+  const { todayBkk } = await import("./time");
+  const day = /^\d{4}-\d{2}-\d{2}$/.test(String(fd.get("day"))) ? String(fd.get("day")) : todayBkk();
+  const amount = Number(String(fd.get("amount") ?? "").replace(/,/g, ""));
+  if (!(amount > 0)) redirect("/staff/finance?err=bad_amount");
+  const method = ["cash", "transfer", "card"].includes(String(fd.get("method"))) ? String(fd.get("method")) : "transfer";
+  const seller = String(fd.get("seller") || "").slice(0, 30) || null, channel = String(fd.get("channel") || "").slice(0, 30) || null;
+  const s = (k: string) => String(fd.get(k) || "").trim().slice(0, 120) || null;
+  const added = await addRows([{ day, hn: s("hn"), name: s("name"), item: s("item"), method, amount, note: s("note"), seller, channel }], "manual", null, me.id);
+  if (added && seller && channel) {
+    const { q } = await import("./db");
+    await q(`insert into sales_matrix(day, seller, channel, amount) values ($1,$2,$3,$4)
+      on conflict (day, seller, channel) do update set amount = sales_matrix.amount + excluded.amount, updated_at = now()`, [day, seller, channel, amount]);
+  }
+  await reconcile(day, day);
+  revalidatePath("/staff/finance");
+}
+
+export async function salesFormUpload(fd: FormData) {
+  await requireStaff(CASHIER_ROLES);
+  const f = fd.get("file") as File | null;
+  if (!f || !f.size) redirect("/staff/finance?err=no_file#form");
+  const { ingestFormImage } = await import("./salesForm");
+  let text: string | null = null;
+  try { text = await ingestFormImage(`upload:${Date.now()}:${f.size}`, "upload", Buffer.from(await f.arrayBuffer()), f.type || "image/jpeg"); }
+  catch (e) { console.error("[form] upload", e); redirect("/staff/finance?err=form_read#form"); }
+  if (!text) redirect("/staff/finance?err=not_form#form");
+  const { notifyExec } = await import("./notify");
+  await notifyExec(text!).catch(() => {});
+  revalidatePath("/staff/finance");
+  redirect("/staff/finance?ok=form#form");
+}
+
+export async function manualSaleVoid(fd: FormData) {
+  await requireStaff(["BM"]);
+  const { q } = await import("./db");
+  await q("update manual_sales set voided_at = now() where id = $1 and voided_at is null", [Number(fd.get("id"))]);
+  revalidatePath("/staff/finance");
+}
+
 // ---- Vinfinity Circle: secret offers ----
 export async function createOfferAction(fd: FormData) {
   const me = await requireStaff(["BM", "MK"]);

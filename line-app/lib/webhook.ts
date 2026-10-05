@@ -32,6 +32,11 @@ export async function handleEvent(ev: Ev, now = new Date(), s?: ClinicSettings):
              on conflict (key) do update set value = excluded.value, updated_at = now()`, [JSON.stringify({ groupId: src.groupId, at: now })]);
     return { replyToken: ev.replyToken, messages: [{ type: "text", text: "ระบบ Vinfinity พร้อมแจ้งเตือนในกลุ่มนี้แล้ว ให้ผู้จัดการสาขากดยืนยันกลุ่มในหน้าตั้งค่าของระบบค่ะ" }] };
   }
+  // Staff sales form (screenshot) posted in the staff or management group: read, re-check, add to the money report.
+  if (ev.type === "message" && ev.message?.type === "image" && src.groupId && (src.groupId === s.execGroupId || src.groupId === s.staffGroupId)) {
+    await formFromGroup(ev, src.groupId, s);
+    return null;
+  }
   if (src.type !== "user" || !src.userId) return null; // ignore other group chatter
   const userId = src.userId as string;
 
@@ -192,4 +197,19 @@ export async function nextFreeSlots(s: ClinicSettings, now: Date, doctor: string
     for (const x of await availableSlots(d, s, doctor, now)) { if (x.available) out.push(x); if (out.length >= n) break; }
   }
   return out;
+}
+
+/** Money figures go to the management group only; the staff group just gets a short receipt. */
+async function formFromGroup(ev: Ev, groupId: string, s: ClinicSettings) {
+  try {
+    const img = await line.content(ev.message.id);
+    const { ingestFormImage } = await import("./salesForm");
+    const text = await ingestFormImage(ev.message.id, groupId, img.data, img.mime);
+    if (!text) return; // not a sales form (e.g. a normal photo)
+    if (s.execGroupId) await line.push(s.execGroupId, [{ type: "text", text }], `form:${ev.message.id}`);
+    if (groupId !== s.execGroupId && ev.replyToken) await line.reply(ev.replyToken, [{ type: "text", text: "รับฟอร์มยอดขายแล้วค่ะ ระบบตรวจทานและรวมในรายงานผู้บริหารให้แล้ว 🙏" }]);
+  } catch (e) {
+    console.error("[form] read failed", e);
+    if (groupId === s.execGroupId && ev.replyToken) await line.reply(ev.replyToken, [{ type: "text", text: `อ่านฟอร์มจากรูปนี้ไม่ได้ค่ะ ลองส่งภาพที่ชัดขึ้น หรือกรอกที่ ${process.env.APP_URL || ""}/staff/finance` }]).catch(() => {});
+  }
 }

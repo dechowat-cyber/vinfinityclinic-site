@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.2.0",
+    "@vercel/oidc": "^4.0.0",
     "@vladmandic/face-api": "^1.7.15",
     "jpeg-js": "^0.4.4",
     "jsqr": "^1.4.0",

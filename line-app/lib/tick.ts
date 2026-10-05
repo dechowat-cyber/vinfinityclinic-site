@@ -225,6 +225,7 @@ export async function runTick(now = new Date()) {
     ["csat", () => csat(now)],
     ["nurture", async () => (after(now, "10:00") && (await once(`nurture-run:${todayBkk(now)}`)) ? nurture(now) : 0)],
     ["planFollowUp", () => planFollowUp(now)],
+    ["formImport", async () => ((await once("import:form-oct69")) ? (await import("./salesForm")).importOct69() : 0)],
     ["financeReport", () => financeReport(now, s)],
     ["offers", () => (isQuiet(now) ? Promise.resolve(0) : sendOfferBatch(150, now))],
     ["tierExpiry", async () => ((await once(`tiers:${todayBkk(now)}`)) ? expireTiers(now) : 0)],

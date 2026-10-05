@@ -33,6 +33,8 @@ export type ClinicSettings = {
   recallAuto?: boolean;
   /** send the recall message this many days before the due date */
   recallLeadDays?: number;
+  /** sales target per open day (THB); 0 = no target line in the 19:00 report */
+  salesTargetDay?: number;
 };
 
 // Defaults match the Udon Thani branch as published on Google Maps (closed on Tuesdays).
