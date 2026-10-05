@@ -280,3 +280,7 @@ details.card summary{cursor:pointer;color:var(--royal)}
 .vc-code span{font:700 18px var(--display);letter-spacing:.12em;color:var(--royal)}
 .vc-code small{color:var(--muted)}
 .vc-perks{margin:8px 0 0;padding-left:20px;display:grid;gap:4px;font-size:14px}
+.vc-bal{font:600 30px var(--display);color:var(--royal)}.vc-bal small{font:400 14px var(--body);color:var(--muted)}
+.vc-hist{list-style:none;margin:10px 0 6px;padding:0;display:grid;gap:6px;font-size:14px}
+.vc-hist li{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:6px}
+.vc-hist small{display:block;font-size:11px;color:var(--muted)}.vc-hist b{color:var(--ok)}.vc-hist b.neg{color:var(--navy)}

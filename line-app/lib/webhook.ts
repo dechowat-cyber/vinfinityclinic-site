@@ -66,6 +66,17 @@ export async function handleEvent(ev: Ev, now = new Date(), s?: ClinicSettings):
     if (p.get("menu") === "book") return { replyToken: ev.replyToken, messages: [M.bookingPrompt(userId)] };
     if (p.get("menu") === "my") return { replyToken: ev.replyToken, messages: [M.myPrompt(userId)] };
     if (p.get("menu") === "card") return { replyToken: ev.replyToken, messages: [M.cardPrompt(userId)] };
+    if (p.get("rsvp")) {
+      const { rsvp } = await import("./events");
+      const r = await rsvp(Number(p.get("rsvp")), c.id, p.get("a") === "yes");
+      await logTouch(c.id, "in", "event_rsvp", `${p.get("rsvp")}:${r.status}`);
+      const when = r.event ? ` (${new Date(r.event.starts_at).toLocaleString("th-TH", { timeZone: "Asia/Bangkok", dateStyle: "medium", timeStyle: "short" })})` : "";
+      const text = r.status === "going" ? `ยืนยันที่นั่งของคุณใน ${r.event!.title}${when} แล้วค่ะ แล้วพบกันนะคะ 🙏`
+        : r.status === "waitlist" ? `ที่นั่ง ${r.event!.title} เต็มแล้วค่ะ เราใส่ชื่อคุณไว้ในรายชื่อสำรอง ถ้ามีที่ว่างจะแจ้งทันทีนะคะ`
+        : r.status === "declined" ? "รับทราบค่ะ ไว้โอกาสหน้านะคะ" : r.status === "past" ? "งานนี้จบไปแล้วค่ะ ไว้พบกันงานหน้านะคะ" : "ขออภัยค่ะ คำเชิญนี้สำหรับสมาชิกที่ได้รับเชิญเท่านั้น";
+      if (r.status === "going") await notifyStaff(`🎟️ มีสมาชิกยืนยันร่วม ${r.event!.title} · ${process.env.APP_URL || ""}/staff/loyalty`, `rsvp:${p.get("rsvp")}:${c.id}`).catch(() => {});
+      return { replyToken: ev.replyToken, messages: [{ type: "text", text }] };
+    }
     if (p.get("resched")) {
       const a = await one(`select * from appointments where id = $1 and client_id = $2 and status in ('booked','confirmed')`, [Number(p.get("resched")), c.id]);
       if (!a) return { replyToken: ev.replyToken, messages: [{ type: "text", text: "ไม่พบนัดนี้แล้วค่ะ ดูนัดล่าสุดได้ที่เมนู นัดของฉัน นะคะ" }] };

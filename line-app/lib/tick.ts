@@ -228,6 +228,7 @@ export async function runTick(now = new Date()) {
     ["financeReport", () => financeReport(now, s)],
     ["offers", () => (isQuiet(now) ? Promise.resolve(0) : sendOfferBatch(150, now))],
     ["tierExpiry", async () => ((await once(`tiers:${todayBkk(now)}`)) ? expireTiers(now) : 0)],
+    ["walletExpiry", async () => ((await once(`wallet-exp:${todayBkk(now)}`)) ? (await import("./wallet")).expireWallets(now) : 0)],
     ["recall", () => recallTick(now, s)],
     ["campaigns", () => sendCampaignBatch(200)],
     ["capi", () => capiTick(now)],

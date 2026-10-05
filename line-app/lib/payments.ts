@@ -5,7 +5,9 @@ import { parts } from "./time";
 // is one), so the funnel can be measured from first contact to money, per channel.
 // This records receipts for the clinic's own books; it is not a tax invoice.
 
-export const METHODS: Record<string, string> = { transfer: "โอน", qr: "QR พร้อมเพย์", cash: "เงินสด", card: "บัตร" };
+export const METHODS: Record<string, string> = { transfer: "โอน", qr: "QR พร้อมเพย์", cash: "เงินสด", card: "บัตร", wallet: "Vinfinity Wallet" };
+/** money actually received (Wallet use is paid out of a top-up already counted) */
+export const CASH_METHODS = ["transfer", "qr", "cash", "card"];
 /** who may take money / who may void */
 export const CASHIER_ROLES = ["BM", "FD", "CS"];
 export const VOID_ROLES = ["BM"];
@@ -56,7 +58,7 @@ export async function paidByPlan(clientId: number) {
 }
 
 export async function clientRevenue(clientId: number) {
-  const r = await one("select coalesce(sum(amount), 0)::float as total, count(*)::int as n, min(created_at) as first_at from payments where client_id = $1 and voided_at is null", [clientId]);
+  const r = await one("select coalesce(sum(amount), 0)::float as total, count(*)::int as n, min(created_at) as first_at from payments where client_id = $1 and voided_at is null and method <> 'wallet'", [clientId]);
   return { total: Number(r!.total), count: Number(r!.n), firstAt: r!.first_at as string | null };
 }
 

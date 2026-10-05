@@ -12,7 +12,8 @@ const ADDRESS = "106/27-28 อาคารธนารักษ์ ต.หมา
 const LICENCE = "41101001567";
 
 /** Printable receipt for the clinic's own records. Not a tax invoice. */
-export default async function Receipt({ params }: { params: Promise<{ id: string }> }) {
+export default async function Receipt({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ void?: string }> }) {
+  const { void: voidErr } = await searchParams;
   await requireStaff();
   const id = Number((await params).id);
   const p = await one(`select p.*, c.name, c.display_name, c.phone, s.name as staff_name, pl.items, pl.total as plan_total, pl.goal
@@ -44,6 +45,7 @@ export default async function Receipt({ params }: { params: Promise<{ id: string
           <tfoot><tr><td style={{ textAlign: "right" }}><b>รวม</b></td><td style={{ textAlign: "right" }}><b>{baht(Number(p.amount))}</b></td></tr></tfoot>
         </table>
         <p><small>ชำระโดย {METHODS[p.method] ?? p.method} · ผู้รับเงิน {p.staff_name || "-"}</small></p>
+        {voidErr && !p.voided_at && <p className="err">ยกเลิกไม่ได้: {voidErr === "wallet_used" ? "ลูกค้าใช้เครดิตจาก Wallet นี้ไปแล้ว ต้องปรับยอดกับผู้จัดการก่อน" : voidErr === "reason" ? "ต้องใส่เหตุผล" : voidErr}</p>}
         {p.voided_at && <p className="err">ยกเลิกเมื่อ {thaiDate(new Date(p.voided_at))} · เหตุผล: {p.void_reason}</p>}
         <p className="muted" style={{ fontSize: 12 }}>เอกสารนี้เป็นใบรับเงินของคลินิก ไม่ใช่ใบกำกับภาษี</p>
       </article>

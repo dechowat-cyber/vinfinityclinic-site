@@ -13,8 +13,10 @@ export async function takePayment(fd: FormData) {
   const clientId = Number(fd.get("client_id"));
   let r: { id: number; receiptNo: string };
   try {
-    r = await recordPayment({ clientId, planId: Number(fd.get("plan_id")) || null, amount: Number(String(fd.get("amount") || "").replace(/,/g, "")),
-      method: String(fd.get("method")), note: String(fd.get("note") || ""), staffId: me.id });
+    const amount = Number(String(fd.get("amount") || "").replace(/,/g, "")), planId = Number(fd.get("plan_id")) || null, note = String(fd.get("note") || "");
+    r = String(fd.get("method")) === "wallet"
+      ? await (await import("./wallet")).payWithWallet({ clientId, planId, amount, note, staffId: me.id })
+      : await recordPayment({ clientId, planId, amount, method: String(fd.get("method")), note, staffId: me.id });
   } catch (e) {
     redirect(`/staff/clients/${clientId}?pay=${encodeURIComponent((e as Error).message)}#payments`);
   }
@@ -22,13 +24,16 @@ export async function takePayment(fd: FormData) {
   const { redeemCode, afterPayment } = await import("./loyalty");
   const codeId = Number(fd.get("code_id"));
   if (codeId) await redeemCode(codeId, clientId, r.id, me.id).catch((e) => console.warn("[offer] redeem", e));
-  await afterPayment(clientId).catch((e) => console.error("[tier]", e));
+  await afterPayment(clientId, new Date(), r.id).catch((e) => console.error("[tier]", e));
   revalidatePath(`/staff/clients/${clientId}`);
   redirect(`/staff/receipts/${r.id}`);
 }
 
 export async function voidPaymentAction(fd: FormData) {
   const me = await requireStaff(VOID_ROLES);
+  const pid = Number(fd.get("id"));
+  try { await (await import("./wallet")).reverseForVoid(pid, me.id); }
+  catch (e) { redirect(`/staff/receipts/${pid}?void=${encodeURIComponent((e as Error).message)}`); }
   const clientId = await voidPayment(Number(fd.get("id")), String(fd.get("reason") || ""), me.id).catch(() => null);
   if (clientId) revalidatePath(`/staff/clients/${clientId}`);
   redirect(clientId ? `/staff/clients/${clientId}#payments` : `/staff/receipts/${Number(fd.get("id"))}?void=reason`);
@@ -56,7 +61,8 @@ export async function slipConfirm(fd: FormData) {
   try {
     await confirmSlip(id, { amount: Number(String(fd.get("amount") || "").replace(/,/g, "")), planId: Number(fd.get("plan_id")) || null, staffId: me.id, method: String(fd.get("method") || "transfer") });
     const s = await (await import("./db")).one("select client_id from slips where id = $1", [id]);
-    if (s) await (await import("./loyalty")).afterPayment(Number(s.client_id)).catch((e) => console.error("[tier]", e));
+    const sp = await (await import("./db")).one("select payment_id from slips where id = $1", [id]);
+    if (s) await (await import("./loyalty")).afterPayment(Number(s.client_id), new Date(), Number(sp?.payment_id) || undefined).catch((e) => console.error("[tier]", e));
   } catch (e) { redirect(`/staff/finance?err=${encodeURIComponent((e as Error).message)}`); }
   revalidatePath("/staff/finance");
 }
@@ -120,4 +126,35 @@ export async function setTierAction(fd: FormData) {
     await push(cur.line_user_id, [M.tierUp(cur.line_user_id, t.name, t.perks)], `tier:${id}:${tier}:manual`).catch((e) => console.error("[tier] push", e));
   }
   revalidatePath(`/staff/clients/${id}`);
+}
+
+/** Sells a Vinfinity Wallet package at the counter. */
+export async function walletTopUp(fd: FormData) {
+  const me = await requireStaff(CASHIER_ROLES);
+  const clientId = Number(fd.get("client_id"));
+  let r: { id: number; receiptNo: string };
+  try {
+    r = await (await import("./wallet")).topUp({ clientId, pkg: String(fd.get("pkg")), method: String(fd.get("method")), staffId: me.id });
+  } catch (e) { redirect(`/staff/clients/${clientId}?pay=${encodeURIComponent((e as Error).message)}#payments`); }
+  await logTouch(clientId, "in", "wallet_topup", r.receiptNo, "frontdesk");
+  await (await import("./loyalty")).afterPayment(clientId, new Date(), r.id).catch((e) => console.error("[tier]", e));
+  revalidatePath(`/staff/clients/${clientId}`);
+  redirect(`/staff/receipts/${r.id}`);
+}
+
+export async function createEventAction(fd: FormData) {
+  const me = await requireStaff(["BM", "MK"]);
+  const { createEvent, sendInvites } = await import("./events");
+  const { bkk } = await import("./time");
+  try {
+    const date = String(fd.get("date") || ""), time = String(fd.get("time") || "18:00");
+    const r = await createEvent({ title: String(fd.get("title") || ""), detail: String(fd.get("detail") || ""), startsAt: bkk(date, time),
+      capacity: Number(fd.get("capacity")) || 10, minTier: (String(fd.get("min_tier")) || "gold") as any, staffId: me.id });
+    await sendInvites(Number(r.event.id));
+    revalidatePath("/staff/loyalty");
+    redirect(`/staff/loyalty?ev=${r.invited}#events`);
+  } catch (e) {
+    if ((e as any)?.digest?.startsWith?.("NEXT_REDIRECT")) throw e;
+    redirect(`/staff/loyalty?everr=${encodeURIComponent((e as Error).message)}#events`);
+  }
 }

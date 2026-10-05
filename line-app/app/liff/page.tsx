@@ -271,6 +271,20 @@ function Card({ api, onBook }: { api: any; onBook: () => void }) {
           <div className="vc-name">{d.name || "สมาชิก"}</div>
           <div className="vc-bot"><span>{d.until ? `คงระดับถึง ${day(d.until)}` : "สมาชิกตั้งแต่ " + (d.since ? day(d.since) : "")}</span>{d.refCode && <span>รหัสแนะนำ {d.refCode}</span>}</div>
         </div>
+        <section className="card vc-wallet">
+          <div className="row" style={{ justifyContent: "space-between", alignItems: "baseline" }}>
+            <div><div className="eyebrow">VINFINITY WALLET · เครดิต</div><div className="vc-bal">{baht(d.wallet.balance)} <small>บาท</small></div></div>
+            {d.wallet.expires && <small className="muted">ใช้ได้ถึง {day(d.wallet.expires)}</small>}
+          </div>
+          {d.wallet.cashback > 0 && <small className="muted">ระดับ {d.tierName} ได้เครดิตคืน {Math.round(d.wallet.cashback * 100)}% ทุกครั้งที่ชำระ</small>}
+          {d.wallet.history.length > 0 && <ul className="vc-hist">{d.wallet.history.map((h: any, i: number) => <li key={i}><span>{h.label}<small>{day(h.at)}</small></span><b className={h.amount < 0 ? "neg" : ""}>{h.amount > 0 ? "+" : ""}{baht(h.amount)}</b></li>)}</ul>}
+          <details><summary className="muted" style={{ fontSize: 13 }}>เติม Wallet รับเครดิตเพิ่ม</summary>
+            <ul className="vc-perks" style={{ marginTop: 8 }}>{d.packages.map((p: any) => <li key={p.key}><b>{p.name}</b> · เติม {baht(p.pay)} ได้ {baht(p.get)}</li>)}</ul>
+            <small className="muted">เติมได้ที่เคาน์เตอร์คลินิก · เครดิตใช้ได้ 2 ปี ทุกบริการ ทั้ง 2 สาขา</small></details>
+        </section>
+        {d.refCode && <section className="card"><div className="eyebrow">V CIRCLE · ชวนเพื่อน</div>
+          <p style={{ margin: "6px 0 0", fontSize: 14 }}>เพื่อนนัดผ่านรหัส <b>{d.refCode}</b> และมารับบริการครั้งแรก รับเครดิตทั้งคุณและเพื่อน คนละ {baht(d.referralCredit)} บาท</p>
+          <a className="btn small" style={{ marginTop: 10 }} href={`https://line.me/R/share?text=${encodeURIComponent(`มาลองปรึกษาคุณหมอที่ Vinfinity Clinic อุดรธานีด้วยกันนะ ใช้รหัสแนะนำของเรา ${d.refCode} ได้เครดิต ${baht(d.referralCredit)} บาท 👉 https://vinfinity-line.vercel.app/r/ref_${d.refCode}`)}`}>ชวนเพื่อนทาง LINE</a></section>}
         {d.progress ? <section className="card">
           <div className="row" style={{ justifyContent: "space-between" }}><b>อีก {baht(d.progress.need)} บาท ขึ้นระดับ {d.progress.next}</b><small className="muted">ยอด 12 เดือน {baht(d.spend)}</small></div>
           <div className="vc-bar"><i style={{ width: `${d.progress.pct}%` }} /></div>

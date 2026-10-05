@@ -50,7 +50,7 @@ const BASE = `
   select c.id, c.name, c.display_name, c.phone, c.source, c.created_at, c.line_user_id, c.followed,
     (select max(t.done_at) from treatments t where t.client_id = c.id) as last_visit,
     (select count(distinct (t.done_at at time zone 'Asia/Bangkok')::date)::int from treatments t where t.client_id = c.id) as visits,
-    (select coalesce(sum(p.amount), 0)::float from payments p where p.client_id = c.id and p.voided_at is null) as spend,
+    (select coalesce(sum(p.amount), 0)::float from payments p where p.client_id = c.id and p.voided_at is null and p.method <> 'wallet') as spend,
     (c.line_user_id is not null and c.followed and coalesce((select k.granted from consents k where k.client_id = c.id and k.type = 'marketing'
       order by k.created_at desc, k.id desc limit 1), false)) as reachable
   from clients c`;

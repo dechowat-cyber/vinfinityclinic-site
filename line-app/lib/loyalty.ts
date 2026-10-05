@@ -20,7 +20,7 @@ export const RANK: Record<Tier, number> = { member: 0, silver: 1, gold: 2, plati
 export const tierInfo = (t: string | null | undefined) => TIERS.find((x) => x.key === t) ?? TIERS[0];
 
 export async function spend12m(clientId: number, now = new Date()) {
-  const r = await one(`select coalesce(sum(amount),0)::float s from payments where client_id = $1 and voided_at is null and created_at > $2`,
+  const r = await one(`select coalesce(sum(amount),0)::float s from payments where client_id = $1 and voided_at is null and method <> 'wallet' and created_at > $2`,
     [clientId, new Date(now.getTime() - 365 * 864e5).toISOString()]);
   return Number(r?.s ?? 0);
 }
@@ -119,8 +119,13 @@ export async function offerResults(limit = 20) {
 }
 
 /** After money is received: re-evaluate the tier and congratulate on an upgrade (service message, followers only). */
-export async function afterPayment(clientId: number, now = new Date()) {
+export async function afterPayment(clientId: number, now = new Date(), paymentId?: number) {
   const r = await refreshTier(clientId, now);
+  if (paymentId) {
+    const { creditsFor } = await import("./wallet");
+    const cr = await creditsFor(paymentId, now).catch((e) => { console.error("[credit]", e); return null; });
+    if (cr?.referral && cr.referrer) await notifyReferral(cr.referrer, clientId);
+  }
   if (!r?.changed || !r.up) return r;
   const c = await one("select line_user_id, followed from clients where id = $1", [clientId]);
   if (c?.line_user_id && c.followed) {
@@ -130,4 +135,13 @@ export async function afterPayment(clientId: number, now = new Date()) {
     await push(c.line_user_id, [M.tierUp(c.line_user_id, t.name, t.perks)], `tier:${clientId}:${r.to}:${now.toISOString().slice(0, 10)}`).catch((e) => console.error("[tier] push", e));
   }
   return r;
+}
+
+/** V Circle: tell the person who invited a friend that both got their credit. */
+async function notifyReferral(referrerId: number, friendId: number) {
+  const [a, f] = await Promise.all([one("select line_user_id, followed from clients where id = $1", [referrerId]), one("select coalesce(name, display_name) n from clients where id = $1", [friendId])]);
+  if (!a?.line_user_id || !a.followed) return;
+  const { push } = await import("./line");
+  const M = await import("./messages");
+  await push(a.line_user_id, [M.referralThanks(a.line_user_id, String(f?.n || "เพื่อนของคุณ").split(" ")[0])], `ref:${referrerId}:${friendId}`).catch((e) => console.error("[ref] push", e));
 }

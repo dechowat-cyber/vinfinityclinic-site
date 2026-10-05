@@ -289,3 +289,27 @@ export function offerCard(userId: string | null, title: string, detail: string, 
         btn("จองคิว", { type: "uri", uri: bookUrl(userId, { src: "offer" }) }),
         btn("บัตรสมาชิกของฉัน", { type: "uri", uri: cardUrl(userId) }, "secondary")] } } };
 }
+
+export function referralThanks(userId: string | null, friend: string) {
+  return { type: "flex", altText: "V Circle: ได้รับเครดิต 1,000 บาทแล้ว", contents: { type: "bubble", body: { type: "box", layout: "vertical", spacing: "sm", paddingAll: "18px", contents: [
+    txt("V CIRCLE", { size: "xxs", color: MUTED, weight: "bold" }),
+    txt("ขอบคุณที่แนะนำเพื่อนมาที่ Vinfinity ค่ะ", { weight: "bold", size: "md", color: NAVY }),
+    txt(`${friend} มารับบริการแล้ว คุณและเพื่อนได้รับเครดิตคนละ 1,000 บาท ใช้ได้กับทุกบริการ`, { size: "sm", color: MUTED })] },
+    footer: { type: "box", layout: "vertical", contents: [btn("ดูเครดิตในบัตรสมาชิก", { type: "uri", uri: cardUrl(userId) })] } } };
+}
+
+/** Circle Talk / member event invitation with a reply button. */
+export function eventInvite(userId: string | null, e: { id: number; title: string; detail: string; starts_at: string | Date; capacity: number }) {
+  const d = new Date(e.starts_at);
+  return { type: "flex", altText: `คำเชิญ: ${e.title}`, contents: { type: "bubble",
+    header: { type: "box", layout: "vertical", backgroundColor: NAVY, paddingAll: "18px", contents: [
+      txt("VINFINITY CIRCLE · INVITATION", { size: "xxs", color: SILVER, weight: "bold" }),
+      txt(e.title, { size: "lg", color: "#FFFFFF", weight: "bold", margin: "sm" })] },
+    body: { type: "box", layout: "vertical", spacing: "sm", paddingAll: "18px", contents: [
+      txt(`${thaiDate(d)} · ${thaiTime(d)}`, { size: "sm", color: ROYAL, weight: "bold" }),
+      txt(e.detail, { size: "sm", color: NAVY }),
+      txt(`รับจำนวนจำกัด ${e.capacity} ท่าน · เฉพาะสมาชิก`, { size: "xs", color: MUTED })] },
+    footer: { type: "box", layout: "vertical", spacing: "sm", contents: [
+      btn("ร่วมงาน", { type: "postback", data: `rsvp=${e.id}&a=yes`, displayText: "ขอร่วมงานค่ะ" }),
+      btn("ไม่สะดวกครั้งนี้", { type: "postback", data: `rsvp=${e.id}&a=no`, displayText: "ครั้งนี้ไม่สะดวกค่ะ" }, "secondary")] } } };
+}

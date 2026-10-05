@@ -16,7 +16,9 @@ export async function totals(from: string, toIncl: string) {
   const voids = await one(`select count(*)::int n, coalesce(sum(amount),0)::float amt from payments where voided_at is not null and created_at >= $1 and created_at < $2`, [a, b]);
   const by: Record<string, { n: number; amt: number }> = {};
   for (const r of rows) by[r.method] = { n: Number(r.n), amt: Number(r.amt) };
-  const total = rows.reduce((s, r) => s + Number(r.amt), 0), n = rows.reduce((s, r) => s + Number(r.n), 0);
+  // money received: Wallet use is paid out of a top-up that was already counted when it was sold
+  const cashRows = rows.filter((r) => r.method !== "wallet");
+  const total = cashRows.reduce((s, r) => s + Number(r.amt), 0), n = cashRows.reduce((s, r) => s + Number(r.n), 0);
   return { by, total, n, voids: { n: Number(voids?.n ?? 0), amt: Number(voids?.amt ?? 0) } };
 }
 
@@ -57,7 +59,9 @@ export async function dailyReport(now = new Date()) {
   const wd = new Date(`${day}T12:00:00+07:00`).getUTCDay();
   const isLastOfMonth = addDays(day, 1).slice(8) === "01";
   const head = isLastOfMonth ? "📊 สรุปยอดประจำเดือน" : wd === 0 ? "📊 สรุปยอดประจำสัปดาห์" : "📊 สรุปยอดรายวัน";
-  const methods = Object.entries(METHODS).map(([k, l]) => (t.by[k] ? `${l} ${fmt(t.by[k].amt)}` : null)).filter(Boolean).join(" · ") || "-";
+  const methods = Object.entries(METHODS).filter(([k]) => k !== "wallet").map(([k, l]) => (t.by[k] ? `${l} ${fmt(t.by[k].amt)}` : null)).filter(Boolean).join(" · ") || "-";
+  const topups = await one(`select coalesce(sum(amount),0)::float a, count(*)::int n from payments where kind = 'wallet_topup' and voided_at is null and created_at >= $1 and created_at < $2`,
+    [bkk(day, "00:00").toISOString(), bkk(addDays(day, 1), "00:00").toISOString()]);
   const pct = lm.total > 0 ? ` (${m.total >= lm.total ? "+" : ""}${Math.round(((m.total - lm.total) / lm.total) * 100)}% เทียบช่วงเดียวกันเดือนก่อน)` : "";
   return [
     `${head} · ${thaiDate(new Date(`${day}T12:00:00+07:00`))}`,
@@ -65,6 +69,8 @@ export async function dailyReport(now = new Date()) {
     `วันนี้ ${baht(t.total)} · ${t.n} ใบเสร็จ`,
     `  ${methods}`,
     ...(t.voids.n ? [`  ยกเลิกใบเสร็จ ${t.voids.n} ใบ (${fmt(t.voids.amt)})`] : []),
+    ...(Number(topups?.n) ? [`  ในยอดนี้เป็นการเติม Wallet ${topups!.n} รายการ ${fmt(Number(topups!.a))} (เงินรับล่วงหน้า)`] : []),
+    ...(t.by.wallet ? [`  ลูกค้าใช้ Wallet จ่ายค่าบริการ ${fmt(t.by.wallet.amt)} (${t.by.wallet.n} ใบ · ไม่นับซ้ำในยอดรับ)`] : []),
     closeLine(close, t),
     ...(Number(pending?.n) ? [`สลิปโอนรอยืนยัน ${pending!.n} ใบ`] : []),
     "",

@@ -9,7 +9,8 @@ import { BeforeAfter } from "../../before-after";
 import { QuickShoot } from "../../quick-shoot";
 import { startPhotoSession } from "@/lib/photoActions";
 import { METHODS, CASHIER_ROLES, VOID_ROLES, paidByPlan, clientRevenue, baht } from "@/lib/payments";
-import { takePayment, voidPaymentAction, setTierAction } from "@/lib/crmActions";
+import { takePayment, voidPaymentAction, setTierAction, walletTopUp } from "@/lib/crmActions";
+import { balance as walletBalance, PACKAGES } from "@/lib/wallet";
 import { possibleDuplicates } from "@/lib/identity";
 import { mergeAction } from "@/lib/cdpActions";
 import { SOURCE_LABEL } from "@/lib/reports";
@@ -24,7 +25,7 @@ const fmt = (d: string | Date) => `${thaiDate(new Date(d))} ${thaiTime(new Date(
 const APPT_TH: Record<string, string> = { booked: "จองแล้ว", confirmed: "ยืนยันแล้ว", arrived: "มาถึงแล้ว", in_consult: "กำลังปรึกษา", done: "เสร็จ", no_show: "ไม่มา", cancelled: "ยกเลิก" };
 const PLAN_TH: Record<string, string> = { draft: "ร่าง", sent: "ส่งการ์ดแล้ว", booked: "จองแล้ว", done: "ทำแล้ว" };
 
-const PAY_ERR: Record<string, string> = { bad_amount: "จำนวนเงินไม่ถูกต้อง", bad_method: "เลือกวิธีชำระ", bad_plan: "แผนไม่ตรงกับลูกค้า", receipt_busy: "ระบบออกเลขใบเสร็จไม่ทัน ลองใหม่อีกครั้ง" };
+const PAY_ERR: Record<string, string> = { wallet_low: "เครดิตใน Wallet ไม่พอ", bad_package: "เลือกแพ็กเกจ Wallet", bad_amount: "จำนวนเงินไม่ถูกต้อง", bad_method: "เลือกวิธีชำระ", bad_plan: "แผนไม่ตรงกับลูกค้า", receipt_busy: "ระบบออกเลขใบเสร็จไม่ทัน ลองใหม่อีกครั้ง" };
 
 export default async function ClientPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ photo?: string; pay?: string; merged?: string }> }) {
   const me = await requireStaff();
@@ -56,7 +57,7 @@ export default async function ClientPage({ params, searchParams }: { params: Pro
     one("select src, utm_source, utm_medium, utm_campaign, gclid is not null as g, fbclid is not null as f, ttclid is not null as t, landing, created_at from web_visits where client_id = $1 order by created_at limit 1", [id]),
   ]);
   const cashier = CASHIER_ROLES.includes(me.role);
-  const [codes, spend] = await Promise.all([activeCodes(id), spend12m(id)]);
+  const [codes, spend, wallet] = await Promise.all([activeCodes(id), spend12m(id), walletBalance(id)]);
   const tier = tierInfo(c.tier);
   const due = plans.map((p) => ({ id: Number(p.id), goal: p.goal, balance: Math.max(0, Number(p.total) - (paidMap.get(Number(p.id)) ?? 0)) })).filter((p) => p.balance > 0);
   const pair = pairs[0];
@@ -217,12 +218,19 @@ export default async function ClientPage({ params, searchParams }: { params: Pro
             <option value="">ไม่ผูกกับแผน</option>
           </select>
           <input name="amount" className="inp" inputMode="decimal" required placeholder="จำนวนเงิน" defaultValue={due[0]?.balance || ""} style={{ width: 130 }} aria-label="จำนวนเงิน (บาท)" />
-          <select name="method" className="inp" defaultValue="transfer">{Object.entries(METHODS).map(([k, l]) => <option key={k} value={k}>{l}</option>)}</select>
+          <select name="method" className="inp" defaultValue="transfer">{Object.entries(METHODS).filter(([k]) => k !== "wallet" || wallet > 0).map(([k, l]) => <option key={k} value={k}>{k === "wallet" ? `${l} (คงเหลือ ${baht(wallet)})` : l}</option>)}</select>
           <input name="note" className="inp" placeholder="หมายเหตุ เช่น มัดจำ / งวดที่ 2" style={{ flex: 1, minWidth: 140 }} />
           {codes.length > 0 && <select name="code_id" className="inp" defaultValue="" aria-label="ใช้โปรลับ">
             <option value="">ไม่ใช้โปรลับ</option>
             {codes.map((k) => <option key={k.id} value={k.id}>ใช้โปรลับ: {k.title} ({k.code})</option>)}</select>}
           <button className="btn">รับชำระ + ออกใบเสร็จ</button>
+        </form>}
+        {cashier && <form action={walletTopUp} className="row" style={{ margin: "0 0 12px", alignItems: "center" }}>
+          <input type="hidden" name="client_id" value={id} />
+          <span className="muted" style={{ fontSize: 14 }}>Vinfinity Wallet คงเหลือ <b style={{ color: "var(--royal)" }}>{baht(wallet)}</b></span>
+          <select name="pkg" className="inp" defaultValue="" required><option value="" disabled>เติม Wallet…</option>{PACKAGES.map((p) => <option key={p.key} value={p.key}>{p.name} · จ่าย {p.pay.toLocaleString()} ได้ {p.get.toLocaleString()}</option>)}</select>
+          <select name="method" className="inp" defaultValue="transfer">{Object.entries(METHODS).filter(([k]) => k !== "wallet").map(([k, l]) => <option key={k} value={k}>{l}</option>)}</select>
+          <button className="btn ghost small">เติม + ออกใบเสร็จ</button>
         </form>}
         {payments.length === 0 ? <p className="muted" style={{ fontSize: 14 }}>ยังไม่มีการชำระเงิน</p> :
           <table className="t" style={{ marginTop: 8 }}><thead><tr><th>เลขที่</th><th>วันที่</th><th>จำนวน</th><th>วิธี</th><th>แผน</th><th>ผู้รับ</th><th></th></tr></thead>

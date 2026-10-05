@@ -390,4 +390,40 @@ create table if not exists offer_codes (
 );
 create index if not exists offer_codes_client on offer_codes(client_id, expires_at);
 create index if not exists offer_codes_unsent on offer_codes(sent_at) where sent_at is null;
+
+-- Vinfinity Wallet + credit: one ledger, + adds / - uses. kind: topup | bonus | cashback | referral | spend | refund | expire | adjust
+create table if not exists wallet_ledger (
+  id bigserial primary key,
+  client_id bigint not null references clients(id),
+  kind text not null,
+  amount numeric not null,
+  payment_id bigint,
+  note text,
+  created_by bigint,
+  created_at timestamptz not null default now()
+);
+create index if not exists wallet_client on wallet_ledger(client_id, created_at desc);
+create unique index if not exists wallet_once on wallet_ledger(payment_id, kind) where payment_id is not null and kind in ('cashback','topup','bonus','spend');
+alter table clients add column if not exists wallet_expires_at timestamptz;
+alter table clients add column if not exists referral_paid_at timestamptz;
+-- Circle Talk and other member events
+create table if not exists events (
+  id bigserial primary key,
+  title text not null,
+  detail text not null,
+  starts_at timestamptz not null,
+  capacity int not null default 10,
+  min_tier text not null default 'gold',
+  created_by bigint,
+  created_at timestamptz not null default now()
+);
+create table if not exists event_rsvps (
+  event_id bigint not null references events(id),
+  client_id bigint not null references clients(id),
+  status text not null default 'going',
+  invited_at timestamptz not null default now(),
+  replied_at timestamptz,
+  primary key (event_id, client_id)
+);
+alter table payments add column if not exists kind text not null default 'service';
 `;

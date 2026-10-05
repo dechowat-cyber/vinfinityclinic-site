@@ -2,6 +2,7 @@ import { clientFromRequest } from "@/lib/liffAuth";
 import { refreshTier, tierInfo, progress, activeCodes, TIERS, type Tier } from "@/lib/loyalty";
 import { logTouch } from "@/lib/crm";
 import { one } from "@/lib/db";
+import { balance, history, PACKAGES, CASHBACK, KIND_TH, REFERRAL_CREDIT } from "@/lib/wallet";
 
 export const dynamic = "force-dynamic";
 
@@ -10,7 +11,7 @@ export async function GET(req: Request) {
   const client = await clientFromRequest(req);
   if (!client) return Response.json({ error: "unauthorized" }, { status: 401 });
   const r = await refreshTier(client.id);
-  const c = await one("select tier, tier_until, ref_code, created_at from clients where id = $1", [client.id]);
+  const c = await one("select tier, tier_until, ref_code, created_at, wallet_expires_at from clients where id = $1", [client.id]);
   const t = tierInfo(c?.tier);
   await logTouch(client.id, "in", "member_card", null, "liff");
   return Response.json({
@@ -19,6 +20,9 @@ export async function GET(req: Request) {
     until: c?.tier_until ?? null, since: c?.created_at ?? null, refCode: c?.ref_code ?? null,
     spend: r?.spend ?? 0, progress: progress(r?.spend ?? 0, t.key as Tier),
     tiers: TIERS.map((x) => ({ key: x.key, name: x.name, min: x.min })),
+    wallet: { balance: await balance(client.id), expires: c?.wallet_expires_at ?? null, cashback: CASHBACK[(c?.tier ?? "member") as Tier],
+      history: (await history(client.id, 10)).map((h) => ({ label: KIND_TH[h.kind] ?? h.kind, amount: h.amount, at: h.created_at })) },
+    packages: PACKAGES, referralCredit: REFERRAL_CREDIT,
     offers: (await activeCodes(client.id)).map((o) => ({ code: o.code, title: o.title, detail: o.detail, expires: o.expires_at })),
   });
 }
