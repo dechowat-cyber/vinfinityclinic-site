@@ -179,6 +179,13 @@ def reviews_html_en():
 </section>"""
 
 
+def page_img(path):
+    img = PAGE_IMG.get(th_path(path), "/assets/img/og.jpg")
+    if path.startswith("/en/") and img.startswith("/assets/img/articles/"):
+        img = img.replace("/assets/img/articles/", "/assets/img/articles/en/", 1)
+    return img
+
+
 def en_path(path):
     """Thai URL path -> English counterpart."""
     return "/en" + path
@@ -236,7 +243,7 @@ def head(title, desc, path, keywords, extra_ld=(), lang="th"):
 <meta property="og:title" content="{title}">
 <meta property="og:description" content="{desc}">
 <meta property="og:url" content="{url}">
-<meta property="og:image" content="{SITE}{PAGE_IMG.get(th_path(path), "/assets/img/og.jpg")}">
+<meta property="og:image" content="{SITE}{page_img(path)}">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#0B142E">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -451,6 +458,7 @@ def build_en_all():
             if "inLanguage" in x:
                 x["inLanguage"] = "en"
             if isinstance(t, list) and "Article" in t:
+                x["image"]["url"] = SITE + page_img(ep)
                 x["headline"] = meta.get("headline", meta["title"].split(" | ")[0])
                 x["description"] = meta["desc"]
             elif "name" in x and t in ("MedicalWebPage", "ProfilePage", "WebPage"):

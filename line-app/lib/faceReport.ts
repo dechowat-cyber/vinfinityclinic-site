@@ -8,7 +8,7 @@ import type * as line from "./line";
 // Answers and photos are health data: they stay in the database and the staff page (login + health roles).
 // The staff LINE group only ever gets a link, never what the person asked about.
 
-export const TRIGGER = /face\s*architecture|วิเคราะห์(ใบ)?หน้า|รายงานใบหน้า|ประเมินหน้า(ฟรี)?|ขอรับรายงาน/i;
+export const TRIGGER = /face\s*architecture|face\s*(analysis|report|assessment)|analy[sz]e\s*my\s*face|วิเคราะห์(ใบ)?หน้า|รายงานใบหน้า|ประเมินหน้า(ฟรี)?|ขอรับรายงาน/i;
 
 export const QUESTIONS: { key: string; text: string; options: string[] }[] = [
   { key: "concern", text: "อยากปรับเรื่องไหนมากที่สุดคะ", options: ["ใต้ตา / ดูเหนื่อย", "แก้มตอบ / ขมับ", "คาง / กราม / โครงหน้า", "ร่องแก้ม / หย่อนคล้อย", "ผิว / ริ้วรอย", "ยังไม่แน่ใจ"] },
