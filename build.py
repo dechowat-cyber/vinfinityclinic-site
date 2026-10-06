@@ -284,8 +284,7 @@ def header_html(lang, path):
 </nav>
 <div class="hdr-r">{lang_switch(lang, path)}<a class="btn btn-silver header-cta" href="{LINE_EN if en else LINE}"><span class="cta-full">{cta}</span><span class="cta-short">{"Book" if en else "นัดหมอ"}</span></a></div>
 </div>
-</header>
-<main>"""
+</header>"""
 
 
 def footer(lang="th"):
