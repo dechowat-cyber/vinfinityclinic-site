@@ -270,13 +270,13 @@ def footer():
 
 
 def bust(html):
-    """/assets is cached as immutable, so CSS/JS links carry a content hash."""
+    """/assets is cached as immutable, so asset links (CSS/JS/images) carry a content hash."""
     import hashlib, re
     def rep(m):
-        f = ROOT / m.group(1).lstrip("/")
+        f = ROOT / m.group(2).lstrip("/")
         h = hashlib.sha1(f.read_bytes()).hexdigest()[:10] if f.exists() else "0"
-        return '"%s?v=%s"' % (m.group(1), h)
-    return re.sub(r'"(/assets/[^"?]+\.(?:css|js))"', rep, html)
+        return '"%s%s?v=%s"' % (m.group(1) or "", m.group(2), h)
+    return re.sub(r'"(https://vinfinityclinic\.com)?(/assets/[^"?\s]+\.(?:css|js|jpg|jpeg|png|webp|svg))"', rep, html)
 
 
 def build(out, title, desc, path, keywords, body_file, faqs, extra_ld=(), lang="th"):
