@@ -411,3 +411,7 @@ html{scroll-padding-top:84px}
   .dr-time li{grid-template-columns:1fr;gap:4px}
   .dr-card{padding:26px 22px}
 }
+.art-fig{margin:0 0 28px}
+.art-fig img{width:100%;height:auto;display:block;border-radius:18px;border:1px solid var(--line)}
+.art-fig figcaption{font-size:13.5px;color:var(--muted);margin-top:8px}
+.article-card .ac-thumb{width:calc(100% + 64px);max-width:none;height:auto;aspect-ratio:16/9;object-fit:cover;margin:-32px -32px 4px;border-radius:22px 22px 0 0;display:block;overflow:hidden}

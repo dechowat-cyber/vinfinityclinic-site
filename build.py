@@ -155,6 +155,18 @@ def faq_html(items):
 HREFLANG = f'\n<link rel="alternate" hreflang="th" href="{SITE}/">\n<link rel="alternate" hreflang="en" href="{SITE}/en/">\n<link rel="alternate" hreflang="x-default" href="{SITE}/">'
 
 
+PAGE_IMG = {
+    "/articles/pn-molecular-weight/": "/assets/img/articles/pn-hmw-lmw-polynucleotide.jpg",
+    "/articles/filler-long-term/": "/assets/img/articles/filler-mri-longevity-timeline.jpg",
+    "/articles/dissolve-filler-native-tissue/": "/assets/img/articles/hyaluronidase-native-ha-recovery.jpg",
+    "/articles/same-filler-different-results/": "/assets/img/articles/filler-volume-retention-lips-vs-cheek.jpg",
+    "/articles/filler-safety-evidence/": "/assets/img/articles/filler-safety-vascular-midface.jpg",
+    "/articles/layered-injection-anatomy/": "/assets/img/articles/facial-anatomy-5-layers.jpg",
+    "/articles/choosing-filler-clinic-udon/": "/assets/img/articles/filler-clinic-udon-checklist.jpg",
+    "/doctor/": "/assets/img/doctor/stage-keynote.jpg",
+}
+
+
 def head(title, desc, path, keywords, extra_ld=(), lang="th"):
     lds = [CLINIC_LD, DOCTOR_LD, *extra_ld]
     ld = "\n".join(f'<script type="application/ld+json">{json.dumps(x, ensure_ascii=False)}</script>' for x in lds)
@@ -175,7 +187,7 @@ def head(title, desc, path, keywords, extra_ld=(), lang="th"):
 <meta property="og:title" content="{title}">
 <meta property="og:description" content="{desc}">
 <meta property="og:url" content="{url}">
-<meta property="og:image" content="{SITE}/assets/img/og.jpg">
+<meta property="og:image" content="{SITE}{PAGE_IMG.get(path, "/assets/img/og.jpg")}">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#0B142E">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -382,7 +394,7 @@ def article_ld(path, headline, desc, cites, date="2026-10-03"):
             "headline": headline, "description": desc, "inLanguage": "th",
             "url": SITE + path, "datePublished": date, "dateModified": date,
             "author": {"@id": SITE + "/#dr-dechowat"}, "reviewedBy": {"@id": SITE + "/#dr-dechowat"},
-            "publisher": {"@id": SITE + "/#clinic"}, "image": SITE + "/assets/img/og.jpg",
+            "publisher": {"@id": SITE + "/#clinic"}, "image": {"@type": "ImageObject", "url": SITE + PAGE_IMG.get(path, "/assets/img/og.jpg"), "width": 1600, "height": 900},
             "citation": cites}
 
 
