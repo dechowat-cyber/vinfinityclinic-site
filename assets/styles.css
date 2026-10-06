@@ -417,3 +417,15 @@ html{scroll-padding-top:84px}
 .article-card .ac-thumb{width:calc(100% + 64px);max-width:none;height:auto;aspect-ratio:16/9;object-fit:cover;margin:-32px -32px 4px;border-radius:22px 22px 0 0;display:block;overflow:hidden}
 @media (max-width:640px){.prose table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;font-size:14.5px}.prose th,.prose td{min-width:110px}.prose th:first-child,.prose td:first-child{min-width:96px}}
 .prose{min-width:0;overflow-wrap:break-word}
+.hdr-r{display:flex;align-items:center;gap:12px}
+.lang-sw{display:flex;border:1px solid rgba(213,221,238,.35);border-radius:999px;padding:3px;font:600 12px/1 'Montserrat',sans-serif;letter-spacing:.06em}
+.lang-sw a{color:var(--silver);text-decoration:none;padding:7px 10px;border-radius:999px}
+.lang-sw a[aria-current]{background:var(--silver);color:var(--navy)}
+.lang-sw a:not([aria-current]):hover{color:#fff}
+@media (max-width:640px){.hdr-r{gap:8px}.lang-sw{font-size:11px}.lang-sw a{padding:6px 8px}.site-header .wrap{gap:10px}}
+@media (max-width:380px){.lockup .lk-tag{display:none}}
+.cta-short{display:none}
+.site-header .wrap{flex-wrap:nowrap}
+@media (min-width:961px) and (max-width:1360px){.nav{gap:18px;font-size:14px}.nav a[href$="#programs"],.nav a[href$="#reviews"]{display:none}}
+@media (max-width:640px){.cta-full{display:none}.cta-short{display:inline}.lockup .lk-tag{display:none}.lockup{gap:8px}}
+html[lang=en] .hero h1 .ln{white-space:normal}

@@ -15,12 +15,16 @@ from urllib.parse import quote as _q
 # FR-01: every LINE button opens the chat with a pre-filled message carrying the source tag,
 # which the LINE app (line-app/lib/source.ts) reads and stamps on the lead.
 LINE = "https://line.me/R/oaMessage/%40230eeqvl/?" + _q("สวัสดีค่ะ สนใจปรึกษาคุณหมอ (จากเว็บไซต์)")
+LINE_EN = "https://line.me/R/oaMessage/%40230eeqvl/?" + _q("Hello, I'd like to consult the doctor (from website)")
 MSG = "https://m.me/Vinfinity.Clinic"
 TEL = "082-462-2963"
 # NAP — keep identical everywhere (site, Google Business Profile, Facebook)
 ADDR_STREET = "106/27-28 อาคารธนารักษ์"
 ADDR_LINE = "106/27-28 อาคารธนารักษ์ ต.หมากแข้ง อ.เมือง จ.อุดรธานี 41000"
 HOURS_TEXT = "เปิดทุกวัน 10:00–19:00 น. (ปิดวันอังคาร)"
+import i18n_en as EN
+ADDR_EN = EN.ADDR_EN
+HOURS_EN = EN.HOURS_EN
 GEO = (17.4037305, 102.7894748)
 PLACE_ID = "ChIJ2z9FVIedIzERYDruDs_3xeU"
 MAPS_URL = "https://www.google.com/maps/search/?api=1&query=Vinfinity+Clinic+%E0%B8%AD%E0%B8%B8%E0%B8%94%E0%B8%A3%E0%B8%98%E0%B8%B2%E0%B8%99%E0%B8%B5&query_place_id=" + PLACE_ID
@@ -97,9 +101,9 @@ def faq_ld(items):
                             "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in items]}
 
 
-def crumb_ld(*trail):
+def crumb_ld(*trail, lang="th"):
     """trail: (name, path) pairs after the home page."""
-    items = [("หน้าแรก", "/")] + list(trail)
+    items = [("Home", "/en/") if lang == "en" else ("หน้าแรก", "/")] + list(trail)
     return {"@context": "https://schema.org", "@type": "BreadcrumbList",
             "itemListElement": [{"@type": "ListItem", "position": i + 1, "name": n, "item": SITE + u}
                                 for i, (n, u) in enumerate(items)]}
@@ -112,7 +116,9 @@ def crumb_ld(*trail):
 REVIEWS = []
 
 
-def reviews_html():
+def reviews_html(lang="th"):
+    if lang == "en":
+        return reviews_html_en()
     quotes = "".join(
         f'<figure class="rv"><blockquote>“{t}”</blockquote><figcaption>{n} · รีวิวบน {src}</figcaption></figure>'
         for t, n, src in REVIEWS)
@@ -136,7 +142,13 @@ def reviews_html():
 </section>"""
 
 
-def clinic_info_html():
+def clinic_info_html(lang="th"):
+    if lang == "en":
+        return f"""<div><small>Address</small><b>{ADDR_EN}</b></div>
+<div><small>Opening hours</small><b>{HOURS_EN}</b></div>
+<div><small>Phone</small><a href="tel:+66{TEL.replace('-', '')[1:]}"><b>+66 {TEL[1:]}</b></a></div>
+<div><small>LINE</small><a href="{LINE_EN}"><b>@230eeqvl</b></a></div>
+<a class="btn btn-navy" style="margin-top:auto" href="{MAPS_URL}" target="_blank" rel="noopener">Open in Google Maps</a>"""
     return f"""<div><small>ที่อยู่</small><b>{ADDR_LINE}</b></div>
 <div><small>เวลาทำการ</small><b>{HOURS_TEXT}</b></div>
 <div><small>โทร</small><a href="tel:{TEL.replace('-', '')}"><b>{TEL}</b></a></div>
@@ -144,15 +156,49 @@ def clinic_info_html():
 <a class="btn btn-navy" style="margin-top:auto" href="{MAPS_URL}" target="_blank" rel="noopener">เปิดแผนที่ Google Maps</a>"""
 
 
-def map_html():
-    return f'<div class="map-embed"><iframe src="{MAP_EMBED}" title="แผนที่ Vinfinity Clinic อุดรธานี" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe></div>'
+def map_html(lang="th"):
+    return f'<div class="map-embed"><iframe src="{MAP_EMBED}" title="{"Map of Vinfinity Clinic Udon Thani" if lang == "en" else "แผนที่ Vinfinity Clinic อุดรธานี"}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe></div>'
+
+
+def reviews_html_en():
+    return f"""<section class="reviews" id="reviews">
+<div class="wrap">
+<div class="results-head">
+<div>
+<div class="eyebrow">Reviews</div>
+<h2 class="h2">Reviews from real patients</h2>
+</div>
+<p class="lead">Read every review directly on the clinic's Google Maps and Facebook pages. Each one is written by the patient.</p>
+</div>
+<div class="rv-sources">
+<a class="rv-src" href="{G_REVIEWS}" target="_blank" rel="noopener"><span class="rv-logo" aria-hidden="true">G</span><span><b>Google Maps reviews</b><small>Vinfinity Clinic Udon Thani</small></span><span class="rv-go">Read →</span></a>
+<a class="rv-src" href="{FB_REVIEWS}" target="_blank" rel="noopener"><span class="rv-logo fb" aria-hidden="true">f</span><span><b>Facebook reviews</b><small>facebook.com/Vinfinity.Clinic</small></span><span class="rv-go">Read →</span></a>
+</div>
+<p class="rv-write">Been to the clinic? <a href="{G_WRITE}" target="_blank" rel="noopener">Write a Google review</a>. Your feedback helps other people decide.</p>
+</div>
+</section>"""
+
+
+def en_path(path):
+    """Thai URL path -> English counterpart."""
+    return "/en" + path
+
+
+def th_path(path):
+    return path[3:] if path.startswith("/en/") else path
 
 
 def faq_html(items):
     return "\n".join(f"<details><summary>{q}</summary><p>{a}</p></details>" for q, a in items)
 
 
-HREFLANG = f'\n<link rel="alternate" hreflang="th" href="{SITE}/">\n<link rel="alternate" hreflang="en" href="{SITE}/en/">\n<link rel="alternate" hreflang="x-default" href="{SITE}/">'
+def hreflang(path):
+    t = th_path(path)
+    if t not in EN.EN_PAGES:
+        return ""
+    return (f'\n<link rel="alternate" hreflang="th" href="{SITE}{t}">'
+            f'\n<link rel="alternate" hreflang="en" href="{SITE}{en_path(t)}">'
+            f'\n<link rel="alternate" hreflang="x-default" href="{SITE}{t}">')
 
 
 PAGE_IMG = {
@@ -185,12 +231,12 @@ def head(title, desc, path, keywords, extra_ld=(), lang="th"):
 <link rel="canonical" href="{url}">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta property="og:type" content="website">
-<meta property="og:locale" content="{"en_US" if lang == "en" else "th_TH"}">{HREFLANG if path in ("/", "/en/") else ""}
+<meta property="og:locale" content="{"en_US" if lang == "en" else "th_TH"}">{hreflang(path)}
 <meta property="og:site_name" content="Vinfinity Clinic">
 <meta property="og:title" content="{title}">
 <meta property="og:description" content="{desc}">
 <meta property="og:url" content="{url}">
-<meta property="og:image" content="{SITE}{PAGE_IMG.get(path, "/assets/img/og.jpg")}">
+<meta property="og:image" content="{SITE}{PAGE_IMG.get(th_path(path), "/assets/img/og.jpg")}">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#0B142E">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -200,28 +246,104 @@ def head(title, desc, path, keywords, extra_ld=(), lang="th"):
 {ld}
 </head>
 <body>
-<header class="site-header">
-<div class="wrap">
-<a class="brand lockup" href="/" aria-label="Vinfinity Clinic หน้าแรก"><img class="lk-mark" src="/assets/vinfinity-mark.svg" alt="" width="44" height="46"><span class="lk-text"><img class="lk-word" src="/assets/vinfinity-wordmark.svg" alt="Vinfinity" width="150" height="18"><span class="lk-tag">INFINITE BEAUTY, PRECISELY</span></span></a>
-<nav class="nav" aria-label="เมนูหลัก">
-<a href="/filler/">ฟิลเลอร์</a>
-<a href="/skin-booster/">สกินบูสเตอร์</a>
-<a href="/price/">ราคา</a>
-<a href="/#results">เคสจริง</a>
-<a href="/#programs">โปรแกรม</a>
-<a href="/articles/">บทความ</a>
-<a href="/doctor/">แพทย์</a>
-<a href="/#reviews">รีวิว</a>
-<a href="/#clinic">ติดต่อ</a>
-</nav>
-<a class="btn btn-silver header-cta" href="{LINE}">นัดปรึกษาแพทย์</a>
-</div>
-</header>
+{header_html(lang, path)}
 <main>
 """
 
 
-def footer():
+NAV = {
+    "th": [("/filler/", "ฟิลเลอร์"), ("/skin-booster/", "สกินบูสเตอร์"), ("/price/", "ราคา"), ("/#results", "เคสจริง"),
+           ("/#programs", "โปรแกรม"), ("/articles/", "บทความ"), ("/doctor/", "แพทย์"), ("/#reviews", "รีวิว"), ("/#clinic", "ติดต่อ")],
+    "en": [("/en/filler/", "Filler"), ("/en/skin-booster/", "Skin boosters"), ("/en/price/", "Prices"), ("/en/#results", "Results"),
+           ("/en/#programs", "Programs"), ("/en/articles/", "Articles"), ("/en/doctor/", "Doctor"), ("/en/#reviews", "Reviews"), ("/en/#clinic", "Contact")],
+}
+
+
+def lang_switch(lang, path):
+    t = th_path(path)
+    if t not in EN.EN_PAGES:
+        return ""
+    th_cur = ' aria-current="true"' if lang == "th" else ""
+    en_cur = ' aria-current="true"' if lang == "en" else ""
+    return (f'<div class="lang-sw" role="group" aria-label="Language">'
+            f'<a href="{t}" hreflang="th" lang="th"{th_cur}>TH</a>'
+            f'<a href="{en_path(t)}" hreflang="en" lang="en"{en_cur}>EN</a></div>')
+
+
+def header_html(lang, path):
+    en = lang == "en"
+    nav = "\n".join(f'<a href="{u}">{n}</a>' for u, n in NAV[lang])
+    home = "/en/" if en else "/"
+    label = "Vinfinity Clinic home" if en else "Vinfinity Clinic หน้าแรก"
+    cta = "Book a consult" if en else "นัดปรึกษาแพทย์"
+    return f"""<header class="site-header">
+<div class="wrap">
+<a class="brand lockup" href="{home}" aria-label="{label}"><img class="lk-mark" src="/assets/vinfinity-mark.svg" alt="" width="44" height="46"><span class="lk-text"><img class="lk-word" src="/assets/vinfinity-wordmark.svg" alt="Vinfinity" width="150" height="18"><span class="lk-tag">INFINITE BEAUTY, PRECISELY</span></span></a>
+<nav class="nav" aria-label="{"Main menu" if en else "เมนูหลัก"}">
+{nav}
+</nav>
+<div class="hdr-r">{lang_switch(lang, path)}<a class="btn btn-silver header-cta" href="{LINE_EN if en else LINE}"><span class="cta-full">{cta}</span><span class="cta-short">{"Book" if en else "นัดหมอ"}</span></a></div>
+</div>
+</header>
+<main>"""
+
+
+def footer(lang="th"):
+    if lang == "en":
+        return footer_en()
+    return footer_th()
+
+
+def footer_en():
+    return f"""</main>
+<footer class="site-footer">
+<div class="wrap">
+<div class="cols">
+<div>
+<a class="brand brand-stack" href="/en/"><img src="/assets/vinfinity-logo-stacked.svg" alt="Vinfinity Clinic" width="96" height="114"><span class="brand-tag">INFINITE BEAUTY, PRECISELY</span></a>
+<p style="margin-top:18px;max-width:340px">Physician-led aesthetic clinic, under the care of Dr. Dechowat Promda · Udon Thani, Thailand and Vientiane, Laos</p>
+</div>
+<div>
+<h4>Treatments</h4>
+<p><a href="/en/filler/">Dermal filler in Udon Thani</a></p>
+<p><a href="/en/filler/tear-trough/">Tear trough filler</a></p>
+<p><a href="/en/filler/lips/">Lip filler</a></p>
+<p><a href="/en/filler/chin/">Chin filler</a></p>
+<p><a href="/en/sculptra/">Sculptra</a></p>
+<p><a href="/en/toxin/">Anti-wrinkle injections</a></p>
+<p><a href="/en/skin-booster/">Skin boosters</a></p>
+<p><a href="/en/filler/dissolve/">Filler dissolving and correction</a></p>
+<p><a href="/en/lifting/">HIFU lifting</a></p>
+<p><a href="/en/#programs">The Architect Rebuild</a></p>
+<p><a href="/en/articles/choosing-filler-clinic-udon/">Choosing a filler clinic in Udon Thani</a></p>
+<p><a href="/en/articles/">Advanced Injection articles</a></p>
+<p><a href="/en/price/">All prices</a></p>
+</div>
+<div>
+<h4>Contact</h4>
+<p><a href="{LINE_EN}">LINE @230eeqvl</a></p>
+<p><a href="{MSG}">Facebook Messenger</a></p>
+<p><a href="tel:+66{TEL.replace('-', '')[1:]}">Phone +66 {TEL[1:]}</a></p>
+<p><a href="/" hreflang="th" lang="th">ภาษาไทย</a></p>
+</div>
+<div>
+<h4>Udon Thani clinic</h4>
+<p>{ADDR_EN}</p>
+<p>{HOURS_EN}</p>
+<p><a href="{MAPS_URL}" target="_blank" rel="noopener">Open Google Maps</a> · <a href="{G_REVIEWS}" target="_blank" rel="noopener">Reviews</a></p>
+</div>
+</div>
+<div class="legal">Vinfinity Clinic (วินฟินิตี้ คลินิกเวชกรรม) Udon Thani · Medical facility license no. 41101001567 · Advertising approval ฆสพ.อด.100/2568 · Results vary from person to person. Every procedure can have side effects; please consult a doctor before deciding.</div>
+</div>
+</footer>
+<script>window.VF={{app:{json.dumps(LINE_APP)},ga4:{json.dumps(GA4_ID)},meta:{json.dumps(META_PIXEL_ID)},tiktok:{json.dumps(TIKTOK_PIXEL_ID)}}};</script>
+<script src="/assets/track.js" defer></script>
+</body>
+</html>
+"""
+
+
+def footer_th():
     return f"""</main>
 <footer class="site-footer">
 <div class="wrap">
@@ -280,24 +402,65 @@ def bust(html):
     return re.sub(r'"(https://vinfinityclinic\.com)?(/assets/[^"?\s]+\.(?:css|js|jpg|jpeg|png|webp|svg))"', rep, html)
 
 
+REGISTRY = []  # Thai builds, replayed in English by build_en_all()
+
+
 def build(out, title, desc, path, keywords, body_file, faqs, extra_ld=(), lang="th"):
-    body = (ROOT / "pages" / body_file).read_text(encoding="utf-8")
+    en = lang == "en"
+    src = ROOT / "pages" / ("en" if en else "") / body_file
+    body = src.read_text(encoding="utf-8")
     for key, part in (("ANATOMY", "_anatomy.html"), ("RESULTS_EYE", "_results_eye.html"), ("RESULTS_MEN", "_results_men.html"),
                       ("RESULTS_LAYERS", "_results_layers.html"), ("BA_JS", "_ba_script.html")):
-        f = ROOT / "pages" / part
+        f = ROOT / "pages" / ("en" if en and part != "_ba_script.html" else "") / part
         if "{{%s}}" % key in body and f.exists():
             body = body.replace("{{%s}}" % key, f.read_text(encoding="utf-8"))
-    body = (body.replace("{{REVIEWS}}", reviews_html()).replace("{{CLINIC_INFO}}", clinic_info_html())
-            .replace("{{MAP}}", map_html()))
-    body = body.replace("{{ADDR}}", ADDR_LINE)
-    body = body.replace("{{LINE}}", LINE).replace("{{MSG}}", MSG).replace("{{FAQ}}", faq_html(faqs))
+    body = (body.replace("{{REVIEWS}}", reviews_html(lang)).replace("{{CLINIC_INFO}}", clinic_info_html(lang))
+            .replace("{{MAP}}", map_html(lang)))
+    body = body.replace("{{ADDR}}", ADDR_EN if en else ADDR_LINE)
+    body = body.replace("{{LINE}}", LINE_EN if en else LINE).replace("{{MSG}}", MSG).replace("{{FAQ}}", faq_html(faqs))
     lds = ([faq_ld(faqs)] if faqs else []) + list(extra_ld)
-    html = head(title, desc, path, keywords, lds, lang) + body + footer()
+    html = head(title, desc, path, keywords, lds, lang) + body + footer(lang)
     html = bust(html)
     p = ROOT / out
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(html, encoding="utf-8")
+    if not en:
+        REGISTRY.append((out, path, body_file, faqs, list(extra_ld)))
     print("built", out)
+
+
+def build_en_all():
+    """Build the English twin of every Thai page from pages/en/* and i18n_en.EN_PAGES."""
+    faq_map = {id(HOME_FAQ): EN.EN_HOME_FAQ, id(FILLER_FAQ): EN.EN_FILLER_FAQ, id(LIFT_FAQ): EN.EN_LIFT_FAQ,
+               id(DISSOLVE_FAQ): EN.EN_DISSOLVE_FAQ, id(TT_FAQ): EN.EN_TT_FAQ, id(PRICE_FAQ): EN.EN_PRICE_FAQ,
+               id(SCULPTRA_FAQ): EN.EN_SCULPTRA_FAQ, id(TOXIN_FAQ): EN.EN_TOXIN_FAQ, id(LIPS_FAQ): EN.EN_LIPS_FAQ,
+               id(CHIN_FAQ): EN.EN_CHIN_FAQ, id(BOOSTER_FAQ): EN.EN_BOOSTER_FAQ}
+    for out, path, body_file, faqs, extra in REGISTRY:
+        meta = EN.EN_PAGES.get(path)
+        if not meta or not (ROOT / "pages" / "en" / body_file).exists():
+            print("skip en", path)
+            continue
+        ep = en_path(path)
+        lds = []
+        for x in extra:
+            t = x.get("@type")
+            if t == "BreadcrumbList":
+                continue
+            x = json.loads(json.dumps(x))
+            if x.get("url", "").startswith(SITE):
+                x["url"] = SITE + ep
+            if "inLanguage" in x:
+                x["inLanguage"] = "en"
+            if isinstance(t, list) and "Article" in t:
+                x["headline"] = meta.get("headline", meta["title"].split(" | ")[0])
+                x["description"] = meta["desc"]
+            elif "name" in x and t in ("MedicalWebPage", "ProfilePage", "WebPage"):
+                x["name"] = meta["title"].split(" | ")[0]
+            lds.append(x)
+        if meta.get("crumbs"):
+            lds.append(crumb_ld(*meta["crumbs"], lang="en"))
+        build("en/" + out, meta["title"], meta["desc"], ep, meta["keywords"], body_file,
+              faq_map.get(id(faqs), []) if faqs else [], lds, lang="en")
 
 
 HOME_FAQ = [
@@ -427,11 +590,6 @@ if __name__ == "__main__":
           "ยกกระชับหน้า อุดร ด้วย HIFU New Doublo 2.0 หลายระดับความลึก ไม่ต้องผ่าตัด แพทย์ประเมินความหย่อนคล้อยก่อนเลือกระดับ ราคาเริ่มต้น 22,222 บาท ที่ Vinfinity Clinic อุดรธานี",
           "/lifting/", "ยกกระชับ อุดร, ยกกระชับ อุดรธานี, HIFU อุดร, Doublo อุดร, ไฮฟู่ อุดรธานี, ยกกระชับหน้า ไม่ผ่าตัด, หน้าเรียว อุดร",
           "lifting.html", LIFT_FAQ, [crumb_ld(("ยกกระชับ", "/lifting/"))])
-    build("en/index.html",
-          "Dermal Filler Udon Thani | Vinfinity Clinic, physician-led aesthetic clinic",
-          "Physician-led aesthetic clinic in Udon Thani, Thailand. Hyaluronic acid filler from THB 9,990/cc, tear trough filler, skin boosters and HIFU lifting by Dechowat Promda, M.D. Near Vientiane and Nong Khai.",
-          "/en/", "filler Udon Thani, dermal filler Udon Thani, aesthetic clinic Udon Thani, tear trough filler Thailand, filler near Vientiane",
-          "en.html", EN_FAQ, [crumb_ld(("English", "/en/"))], lang="en")
     a3 = "ฉีดฟิลเลอร์ อุดร ที่ไหนดี 7 ข้อที่ควรเช็กก่อนเลือกคลินิก"
     d3 = "วิธีเลือกคลินิกฟิลเลอร์ในอุดรธานี ตรวจสอบใบอนุญาตสถานพยาบาล รายชื่อแพทย์กับแพทยสภา และเลขทะเบียน อย. ด้วยตัวเอง พร้อมคำถามที่ควรถามแพทย์ก่อนฉีด"
     build("articles/choosing-filler-clinic-udon/index.html", a3 + " | Vinfinity Clinic", d3,
@@ -553,3 +711,4 @@ if __name__ == "__main__":
     build("articles/index.html", "บทความ Advanced Injection อ้างอิงงานวิจัย | Vinfinity Clinic",
           "บทความเรื่องฟิลเลอร์ สกินบูสเตอร์ และกายวิภาคใบหน้า เขียนจากงานวิจัยล่าสุดพร้อมเอกสารอ้างอิง โดย นพ.เดโชวัต พรมดา",
           "/articles/", "บทความ ฟิลเลอร์, advanced injection, evidence-based, Vinfinity", "articles.html", [])
+    build_en_all()
