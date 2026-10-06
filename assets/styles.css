@@ -415,3 +415,5 @@ html{scroll-padding-top:84px}
 .art-fig img{width:100%;height:auto;display:block;border-radius:18px;border:1px solid var(--line)}
 .art-fig figcaption{font-size:13.5px;color:var(--muted);margin-top:8px}
 .article-card .ac-thumb{width:calc(100% + 64px);max-width:none;height:auto;aspect-ratio:16/9;object-fit:cover;margin:-32px -32px 4px;border-radius:22px 22px 0 0;display:block;overflow:hidden}
+@media (max-width:640px){.prose table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;font-size:14.5px}.prose th,.prose td{min-width:110px}.prose th:first-child,.prose td:first-child{min-width:96px}}
+.prose{min-width:0;overflow-wrap:break-word}

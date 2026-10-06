@@ -163,6 +163,8 @@ PAGE_IMG = {
     "/articles/filler-safety-evidence/": "/assets/img/articles/filler-safety-vascular-midface.jpg",
     "/articles/layered-injection-anatomy/": "/assets/img/articles/facial-anatomy-5-layers.jpg",
     "/articles/choosing-filler-clinic-udon/": "/assets/img/articles/filler-clinic-udon-checklist.jpg",
+    "/articles/tear-trough-filler-candidates/": "/assets/img/articles/tear-trough-types-filler-candidate.jpg",
+    "/articles/sculptra-ellanse-vs-ha-filler/": "/assets/img/articles/sculptra-ellanse-ha-filler-timeline.jpg",
     "/doctor/": "/assets/img/doctor/stage-keynote.jpg",
 }
 
@@ -519,6 +521,22 @@ if __name__ == "__main__":
               "https://doi.org/10.3390/ijms231810518", "https://doaj.org/article/26e13299973e41ceaf1f5923a06a24d6", "https://doi.org/10.3390/polym16162386",
               "https://doi.org/10.1093/asjof/ojag030", "https://doi.org/10.1097/GOX.0000000000005934"], "2026-10-06"),
               crumb_ld(("บทความ", "/articles/"), ("ฟิลเลอร์ตัวเดียวกัน ผลไม่เหมือนกัน", "/articles/same-filler-different-results/"))])
+    a8 = "ใต้ตาแบบไหนฉีดฟิลเลอร์ได้ แบบไหนไม่ควรฉีด"
+    d8 = "ร่องใต้ตา ถุงไขมัน คล้ำจากเม็ดสี คล้ำจากเส้นเลือด และบวมน้ำ ต่างกันอย่างไร ใครเหมาะกับฟิลเลอร์ใต้ตา ใครควรเลือกวิธีอื่น พร้อมตัวเลขจากงานวิจัย 2,048 ราย โดย นพ.เดโชวัต พรมดา"
+    build("articles/tear-trough-filler-candidates/index.html", a8 + " | Vinfinity Clinic", d8,
+          "/articles/tear-trough-filler-candidates/", "ฟิลเลอร์ใต้ตา, ใต้ตาคล้ำ, ถุงใต้ตา, ร่องใต้ตา, ฟิลเลอร์ใต้ตาบวม, ฟิลเลอร์ใต้ตา ใครไม่ควรฉีด, ฟิลเลอร์ใต้ตา อุดร",
+          "article-tear-trough-candidates.html", [], [article_ld("/articles/tear-trough-filler-candidates/", a8, d8, [
+              "https://doi.org/10.2147/CCID.S301117", "https://doi.org/10.1055/s-0041-1731348", "https://doi.org/10.3390/jpm14111096",
+              "https://jcadonline.com/periorbital-hyperpigmentation-a-comprehensive-review/", "https://doi.org/10.20517/2347-9264.2022.28"], "2026-10-07"),
+              crumb_ld(("บทความ", "/articles/"), ("ใต้ตาแบบไหนฉีดฟิลเลอร์ได้", "/articles/tear-trough-filler-candidates/"))])
+    a9 = "Sculptra, Ellansé กับฟิลเลอร์ HA ต่างกันอย่างไร เลือกแบบไหนดี"
+    d9 = "เทียบ Sculptra (PLLA) Ellansé (PCL) และฟิลเลอร์ HA เรื่องการทำงาน เห็นผลเมื่อไร อยู่ได้นานแค่ไหน สลายได้ไหม และเหมาะกับใคร สรุปจากงานวิจัยโดย นพ.เดโชวัต พรมดา"
+    build("articles/sculptra-ellanse-vs-ha-filler/index.html", a9 + " | Vinfinity Clinic", d9,
+          "/articles/sculptra-ellanse-vs-ha-filler/", "Sculptra กับฟิลเลอร์ ต่างกันอย่างไร, Ellansé, Sculptra Ellanse, PLLA, PCL, ฟิลเลอร์ HA, สารกระตุ้นคอลลาเจน, Sculptra อุดร",
+          "article-collagen-stimulators.html", [], [article_ld("/articles/sculptra-ellanse-vs-ha-filler/", a9, d9, [
+              "https://doi.org/10.1093/asj/sjaf121", "https://doi.org/10.1007/s00266-025-05412-8", "https://doi.org/10.2147/CCID.S229054",
+              "https://doi.org/10.2147/CCID.S385202", "https://doi.org/10.1097/GOX.0000000000005934"], "2026-10-07"),
+              crumb_ld(("บทความ", "/articles/"), ("Sculptra, Ellansé กับฟิลเลอร์ HA", "/articles/sculptra-ellanse-vs-ha-filler/"))])
     build("doctor/index.html", "นพ.เดโชวัต พรมดา The Filler Architect | ประวัติแพทย์ Vinfinity Clinic อุดรธานี",
           "ประวัติ นพ.เดโชวัต พรมดา แพทย์ผู้ก่อตั้ง Vinfinity Clinic แนวคิด Data-driven precision, Art-driven result ประวัติการสอนแพทย์และนักศึกษา รางวัลในและต่างประเทศ KOL Galderma Vivacy MNB IMCAS",
           "/doctor/", "หมอบาส, นพ.เดโชวัต พรมดา, Dechowat Promda, The Filler Architect, หมอฉีดฟิลเลอร์ อุดร, แพทย์ความงาม อุดรธานี",
