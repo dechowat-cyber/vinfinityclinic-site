@@ -165,6 +165,7 @@ PAGE_IMG = {
     "/articles/choosing-filler-clinic-udon/": "/assets/img/articles/filler-clinic-udon-checklist.jpg",
     "/articles/tear-trough-filler-candidates/": "/assets/img/articles/tear-trough-types-filler-candidate.jpg",
     "/articles/sculptra-ellanse-vs-ha-filler/": "/assets/img/articles/sculptra-ellanse-ha-filler-timeline.jpg",
+    "/articles/skincare-routine-filler-botox/": "/assets/img/articles/skincare-before-after-injection.jpg",
     "/doctor/": "/assets/img/doctor/stage-keynote.jpg",
 }
 
@@ -537,6 +538,14 @@ if __name__ == "__main__":
               "https://doi.org/10.1093/asj/sjaf121", "https://doi.org/10.1007/s00266-025-05412-8", "https://doi.org/10.2147/CCID.S229054",
               "https://doi.org/10.2147/CCID.S385202", "https://doi.org/10.1097/GOX.0000000000005934"], "2026-10-07"),
               crumb_ld(("บทความ", "/articles/"), ("Sculptra, Ellansé กับฟิลเลอร์ HA", "/articles/sculptra-ellanse-vs-ha-filler/"))])
+    a10 = "สกินแคร์ก่อนและหลังฉีดหน้า อะไรต้องงด อะไรใช้ต่อได้"
+    d10 = "เรตินอล AHA BHA วิตามินซี กันแดด และอาหารเสริม ควรปรับอย่างไรก่อนและหลังฉีดฟิลเลอร์ โบท็อก สกินบูสเตอร์ สรุปจากฉันทามติและงานวิจัยโดย นพ.เดโชวัต พรมดา"
+    build("articles/skincare-routine-filler-botox/index.html", a10 + " | Vinfinity Clinic", d10,
+          "/articles/skincare-routine-filler-botox/", "สกินแคร์หลังฉีดฟิลเลอร์, หลังฉีดโบท็อก ทาอะไรได้, เรตินอลก่อนฉีดฟิลเลอร์, งดอะไรก่อนฉีดฟิลเลอร์, สกินแคร์หลังสกินบูสเตอร์, ฉีดฟิลเลอร์ อุดร",
+          "article-skincare-injectables.html", [], [article_ld("/articles/skincare-routine-filler-botox/", a10, d10, [
+              "https://doi.org/10.1093/asjof/ojaf121", "https://doi.org/10.1111/jocd.70880",
+              "https://jcadonline.com/minimizing-bruising-following-fillers-and-other-cosmetic-injectables/"], "2026-10-07"),
+              crumb_ld(("บทความ", "/articles/"), ("สกินแคร์กับการฉีดหน้า", "/articles/skincare-routine-filler-botox/"))])
     build("doctor/index.html", "นพ.เดโชวัต พรมดา The Filler Architect | ประวัติแพทย์ Vinfinity Clinic อุดรธานี",
           "ประวัติ นพ.เดโชวัต พรมดา แพทย์ผู้ก่อตั้ง Vinfinity Clinic แนวคิด Data-driven precision, Art-driven result ประวัติการสอนแพทย์และนักศึกษา รางวัลในและต่างประเทศ KOL Galderma Vivacy MNB IMCAS",
           "/doctor/", "หมอบาส, นพ.เดโชวัต พรมดา, Dechowat Promda, The Filler Architect, หมอฉีดฟิลเลอร์ อุดร, แพทย์ความงาม อุดรธานี",
