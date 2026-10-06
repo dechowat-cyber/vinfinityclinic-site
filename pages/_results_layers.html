@@ -87,27 +87,4 @@
 <p class="ba-legal">ภาพจากผู้รับบริการจริงที่ยินยอมให้เผยแพร่ ไม่ผ่านการตกแต่ง แผนการรักษาของแต่ละคนแตกต่างกัน · ผลลัพธ์ที่ได้ขึ้นอยู่กับสภาพผิวและดุลยพินิจของแพทย์ในแต่ละบุคคล</p>
 </div>
 </section>
-<script>
-(function(){
-  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
-  [].forEach.call(document.querySelectorAll('.ba'),function(el){
-    var r=el.querySelector('.ba-range'),touched=false;
-    function set(v){el.style.setProperty('--pos',v+'%')}
-    r.addEventListener('input',function(){touched=true;set(r.value)});
-    if(reduce||!('IntersectionObserver' in window))return;
-    var io=new IntersectionObserver(function(es){es.forEach(function(e){
-      if(!e.isIntersecting||touched)return;io.disconnect();
-      var t0=null;function step(t){if(touched)return;if(!t0)t0=t;var p=(t-t0)/2200;if(p>=1){set(50);r.value=50;return}
-        var v=50+38*Math.sin(p*Math.PI*2)*(1-p*.35);set(v.toFixed(1));r.value=v;requestAnimationFrame(step)}
-      setTimeout(function(){requestAnimationFrame(step)},300);
-    })},{threshold:.6});io.observe(el);
-  });
-  [].forEach.call(document.querySelectorAll('.lchip[data-layer]'),function(b){
-    b.addEventListener('click',function(){
-      var s=document.getElementById('layers');if(!s)return;
-      s.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'});
-      window.dispatchEvent(new CustomEvent('ana:pick',{detail:+b.dataset.layer}));
-    });
-  });
-})();
-</script>
+{{BA_JS}}
