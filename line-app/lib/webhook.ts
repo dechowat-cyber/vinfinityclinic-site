@@ -8,6 +8,7 @@ import { notifyStaff, alertCare } from "./notify";
 import { addDays, todayBkk } from "./time";
 import * as line from "./line";
 import * as M from "./messages";
+import * as FR from "./faceReport";
 import { parts, minutes } from "./time";
 
 export function isOpen(s: ClinicSettings, now = new Date()) {
@@ -65,10 +66,16 @@ export async function handleEvent(ev: Ev, now = new Date(), s?: ClinicSettings):
       const yes = p.get("v") === "1";
       await recordConsent(c.id, type, yes, s.consentVersion);
       await logTouch(c.id, "in", `consent_${type}_${yes ? "yes" : "no"}`);
+      if (type === "data" && yes) {
+        const resume = await FR.resumeAfterConsent(c.id, now);
+        if (resume) return { replyToken: ev.replyToken, messages: resume };
+      }
       if (type === "data") return { replyToken: ev.replyToken, messages: yes ? [M.marketingAsk()] : [M.declinedDataReply(), M.marketingAsk()] };
       return { replyToken: ev.replyToken, messages: [M.thanksMarketing(yes), M.bookingPrompt(userId)] };
     }
     if (p.get("menu") === "book") return { replyToken: ev.replyToken, messages: [M.bookingPrompt(userId)] };
+    if (p.get("menu") === "report") return { replyToken: ev.replyToken, messages: await startFR(c.id, s, now, "richmenu") };
+    if (p.get("fr") === "a") return { replyToken: ev.replyToken, messages: await FR.answerFaceReport(c.id, String(p.get("k")), Number(p.get("v")), now) };
     if (p.get("menu") === "my") return { replyToken: ev.replyToken, messages: [M.myPrompt(userId)] };
     if (p.get("menu") === "card") return { replyToken: ev.replyToken, messages: [M.cardPrompt(userId)] };
     if (p.get("rsvp")) {
@@ -138,6 +145,11 @@ export async function handleEvent(ev: Ev, now = new Date(), s?: ClinicSettings):
     if (ev.message?.type === "text") await applySource(c.id, leadId, parseSource(text));
     // FR-09: any reply stops nurture and puts the person back in the inbox
     await q("update leads set status = 'Contacted', nurture_started_at = null where id = $1 and status = 'Nurture'", [leadId]);
+    // Face Architecture Report: start / cancel by keyword (the ad's pre-filled message matches TRIGGER)
+    if (ev.message?.type === "text" && FR.TRIGGER.test(text) && text.length < 80)
+      return { replyToken: ev.replyToken, messages: await startFR(c.id, s, now, "keyword") };
+    if (ev.message?.type === "text" && /^ยกเลิก(รายงาน)?$/.test(text.trim()) && (await FR.cancelFaceReport(c.id, now)))
+      return { replyToken: ev.replyToken, messages: [{ type: "text", text: "ยกเลิกคำขอรายงานแล้วค่ะ พิมพ์ “วิเคราะห์หน้า” เมื่อพร้อมได้เลยนะคะ" }] };
     // FR-33: photo for a pending "อยากให้หมอดู" request
     if (ev.message?.type === "image") {
       const cr = await one(`select id from care_requests where client_id = $1 and status in ('waiting_photo','waiting_review') and created_at > $2 order by id desc limit 1`,
@@ -148,6 +160,13 @@ export async function handleEvent(ev: Ev, now = new Date(), s?: ClinicSettings):
         await q("update care_requests set status = 'waiting_review' where id = $1", [cr.id]);
         await alertCare(c.id, "ลูกค้าส่งรูปอาการหลังทำแล้ว รอพยาบาล/แพทย์ดู");
         return { replyToken: ev.replyToken, messages: [M.carePhotoThanks()] };
+      }
+      // Face Architecture Report waiting for its three photos
+      const fr = await FR.activeReport(c.id, now);
+      if (fr && fr.status === "waiting_photo") {
+        const img = await line.content(ev.message.id).catch(() => null);
+        const out = await FR.addFaceReportPhoto(c.id, img, now);
+        if (out) return { replyToken: ev.replyToken, messages: out };
       }
       // otherwise it may be a transfer slip: kept for a cashier to confirm (never treated as a health photo)
       const img = await line.content(ev.message.id).catch(() => null);
@@ -179,6 +198,12 @@ export async function handleEvent(ev: Ev, now = new Date(), s?: ClinicSettings):
     return msgs.length ? { replyToken: ev.replyToken, messages: msgs } : null; // humans answer in LINE OA Manager
   }
   return null;
+}
+
+async function startFR(clientId: number, s: ClinicSettings, now: Date, source: string) {
+  const st = await consentState(clientId);
+  const msgs = await FR.startFaceReport(clientId, st.data === true, source, now);
+  return st.data === true ? msgs : [...msgs, M.consentAsk(s)];
 }
 
 export async function confirmStaffGroup() {

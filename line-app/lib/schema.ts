@@ -458,4 +458,19 @@ create table if not exists sales_forms (
   summary text,
   created_at timestamptz not null default now()
 );
+create table if not exists face_reports (
+  id bigserial primary key,
+  client_id bigint not null references clients(id),
+  status text not null default 'asking',
+  step int not null default 0,
+  answers jsonb not null default '{}',
+  report jsonb,
+  source text,
+  sent_by bigint,
+  sent_at timestamptz,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+create index if not exists face_reports_client on face_reports(client_id, id desc);
+alter table photos add column if not exists face_report_id bigint;
 `;

@@ -17,9 +17,10 @@ async function counts(clinical: boolean) {
       (select count(*)::int from appointments a where a.start_at >= $1 and a.start_at < $2 and a.status in ('arrived','in_consult')
          and not exists (select 1 from photo_sessions s where s.client_id = a.client_id and s.kind = 'before' and s.created_at >= $1)) as photos,
       (select count(*)::int from staff where not active and role <> 'OFF') as team,
-      (select count(*)::int from slips where status in ('pending','duplicate')) as slips`,
+      (select count(*)::int from slips where status in ('pending','duplicate')) as slips,
+      (select count(*)::int from face_reports where status in ('waiting_doctor','drafting')) as fr`,
     [from, to, addDays(today, 7)]);
-  return { ...r, photos: clinical ? r.photos : 0 } as Record<string, number>;
+  return { ...r, photos: clinical ? r.photos : 0, fr: clinical ? r.fr : 0 } as Record<string, number>;
 }
 
 export default async function StaffLayout({ children }: { children: React.ReactNode }) {

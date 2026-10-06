@@ -15,6 +15,7 @@ const GROUPS: { title: string; items: Item[] }[] = [
   { title: "ลูกค้า", items: [
     { href: "/staff/clients", label: "ลูกค้า", icon: "users" },
     { href: "/staff/care", label: "ดูแลหลังทำ", icon: "heart", badge: "care" },
+    { href: "/staff/face-reports", label: "Face Report", icon: "target", roles: CLINICAL, badge: "fr" },
     { href: "/staff/recall", label: "กลับมาทำซ้ำ", icon: "repeat", badge: "recall" },
   ] },
   { title: "ธุรกิจ", items: [
