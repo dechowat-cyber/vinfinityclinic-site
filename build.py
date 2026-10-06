@@ -75,8 +75,19 @@ DOCTOR_LD = {
     "name": "นพ.เดโชวัต พรมดา", "alternateName": "Dechowat Promda, M.D.",
     "description": "แพทย์ผู้ก่อตั้ง Vinfinity Clinic ผู้ออกแบบแนวคิด The Filler Architect",
     "image": SITE + "/assets/img/dr-bas.jpg",
-    "alumniOf": {"@type": "CollegeOrUniversity", "name": "มหาวิทยาลัยขอนแก่น"},
+    "alumniOf": [{"@type": "CollegeOrUniversity", "name": "มหาวิทยาลัยขอนแก่น"},
+                 {"@type": "CollegeOrUniversity", "name": "National University of Singapore"}],
     "worksFor": {"@id": SITE + "/#clinic"},
+    "url": SITE + "/doctor/",
+    "medicalSpecialty": "Dermatology",
+    "knowsAbout": ["Aesthetic medicine", "Dermal filler", "Facial anatomy", "Digital health", "Health data interoperability", "AI in healthcare"],
+    "award": ["Galderma Thailand — Best Result on Difficult Case (2021)",
+              "ODESS Global South E-Health Observatory — Winner (2024)",
+              "ASEAN Digital Awards, Public Sector — Silver (2024)",
+              "MEDICA — World's Top 12 Medical Start-ups (2023)",
+              "APICTA — Winner, Cross Category: Start-up (2022)",
+              "TICTA — 1st Runner-up, Cross Category: Blockchain (2022)"],
+    "sameAs": ["https://youtu.be/94WBbooeqhc"],
 }
 
 
@@ -184,7 +195,7 @@ def head(title, desc, path, keywords, extra_ld=(), lang="th"):
 <a href="/#results">เคสจริง</a>
 <a href="/#programs">โปรแกรม</a>
 <a href="/articles/">บทความ</a>
-<a href="/#doctor">แพทย์</a>
+<a href="/doctor/">แพทย์</a>
 <a href="/#reviews">รีวิว</a>
 <a href="/#clinic">ติดต่อ</a>
 </nav>
@@ -496,6 +507,10 @@ if __name__ == "__main__":
               "https://doi.org/10.3390/ijms231810518", "https://doaj.org/article/26e13299973e41ceaf1f5923a06a24d6", "https://doi.org/10.3390/polym16162386",
               "https://doi.org/10.1093/asjof/ojag030", "https://doi.org/10.1097/GOX.0000000000005934"], "2026-10-06"),
               crumb_ld(("บทความ", "/articles/"), ("ฟิลเลอร์ตัวเดียวกัน ผลไม่เหมือนกัน", "/articles/same-filler-different-results/"))])
+    build("doctor/index.html", "นพ.เดโชวัต พรมดา The Filler Architect | ประวัติแพทย์ Vinfinity Clinic อุดรธานี",
+          "ประวัติ นพ.เดโชวัต พรมดา แพทย์ผู้ก่อตั้ง Vinfinity Clinic แนวคิด Data-driven precision, Art-driven result ประวัติการสอนแพทย์และนักศึกษา รางวัลในและต่างประเทศ KOL Galderma Vivacy MNB IMCAS",
+          "/doctor/", "หมอบาส, นพ.เดโชวัต พรมดา, Dechowat Promda, The Filler Architect, หมอฉีดฟิลเลอร์ อุดร, แพทย์ความงาม อุดรธานี",
+          "doctor.html", [], [crumb_ld(("แพทย์", "/doctor/")), {"@context": "https://schema.org", "@type": "ProfilePage", "name": "นพ.เดโชวัต พรมดา", "url": SITE + "/doctor/", "inLanguage": "th", "dateModified": "2026-10-06", "mainEntity": {"@id": SITE + "/#dr-dechowat"}}])
     build("articles/index.html", "บทความ Advanced Injection อ้างอิงงานวิจัย | Vinfinity Clinic",
           "บทความเรื่องฟิลเลอร์ สกินบูสเตอร์ และกายวิภาคใบหน้า เขียนจากงานวิจัยล่าสุดพร้อมเอกสารอ้างอิง โดย นพ.เดโชวัต พรมดา",
           "/articles/", "บทความ ฟิลเลอร์, advanced injection, evidence-based, Vinfinity", "articles.html", [])
