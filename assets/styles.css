@@ -506,3 +506,7 @@ html[lang=en] .hero h1 .ln{white-space:normal}
 .ch-media.two.award figure img{aspect-ratio:2/3!important;object-position:center 30%}
 .ch-media.two.award figure:last-child{margin-top:48px}
 .aw-grid .aw:nth-child(2){}
+.ch-media.quad{grid-template-columns:1fr 1fr;align-items:start}
+.ch-media.quad img{aspect-ratio:4/5!important;max-width:none!important}
+.ch-media.quad figure:nth-child(2),.ch-media.quad figure:nth-child(4){margin-top:40px}
+@media (max-width:640px){.ch-media.quad figure:nth-child(2),.ch-media.quad figure:nth-child(4){margin-top:24px}}
