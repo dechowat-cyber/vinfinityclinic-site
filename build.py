@@ -91,7 +91,7 @@ DOCTOR_LD = {
               "MEDICA — World's Top 12 Medical Start-ups (2023)",
               "APICTA — Winner, Cross Category: Start-up (2022)",
               "TICTA — 1st Runner-up, Cross Category: Blockchain (2022)"],
-    "sameAs": ["https://youtu.be/94WBbooeqhc"],
+    "sameAs": ["https://www.ted.com/talks/dechowat_promda_don_t_trust_just_verify", "https://youtu.be/94WBbooeqhc"],
 }
 
 
