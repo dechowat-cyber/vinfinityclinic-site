@@ -468,3 +468,32 @@ html[lang=en] .hero h1 .ln{white-space:normal}
 @media (max-width:640px){.edu-cards{grid-template-columns:1fr}.dr-badge{right:8px;top:12px;max-width:180px;padding:10px 14px}.dr-badge b{font-size:13.5px}.dr-stats>div{padding:20px 22px}}
 .gal .g1{display:flex;flex-direction:column}.gal .g1 picture{display:block;flex:1;min-height:0}.gal .g1 img{height:100%}@media (max-width:960px){.gal .g1 img{height:auto}}
 .dr-stats-wrap{background:linear-gradient(180deg,transparent 56px,#0B142E 56px)}.dr-stats-wrap+.dr-philo{background-image:radial-gradient(ellipse at 20% 30%,#1A326B 0%,#0B142E 70%)}@media (max-width:960px){.dr-stats-wrap{background:linear-gradient(180deg,transparent 40px,#0B142E 40px)}}
+/* doctor story: Data > Precision > State of the Art > Art */
+.dr-intro{max-width:760px;color:#C9D2E3;font-size:17px;line-height:1.85;margin:30px 0 0}
+.story-steps{list-style:none;margin:40px 0 0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid rgba(213,221,238,.25)}
+.story-steps li{position:relative}
+.story-steps a{display:block;padding:18px 18px 4px 0;color:#fff;text-decoration:none;font:600 clamp(16px,1.8vw,22px)/1.2 'Montserrat',sans-serif}
+.story-steps a span{display:block;font-size:12px;letter-spacing:.2em;color:var(--silver);margin-bottom:8px}
+.story-steps li::before{content:"";position:absolute;top:-5px;left:0;width:9px;height:9px;border-radius:50%;background:var(--silver)}
+.story-steps li:not(:last-child) a::after{content:"→";position:absolute;right:14px;top:30px;color:var(--peri);font-weight:400}
+.dr-story{background:#fff;padding-top:96px}
+.ch{display:grid;grid-template-columns:1fr 1.05fr;gap:64px;align-items:center;padding:0 0 96px;scroll-margin-top:90px}
+.ch.rev .ch-text{order:2}
+.ch-k{font:600 12.5px 'Montserrat',sans-serif;letter-spacing:.24em;color:var(--sapphire)}
+.ch h3{font-size:clamp(28px,3.2vw,40px);color:var(--royal);margin:12px 0 18px;line-height:1.25}
+.ch-text>p{color:var(--muted);font-size:16.5px;line-height:1.85;margin:0 0 14px}
+.ch-lesson{border-left:2px solid var(--royal);padding-left:18px;color:var(--ink)!important}
+.ch-proof{list-style:none;margin:20px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+.ch-proof li{font:500 13px 'Montserrat','Kanit',sans-serif;color:var(--royal);background:var(--mist);border:1px solid var(--line);border-radius:999px;padding:7px 14px}
+.ch-media{display:grid;gap:16px}
+.ch-media.two{grid-template-columns:1.25fr 1fr;align-items:end}
+.ch-media figure{margin:0}
+.ch-media img{width:100%;display:block;border-radius:22px;object-fit:cover;aspect-ratio:4/5}
+.ch-media.two figure:first-child img{aspect-ratio:4/5}
+.ch-media.two figure:last-child img{aspect-ratio:1/1}
+.ch-art .ch-media img{aspect-ratio:1/1;max-width:560px}
+.ch-media figcaption{font-size:13.5px;color:var(--muted);margin-top:8px}
+.ch-end{border-top:1px solid var(--line);padding:40px 0 8px;max-width:860px}
+.ch-end p{font-size:19px;line-height:1.8;color:var(--ink);margin:0}
+@media (max-width:960px){.ch{grid-template-columns:1fr;gap:28px;padding-bottom:72px}.ch.rev .ch-text{order:0}.story-steps{grid-template-columns:1fr 1fr;row-gap:8px}.story-steps li:nth-child(2) a::after{display:none}.dr-story{padding-top:64px}}
+@media (max-width:640px){.ch-media.two{grid-template-columns:1fr 1fr}.ch-end p{font-size:17px}}
