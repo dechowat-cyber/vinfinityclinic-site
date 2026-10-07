@@ -510,3 +510,9 @@ html[lang=en] .hero h1 .ln{white-space:normal}
 .ch-media.quad img{aspect-ratio:4/5!important;max-width:none!important}
 .ch-media.quad figure:nth-child(2),.ch-media.quad figure:nth-child(4){margin-top:40px}
 @media (max-width:640px){.ch-media.quad figure:nth-child(2),.ch-media.quad figure:nth-child(4){margin-top:24px}}
+
+/* ch04: wide on-stage award photo above the 2x2 grid */
+.ch-media.quad figure.lead{grid-column:1 / -1;margin-top:0!important}
+.ch-media.quad figure.lead img{aspect-ratio:3/2!important;object-position:center 40%}
+.ch-media.quad.has-lead figure:nth-child(2),.ch-media.quad.has-lead figure:nth-child(4){margin-top:0}
+.ch-media.quad.has-lead figure:nth-child(3),.ch-media.quad.has-lead figure:nth-child(5){margin-top:24px}
