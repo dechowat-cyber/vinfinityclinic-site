@@ -318,3 +318,13 @@ for _path, (_headline, _desc, _kw, _crumb) in _ARTICLES.items():
         "keywords": _kw,
         "crumbs": [_ART, (_crumb, "/en" + _path)],
     }
+
+
+EN_DOCTOR_FAQ = [
+    ("Who is Dr. Bas, Dr. Dechowat Promda?", "The founding physician of Vinfinity Clinic in Udon Thani and Vientiane, creator of The Filler Architect approach that plans facial treatment across 5 layers, and founder of HealthTAG, a digital health data company."),
+    ("Where did the doctor study?", "Doctor of Medicine, Khon Kaen University (2014), and a Certification in AI in Healthcare from the National University of Singapore (2023)."),
+    ("How can I verify the doctor's license?", "Medical license no. 48943. You can check the name on the Medical Council of Thailand website."),
+    ("Does the doctor inject every patient personally?", "Yes. A physician assesses and treats every patient. Injections are never delegated to non-physicians."),
+    ("What is The Filler Architect?", "The doctor's approach of reading the face like architecture: assessing each layer from bone to skin, planning what each layer needs, using only what is necessary, and following up until the plan is complete."),
+    ("Where does the doctor teach or speak?", "He has trained physicians in Northeast Thailand for Galderma, served as faculty at IMCAS Asia, and lectures on Digital Health master's programs at KMITL, Chulalongkorn University and Khon Kaen University."),
+]

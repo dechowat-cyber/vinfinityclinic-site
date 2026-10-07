@@ -440,7 +440,7 @@ def build_en_all():
     faq_map = {id(HOME_FAQ): EN.EN_HOME_FAQ, id(FILLER_FAQ): EN.EN_FILLER_FAQ, id(LIFT_FAQ): EN.EN_LIFT_FAQ,
                id(DISSOLVE_FAQ): EN.EN_DISSOLVE_FAQ, id(TT_FAQ): EN.EN_TT_FAQ, id(PRICE_FAQ): EN.EN_PRICE_FAQ,
                id(SCULPTRA_FAQ): EN.EN_SCULPTRA_FAQ, id(TOXIN_FAQ): EN.EN_TOXIN_FAQ, id(LIPS_FAQ): EN.EN_LIPS_FAQ,
-               id(CHIN_FAQ): EN.EN_CHIN_FAQ, id(BOOSTER_FAQ): EN.EN_BOOSTER_FAQ}
+               id(CHIN_FAQ): EN.EN_CHIN_FAQ, id(BOOSTER_FAQ): EN.EN_BOOSTER_FAQ, id(DOCTOR_FAQ): EN.EN_DOCTOR_FAQ}
     for out, path, body_file, faqs, extra in REGISTRY:
         meta = EN.EN_PAGES.get(path)
         if not meta or not (ROOT / "pages" / "en" / body_file).exists():
@@ -559,6 +559,16 @@ BOOSTER_FAQ = [
     ("ทำสกินบูสเตอร์แล้วหน้าบวมไหม", "หลังทำอาจมีตุ่มนูนเล็ก ๆ หรือรอยแดงตามจุดฉีดได้ 1–3 วัน ส่วนใหญ่ยุบเอง"),
     ("สกินบูสเตอร์ทำร่วมกับฟิลเลอร์หรือยกกระชับได้ไหม", "ได้ และมักทำร่วมกันในแผนแบบเป็นชั้น เช่น ยกกระชับด้วย New Doublo 2.0 แล้วฟื้นฟูคุณภาพผิวด้วยสกินบูสเตอร์"),
     ("ใครไม่ควรทำสกินบูสเตอร์", "ผู้ที่ตั้งครรภ์หรือให้นมบุตร มีการติดเชื้อบริเวณที่จะฉีด หรือแพ้ส่วนประกอบของผลิตภัณฑ์ ควรแจ้งแพทย์ระหว่างการประเมิน"),
+]
+
+
+DOCTOR_FAQ = [
+    ("หมอบาส นพ.เดโชวัต พรมดา คือใคร", "แพทย์ผู้ก่อตั้ง Vinfinity Clinic อุดรธานีและเวียงจันทน์ ผู้ออกแบบแนวคิด The Filler Architect ที่วางแผนการรักษาใบหน้าเป็น 5 ชั้น และผู้ก่อตั้ง HealthTAG บริษัทด้านข้อมูลสุขภาพดิจิทัล"),
+    ("คุณหมอเรียนจบจากที่ไหน", "แพทยศาสตรบัณฑิต มหาวิทยาลัยขอนแก่น ปี 2014 และได้รับ Certification ด้าน AI in Healthcare จาก National University of Singapore ปี 2023"),
+    ("ตรวจสอบใบอนุญาตของคุณหมอได้อย่างไร", "ใบอนุญาตประกอบวิชาชีพเวชกรรมเลขที่ ว.48943 ตรวจสอบรายชื่อได้ที่เว็บไซต์แพทยสภา"),
+    ("คุณหมอฉีดเองทุกเคสไหม", "แพทย์เป็นผู้ประเมินและทำหัตถการเองทุกเคส ไม่มีการให้ผู้ที่ไม่ใช่แพทย์ฉีดแทน"),
+    ("The Filler Architect คืออะไร", "แนวคิดของคุณหมอที่มองใบหน้าเหมือนสถาปัตยกรรม อ่านโครงสร้างทีละชั้นตั้งแต่กระดูกถึงผิว แล้ววางแผนว่าแต่ละชั้นต้องการอะไร ใช้เท่าที่จำเป็น และนัดติดตามผลจนจบแผน"),
+    ("คุณหมอสอนหรือบรรยายที่ไหนบ้าง", "เป็นวิทยากรอบรมแพทย์ภาคอีสานให้ Galderma คณะวิทยากรที่ IMCAS Asia และอาจารย์พิเศษหลักสูตร Digital Health ที่ สจล. จุฬาลงกรณ์มหาวิทยาลัย และมหาวิทยาลัยขอนแก่น"),
 ]
 
 
@@ -714,7 +724,7 @@ if __name__ == "__main__":
     build("doctor/index.html", "นพ.เดโชวัต พรมดา The Filler Architect | ประวัติแพทย์ Vinfinity Clinic อุดรธานี",
           "ประวัติ นพ.เดโชวัต พรมดา แพทย์ผู้ก่อตั้ง Vinfinity Clinic แนวคิด Data-driven precision, Art-driven result ประวัติการสอนแพทย์และนักศึกษา รางวัลในและต่างประเทศ KOL Galderma Vivacy MNB IMCAS",
           "/doctor/", "หมอบาส, นพ.เดโชวัต พรมดา, Dechowat Promda, The Filler Architect, หมอฉีดฟิลเลอร์ อุดร, แพทย์ความงาม อุดรธานี",
-          "doctor.html", [], [crumb_ld(("แพทย์", "/doctor/")), {"@context": "https://schema.org", "@type": "ProfilePage", "name": "นพ.เดโชวัต พรมดา", "url": SITE + "/doctor/", "inLanguage": "th", "dateModified": "2026-10-06", "mainEntity": {"@id": SITE + "/#dr-dechowat"}}])
+          "doctor.html", DOCTOR_FAQ, [crumb_ld(("แพทย์", "/doctor/")), {"@context": "https://schema.org", "@type": "ProfilePage", "name": "นพ.เดโชวัต พรมดา", "url": SITE + "/doctor/", "inLanguage": "th", "dateModified": "2026-10-06", "mainEntity": {"@id": SITE + "/#dr-dechowat"}}])
     build("articles/index.html", "บทความ Advanced Injection อ้างอิงงานวิจัย | Vinfinity Clinic",
           "บทความเรื่องฟิลเลอร์ สกินบูสเตอร์ และกายวิภาคใบหน้า เขียนจากงานวิจัยล่าสุดพร้อมเอกสารอ้างอิง โดย นพ.เดโชวัต พรมดา",
           "/articles/", "บทความ ฟิลเลอร์, advanced injection, evidence-based, Vinfinity", "articles.html", [])
