@@ -722,7 +722,7 @@ if __name__ == "__main__":
               "https://jcadonline.com/minimizing-bruising-following-fillers-and-other-cosmetic-injectables/"], "2026-10-07"),
               crumb_ld(("บทความ", "/articles/"), ("สกินแคร์กับการฉีดหน้า", "/articles/skincare-routine-filler-botox/"))])
     build("doctor/index.html", "นพ.เดโชวัต พรมดา The Filler Architect | ประวัติแพทย์ Vinfinity Clinic อุดรธานี",
-          "ประวัติ นพ.เดโชวัต พรมดา แพทย์ผู้ก่อตั้ง Vinfinity Clinic แนวคิด Data-driven precision, Art-driven result ประวัติการสอนแพทย์และนักศึกษา รางวัลในและต่างประเทศ KOL Galderma Vivacy MNB IMCAS",
+          "ประวัติ นพ.เดโชวัต พรมดา แพทย์ผู้ก่อตั้ง Vinfinity Clinic แนวคิด Data-driven precision, Art-driven result ประวัติการสอนแพทย์และนักศึกษา รางวัลในและต่างประเทศ KOL Vivacy MNB IMCAS",
           "/doctor/", "หมอบาส, นพ.เดโชวัต พรมดา, Dechowat Promda, The Filler Architect, หมอฉีดฟิลเลอร์ อุดร, แพทย์ความงาม อุดรธานี",
           "doctor.html", DOCTOR_FAQ, [crumb_ld(("แพทย์", "/doctor/")), {"@context": "https://schema.org", "@type": "ProfilePage", "name": "นพ.เดโชวัต พรมดา", "url": SITE + "/doctor/", "inLanguage": "th", "dateModified": "2026-10-06", "mainEntity": {"@id": SITE + "/#dr-dechowat"}}])
     build("articles/index.html", "บทความ Advanced Injection อ้างอิงงานวิจัย | Vinfinity Clinic",

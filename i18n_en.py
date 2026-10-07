@@ -298,7 +298,7 @@ EN_PAGES = {
     },
     "/doctor/": {
         "title": "Dr. Dechowat Promda, The Filler Architect | About the Doctor, Vinfinity Clinic Udon Thani",
-        "desc": "Dr. Dechowat Promda, Vinfinity Clinic founder: data-driven precision, art-driven result. Teaching, awards, KOL for Galderma, Vivacy, MNB and IMCAS.",
+        "desc": "Dr. Dechowat Promda, Vinfinity Clinic founder: data-driven precision, art-driven result. Teaching, awards, KOL for Vivacy, MNB and IMCAS.",
         "keywords": "Dr. Bas, Dr. Dechowat Promda, Dechowat Promda, The Filler Architect, filler doctor Udon Thani, aesthetic doctor Udon Thani",
         "crumbs": [("Our Doctor", "/en/doctor/")],
     },
