@@ -502,3 +502,7 @@ html[lang=en] .hero h1 .ln{white-space:normal}
 .ch-media.trio figure:first-child img{aspect-ratio:16/11}
 .ch-media.trio figure:not(:first-child) img{aspect-ratio:4/3}
 .ch-art .ch-media.trio img{max-width:none}
+.ch-media.two.award{grid-template-columns:1fr 1fr;align-items:start}
+.ch-media.two.award figure img{aspect-ratio:2/3!important;object-position:center 30%}
+.ch-media.two.award figure:last-child{margin-top:48px}
+.aw-grid .aw:nth-child(2){}

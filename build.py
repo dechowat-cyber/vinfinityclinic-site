@@ -85,7 +85,7 @@ DOCTOR_LD = {
     "url": SITE + "/doctor/",
     "medicalSpecialty": "Dermatology",
     "knowsAbout": ["Aesthetic medicine", "Dermal filler", "Facial anatomy", "Digital health", "Health data interoperability", "AI in healthcare"],
-    "award": ["Galderma Thailand — Best Result on Difficult Case (2021)",
+    "award": ["Galderma Distinguished Award 2024 — Top 100", "Galderma Thailand — Best Result on Difficult Case (2021)",
               "ODESS Global South E-Health Observatory — Winner (2024)",
               "ASEAN Digital Awards, Public Sector — Silver (2024)",
               "MEDICA — World's Top 12 Medical Start-ups (2023)",
