@@ -497,3 +497,8 @@ html[lang=en] .hero h1 .ln{white-space:normal}
 .ch-end p{font-size:19px;line-height:1.8;color:var(--ink);margin:0}
 @media (max-width:960px){.ch{grid-template-columns:1fr;gap:28px;padding-bottom:72px}.ch.rev .ch-text{order:0}.story-steps{grid-template-columns:1fr 1fr;row-gap:8px}.story-steps li:nth-child(2) a::after{display:none}.dr-story{padding-top:64px}}
 @media (max-width:640px){.ch-media.two{grid-template-columns:1fr 1fr}.ch-end p{font-size:17px}}
+.ch-media.trio{grid-template-columns:1fr 1fr}
+.ch-media.trio figure:first-child{grid-column:1 / -1}
+.ch-media.trio figure:first-child img{aspect-ratio:16/11}
+.ch-media.trio figure:not(:first-child) img{aspect-ratio:4/3}
+.ch-art .ch-media.trio img{max-width:none}
