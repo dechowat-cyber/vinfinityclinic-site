@@ -219,6 +219,7 @@ PAGE_IMG = {
     "/articles/tear-trough-filler-candidates/": "/assets/img/articles/tear-trough-types-filler-candidate.jpg",
     "/articles/sculptra-ellanse-vs-ha-filler/": "/assets/img/articles/sculptra-ellanse-ha-filler-timeline.jpg",
     "/articles/skincare-routine-filler-botox/": "/assets/img/articles/skincare-before-after-injection.jpg",
+    "/articles/facial-ligaments-aging/": "/assets/img/articles/facial-ligaments-aging-anchor.jpg",
     "/doctor/": "/assets/img/doctor/stage-keynote.jpg",
 }
 
@@ -721,6 +722,15 @@ if __name__ == "__main__":
               "https://doi.org/10.1093/asjof/ojaf121", "https://doi.org/10.1111/jocd.70880",
               "https://jcadonline.com/minimizing-bruising-following-fillers-and-other-cosmetic-injectables/"], "2026-10-07"),
               crumb_ld(("บทความ", "/articles/"), ("สกินแคร์กับการฉีดหน้า", "/articles/skincare-routine-filler-botox/"))])
+    a11 = "เอ็นยึดใบหน้าหย่อนตามอายุจริงไหม งานวิจัยใหม่พบว่าเอ็นกลับแข็งขึ้น"
+    d11 = "เดิมเชื่อว่าหน้าย้อยเพราะเอ็นยึดใบหน้ายืดและหลวม งานวิจัยปี 2023 พบว่าเอ็นไม่ได้หลวมขึ้น แต่แข็งขึ้น แล้วอะไรที่ทำให้หน้าย้อย และเปลี่ยนการวางแผนรักษาอย่างไร โดย นพ.เดโชวัต พรมดา"
+    build("articles/facial-ligaments-aging/index.html", a11 + " | Vinfinity Clinic", d11,
+          "/articles/facial-ligaments-aging/", "เอ็นยึดใบหน้า, retaining ligament, หน้าย้อย สาเหตุ, เหนียง, ร่องมุมปาก, zygomatic ligament, mandibular ligament, หน้าหย่อน อุดร, ฟิลเลอร์ อุดรธานี",
+          "article-ligament-aging.html", [], [article_ld("/articles/facial-ligaments-aging/", a11, d11, [
+              "https://doi.org/10.1093/asj/sjad235", "https://doi.org/10.1093/asj/sjad291", "https://pubmed.ncbi.nlm.nih.gov/23855010/",
+              "https://cotofanaanatomy.com/blog/do-facial-ligaments-age/", "https://doi.org/10.1055/s-0036-1582234",
+              "https://doi.org/10.1007/s00266-025-05060-y"], "2026-10-10"),
+              crumb_ld(("บทความ", "/articles/"), ("เอ็นยึดใบหน้ากับอายุ", "/articles/facial-ligaments-aging/"))])
     build("doctor/index.html", "นพ.เดโชวัต พรมดา The Filler Architect | ประวัติแพทย์ Vinfinity Clinic อุดรธานี",
           "ประวัติ นพ.เดโชวัต พรมดา แพทย์ผู้ก่อตั้ง Vinfinity Clinic แนวคิด Data-driven precision, Art-driven result ประวัติการสอนแพทย์และนักศึกษา รางวัลในและต่างประเทศ KOL Vivacy MNB IMCAS",
           "/doctor/", "หมอบาส, นพ.เดโชวัต พรมดา, Dechowat Promda, The Filler Architect, หมอฉีดฟิลเลอร์ อุดร, แพทย์ความงาม อุดรธานี",

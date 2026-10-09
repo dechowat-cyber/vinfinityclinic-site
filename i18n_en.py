@@ -227,6 +227,11 @@ _ARTICLES = {
         "Retinol, AHA, BHA, vitamin C, sunscreen and supplements: how to adjust them around filler, anti-wrinkle and skin booster treatment, from consensus and research.",
         "skincare after filler, skincare after anti-wrinkle injections, retinol before filler, what to avoid before filler, skincare after skin booster, filler Udon Thani",
         "Skincare and Facial Injections"),
+    "/articles/facial-ligaments-aging/": (
+        "Do Facial Ligaments Loosen With Age? New Research Says They Stiffen",
+        "Sagging was long blamed on stretched facial ligaments. A 2023 study found they do not loosen but stiffen. What makes a face sag, and what it means for treatment.",
+        "facial retaining ligaments, do ligaments sag with age, why does the face sag, jowls, marionette lines, zygomatic ligament, mandibular ligament, facial ageing Udon Thani",
+        "Facial Ligaments and Ageing"),
 }
 
 EN_PAGES = {
