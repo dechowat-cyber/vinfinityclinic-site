@@ -30,6 +30,7 @@ body{font-family:Kanit,Montserrat,sans-serif;color:#fff;position:relative}
 .progress i{display:block;height:100%;width:0;background:var(--silver)}
 .ph{position:absolute;margin:0;border-radius:24px;overflow:hidden;border:2px solid rgba(201,206,214,.55);box-shadow:0 30px 60px rgba(0,0,0,.45);background:#0b1f4a}
 .ph img{width:100%;height:100%;object-fit:cover;display:block;transform-origin:50% 40%}
+.ph.book{background:#000}
 .ph figcaption{position:absolute;left:0;right:0;bottom:0;padding:44px 22px 16px;font:500 24px Montserrat,Kanit;color:#fff;background:linear-gradient(transparent,rgba(4,23,56,.88))}
 </style></head>
 <body>
@@ -60,11 +61,13 @@ body{font-family:Kanit,Montserrat,sans-serif;color:#fff;position:relative}
 
 <!-- 3b with Prof. Cotofana -->
 <div class="scene" id="sP">
-  <div class="c" style="top:30px;text-align:center"><span class="tag">FROM THE SOURCE</span></div>
-  <div class="c h" style="top:110px;font-size:62px;line-height:1.25">หมอบาส กับ Prof. Cotofana<br><span style="font-weight:400;font-size:44px;color:var(--mist)">เรียนกายวิภาคใบหน้าจากร่างอาจารย์ใหญ่ · 2018</span></div>
-  <figure class="ph" id="ph1" style="left:80px;top:360px;width:920px;height:580px"><img src="photos/itcam2018.jpg" style="object-position:50% 35%"><figcaption>ITCAM Post-Congress Cadaver Course · จุฬาลงกรณ์มหาวิทยาลัย</figcaption></figure>
-  <figure class="ph" id="ph2" style="left:80px;top:964px;width:448px;height:540px"><img src="photos/imcas2018.jpg" style="object-position:50% 30%"><figcaption>IMCAS Asia 2018 · Bangkok</figcaption></figure>
-  <figure class="ph" id="ph3" style="left:552px;top:964px;width:448px;height:540px"><img src="photos/cadaver2018.jpg" style="object-position:40% 30%"><figcaption>Cadaver Lab · 2018</figcaption></figure>
+  <div class="c" style="top:20px;text-align:center"><span class="tag">8 YEARS AGO · 2018</span></div>
+  <div class="c h" style="top:100px;font-size:60px;line-height:1.28">เรียนผ่ากายวิภาคใบหน้า<br>แบบตัวต่อตัว กับ Prof. Cotofana</div>
+  <div class="c p" style="top:268px;font-size:34px">นักกายวิภาคใบหน้าระดับโลก ผู้เขียน <i style="font-family:Montserrat">The Anatomy of Beauty</i></div>
+  <figure class="ph" id="ph1" style="left:80px;top:360px;width:920px;height:560px"><img src="photos/itcam2018.jpg" style="object-position:50% 4%"><figcaption>ITCAM Post-Congress Cadaver Course · จุฬาลงกรณ์มหาวิทยาลัย</figcaption></figure>
+  <figure class="ph" id="ph2" style="left:80px;top:946px;width:292px;height:530px"><img src="photos/imcas2018.jpg" style="object-position:50% 8%"><figcaption>IMCAS Asia 2018</figcaption></figure>
+  <figure class="ph" id="ph3" style="left:394px;top:946px;width:292px;height:530px"><img src="photos/cadaver2018.jpg" style="object-position:38% 6%"><figcaption>Cadaver Lab · 2018</figcaption></figure>
+  <figure class="ph book" id="ph4" style="left:708px;top:946px;width:292px;height:530px"><img src="photos/anatomy-of-beauty.jpg" style="object-fit:contain;object-position:50% 38%"><figcaption>หนังสือเล่มล่าสุด</figcaption></figure>
 </div>
 
 <!-- 4 jowl clue -->
@@ -115,9 +118,9 @@ body{font-family:Kanit,Montserrat,sans-serif;color:#fff;position:relative}
 <div class="foot">__LOGO__<div class="r">The Filler Architect · <b>นพ.เดโชวัต พรมดา</b></div></div>
 
 <script>
-const D = 51.8; // seconds
+const D = 53.2; // seconds
 const S = [ // scene windows [start, end]
-  [0, 4.2], [4.2, 10.2], [10.2, 13.6], [13.6, 19.4], [19.4, 26.6], [26.6, 33], [33, 40.2], [40.2, 46.8], [46.8, 51.8]];
+  [0, 4.2], [4.2, 10.2], [10.2, 13.6], [13.6, 20.8], [20.8, 28], [28, 34.4], [34.4, 41.6], [41.6, 48.2], [48.2, 53.2]];
 const SID = ["s1", "s2", "s3", "sP", "s4", "s5", "s6", "s7", "s8"];
 const cl = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
 const ease = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
@@ -247,7 +250,7 @@ function render(t) {
   // s2
   { const [a] = S[1]; drawS2(prog(t, a + 1.4, a + 4.4)); $("s2p").style.opacity = prog(t, a + 3.2, a + 4); }
   // photos with Prof. Cotofana
-  { const [a, b] = S[3]; ["ph1", "ph2", "ph3"].forEach((id, i) => { const k = prog(t, a + .4 + i * .45, a + 1.2 + i * .45), f = $(id);
+  { const [a, b] = S[3]; ["ph1", "ph2", "ph3", "ph4"].forEach((id, i) => { const k = prog(t, a + .4 + i * .4, a + 1.2 + i * .4), f = $(id);
       f.style.opacity = k; f.style.transform = `translateY(${(1 - k) * 50}px)`;
       f.firstElementChild.style.transform = `scale(${1.08 - .08 * cl((t - a) / (b - a))})`; }); }
   // s4
