@@ -41,7 +41,7 @@ def main():
         pg.wait_for_timeout(500)
         dur = pg.evaluate("window.DURATION")
         if stills:
-            for t in (2.8, 8.8, 12, 18.8, 25.5, 32.5, 39.5, 44):
+            for t in (2.8, 8.8, 12, 16.5, 24.4, 31, 38, 45, 50):
                 pg.evaluate(f"render({t})")
                 pg.screenshot(path=str(OUT / f"still_{t:05.1f}.png"))
             b.close()

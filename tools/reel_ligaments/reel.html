@@ -28,6 +28,9 @@ body{font-family:Kanit,Montserrat,sans-serif;color:#fff;position:relative}
 .small{font-size:28px;line-height:1.55;color:#93a0bd;text-align:center}
 .progress{position:absolute;left:80px;right:80px;top:150px;height:4px;background:rgba(255,255,255,.12);border-radius:4px;overflow:hidden}
 .progress i{display:block;height:100%;width:0;background:var(--silver)}
+.ph{position:absolute;margin:0;border-radius:24px;overflow:hidden;border:2px solid rgba(201,206,214,.55);box-shadow:0 30px 60px rgba(0,0,0,.45);background:#0b1f4a}
+.ph img{width:100%;height:100%;object-fit:cover;display:block;transform-origin:50% 40%}
+.ph figcaption{position:absolute;left:0;right:0;bottom:0;padding:44px 22px 16px;font:500 24px Montserrat,Kanit;color:#fff;background:linear-gradient(transparent,rgba(4,23,56,.88))}
 </style></head>
 <body>
 <div id="bg"></div><div id="grid"></div>
@@ -53,6 +56,15 @@ body{font-family:Kanit,Montserrat,sans-serif;color:#fff;position:relative}
 <div class="scene" id="s3">
   <div class="c h" style="top:560px">แต่ความเชื่อนี้<br><span class="em">ถูกตั้งคำถาม</span></div>
   <div class="c p" style="top:900px">โดยนักกายวิภาคใบหน้า<br>Prof. Sebastian Cotofana</div>
+</div>
+
+<!-- 3b with Prof. Cotofana -->
+<div class="scene" id="sP">
+  <div class="c" style="top:30px;text-align:center"><span class="tag">FROM THE SOURCE</span></div>
+  <div class="c h" style="top:110px;font-size:62px;line-height:1.25">หมอบาส กับ Prof. Cotofana<br><span style="font-weight:400;font-size:44px;color:var(--mist)">เรียนกายวิภาคใบหน้าจากร่างอาจารย์ใหญ่ · 2018</span></div>
+  <figure class="ph" id="ph1" style="left:80px;top:360px;width:920px;height:580px"><img src="photos/itcam2018.jpg" style="object-position:50% 35%"><figcaption>ITCAM Post-Congress Cadaver Course · จุฬาลงกรณ์มหาวิทยาลัย</figcaption></figure>
+  <figure class="ph" id="ph2" style="left:80px;top:964px;width:448px;height:540px"><img src="photos/imcas2018.jpg" style="object-position:50% 30%"><figcaption>IMCAS Asia 2018 · Bangkok</figcaption></figure>
+  <figure class="ph" id="ph3" style="left:552px;top:964px;width:448px;height:540px"><img src="photos/cadaver2018.jpg" style="object-position:40% 30%"><figcaption>Cadaver Lab · 2018</figcaption></figure>
 </div>
 
 <!-- 4 jowl clue -->
@@ -103,9 +115,10 @@ body{font-family:Kanit,Montserrat,sans-serif;color:#fff;position:relative}
 <div class="foot">__LOGO__<div class="r">The Filler Architect · <b>นพ.เดโชวัต พรมดา</b></div></div>
 
 <script>
-const D = 46; // seconds
+const D = 51.8; // seconds
 const S = [ // scene windows [start, end]
-  [0, 4.2], [4.2, 10.2], [10.2, 13.6], [13.6, 20.8], [20.8, 27.2], [27.2, 34.4], [34.4, 41], [41, 46]];
+  [0, 4.2], [4.2, 10.2], [10.2, 13.6], [13.6, 19.4], [19.4, 26.6], [26.6, 33], [33, 40.2], [40.2, 46.8], [46.8, 51.8]];
+const SID = ["s1", "s2", "s3", "sP", "s4", "s5", "s6", "s7", "s8"];
 const cl = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
 const ease = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
 const prog = (t, a, b) => ease(cl((t - a) / (b - a)));
@@ -222,7 +235,7 @@ function sceneAlpha(t, [a, b]) { const f = .45; return cl((t - a) / f) * cl((b -
 function render(t) {
   $("prog").style.width = (100 * cl(t / D)) + "%";
   S.forEach((w, i) => {
-    const s = $("s" + (i + 1)), al = sceneAlpha(t, w);
+    const s = $(SID[i]), al = sceneAlpha(t, w);
     s.style.opacity = al; s.style.transform = `translateY(${(1 - cl((t - w[0]) / .6)) * 30}px)`;
     s.style.visibility = al > 0 ? "visible" : "hidden";
   });
@@ -233,18 +246,22 @@ function render(t) {
     $("s1h").style.opacity = prog(t, a + .2, a + .9); }
   // s2
   { const [a] = S[1]; drawS2(prog(t, a + 1.4, a + 4.4)); $("s2p").style.opacity = prog(t, a + 3.2, a + 4); }
+  // photos with Prof. Cotofana
+  { const [a, b] = S[3]; ["ph1", "ph2", "ph3"].forEach((id, i) => { const k = prog(t, a + .4 + i * .45, a + 1.2 + i * .45), f = $(id);
+      f.style.opacity = k; f.style.transform = `translateY(${(1 - k) * 50}px)`;
+      f.firstElementChild.style.transform = `scale(${1.08 - .08 * cl((t - a) / (b - a))})`; }); }
   // s4
-  { const [a] = S[3]; jaw.style.strokeDashoffset = jawLen * (1 - prog(t, a + .3, a + 1.6));
+  { const [a] = S[4]; jaw.style.strokeDashoffset = jawLen * (1 - prog(t, a + .3, a + 1.6));
     pin4.setAttribute("opacity", prog(t, a + 1.4, a + 2));
     drawS4(prog(t, a + 1.8, a + 3.6)); jowl.setAttribute("opacity", .85 * prog(t, a + 1.8, a + 2.3));
     const g = prog(t, a + 3.8, a + 4.6); ghost.setAttribute("opacity", g); ghostX.setAttribute("opacity", prog(t, a + 4.6, a + 5)); ghostT.setAttribute("opacity", g); }
   // s5
-  { const [a] = S[4]; panels5.forEach((p, i) => { const k = prog(t, a + .6 + i * .7, a + 1.4 + i * .7); p.g.setAttribute("opacity", k); p.g.setAttribute("transform", `translate(0 ${(1 - k) * 30})`); });
+  { const [a] = S[5]; panels5.forEach((p, i) => { const k = prog(t, a + .6 + i * .7, a + 1.4 + i * .7); p.g.setAttribute("opacity", k); p.g.setAttribute("transform", `translate(0 ${(1 - k) * 30})`); });
     s5arrow.setAttribute("opacity", prog(t, a + 2.6, a + 3.2)); $("s5p").style.opacity = prog(t, a + 2.8, a + 3.6); }
   // s6
-  { const [a] = S[5]; [...$("rows").children].forEach((r, i) => { const k = prog(t, a + .7 + i * .85, a + 1.3 + i * .85); r.style.opacity = k; r.style.transform = `translateX(${(1 - k) * -40}px)`; }); }
+  { const [a] = S[6]; [...$("rows").children].forEach((r, i) => { const k = prog(t, a + .7 + i * .85, a + 1.3 + i * .85); r.style.opacity = k; r.style.transform = `translateX(${(1 - k) * -40}px)`; }); }
   // s7
-  { const [a] = S[6]; drawS7(prog(t, a + 1.2, a + 4)); }
+  { const [a] = S[7]; drawS7(prog(t, a + 1.2, a + 4)); }
 }
 window.render = render; window.DURATION = D;
 render(0);
