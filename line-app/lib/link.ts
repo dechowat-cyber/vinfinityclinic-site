@@ -22,7 +22,7 @@ export function readLinkToken(t: string | null | undefined, now = Date.now()): s
 }
 
 export const useLiff = () => !!process.env.NEXT_PUBLIC_LIFF_ID;
-export const addFriendUrl = () => `https://line.me/R/ti/p/${process.env.LINE_OA_ID || "@230eeqvl"}`;
+export const addFriendUrl = () => `https://line.me/R/ti/p/${process.env.LINE_OA_ID || "@vinfinityclinic"}`;
 
 /** URL of the booking page for this customer: LIFF when configured, otherwise a signed personal link. */
 export function bookUrl(userId: string | null | undefined, params: Record<string, string> = {}) {

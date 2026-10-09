@@ -21,9 +21,9 @@ EN_HOME_FAQ = [
     ("How long do results last?",
      "It depends on the product, the treatment area and your own metabolism. The doctor will suggest a follow-up schedule that suits you."),
     ("How do I book a consultation?",
-     "Message us on LINE @230eeqvl or Facebook Messenger with a front-facing photo and a note about what concerns you. Our team will book an assessment with the doctor for you."),
+     "Message us on LINE @vinfinityclinic or Facebook Messenger with a front-facing photo and a note about what concerns you. Our team will book an assessment with the doctor for you."),
     ("Where is Vinfinity Clinic Udon Thani, and when is it open?",
-     f"The clinic is at {ADDR_EN}. {HOURS_EN}. Call {TEL} or book on LINE @230eeqvl."),
+     f"The clinic is at {ADDR_EN}. {HOURS_EN}. Call {TEL} or book on LINE @vinfinityclinic."),
     ("Do you have a branch in Laos?",
      "Yes. We have a branch in Vientiane, Laos, as well as our Udon Thani branch. Patients from Laos can book ahead and travel to Udon Thani for treatment."),
 ]
@@ -44,7 +44,7 @@ EN_FILLER_FAQ = [
     ("Where should I get filler in Udon Thani, and what should I look for?",
      "Choose a licensed medical facility where the injector is a doctor you can verify with the Medical Council of Thailand, the products are Thai FDA-registered, and you are assessed before you are quoted a price. Read the full checklist in our article on 7 things to check before choosing a filler clinic in Udon Thani."),
     ("Where is Vinfinity Clinic Udon Thani, and when is it open?",
-     f"The clinic is at {ADDR_EN}. {HOURS_EN}. Book ahead on LINE @230eeqvl or call {TEL}."),
+     f"The clinic is at {ADDR_EN}. {HOURS_EN}. Book ahead on LINE @vinfinityclinic or call {TEL}."),
 ]
 
 EN_LIFT_FAQ = [
@@ -92,7 +92,7 @@ EN_PRICE_FAQ = [
     ("How much does dermal filler cost in Udon Thani?",
      "European HA filler at Vinfinity Clinic starts at THB 9,990 per cc. The amount depends on the area and your facial structure. The doctor confirms the full cost after your assessment, before starting."),
     ("Is there a consultation fee?",
-     "Your first doctor consultation and skin analysis are free. You can also send photos on LINE @230eeqvl for an initial assessment by the doctor before your visit."),
+     "Your first doctor consultation and skin analysis are free. You can also send photos on LINE @vinfinityclinic for an initial assessment by the doctor before your visit."),
     ("Do the prices on the website include everything?",
      "The prices shown cover the product and the procedure. The doctor summarizes the full cost for you before every treatment, with no hidden charges."),
     ("Can I pay in installments?",

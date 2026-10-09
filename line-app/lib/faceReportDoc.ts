@@ -45,7 +45,7 @@ export function renderFaceReport(d: ReportData, opts: { fontCss?: string } = {})
   const counts = { treat: d.layers.filter((l) => l.status === "treat").length, watch: d.layers.filter((l) => l.status === "watch").length };
 
   const head = (page: number) => `<header class="hd"><div class="brand">${LOGO}<span>VINFINITY</span></div><div class="meta">FACE ARCHITECTURE REPORT${d.reportNo ? ` · ${esc(d.reportNo)}` : ""} · ${page} / 3</div></header>`;
-  const foot = `<footer class="ft"><span>Data-driven precision. Art-driven result.</span><span>LINE @230eeqvl · vinfinityclinic.com</span></footer>`;
+  const foot = `<footer class="ft"><span>Data-driven precision. Art-driven result.</span><span>LINE @vinfinityclinic · vinfinityclinic.com</span></footer>`;
 
   const stack = LAYERS.map((L, i) => {
     const st = (byKey[L.key]?.status ?? "good") as LayerStatus;
@@ -182,7 +182,7 @@ ol.plan li{display:grid;grid-template-columns:36mm 1fr;gap:5mm;padding:3.6mm 0;b
   <div class="box price"><div class="eb">ค่าใช้จ่ายโดยประมาณ</div><b>${esc(d.priceRange ?? "แจ้งหลังประเมินที่คลินิก")}</b><small>${esc(d.priceNote ?? "ราคาจริงยืนยันอีกครั้งหลังตรวจที่คลินิก แจ้งค่าใช้จ่ายทั้งหมดก่อนเริ่มทุกครั้ง")}</small></div>
   <div class="box nn"><div class="eb">ยังไม่แนะนำตอนนี้</div><ul>${(d.notNow ?? ["—"]).map((x) => `<li>${esc(x)}</li>`).join("")}</ul></div>
  </div>
- <div class="next"><div><b>STEP 1</b>ทัก LINE @230eeqvl เพื่อนัดตรวจที่คลินิก</div><div><b>STEP 2</b>แพทย์ตรวจซ้ำ ถ่ายรูปมาตรฐาน และยืนยันแผน</div><div><b>STEP 3</b>เริ่มชั้นแรก แล้วนัดดูผลราว 2 สัปดาห์</div></div>
+ <div class="next"><div><b>STEP 1</b>ทัก LINE @vinfinityclinic เพื่อนัดตรวจที่คลินิก</div><div><b>STEP 2</b>แพทย์ตรวจซ้ำ ถ่ายรูปมาตรฐาน และยืนยันแผน</div><div><b>STEP 3</b>เริ่มชั้นแรก แล้วนัดดูผลราว 2 สัปดาห์</div></div>
  <div class="sign"><div class="disc" style="max-width:100mm">รายงานนี้ประเมินจากรูปถ่ายเพื่อประกอบการปรึกษา ไม่ใช่การวินิจฉัยหรือการรับประกันผล ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล การทำหัตถการทุกชนิดอาจมีผลข้างเคียง แพทย์จะยืนยันแผนอีกครั้งหลังตรวจที่คลินิก</div><div class="s">${esc(d.doctor ?? "นพ.เดโชวัต พรมดา")}<br><small style="color:var(--muted)">ว.48943 · Vinfinity Clinic</small></div></div>
  ${d.refs?.length ? `<div class="refs"><div class="eb" style="font-size:8px">เอกสารอ้างอิง</div><ol>${d.refs.map((r) => `<li>${r.url ? `<a href="${esc(r.url)}">${esc(r.label)}</a>` : esc(r.label)}</li>`).join("")}</ol></div>` : ""}
  ${foot}

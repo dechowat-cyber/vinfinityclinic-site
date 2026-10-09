@@ -14,7 +14,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
   const userId = readLinkToken(new URL(req.url).searchParams.get("t"));
   const r = userId ? await one(`select f.*, c.name, c.display_name, c.line_user_id from face_reports f join clients c on c.id = f.client_id where f.id = $1`, [id]) : null;
   if (!r || r.line_user_id !== userId || r.status !== "sent")
-    return new Response("ลิงก์นี้หมดอายุหรือไม่ถูกต้อง กรุณาทักแชท LINE @230eeqvl เพื่อขอลิงก์ใหม่", { status: 403, headers: { "Content-Type": "text/plain; charset=utf-8" } });
+    return new Response("ลิงก์นี้หมดอายุหรือไม่ถูกต้อง กรุณาทักแชท LINE @vinfinityclinic เพื่อขอลิงก์ใหม่", { status: 403, headers: { "Content-Type": "text/plain; charset=utf-8" } });
   const photos = await q("select angle, mime, data from photos where face_report_id = $1 order by id", [id]);
   await logTouch(r.client_id, "in", "face_report_open", String(id));
   const html = renderFaceReport(reportData(r, r.name || r.display_name || "คุณ",

@@ -12,7 +12,7 @@ export const SOURCES: Record<string, string> = {
   qr_store: "จากหน้าร้าน",
 };
 
-export const oaId = () => process.env.LINE_OA_ID || "@230eeqvl";
+export const oaId = () => process.env.LINE_OA_ID || "@vinfinityclinic";
 
 export function deepLink(src: string, refCode?: string, visitCode?: string) {
   const base = src === "ref" && refCode ? `รหัสแนะนำ ${refCode}` : SOURCES[src] || src;

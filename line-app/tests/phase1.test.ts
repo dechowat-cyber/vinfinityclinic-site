@@ -19,7 +19,7 @@ const mon10 = new Date("2026-10-05T03:00:00Z"); // Mon 10:00 BKK
 test("FR-01/02 source tag and referral from the pre-filled message", async () => {
   assert.deepEqual(parseSource("สวัสดีค่ะ สนใจปรึกษาคุณหมอ (จาก Facebook)"), { source: "fb" });
   assert.deepEqual(parseSource("สวัสดีค่ะ (รหัสแนะนำ vab3cd9)"), { source: "ref", refCode: "VAB3CD9" });
-  assert.match(deepLink("web"), /^https:\/\/line\.me\/R\/oaMessage\/%40230eeqvl\/\?/);
+  assert.match(deepLink("web"), /^https:\/\/line\.me\/R\/oaMessage\/%40vinfinityclinic\/\?/);
   const a = await upsertClientByLine("UREF1", {});
   const code = await ensureRefCode(a.id);
   assert.equal(await ensureRefCode(a.id), code);

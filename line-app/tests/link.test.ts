@@ -12,7 +12,7 @@ test("personal link token round-trips, rejects tampering and expiry", () => {
   assert.equal(readLinkToken("junk"), null);
   process.env.APP_URL = "https://x.test";
   assert.match(bookUrl("Uabc", { view: "my" }), /^https:\/\/x\.test\/liff\?view=my&t=Uabc\./);
-  assert.match(bookUrl(null), /line\.me\/R\/ti\/p\/@230eeqvl/);
+  assert.match(bookUrl(null), /line\.me\/R\/ti\/p\/@vinfinityclinic/);
 });
 
 test("rich menu postback replies with a personal booking link", async () => {
