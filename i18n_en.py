@@ -232,6 +232,11 @@ _ARTICLES = {
         "Sagging was long blamed on stretched facial ligaments. A 2023 study found they do not loosen but stiffen. What makes a face sag, and what it means for treatment.",
         "facial retaining ligaments, do ligaments sag with age, why does the face sag, jowls, marionette lines, zygomatic ligament, mandibular ligament, facial ageing Udon Thani",
         "Facial Ligaments and Ageing"),
+    "/articles/ligament-lift-injection/": (
+        "Do \"Ligament Lift\" Injections Really Work? What New Research Says",
+        "Sagging is not caused by loose ligaments. Does injecting filler, PN or collagen stimulators to tighten them make sense, and what still works? A simple guide.",
+        "ligament lift injection, filler face lift, facial ligaments, sagging face treatment, PN lifting, collagen stimulator, dermal filler Udon Thani",
+        "Ligament Lift Injections"),
 }
 
 EN_PAGES = {

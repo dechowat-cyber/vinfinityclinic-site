@@ -220,6 +220,7 @@ PAGE_IMG = {
     "/articles/sculptra-ellanse-vs-ha-filler/": "/assets/img/articles/sculptra-ellanse-ha-filler-timeline.jpg",
     "/articles/skincare-routine-filler-botox/": "/assets/img/articles/skincare-before-after-injection.jpg",
     "/articles/facial-ligaments-aging/": "/assets/img/articles/facial-ligaments-aging-anchor.jpg",
+    "/articles/ligament-lift-injection/": "/assets/img/articles/ligament-lift-injection-support.jpg",
     "/doctor/": "/assets/img/doctor/stage-keynote.jpg",
 }
 
@@ -731,6 +732,15 @@ if __name__ == "__main__":
               "https://cotofanaanatomy.com/blog/do-facial-ligaments-age/", "https://doi.org/10.1055/s-0036-1582234",
               "https://doi.org/10.1007/s00266-025-05060-y"], "2026-10-10"),
               crumb_ld(("บทความ", "/articles/"), ("เอ็นยึดใบหน้ากับอายุ", "/articles/facial-ligaments-aging/"))])
+    a12 = "ฉีดยกเอ็น ได้ผลจริงไหม สิ่งที่งานวิจัยใหม่บอก"
+    d12 = "หน้าย้อยไม่ได้เกิดจากเอ็นหลวม การฉีดฟิลเลอร์ PN หรือสารกระตุ้นคอลลาเจนเพื่อกระชับเอ็นยังสมเหตุสมผลไหม และอะไรที่ยังได้ผล สรุปแบบเข้าใจง่ายโดย นพ.เดโชวัต พรมดา"
+    build("articles/ligament-lift-injection/index.html", a12 + " | Vinfinity Clinic", d12,
+          "/articles/ligament-lift-injection/", "ฉีดยกเอ็น, ฉีดกระชับเอ็น, ฟิลเลอร์ยกหน้า, เอ็นยึดใบหน้า, หน้าย้อย ฉีดอะไรดี, PN ยกกระชับ, สารกระตุ้นคอลลาเจน, ฟิลเลอร์ อุดรธานี",
+          "article-ligament-lift.html", [], [article_ld("/articles/ligament-lift-injection/", a12, d12, [
+              "https://doi.org/10.1093/asj/sjad235", "https://cotofanaanatomy.com/blog/do-facial-ligaments-age/",
+              "https://pmc.ncbi.nlm.nih.gov/articles/PMC12202259/", "https://pubmed.ncbi.nlm.nih.gov/33300562/",
+              "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10082303/", "https://doi.org/10.1007/s00266-025-05060-y"], "2026-10-10"),
+              crumb_ld(("บทความ", "/articles/"), ("ฉีดยกเอ็น", "/articles/ligament-lift-injection/"))])
     build("doctor/index.html", "นพ.เดโชวัต พรมดา The Filler Architect | ประวัติแพทย์ Vinfinity Clinic อุดรธานี",
           "ประวัติ นพ.เดโชวัต พรมดา แพทย์ผู้ก่อตั้ง Vinfinity Clinic แนวคิด Data-driven precision, Art-driven result ประวัติการสอนแพทย์และนักศึกษา รางวัลในและต่างประเทศ KOL Vivacy MNB IMCAS",
           "/doctor/", "หมอบาส, นพ.เดโชวัต พรมดา, Dechowat Promda, The Filler Architect, หมอฉีดฟิลเลอร์ อุดร, แพทย์ความงาม อุดรธานี",
