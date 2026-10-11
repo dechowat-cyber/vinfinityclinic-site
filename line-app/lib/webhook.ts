@@ -51,8 +51,7 @@ export async function handleEvent(ev: Ev, now = new Date(), s?: ClinicSettings):
     const c = await upsertClientByLine(userId, prof ?? {});
     await markInbound(c.id);
     await logTouch(c.id, "in", "follow");
-    const st = await consentState(c.id);
-    const msgs = st.data === undefined ? M.welcome(s) : [M.welcome(s)[0], M.bookingPrompt(userId)];
+    const msgs = [...M.welcome(s), M.bookingPrompt(userId)];
     await logTouch(c.id, "out", "welcome");
     return { replyToken: ev.replyToken, messages: msgs };
   }
@@ -189,12 +188,8 @@ export async function handleEvent(ev: Ev, now = new Date(), s?: ClinicSettings):
         return { replyToken: ev.replyToken, messages: M.offHours(s, userId) };
       }
     }
-    const st = await consentState(c.id);
-    if (st.data === undefined) {
-      const asked = await one(`select 1 from touchpoints where client_id = $1 and kind = 'consent_ask' and created_at > $2`,
-        [c.id, new Date(now.getTime() - 24 * 3600_000).toISOString()]);
-      if (!asked) { await logTouch(c.id, "out", "consent_ask"); msgs.push(M.consentAsk(s)); }
-    }
+    // Plain chat never asks for consent: it is collected where it is needed (booking form, Face Report, photos at the clinic),
+    // so a client who ignores the buttons is never blocked or nagged.
     return msgs.length ? { replyToken: ev.replyToken, messages: msgs } : null; // humans answer in LINE OA Manager
   }
   return null;

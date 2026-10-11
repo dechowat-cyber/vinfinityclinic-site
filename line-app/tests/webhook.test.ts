@@ -28,12 +28,19 @@ test("opening hours and Tuesday", () => {
   assert.equal(isOpen(DEFAULTS, new Date("2026-10-06T05:00:00Z")), false);
 });
 
-test("follow creates client and asks consent; consent postback stored", async () => {
+test("follow welcomes without a consent wall; consent postback still stored", async () => {
   const out = await handleEvent({ type: "follow", replyToken: "t", source: { type: "user", userId: "UW1" } }, open, DEFAULTS);
   assert.ok(out && out.messages.length >= 1);
+  assert.ok(!JSON.stringify(out.messages).includes("consent=data"), "no consent prompt on follow");
   const c = (await getClientByLine("UW1"))!;
   await handleEvent({ type: "postback", replyToken: "t", source: { type: "user", userId: "UW1" }, postback: { data: "consent=data&v=1" } }, open, DEFAULTS);
   assert.equal((await consentState(c.id)).data, true);
+});
+
+test("plain chat without consent is never answered with a consent prompt", async () => {
+  const a = await handleEvent(msg("UW9", "อยากปรึกษาค่ะ"), open, DEFAULTS);
+  const b = await handleEvent(msg("UW9", "ฟิลเลอร์ใต้ตาราคาเท่าไหร่"), open, DEFAULTS);
+  assert.ok(!JSON.stringify([a, b]).includes("consent=data"));
 });
 
 test("off-hours auto reply only once per 12h", async () => {
