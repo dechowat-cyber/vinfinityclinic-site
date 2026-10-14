@@ -201,3 +201,73 @@ export async function createEventAction(fd: FormData) {
     redirect(`/staff/loyalty?everr=${encodeURIComponent((e as Error).message)}#events`);
   }
 }
+
+// ---- follow-up ----
+export async function followupAttempt(fd: FormData) {
+  const me = await requireStaff();
+  const { logAttempt } = await import("./followups");
+  await logAttempt({ followupId: Number(fd.get("id")), channel: String(fd.get("channel") || "call"), result: String(fd.get("result") || "replied"),
+    note: String(fd.get("note") || ""), nextOn: String(fd.get("next_on") || "") || null, staffId: me.id });
+  revalidatePath("/staff/followups");
+  const back = String(fd.get("back") || "");
+  if (back.startsWith("/staff/")) redirect(back);
+}
+
+export async function followupStatus(fd: FormData) {
+  const me = await requireStaff();
+  const status = String(fd.get("status")) === "open" ? "open" : "closed";
+  await (await import("./followups")).setFollowupStatus(Number(fd.get("id")), status, me.id);
+  revalidatePath("/staff/followups");
+  const back = String(fd.get("back") || "");
+  if (back.startsWith("/staff/")) redirect(back);
+}
+
+export async function followupOpen(fd: FormData) {
+  const me = await requireStaff();
+  const clientId = Number(fd.get("client_id"));
+  const { openFollowup } = await import("./followups");
+  const { todayBkk } = await import("./time");
+  await openFollowup({ clientId, reason: String(fd.get("reason") || "other"), note: String(fd.get("note") || "") || null,
+    nextOn: String(fd.get("next_on") || "") || todayBkk(), staffId: me.id });
+  revalidatePath(`/staff/clients/${clientId}`);
+  redirect(`/staff/clients/${clientId}#follow`);
+}
+
+/** HN, backup contacts, planned return date and money owed: the details that let the team reach a client again. */
+export async function saveClientContact(fd: FormData) {
+  await requireStaff();
+  const id = Number(fd.get("client_id"));
+  const { q } = await import("./db");
+  const hn = String(fd.get("hn") || "").replace(/\s/g, "") || null;
+  try {
+    await q(`update clients set hn = $2, phone = coalesce(nullif($3,''), phone), phone2 = nullif($4,''), alt_contact = nullif($5,''),
+        next_visit_due = nullif($6,'')::date, owed = $7 where id = $1`,
+      [id, hn, String(fd.get("phone") || "").trim(), String(fd.get("phone2") || "").trim(), String(fd.get("alt_contact") || "").trim(),
+        String(fd.get("next_visit_due") || ""), Number(String(fd.get("owed") || "0").replace(/,/g, "")) || 0]);
+  } catch { redirect(`/staff/clients/${id}?contact=hn_taken#follow`); }
+  revalidatePath(`/staff/clients/${id}`);
+  redirect(`/staff/clients/${id}#follow`);
+}
+
+export async function entitlementAdd(fd: FormData) {
+  const me = await requireStaff();
+  const id = Number(fd.get("client_id"));
+  await (await import("./followups")).addEntitlement(id, String(fd.get("item") || ""), me.id);
+  revalidatePath(`/staff/clients/${id}`);
+  redirect(`/staff/clients/${id}#follow`);
+}
+
+export async function entitlementUse(fd: FormData) {
+  const me = await requireStaff();
+  const r = await (await import("./followups")).useEntitlement(Number(fd.get("id")), me.id);
+  const id = Number(r?.client_id ?? fd.get("client_id"));
+  revalidatePath(`/staff/clients/${id}`);
+  redirect(`/staff/clients/${id}#follow`);
+}
+
+export async function followupImport(fd: FormData) {
+  const me = await requireStaff(["BM"]);
+  const r = await (await import("./followups")).importFollowups(String(fd.get("rows") || ""), me.id);
+  revalidatePath("/staff/followups");
+  redirect(`/staff/followups?tab=all&imported=${r.followups}&created=${r.created}&items=${r.items}&credit=${r.credit}`);
+}

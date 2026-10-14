@@ -473,4 +473,57 @@ create table if not exists face_reports (
 );
 create index if not exists face_reports_client on face_reports(client_id, id desc);
 alter table photos add column if not exists face_report_id bigint;
+
+-- ---------- Follow-up: who must be contacted, how it went, and what they still have with us ----------
+alter table clients add column if not exists hn text;
+create unique index if not exists clients_hn on clients(hn) where hn is not null;
+alter table clients add column if not exists phone2 text;
+alter table clients add column if not exists alt_contact text;
+alter table clients add column if not exists legacy_spend numeric not null default 0;
+alter table clients add column if not exists legacy_last_visit date;
+alter table clients add column if not exists next_visit_due date;
+alter table clients add column if not exists owed numeric not null default 0;
+create table if not exists entitlements (
+  id bigserial primary key,
+  client_id bigint not null references clients(id),
+  item text not null,
+  note text,
+  source text not null default 'staff',
+  created_by bigint,
+  created_at timestamptz not null default now(),
+  used_at timestamptz,
+  used_by bigint
+);
+create index if not exists entitlements_open on entitlements(client_id) where used_at is null;
+create table if not exists followups (
+  id bigserial primary key,
+  client_id bigint not null references clients(id),
+  reason text not null default 'other',
+  note text,
+  status text not null default 'open',
+  next_on date not null,
+  attempts int not null default 0,
+  fails int not null default 0,
+  last_at timestamptz,
+  last_channel text,
+  last_result text,
+  source text not null default 'staff',
+  created_by bigint,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  closed_at timestamptz
+);
+create unique index if not exists followups_one_open on followups(client_id) where status in ('open','unreachable');
+create index if not exists followups_due on followups(status, next_on);
+create table if not exists contact_attempts (
+  id bigserial primary key,
+  followup_id bigint,
+  client_id bigint not null references clients(id),
+  channel text not null,
+  result text not null,
+  note text,
+  staff_id bigint,
+  created_at timestamptz not null default now()
+);
+create index if not exists contact_attempts_client on contact_attempts(client_id, created_at desc);
 `;

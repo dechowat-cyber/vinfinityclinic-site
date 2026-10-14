@@ -9,7 +9,8 @@ import { BeforeAfter } from "../../before-after";
 import { QuickShoot } from "../../quick-shoot";
 import { startPhotoSession } from "@/lib/photoActions";
 import { METHODS, CASHIER_ROLES, VOID_ROLES, paidByPlan, clientRevenue, baht } from "@/lib/payments";
-import { takePayment, voidPaymentAction, setTierAction, walletTopUp } from "@/lib/crmActions";
+import { takePayment, voidPaymentAction, setTierAction, walletTopUp, followupAttempt, followupOpen, saveClientContact, entitlementAdd, entitlementUse } from "@/lib/crmActions";
+import { REASONS, CHANNELS, RESULTS, STATUS, nextChannels } from "@/lib/followups";
 import { balance as walletBalance, PACKAGES } from "@/lib/wallet";
 import { possibleDuplicates } from "@/lib/identity";
 import { mergeAction } from "@/lib/cdpActions";
@@ -27,7 +28,7 @@ const PLAN_TH: Record<string, string> = { draft: "ร่าง", sent: "ส่�
 
 const PAY_ERR: Record<string, string> = { wallet_low: "เครดิตใน Wallet ไม่พอ", bad_package: "เลือกแพ็กเกจ Wallet", bad_amount: "จำนวนเงินไม่ถูกต้อง", bad_method: "เลือกวิธีชำระ", bad_plan: "แผนไม่ตรงกับลูกค้า", receipt_busy: "ระบบออกเลขใบเสร็จไม่ทัน ลองใหม่อีกครั้ง" };
 
-export default async function ClientPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ photo?: string; pay?: string; merged?: string }> }) {
+export default async function ClientPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ photo?: string; pay?: string; merged?: string; contact?: string }> }) {
   const me = await requireStaff();
   const id = Number((await params).id);
   const c = await one(`select c.*, r.name as ref_name, r.display_name as ref_display from clients c left join clients r on r.id = c.referred_by where c.id = $1`, [id]);
@@ -55,6 +56,11 @@ export default async function ClientPage({ params, searchParams }: { params: Pro
     q("select p.*, s.name as staff_name from payments p left join staff s on s.id = p.received_by where p.client_id = $1 order by p.created_at desc limit 30", [id]),
     possibleDuplicates(id),
     one("select src, utm_source, utm_medium, utm_campaign, gclid is not null as g, fbclid is not null as f, ttclid is not null as t, landing, created_at from web_visits where client_id = $1 order by created_at limit 1", [id]),
+  ]);
+  const [follow, ents, tries] = await Promise.all([
+    one("select * from followups where client_id = $1 order by (status in ('open','unreachable')) desc, id desc limit 1", [id]),
+    q("select id, item, created_at from entitlements where client_id = $1 and used_at is null order by id", [id]),
+    q("select channel, result, note, created_at from contact_attempts where client_id = $1 order by created_at desc limit 6", [id]),
   ]);
   const cashier = CASHIER_ROLES.includes(me.role);
   const [codes, spend, wallet] = await Promise.all([activeCodes(id), spend12m(id), walletBalance(id)]);
@@ -98,9 +104,62 @@ export default async function ClientPage({ params, searchParams }: { params: Pro
         })}</div>}
       </div>}
 
+      <section className="card" id="follow">
+        <div className="row" style={{ justifyContent: "space-between" }}>
+          <div className="eyebrow">ติดตาม &amp; ช่องทางติดต่อ{follow && ["open", "unreachable"].includes(follow.status) ? ` · ${STATUS[follow.status]} · ${REASONS[follow.reason] ?? follow.reason}` : ""}</div>
+          <a className="btn ghost small" href="/staff/followups">รายการติดตามทั้งหมด</a>
+        </div>
+        {sp.contact === "hn_taken" && <p className="err">HN นี้มีลูกค้าคนอื่นใช้แล้ว ตรวจสอบ HN อีกครั้ง หรือรวมรายการซ้ำ</p>}
+        <form action={saveClientContact} className="row" style={{ marginTop: 10, gap: 8 }}>
+          <input type="hidden" name="client_id" value={id} />
+          <label className="field" style={{ margin: 0 }}><small>HN</small><input name="hn" className="inp" defaultValue={c.hn ?? ""} style={{ width: 90 }} /></label>
+          <label className="field" style={{ margin: 0 }}><small>เบอร์หลัก</small><input name="phone" className="inp" defaultValue={c.phone ?? ""} style={{ width: 130 }} /></label>
+          <label className="field" style={{ margin: 0 }}><small>เบอร์สำรอง</small><input name="phone2" className="inp" defaultValue={c.phone2 ?? ""} style={{ width: 130 }} /></label>
+          <label className="field" style={{ margin: 0, flex: 1, minWidth: 160 }}><small>ช่องทางอื่น (FB / WhatsApp / ญาติ)</small><input name="alt_contact" className="inp" defaultValue={c.alt_contact ?? ""} /></label>
+          <label className="field" style={{ margin: 0 }}><small>ควรกลับมาภายใน</small><input name="next_visit_due" type="date" className="inp" defaultValue={c.next_visit_due ? String(c.next_visit_due instanceof Date ? c.next_visit_due.toISOString() : c.next_visit_due).slice(0, 10) : ""} /></label>
+          {cashier && <label className="field" style={{ margin: 0 }}><small>ค้างชำระ (บาท)</small><input name="owed" className="inp" inputMode="decimal" defaultValue={Number(c.owed) || ""} style={{ width: 100 }} /></label>}
+          {!cashier && <input type="hidden" name="owed" value={Number(c.owed) || 0} />}
+          <button className="btn small" style={{ alignSelf: "flex-end" }}>บันทึก</button>
+        </form>
+        {!c.phone && !c.phone2 && !c.alt_contact && !c.line_user_id && <p className="err" style={{ fontSize: 14 }}>ยังไม่มีช่องทางติดต่อเลย ขอเบอร์หรือช่องทางสำรองครั้งหน้าที่ลูกค้ามา</p>}
+        {Number(c.legacy_spend) > 0 && me.role === "BM" && <p className="muted" style={{ fontSize: 13, margin: "6px 0 0" }}>ยอดจากระบบเดิม {baht(Number(c.legacy_spend))}{c.legacy_last_visit ? ` · มาล่าสุดในระบบเดิม ${day(String(c.legacy_last_visit instanceof Date ? c.legacy_last_visit.toISOString() : c.legacy_last_visit))}` : ""}</p>}
+
+        <div className="grid2" style={{ marginTop: 12 }}>
+          <div>
+            <div className="eyebrow">บริการคงเหลือ (ซื้อแล้ว ยังไม่ได้ทำ){wallet > 0 ? ` · วงเงิน ${baht(wallet)}` : ""}</div>
+            {ents.length === 0 ? <p className="muted" style={{ fontSize: 14 }}>-</p> : <ul className="list">{ents.map((e) => <li key={e.id} className="row" style={{ justifyContent: "space-between" }}>
+              <span>{e.item} <small className="muted">· {day(String(e.created_at instanceof Date ? e.created_at.toISOString() : e.created_at))}</small></span>
+              <form action={entitlementUse}><input type="hidden" name="id" value={e.id} /><input type="hidden" name="client_id" value={id} /><button className="btn ghost small">ใช้แล้ว</button></form></li>)}</ul>}
+            <form action={entitlementAdd} className="row" style={{ marginTop: 6 }}><input type="hidden" name="client_id" value={id} />
+              <input name="item" className="inp" placeholder="เช่น Sculptra 1 ขวด / Microneedle 4 ครั้ง" style={{ flex: 1 }} required /><button className="btn ghost small">เพิ่ม</button></form>
+          </div>
+          <div>
+            <div className="eyebrow">การติดต่อล่าสุด</div>
+            {tries.length === 0 ? <p className="muted" style={{ fontSize: 14 }}>ยังไม่มีบันทึก</p> : <ul className="list">{tries.map((t, i) => <li key={i}><small className="muted">{fmt(t.created_at)}</small> {CHANNELS[t.channel] ?? t.channel}: {RESULTS[t.result] ?? t.result}{t.note ? ` · ${t.note}` : ""}</li>)}</ul>}
+            {follow && ["open", "unreachable"].includes(follow.status) ? (
+              <form action={followupAttempt} className="row" style={{ marginTop: 6, gap: 6 }}>
+                <input type="hidden" name="id" value={follow.id} /><input type="hidden" name="back" value={`/staff/clients/${id}#follow`} />
+                {(() => { const s = nextChannels({ ...c, value: Number(c.legacy_spend) + revenue.total }, tries.map((t) => t.channel)); return (
+                  <select name="channel" className="inp" defaultValue={s[0] ?? "call"}>{Object.entries(CHANNELS).map(([k, l]) => <option key={k} value={k}>{l}{k === s[0] ? " (แนะนำ)" : ""}</option>)}</select>); })()}
+                <select name="result" className="inp" defaultValue="no_answer">{Object.entries(RESULTS).map(([k, l]) => <option key={k} value={k}>{l}</option>)}</select>
+                <input name="note" className="inp" placeholder="รายละเอียด" style={{ flex: 1, minWidth: 120 }} />
+                <button className="btn small">บันทึกการติดต่อ</button>
+              </form>) : (
+              <form action={followupOpen} className="row" style={{ marginTop: 6, gap: 6 }}>
+                <input type="hidden" name="client_id" value={id} />
+                <select name="reason" className="inp" defaultValue="next_visit">{Object.entries(REASONS).map(([k, l]) => <option key={k} value={k}>{l}</option>)}</select>
+                <input name="note" className="inp" placeholder="ต้องคุยเรื่องอะไร" style={{ flex: 1, minWidth: 120 }} />
+                <input name="next_on" type="date" className="inp" />
+                <button className="btn ghost small">เพิ่มเข้ารายการติดตาม</button>
+              </form>)}
+          </div>
+        </div>
+      </section>
+
       <nav className="subnav" aria-label="ส่วนของหน้านี้">
         {health && <a href="#overview">ประวัติ & ปรึกษา</a>}
         {health && dataOk && <a href="#photos">ภาพก่อน-หลัง</a>}
+        <a href="#follow">ติดตาม</a>
         <a href="#plans">แผนการรักษา</a>
         <a href="#payments">ชำระเงิน</a>
         <a href="#history">นัด & ไทม์ไลน์</a>

@@ -228,6 +228,16 @@ export async function financeReport(now: Date, s: ClinicSettings) {
   return (await notifyExec(await dailyReport(now))) ? 1 : 0;
 }
 
+/** Daily 09:30: add system follow-ups, then tell the staff group how many are due (count + link only, no names or health details). */
+export async function followupTick(now: Date) {
+  if (!after(now, "09:30") || !(await once(`followup-run:${todayBkk(now)}`))) return 0;
+  const { syncFollowups, followupCount } = await import("./followups");
+  await syncFollowups(now);
+  const n = await followupCount(now);
+  if (n > 0) await notifyStaff(`📋 วันนี้มีลูกค้าที่ต้องติดตาม ${n} ราย\nเปิดรายการ: ${APP()}/staff/followups`, `followup-day:${todayBkk(now)}`);
+  return n;
+}
+
 /** One entry point, called every 5 minutes. Every step is idempotent and isolated. */
 export async function runTick(now = new Date()) {
   const s = (await getSettings()) as ClinicSettings & { aftercareApproved?: boolean; paused?: boolean };
@@ -251,6 +261,7 @@ export async function runTick(now = new Date()) {
     ["tierExpiry", async () => ((await once(`tiers:${todayBkk(now)}`)) ? expireTiers(now) : 0)],
     ["walletExpiry", async () => ((await once(`wallet-exp:${todayBkk(now)}`)) ? (await import("./wallet")).expireWallets(now) : 0)],
     ["recall", () => recallTick(now, s)],
+    ["followups", () => followupTick(now)],
     ["campaigns", () => sendCampaignBatch(200)],
     ["capi", () => capiTick(now)],
     ["reminderD1", async () => (after(now, "18:00") && !after(now, "21:00") ? sendReminders(now) : 0)],
