@@ -59,6 +59,17 @@ export async function complete(system: string, messages: { role: "user" | "assis
     const last = messages[messages.length - 1].content;
     return /จอง|นัด|book/i.test(last) ? "ได้เลยค่ะ เลือกเวลาที่สะดวกด้านล่างนะคะ [[BOOK]]" : `น้องวินตอบ (ทดสอบ): ${last}\nดูราคาได้ที่ https://vinfinityclinic.com/price/ หรือทัก @vinfinityclinic ค่ะ`;
   }
+  if (process.env.ANTHROPIC_API_KEY) { // direct Anthropic API, when the clinic uses its own key instead of the gateway
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "content-type": "application/json", "x-api-key": process.env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01" },
+      body: JSON.stringify({ model: process.env.WEBCHAT_MODEL_DIRECT || "claude-haiku-4-5", max_tokens: 500, temperature: 0.3,
+        system: [{ type: "text", text: system, cache_control: { type: "ephemeral" } }], messages }),
+    });
+    if (!res.ok) throw new Error(`anthropic ${res.status}: ${(await res.text()).slice(0, 200)}`);
+    const j = await res.json();
+    return String((j.content || []).filter((c: any) => c.type === "text").map((c: any) => c.text).join("")).trim();
+  }
   const { getVercelOidcToken } = await import("@vercel/oidc");
   const token = process.env.AI_GATEWAY_API_KEY || (await getVercelOidcToken());
   const res = await fetch("https://ai-gateway.vercel.sh/v1/chat/completions", {
