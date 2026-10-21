@@ -346,6 +346,7 @@ def footer_en():
 </footer>
 <script>window.VF={{app:{json.dumps(LINE_APP)},ga4:{json.dumps(GA4_ID)},meta:{json.dumps(META_PIXEL_ID)},tiktok:{json.dumps(TIKTOK_PIXEL_ID)}}};</script>
 <script src="/assets/track.js" defer></script>
+<script src="/assets/chat.js" defer></script>
 </body>
 </html>
 """
@@ -395,6 +396,7 @@ def footer_th():
 </footer>
 <script>window.VF={{app:{json.dumps(LINE_APP)},ga4:{json.dumps(GA4_ID)},meta:{json.dumps(META_PIXEL_ID)},tiktok:{json.dumps(TIKTOK_PIXEL_ID)}}};</script>
 <script src="/assets/track.js" defer></script>
+<script src="/assets/chat.js" defer></script>
 </body>
 </html>
 """
@@ -749,3 +751,32 @@ if __name__ == "__main__":
           "บทความเรื่องฟิลเลอร์ สกินบูสเตอร์ และกายวิภาคใบหน้า เขียนจากงานวิจัยล่าสุดพร้อมเอกสารอ้างอิง โดย นพ.เดโชวัต พรมดา",
           "/articles/", "บทความ ฟิลเลอร์, advanced injection, evidence-based, Vinfinity", "articles.html", [])
     build_en_all()
+
+
+def write_kb():
+    """kb.txt: what the website's chat assistant (น้องวิน, served by the LINE app) may answer from.
+    llms.txt for clinic facts + the visible text of the service, price, doctor and home pages (Thai)."""
+    import html as _h, os, re
+    def text_of(path):
+        s = open(path, encoding="utf-8").read()
+        m = re.search(r"<main[^>]*>(.*?)</main>", s, re.S)
+        s = m.group(1) if m else s
+        s = re.sub(r"<(script|style|svg|nav|form|picture|figure)[^>]*>.*?</\1>", " ", s, flags=re.S)
+        s = re.sub(r"<(br|/p|/li|/h[1-6]|/tr|/div|/summary|/details)[^>]*>", "\n", s)
+        s = _h.unescape(re.sub(r"<[^>]+>", " ", s))
+        s = re.sub(r"[ \t ]+", " ", s)
+        return re.sub(r"\n\s*\n+", "\n", s).strip()
+    parts = [open("llms.txt", encoding="utf-8").read().strip()]
+    for title, path in [("หน้าแรก", "index.html"), ("ราคา", "price/index.html"), ("ฟิลเลอร์", "filler/index.html"),
+                        ("ฟิลเลอร์ใต้ตา", "filler/tear-trough/index.html"), ("ฟิลเลอร์ปาก", "filler/lips/index.html"),
+                        ("ฟิลเลอร์คาง", "filler/chin/index.html"), ("สลายฟิลเลอร์", "filler/dissolve/index.html"),
+                        ("สกินบูสเตอร์", "skin-booster/index.html"), ("Sculptra", "sculptra/index.html"), ("โบท็อก/ท็อกซิน", "toxin/index.html"),
+                        ("ยกกระชับ", "lifting/index.html"), ("แพทย์", "doctor/index.html")]:
+        if os.path.exists(path):
+            parts.append(f"=== {title} ({SITE}/{path.replace('index.html', '')}) ===\n" + text_of(path)[:9000])
+    out = "\n\n".join(parts)
+    open("kb.txt", "w", encoding="utf-8").write(out)
+    return len(out)
+
+
+print("kb.txt", write_kb(), "chars")

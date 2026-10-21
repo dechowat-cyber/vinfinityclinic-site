@@ -47,7 +47,15 @@ export async function recordVisit(code: string | null, v: VisitParams) {
 /** Called from the webhook when "(… #CODE)" arrives: binds the visit to the client and stamps the channel. */
 export async function linkVisit(code: string, clientId: number, leadId: number | null) {
   const v = await one("update web_visits set client_id = $2, matched_at = now() where code = $1 and client_id is null returning src", [code, clientId]);
-  if (!v) return null;
+  if (!v) {
+    // a code handed out after a website booking: the web record (no LINE) joins the LINE client who just wrote in
+    const w = await one("select w.client_id, c.line_user_id from web_visits w join clients c on c.id = w.client_id where w.code = $1", [code]);
+    if (w && Number(w.client_id) !== clientId && !w.line_user_id) {
+      const { mergeClients } = await import("./identity");
+      await mergeClients(clientId, Number(w.client_id), null).catch((e) => console.error("[linkVisit] merge", e));
+    }
+    return null;
+  }
   await q("update clients set source = case when source is null or source = 'web' then $2 else source end where id = $1", [clientId, v.src]);
   if (leadId) await q("update leads set source = case when source is null or source = 'web' then $2 else source end where id = $1", [leadId, v.src]);
   return v.src as string;

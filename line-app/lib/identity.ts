@@ -6,7 +6,8 @@ import { q, one } from "./db";
 
 /** Every table that points at a client. Moving these rows is what a merge is. */
 const CLIENT_TABLES = ["leads", "touchpoints", "consents", "appointments", "consults", "photos", "photo_sessions", "plans", "treatments",
-  "care_requests", "issues", "payments", "recalls", "health_access", "web_visits", "campaign_recipients", "conversions"];
+  "care_requests", "issues", "payments", "recalls", "health_access", "web_visits", "campaign_recipients", "conversions",
+  "wallet_ledger", "face_reports", "followups", "entitlements", "contact_attempts"];
 
 /** Groups of clients sharing a phone number. */
 export async function duplicateGroups() {
@@ -44,6 +45,8 @@ export async function mergeClients(primaryId: number, secondaryId: number, staff
   // rows that would collide on a unique index once moved
   await q(`update leads set status = 'Lost', lost_reason = 'merged_duplicate' where client_id = $2 and status not in ('Lost','Consult-Booked')
     and exists (select 1 from leads where client_id = $1 and status not in ('Lost','Consult-Booked'))`, [primaryId, secondaryId]);
+  await q(`update followups set status = 'closed', closed_at = now() where client_id = $2 and status in ('open','unreachable')
+    and exists (select 1 from followups where client_id = $1 and status in ('open','unreachable'))`, [primaryId, secondaryId]);
   await q("delete from campaign_recipients where client_id = $2 and campaign_id in (select campaign_id from campaign_recipients where client_id = $1)", [primaryId, secondaryId]);
 
   // one statement, so the move and the delete succeed or fail together
