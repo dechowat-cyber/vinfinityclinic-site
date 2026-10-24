@@ -117,7 +117,7 @@ footer{padding:6px 16px calc(12px + env(safe-area-inset-bottom));display:grid;ga
   var q = new URLSearchParams(location.search).get("lang"); if (/^(th|en|lo)$/.test(q || "")) lang = q;
 
   // /assets is cached for a year: bump V whenever the page images change, or phones keep the old pages
-  var V = "20261009-1";
+  var V = "20261025-1";
   var src = function (p, t) { return "/assets/img/menu/" + lang + "-" + String(p).padStart(2, "0") + (t ? "-t" : "") + ".webp?v=" + V; };
   // slides: phone = [1],[2]…; spread = [1],[2,3],[4,5]…[14,15],[16]
   function slides() {

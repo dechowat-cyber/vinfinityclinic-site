@@ -157,7 +157,7 @@ EN_CHIN_FAQ = [
 
 EN_BOOSTER_FAQ = [
     ("How much is a skin booster in Udon Thani?",
-     "It depends on the product and the number of sessions in the course. The doctor explains the plan and the cost before starting. Prices start at THB 7,900 per session."),
+     "It depends on the product and the number of sessions in the course. The doctor explains the plan and the cost before starting. Prices start at THB 8,900 per session."),
     ("How many skin booster sessions will I need?",
      "It is usually planned as a course of several sessions at intervals set by the doctor, followed by repeat sessions to maintain your skin. The number depends on your skin."),
     ("Will my face swell after a skin booster?",
@@ -302,7 +302,7 @@ EN_PAGES = {
     },
     "/price/": {
         "title": "Filler, Anti-Wrinkle, Lifting and Skin Booster Prices in Udon Thani 2026" + _SUFFIX,
-        "desc": "Udon Thani prices: filler from THB 9,990/cc, Sculptra THB 24,995, anti-wrinkle from THB 1,500, New Doublo 2.0 from THB 22,222, skin boosters from THB 7,900.",
+        "desc": "Udon Thani prices: filler from THB 9,990/cc, Sculptra THB 24,995, anti-wrinkle from THB 1,500, New Doublo 2.0 from THB 22,222, skin boosters from THB 8,900.",
         "keywords": "filler price Udon Thani, dermal filler cost Thailand, anti-wrinkle injection price Udon Thani, Sculptra price Udon Thani, HIFU price Udon Thani, skin booster price, aesthetic clinic prices Udon Thani",
         "crumbs": [("Prices", "/en/price/")],
     },
