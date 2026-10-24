@@ -89,28 +89,14 @@ If the image is the sales list (columns: วัน/เดือน/ปี, HN, �
 If the image is the daily grid (rows = dates, column groups = seller names, sub-columns Walk in / Line OA / Online):
 {"kind":"daily_grid","grid":[{"day":"YYYY-MM-DD","seller":"คุณหมอ","channel":"Walk in|Line OA|Online","amount":8000}]}
  - only non-empty cells; ignore the target column, day-off rows and the total row.
+If the image is a photo of payment slips — card terminal (EDC) receipts or bank transfer slips — usually with handwritten notes of the treatment, name or HN:
+{"kind":"sales_list","rows":[...same row shape...]} with one row per slip: day from the slip date (or the handwritten date), method "card" for terminal receipts / "transfer" for transfer slips, amount = the slip's paid total (if a handwritten amount clearly belongs to that slip and differs, use the slip), item / name / hn from the handwriting, note = anything else written (e.g. "รูดบัตร", "ค้างจ่าย").
 Otherwise: {"kind":"other"}. Numbers are plain numbers without commas. Never invent values you cannot read.`;
 
-/** Reads the form image through Vercel AI Gateway (authenticated with the deployment's OIDC token). */
+/** Reads the form / receipt photo with the clinic's AI (see lib/ai.ts). */
 export async function readForm(img: Buffer, mime: string): Promise<ParsedForm> {
-  const { getVercelOidcToken } = await import("@vercel/oidc");
-  const token = process.env.AI_GATEWAY_API_KEY || (await getVercelOidcToken());
-  const res = await fetch("https://ai-gateway.vercel.sh/v1/chat/completions", {
-    method: "POST",
-    headers: { "content-type": "application/json", authorization: `Bearer ${token}` },
-    body: JSON.stringify({
-      model: process.env.FORM_READER_MODEL || "anthropic/claude-sonnet-4.5",
-      temperature: 0,
-      messages: [{ role: "user", content: [
-        { type: "text", text: PROMPT },
-        { type: "image_url", image_url: { url: `data:${mime};base64,${img.toString("base64")}` } },
-      ] }],
-    }),
-  });
-  if (!res.ok) throw new Error(`gateway ${res.status}: ${(await res.text()).slice(0, 200)}`);
-  const j = await res.json();
-  const text: string = j.choices?.[0]?.message?.content ?? "";
-  return parseReply(text);
+  const { askAI } = await import("./ai");
+  return parseReply(await askAI({ messages: [{ role: "user", content: PROMPT }], images: [{ data: img, mime }], maxTokens: 4000 }));
 }
 
 export function parseReply(text: string): ParsedForm {

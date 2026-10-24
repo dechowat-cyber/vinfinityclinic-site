@@ -16,7 +16,7 @@ export default async function Finance({ searchParams }: { searchParams: Promise<
   const { err } = await searchParams;
   const day = todayBkk();
   const [slips, t, w, m, close, recent, manual] = await Promise.all([
-    q(`select s.id, s.client_id, s.status, s.qr_ref, s.created_at, c.name, c.display_name,
+    q(`select s.id, s.client_id, s.status, s.qr_ref, s.created_at, s.amount_read::float as amount_read, s.paid_at_read, s.to_name_read, c.name, c.display_name,
          coalesce((select json_agg(json_build_object('id', p.id, 'goal', p.goal, 'due', greatest(p.total - coalesce((select sum(amount) from payments x where x.plan_id = p.id and x.voided_at is null), 0), 0)) order by p.id desc)
            from plans p where p.client_id = s.client_id and p.created_at > now() - interval '60 days'), '[]') as plans
        from slips s join clients c on c.id = s.client_id where s.status in ('pending','duplicate') order by s.created_at`),
@@ -42,6 +42,7 @@ export default async function Finance({ searchParams }: { searchParams: Promise<
                 <div className="slip-b">
                   <a href={`/staff/clients/${s.client_id}#payments`}><b>{s.name || s.display_name || "-"}</b></a>
                   <small className="muted">{thaiTime(new Date(s.created_at))} · {s.qr_ref ? "สลิปธนาคาร (มี QR)" : "รูปจากลูกค้า (ไม่พบ QR สลิป)"}</small>
+                  {s.amount_read ? <small><b>ระบบอ่านยอดได้ {n(s.amount_read)} บาท</b>{s.paid_at_read ? ` · โอนเมื่อ ${s.paid_at_read}` : ""}{s.to_name_read ? ` · ผู้รับ ${s.to_name_read}` : ""} · ตรวจกับรูปก่อนกดยืนยัน</small> : null}
                   {s.status === "duplicate" ? <><p className="err" style={{ margin: "6px 0" }}>สลิปนี้เคยส่งมาแล้ว อาจเป็นสลิปซ้ำ</p>
                     <form action={slipReject}><input type="hidden" name="id" value={s.id} /><button className="btn ghost small">รับทราบ · ไม่บันทึก</button></form></> :
                   <form action={slipConfirm} className="slip-f">
@@ -50,7 +51,7 @@ export default async function Finance({ searchParams }: { searchParams: Promise<
                       {plans.map((p) => <option key={p.id} value={p.id}>แผน #{p.id}{p.goal ? ` ${String(p.goal).slice(0, 20)}` : ""} · ค้าง {n(p.due)}</option>)}
                       <option value="">ไม่ผูกกับแผน</option></select>
                     <div className="row">
-                      <input name="amount" className="inp" inputMode="decimal" required placeholder="ยอดในสลิป" defaultValue={plans[0] ? Number(plans[0].due) : ""} style={{ width: 130 }} aria-label="ยอดในสลิป (บาท)" />
+                      <input name="amount" className="inp" inputMode="decimal" required placeholder="ยอดในสลิป" defaultValue={s.amount_read ? Number(s.amount_read) : plans[0] ? Number(plans[0].due) : ""} style={{ width: 130 }} aria-label="ยอดในสลิป (บาท)" />
                       <select name="method" className="inp" defaultValue="transfer"><option value="transfer">โอน</option><option value="qr">QR พร้อมเพย์</option></select>
                     </div>
                     <div className="row">

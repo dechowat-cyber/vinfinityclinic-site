@@ -67,7 +67,7 @@ export async function dailyReport(now = new Date()) {
   const day = todayBkk(now);
   const [t, w, m, close, pending] = await Promise.all([
     totals(day, day), totals(weekStart(day), day), totals(monthStart(day), day), dayClose(day),
-    one("select count(*)::int n from slips where status = 'pending'"),
+    one("select count(*)::int n, coalesce(sum(amount_read),0)::float amt, count(amount_read)::int known from slips where status = 'pending'"),
   ]);
   // same days last month, for a fair comparison
   const lmEnd = (() => { const [y, mo, d] = day.split("-").map(Number); const pm = mo === 1 ? 12 : mo - 1, py = mo === 1 ? y - 1 : y;
@@ -97,7 +97,7 @@ export async function dailyReport(now = new Date()) {
     ...(Number(topups?.n) ? [`  ในยอดนี้เป็นการเติม Wallet ${topups!.n} รายการ ${fmt(Number(topups!.a))} (เงินรับล่วงหน้า)`] : []),
     ...(t.by.wallet ? [`  ลูกค้าใช้ Wallet จ่ายค่าบริการ ${fmt(t.by.wallet.amt)} (${t.by.wallet.n} ใบ · ไม่นับซ้ำในยอดรับ)`] : []),
     closeLine(close, t),
-    ...(Number(pending?.n) ? [`สลิปโอนรอยืนยัน ${pending!.n} ใบ`] : []),
+    ...(Number(pending?.n) ? [`⚠️ สลิปโอนรอยืนยัน ${pending!.n} ใบ${Number(pending!.known) ? ` (ระบบอ่านได้ ${Number(pending!.amt).toLocaleString("th-TH")} บาท)` : ""} ยังไม่นับในยอด · กดยืนยันที่ ${process.env.APP_URL || ""}/staff/finance`] : []),
     "",
     `สัปดาห์นี้ (${shortDate(weekStart(day))} – ${shortDate(day)}) ${baht(w.total)}`,
     `เดือนนี้ (${shortDate(monthStart(day))} – ${shortDate(day)}) ${baht(m.total)}${pct}`,

@@ -526,4 +526,7 @@ create table if not exists contact_attempts (
   created_at timestamptz not null default now()
 );
 create index if not exists contact_attempts_client on contact_attempts(client_id, created_at desc);
+alter table slips add column if not exists amount_read numeric;
+alter table slips add column if not exists paid_at_read text;
+alter table slips add column if not exists to_name_read text;
 `;

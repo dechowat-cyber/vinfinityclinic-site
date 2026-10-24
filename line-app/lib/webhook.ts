@@ -230,6 +230,13 @@ async function formFromGroup(ev: Ev, groupId: string, s: ClinicSettings) {
     if (groupId !== s.execGroupId && ev.replyToken) await line.reply(ev.replyToken, [{ type: "text", text: "รับฟอร์มยอดขายแล้วค่ะ ระบบตรวจทานและรวมในรายงานผู้บริหารให้แล้ว 🙏" }]);
   } catch (e) {
     console.error("[form] read failed", e);
+    if ((e as Error)?.name === "AiUnavailable") {
+      // the AI is switched off (no key / no card on the gateway): say so once a day instead of "cannot read" every time
+      const { once } = await import("./jobs");
+      if (groupId === s.execGroupId && (await once(`ai-off:${new Date().toISOString().slice(0, 10)}`)) && ev.replyToken)
+        await line.reply(ev.replyToken, [{ type: "text", text: `ระบบอ่านรูปอัตโนมัติยังไม่ได้เปิดใช้ (ต้องใส่ ANTHROPIC_API_KEY ในโปรเจกต์ vinfinity-line บน Vercel) ระหว่างนี้กรอกยอดได้ที่ ${process.env.APP_URL || ""}/staff/finance` }]).catch(() => {});
+      return;
+    }
     if (groupId === s.execGroupId && ev.replyToken) await line.reply(ev.replyToken, [{ type: "text", text: `อ่านฟอร์มจากรูปนี้ไม่ได้ค่ะ ลองส่งภาพที่ชัดขึ้น หรือกรอกที่ ${process.env.APP_URL || ""}/staff/finance` }]).catch(() => {});
   }
 }

@@ -53,34 +53,14 @@ Clinic information (from the website)
 ${kb || "(not available right now — answer only with the hours, phone and LINE above, and offer booking)"}`;
 }
 
-/** Calls the model through Vercel AI Gateway (OIDC on Vercel, or AI_GATEWAY_API_KEY). */
+/** Calls the model (lib/ai.ts: Anthropic key or Vercel AI Gateway). */
 export async function complete(system: string, messages: { role: "user" | "assistant"; content: string }[]) {
-  if (process.env.WEBCHAT_FAKE === "1" && process.env.VERCEL_ENV !== "production") { // local UI testing without the gateway
+  if (process.env.WEBCHAT_FAKE === "1" && process.env.VERCEL_ENV !== "production") { // local UI testing without a model
     const last = messages[messages.length - 1].content;
-    return /จอง|นัด|book/i.test(last) ? "ได้เลยค่ะ เลือกเวลาที่สะดวกด้านล่างนะคะ [[BOOK]]" : `น้องวินตอบ (ทดสอบ): ${last}\nดูราคาได้ที่ https://vinfinityclinic.com/price/ หรือทัก @vinfinityclinic ค่ะ`;
+    return /จอง|นัด|book/i.test(last) ? "ได้เลยค่ะ เลือกเวลาที่สะดวกด้านล่างนะคะ [[BOOK]]" : `น้องวินตอบ (ทดสอบ): ${last}`;
   }
-  if (process.env.ANTHROPIC_API_KEY) { // direct Anthropic API, when the clinic uses its own key instead of the gateway
-    const res = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: { "content-type": "application/json", "x-api-key": process.env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01" },
-      body: JSON.stringify({ model: process.env.WEBCHAT_MODEL_DIRECT || "claude-haiku-4-5", max_tokens: 500, temperature: 0.3,
-        system: [{ type: "text", text: system, cache_control: { type: "ephemeral" } }], messages }),
-    });
-    if (!res.ok) throw new Error(`anthropic ${res.status}: ${(await res.text()).slice(0, 200)}`);
-    const j = await res.json();
-    return String((j.content || []).filter((c: any) => c.type === "text").map((c: any) => c.text).join("")).trim();
-  }
-  const { getVercelOidcToken } = await import("@vercel/oidc");
-  const token = process.env.AI_GATEWAY_API_KEY || (await getVercelOidcToken());
-  const res = await fetch("https://ai-gateway.vercel.sh/v1/chat/completions", {
-    method: "POST",
-    headers: { "content-type": "application/json", authorization: `Bearer ${token}` },
-    body: JSON.stringify({ model: process.env.WEBCHAT_MODEL || "anthropic/claude-haiku-4.5", temperature: 0.3, max_tokens: 500,
-      messages: [{ role: "system", content: system }, ...messages] }),
-  });
-  if (!res.ok) throw new Error(`gateway ${res.status}: ${(await res.text()).slice(0, 200)}`);
-  const j = await res.json();
-  return String(j.choices?.[0]?.message?.content ?? "").trim();
+  const { askAI } = await import("./ai");
+  return askAI({ system, messages, fast: true, maxTokens: 500, temperature: 0.3 });
 }
 
 const BANNED = /ดีที่สุด|อันดับ\s?1|100\s?%|การันตี|หายขาด|เห็นผลทันที|ไม่เจ็บเลย|\bguarantee[ds]?\b|\bpainless\b|\brisk-free\b/gi;
