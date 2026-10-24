@@ -245,6 +245,13 @@ export async function runTick(now = new Date()) {
   if (s.paused) return { paused: true };
   const out: Record<string, unknown> = {};
   const steps: [string, () => Promise<unknown>][] = [
+    ["hours10to19", async () => {
+      // one-time: the doctor confirmed 24 Oct 2569 that opening hours are 10:00–19:00 (closed Tuesday), matching web + Google
+      if (!(await once("fix:hours-10-19:2026-10-24"))) return 0;
+      const { saveSettings } = await import("./settings");
+      await saveSettings({ hours: s.hours.map((h) => (h ? { open: "10:00", close: "19:00" } : null)) });
+      return 1;
+    }],
     ["sla", () => sla(now, s)],
     ["wait", () => waitTimer(now)],
     ["reminder2h", () => reminder2h(now, s)],
