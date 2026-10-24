@@ -43,6 +43,14 @@ test("plain chat without consent is never answered with a consent prompt", async
   assert.ok(!JSON.stringify([a, b]).includes("consent=data"));
 });
 
+test("off-hours: no auto reply to 'โอเคค่ะ' or to a client already chatting in the last 3 hours", async () => {
+  assert.equal(await handleEvent(msg("UW7", "โอเคค่ะ"), night, DEFAULTS), null);
+  await handleEvent(msg("UW8", "ผลจะเห็นเมื่อไหร่คะ"), new Date(night.getTime() - 3600_000), DEFAULTS); // earlier message, team answered in OA Manager
+  await q("delete from touchpoints where kind = 'off_hours'");
+  await q("update touchpoints set created_at = $1 where client_id = (select id from clients where line_user_id = 'UW8')", [new Date(night.getTime() - 3600_000).toISOString()]); // test clock
+  assert.equal(await handleEvent(msg("UW8", "แล้วต้องงดอะไรไหมคะ"), night, DEFAULTS), null);
+});
+
 test("off-hours auto reply only once per 12h", async () => {
   const a = await handleEvent(msg("UW2", "สนใจฟิลเลอร์"), night, DEFAULTS);
   assert.ok(a);

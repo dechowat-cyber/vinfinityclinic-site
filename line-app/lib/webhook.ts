@@ -179,10 +179,12 @@ export async function handleEvent(ev: Ev, now = new Date(), s?: ClinicSettings):
     }
     const msgs: line.Msg[] = [];
     if (/จอง|นัด|คิว|book/i.test(text) && text.length < 40) msgs.push(M.bookingPrompt(userId));
-    if (!isOpen(s, now)) {
-      // FR-08: at most one off-hours reply per person per 12 hours
-      const recent = await one(`select 1 from touchpoints where client_id = $1 and kind = 'off_hours' and created_at > $2`,
-        [c.id, new Date(now.getTime() - 12 * 3600_000).toISOString()]);
+    if (!isOpen(s, now) && !isAck(text)) {
+      // FR-08: at most one off-hours reply per person per 12 hours, and only when a new conversation starts:
+      // if the client already wrote in the last 3 hours, the team is (or was just) talking with them in OA Manager.
+      const recent = await one(`select 1 from touchpoints where client_id = $1 and created_at > $2
+          and (kind = 'off_hours' or (direction = 'in' and kind = 'message' and created_at < $3 and created_at > $4))`,
+        [c.id, new Date(now.getTime() - 12 * 3600_000).toISOString(), new Date(now.getTime() - 1000).toISOString(), new Date(now.getTime() - 3 * 3600_000).toISOString()]);
       if (!recent) {
         await logTouch(c.id, "out", "off_hours");
         return { replyToken: ev.replyToken, messages: M.offHours(s, userId) };
@@ -193,6 +195,13 @@ export async function handleEvent(ev: Ev, now = new Date(), s?: ClinicSettings):
     return msgs.length ? { replyToken: ev.replyToken, messages: msgs } : null; // humans answer in LINE OA Manager
   }
   return null;
+}
+
+/** "โอเคค่ะ", "ขอบคุณค่ะ", 👍, a sticker: closing words that never need an automatic answer. */
+export function isAck(text: string) {
+  const t = text.trim().toLowerCase().replace(/[\s!.~]+/g, "");
+  if (t === "[sticker]" || !t) return true;
+  return t.length <= 20 && /^(โอเค|okay|ok|โอเช|ได้|ค่ะ|คะ|ครับ|คับ|จ้า|จ้ะ|ขอบคุณ|ขอบใจ|thank|thx|รับทราบ|เข้าใจ|ok?ค่ะ|👍|🙏|❤|😊|🥰|ดีค่ะ|ดีครับ|ตกลง|โอเ)/.test(t);
 }
 
 async function startFR(clientId: number, s: ClinicSettings, now: Date, source: string) {
