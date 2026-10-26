@@ -88,6 +88,11 @@ export async function handleEvent(ev: Ev, now = new Date(), s?: ClinicSettings):
       if (r.status === "going") await notifyStaff(`🎟️ มีสมาชิกยืนยันร่วม ${r.event!.title} · ${process.env.APP_URL || ""}/staff/loyalty`, `rsvp:${p.get("rsvp")}:${c.id}`).catch(() => {});
       return { replyToken: ev.replyToken, messages: [{ type: "text", text }] };
     }
+    if (p.get("resched") && c.language === "en") {
+      await logTouch(c.id, "in", "appt_reschedule_request", String(p.get("resched")));
+      await notifyStaff(`🔁 ลูกค้าต่างชาติขอเลื่อนนัด ตอบในแชท LINE (ภาษาอังกฤษ) · ${process.env.APP_URL || ""}/staff/clients/${c.id}`, `resch-en:${p.get("resched")}:${now.toISOString().slice(0, 13)}`).catch(() => {});
+      return { replyToken: ev.replyToken, messages: [{ type: "text", text: "Of course. Which day and time would suit you? Our team will reply here shortly (open daily 10:00–19:00, closed Tuesdays)." }] };
+    }
     if (p.get("resched")) {
       const a = await one(`select * from appointments where id = $1 and client_id = $2 and status in ('booked','confirmed')`, [Number(p.get("resched")), c.id]);
       if (!a) return { replyToken: ev.replyToken, messages: [{ type: "text", text: "ไม่พบนัดนี้แล้วค่ะ ดูนัดล่าสุดได้ที่เมนู นัดของฉัน นะคะ" }] };
@@ -131,6 +136,7 @@ export async function handleEvent(ev: Ev, now = new Date(), s?: ClinicSettings):
       }
       await setStatus(a.id, "confirmed", "confirmed_at");
       await logTouch(c.id, "in", "appt_confirm", String(a.id));
+      if (c.language === "en") { const { enTime } = await import("./apptCard"); return { replyToken: ev.replyToken, messages: [{ type: "text", text: `Thank you for confirming. See you at ${enTime(new Date(a.start_at))} — please arrive 10 minutes early.` }] }; }
       return { replyToken: ev.replyToken, messages: [M.confirmedReply(a as any)] };
     }
     return null;

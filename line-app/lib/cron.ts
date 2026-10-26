@@ -5,6 +5,7 @@ import { getSettings } from "./settings";
 import { reminder } from "./messages";
 import { logTouch } from "./crm";
 import { bkk, todayBkk, addDays, parts, thaiDate } from "./time";
+import { reminderEn } from "./apptCard";
 
 export function authorized(req: NextRequest) {
   const secret = process.env.CRON_SECRET;
@@ -17,14 +18,14 @@ export async function sendReminders(now = new Date()) {
   const s = await getSettings();
   const t = todayBkk(now);
   const rows = await q(
-    `select a.*, c.line_user_id, c.health_updated_at from appointments a join clients c on c.id = a.client_id
+    `select a.*, c.line_user_id, c.health_updated_at, c.language from appointments a join clients c on c.id = a.client_id
      where a.start_at >= $1 and a.start_at < $2 and a.status in ('booked','confirmed') and a.reminder_sent_at is null and a.created_at < $3`,
     [bkk(addDays(t, 1), "00:00").toISOString(), bkk(addDays(t, 2), "00:00").toISOString(), new Date(now.getTime() - 6 * 3600_000).toISOString()]);
   let sent = 0, noLine = 0, failed = 0;
   for (const a of rows) {
     if (!a.line_user_id) { noLine++; continue; }
     try {
-      await push(a.line_user_id, [reminder(a as any, s, a.line_user_id, !a.health_updated_at)], `rem-${a.id}`);
+      await push(a.line_user_id, [a.language === "en" ? reminderEn(a as any, s, "d1") : reminder(a as any, s, a.line_user_id, !a.health_updated_at)], `rem-${a.id}`);
       await q("update appointments set reminder_sent_at = now() where id = $1", [a.id]);
       await logTouch(a.client_id, "out", "reminder_d1", `appt ${a.id}`, "system");
       sent++;

@@ -18,6 +18,7 @@ import { recallTick } from "./recall";
 import { sendCampaignBatch } from "./segments";
 import { capiTick } from "./capi";
 import { bkk, parts, todayBkk, addDays, minutes } from "./time";
+import { reminderEn } from "./apptCard";
 
 const APP = () => process.env.APP_URL || "";
 const REVIEW_URL = "https://search.google.com/local/writereview?placeid=ChIJ2z9FVIedIzERYDruDs_3xeU";
@@ -62,14 +63,14 @@ export async function waitTimer(now: Date) {
 
 /** FR-15: 2 hours before. */
 export async function reminder2h(now: Date, s: ClinicSettings) {
-  const rows = await q(`select a.*, c.line_user_id, c.health_updated_at from appointments a join clients c on c.id = a.client_id
+  const rows = await q(`select a.*, c.line_user_id, c.health_updated_at, c.language from appointments a join clients c on c.id = a.client_id
     where a.status in ('booked','confirmed') and a.reminder2_sent_at is null and c.line_user_id is not null and c.followed
       and a.start_at between $1 and $2 and a.created_at < a.start_at - interval '3 hours'`,
     [new Date(now.getTime() + 60 * 60000).toISOString(), new Date(now.getTime() + 130 * 60000).toISOString()]);
   let n = 0;
   for (const a of rows) {
     if (!(await once(`rem2:${a.id}`))) continue;
-    if (await safePush(a.line_user_id, [M.reminder2h(a as any, s, a.line_user_id, !a.health_updated_at)], `rem2:${a.id}`)) {
+    if (await safePush(a.line_user_id, [a.language === "en" ? reminderEn(a as any, s, "2h") : M.reminder2h(a as any, s, a.line_user_id, !a.health_updated_at)], `rem2:${a.id}`)) {
       await q("update appointments set reminder2_sent_at = now() where id = $1", [a.id]);
       await logTouch(a.client_id, "out", "reminder_2h", String(a.id), "system"); n++;
     }

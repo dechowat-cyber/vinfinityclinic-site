@@ -9,7 +9,9 @@ import { BeforeAfter } from "../../before-after";
 import { QuickShoot } from "../../quick-shoot";
 import { startPhotoSession } from "@/lib/photoActions";
 import { METHODS, CASHIER_ROLES, VOID_ROLES, paidByPlan, clientRevenue, baht } from "@/lib/payments";
-import { takePayment, voidPaymentAction, setTierAction, walletTopUp, followupAttempt, followupOpen, saveClientContact, entitlementAdd, entitlementUse } from "@/lib/crmActions";
+import { takePayment, voidPaymentAction, setTierAction, walletTopUp, followupAttempt, followupOpen, saveClientContact, entitlementAdd, entitlementUse, clientBook } from "@/lib/crmActions";
+import { APPT_KINDS, LANGS } from "@/lib/apptCard";
+import { todayBkk, addDays } from "@/lib/time";
 import { REASONS, CHANNELS, RESULTS, STATUS, nextChannels } from "@/lib/followups";
 import { balance as walletBalance, PACKAGES } from "@/lib/wallet";
 import { possibleDuplicates } from "@/lib/identity";
@@ -24,11 +26,12 @@ export const dynamic = "force-dynamic";
 
 const fmt = (d: string | Date) => `${thaiDate(new Date(d))} ${thaiTime(new Date(d))}`;
 const APPT_TH: Record<string, string> = { booked: "จองแล้ว", confirmed: "ยืนยันแล้ว", arrived: "มาถึงแล้ว", in_consult: "กำลังปรึกษา", done: "เสร็จ", no_show: "ไม่มา", cancelled: "ยกเลิก" };
+const APPT_MSG: Record<string, string> = { sent: "ลงนัดแล้ว และส่งการ์ดนัดทาง LINE แล้ว", saved: "ลงนัดแล้ว", nolink: "ลงนัดแล้ว แต่ลูกค้ายังไม่ได้เชื่อม LINE หรือบล็อกอยู่ จึงยังไม่ได้ส่งการ์ด", pushfail: "ลงนัดแล้ว แต่ส่ง LINE ไม่สำเร็จ ลองส่งข้อความในแชทแทน", taken: "เวลานี้มีนัดของแพทย์อยู่แล้ว เลือกเวลาอื่น", bad: "กรอกวันและเวลาให้ครบ" };
 const PLAN_TH: Record<string, string> = { draft: "ร่าง", sent: "ส่งการ์ดแล้ว", booked: "จองแล้ว", done: "ทำแล้ว" };
 
 const PAY_ERR: Record<string, string> = { wallet_low: "เครดิตใน Wallet ไม่พอ", bad_package: "เลือกแพ็กเกจ Wallet", bad_amount: "จำนวนเงินไม่ถูกต้อง", bad_method: "เลือกวิธีชำระ", bad_plan: "แผนไม่ตรงกับลูกค้า", receipt_busy: "ระบบออกเลขใบเสร็จไม่ทัน ลองใหม่อีกครั้ง" };
 
-export default async function ClientPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ photo?: string; pay?: string; merged?: string; contact?: string }> }) {
+export default async function ClientPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ photo?: string; pay?: string; merged?: string; contact?: string; appt?: string }> }) {
   const me = await requireStaff();
   const id = Number((await params).id);
   const c = await one(`select c.*, r.name as ref_name, r.display_name as ref_display from clients c left join clients r on r.id = c.referred_by where c.id = $1`, [id]);
@@ -305,8 +308,20 @@ export default async function ClientPage({ params, searchParams }: { params: Pro
       </section>
 
       <div className="grid2" id="history">
-        <section className="card"><div className="eyebrow">นัดหมาย</div>
-          {appts.length === 0 ? <p className="muted">ยังไม่มีนัด</p> : <ul className="list">{appts.map((a) => <li key={a.id}>{fmt(a.start_at)} · {a.kind === "treatment" ? "ทำหัตถการ" : "ปรึกษา"} · <span className="tag">{APPT_TH[a.status] ?? a.status}</span></li>)}</ul>}
+        <section className="card" id="appts"><div className="eyebrow">นัดหมาย</div>
+          {sp.appt && <p className={["sent", "saved"].includes(sp.appt) ? "" : "err"} style={{ fontSize: 14 }}>{APPT_MSG[sp.appt] ?? ""}</p>}
+          {appts.length === 0 ? <p className="muted">ยังไม่มีนัด</p> : <ul className="list">{appts.map((a) => <li key={a.id}>{fmt(a.start_at)} · {APPT_KINDS[a.kind]?.th ?? a.kind}{a.note ? ` · ${a.note}` : ""} · <span className="tag">{APPT_TH[a.status] ?? a.status}</span></li>)}</ul>}
+          <form action={clientBook} className="row" style={{ marginTop: 10, gap: 8, alignItems: "flex-end" }}>
+            <input type="hidden" name="client_id" value={id} />
+            <label className="field" style={{ margin: 0 }}><small>ประเภท</small><select name="kind" className="inp" defaultValue="followup">{Object.entries(APPT_KINDS).map(([k, v]) => <option key={k} value={k}>{v.th}</option>)}</select></label>
+            <label className="field" style={{ margin: 0 }}><small>วันที่</small><input name="date" type="date" className="inp" required min={todayBkk()} defaultValue={addDays(todayBkk(), 14)} /></label>
+            <label className="field" style={{ margin: 0 }}><small>เวลา</small><input name="time" type="time" className="inp" required step={900} defaultValue="13:00" /></label>
+            <label className="field" style={{ margin: 0, flex: 1, minWidth: 200 }}><small>นัดเพื่อ (ลูกค้าเห็นในการ์ด)</small><input name="purpose" className="inp" placeholder="2-week follow-up after filler 1 cc + PN 1 cc" /></label>
+            <label className="field" style={{ margin: 0 }}><small>ภาษาการ์ด</small><select name="lang" className="inp" defaultValue={c.language === "en" ? "en" : "th"}>{Object.entries(LANGS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}</select></label>
+            <label className="row" style={{ gap: 4, fontSize: 14 }}><input type="checkbox" name="send" defaultChecked={!!c.line_user_id} disabled={!c.line_user_id} /> ส่งการ์ดนัดทาง LINE</label>
+            <button className="btn small">ลงนัด</button>
+          </form>
+          {!c.line_user_id && <p className="muted" style={{ fontSize: 13 }}>ลูกค้ายังไม่ได้เชื่อม LINE กับระบบ จึงส่งการ์ดอัตโนมัติไม่ได้</p>}
           <div className="eyebrow" style={{ marginTop: 16 }}>หัตถการที่ทำแล้ว</div>
           {treatments.length === 0 ? <p className="muted">-</p> : <ul className="list">{treatments.map((t) => <li key={t.id}>{fmt(t.done_at)} · {t.name}{t.csat_score ? ` · CSAT ${t.csat_score}/5` : ""}</li>)}</ul>}
         </section>

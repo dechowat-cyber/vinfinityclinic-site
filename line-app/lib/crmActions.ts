@@ -271,3 +271,44 @@ export async function followupImport(fd: FormData) {
   revalidatePath("/staff/followups");
   redirect(`/staff/followups?tab=all&imported=${r.followups}&created=${r.created}&items=${r.items}&credit=${r.credit}`);
 }
+
+/** Book from the client page (follow-up, treatment or consult) and, if the client is on LINE, send the card in their language. */
+export async function clientBook(fd: FormData) {
+  const me = await requireStaff(["BM", "FD", "CS", "AD", "DR", "NS"]);
+  const { q, one } = await import("./db");
+  const { getSettings } = await import("./settings");
+  const { book, SlotTakenError } = await import("./booking");
+  const { bkk } = await import("./time");
+  const { apptCard, APPT_KINDS, LANGS } = await import("./apptCard");
+  const { push } = await import("./line");
+  const id = Number(fd.get("client_id")), date = String(fd.get("date") || ""), time = String(fd.get("time") || "");
+  const kind = APPT_KINDS[String(fd.get("kind"))] ? String(fd.get("kind")) : "followup";
+  const lang = LANGS[String(fd.get("lang"))] ? String(fd.get("lang")) : "th";
+  const purpose = String(fd.get("purpose") || "").trim().slice(0, 120) || null;
+  const back = (r: string) => redirect(`/staff/clients/${id}?appt=${r}#appts`);
+  if (!id || !/^\d{4}-\d{2}-\d{2}$/.test(date) || !/^\d{2}:\d{2}$/.test(time)) back("bad");
+  const c = await one("select id, line_user_id, followed from clients where id = $1", [id]);
+  if (!c) back("bad");
+  await q("update clients set language = $2 where id = $1", [id, lang]);
+  const s = await getSettings();
+  let apptId = 0;
+  try {
+    apptId = await book({ clientId: id, startIso: bkk(date, time).toISOString(), s, source: "staff", note: purpose, createdBy: me.name, skipRules: true });
+  } catch (e) { if (e instanceof SlotTakenError) back("taken"); throw e; }
+  await q("update appointments set kind = $2 where id = $1", [apptId, kind]);
+  await logTouch(id, "out", "staff_booked", `${kind} by ${me.name}`, "staff");
+  let r = "saved";
+  if (fd.get("send") === "on") {
+    if (!c!.line_user_id || c!.followed === false) r = "nolink";
+    else {
+      try {
+        const a = await one("select * from appointments where id = $1", [apptId]);
+        await push(c!.line_user_id, [apptCard(a as any, lang, s, purpose)], `apptcard:${apptId}`);
+        await logTouch(id, "out", "appt_card", String(apptId), "staff");
+        r = "sent";
+      } catch (e) { console.error("[clientBook] push", e); r = "pushfail"; }
+    }
+  }
+  revalidatePath("/staff/appointments");
+  back(r);
+}
