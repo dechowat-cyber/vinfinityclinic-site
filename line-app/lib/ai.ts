@@ -19,7 +19,7 @@ export async function askAI(o: { system?: string; messages: AiMsg[]; images?: Ai
     const res = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: { "content-type": "application/json", "x-api-key": process.env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01" },
-      body: JSON.stringify({ model, max_tokens: o.maxTokens ?? 1500, temperature: o.temperature ?? 0,
+      body: JSON.stringify({ model, max_tokens: o.maxTokens ?? 1500, ...(/haiku-4/.test(model) ? { temperature: o.temperature ?? 0 } : {}), // newer models reject temperature
         ...(o.system ? { system: [{ type: "text", text: o.system, cache_control: { type: "ephemeral" } }] } : {}), messages }),
     });
     if (res.status === 401 || res.status === 403) throw new AiUnavailable(`anthropic ${res.status}`);
@@ -36,7 +36,7 @@ export async function askAI(o: { system?: string; messages: AiMsg[]; images?: Ai
     : m.content }))];
   const res = await fetch("https://ai-gateway.vercel.sh/v1/chat/completions", {
     method: "POST", headers: { "content-type": "application/json", authorization: `Bearer ${token}` },
-    body: JSON.stringify({ model, temperature: o.temperature ?? 0, max_tokens: o.maxTokens ?? 1500, messages }),
+    body: JSON.stringify({ model, ...(/haiku-4/.test(model) ? { temperature: o.temperature ?? 0 } : {}), max_tokens: o.maxTokens ?? 1500, messages }),
   });
   const body = res.ok ? null : await res.text();
   if (res.status === 401 || res.status === 403) throw new AiUnavailable(`gateway ${res.status}: ${body!.slice(0, 160)}`);
