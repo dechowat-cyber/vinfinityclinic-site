@@ -10,11 +10,13 @@ import { q, one } from "./db";
 
 export type Platform = "meta" | "tiktok" | "ga4";
 const env = (k: string) => process.env[k] || "";
+/** Vercel env names are case-sensitive; accept the spelling the owner typed in the dashboard too. */
+const ga4Secret = () => env("GA4_API_SECRET") || env("GA4_API_Secret");
 export function platforms(): Platform[] {
   const on: Platform[] = [];
   if (env("META_PIXEL_ID") && env("META_CAPI_TOKEN")) on.push("meta");
   if (env("TIKTOK_PIXEL_ID") && env("TIKTOK_ACCESS_TOKEN")) on.push("tiktok");
-  if (env("GA4_MEASUREMENT_ID") && env("GA4_API_SECRET")) on.push("ga4");
+  if (env("GA4_MEASUREMENT_ID") && ga4Secret()) on.push("ga4");
   return on;
 }
 
@@ -108,7 +110,7 @@ export async function sendConversions(now = new Date(), doFetch: Fetch = fetch a
           });
         } else {
           if (!x.gaCid) { results.ga4 = "no_client_id"; continue; }
-          res = await doFetch(`https://www.google-analytics.com/mp/collect?measurement_id=${env("GA4_MEASUREMENT_ID")}&api_secret=${encodeURIComponent(env("GA4_API_SECRET"))}`, {
+          res = await doFetch(`https://www.google-analytics.com/mp/collect?measurement_id=${env("GA4_MEASUREMENT_ID")}&api_secret=${encodeURIComponent(ga4Secret())}`, {
             method: "POST", headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ client_id: x.gaCid, user_id: sha256(x.ext), timestamp_micros: new Date(ev.event_at).getTime() * 1000,
               events: [{ name: NAMES[ev.event].ga4, params: { currency: "THB", ...(ev.value != null ? { value: ev.value } : {}), transaction_id: ev.event_id } }] }),
