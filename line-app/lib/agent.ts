@@ -94,6 +94,7 @@ export async function draftFor(clientId: number, kind: "reply" | "nudge" = "repl
   await q("update agent_drafts set status = 'superseded' where client_id = $1 and status = 'pending'", [clientId]);
   const d = await one(`insert into agent_drafts(client_id, kind, lang, body, engine, slots) values ($1,$2,$3,$4,$5,$6) returning id`,
     [clientId, kind, lang, text.slice(0, 1800), engine, JSON.stringify(slots)]);
+  console.log(`[agent] draft ${d!.id} ${kind} ${lang} ${engine}`);
   return Number(d!.id);
 }
 
