@@ -60,7 +60,7 @@ export default async function Leads({ searchParams }: { searchParams: Promise<{ 
                 <small className="muted">{ago(d.created_at, now)}</small>
               </div>
               {d.last_in && <p className="muted" style={{ margin: "6px 0" }}>ลูกค้า: {String(d.last_in).slice(0, 200)}</p>}
-              <textarea name="body" rows={6} defaultValue={d.body} style={{ width: "100%" }} />
+              <textarea name="body" rows={11} defaultValue={d.body} style={{ width: "100%" }} />
               <div className="row" style={{ marginTop: 6 }}>
                 <CopyOpen formId={`d${d.id}`} url={chatUrl(bot?.userId, d.line_user_id)} />
                 <button formAction={doneDraft} className="btn ghost small">ส่งในแชทแล้ว ✓</button>

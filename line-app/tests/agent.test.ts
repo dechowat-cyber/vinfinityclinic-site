@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { DEFAULTS } from "../lib/settings";
 import { handleEvent } from "../lib/webhook";
-import { detectLang, templateDraft, draftFor, nudgeTick, pendingDrafts, leadLangStats } from "../lib/agent";
+import { detectLang, spread, templateDraft, draftFor, nudgeTick, pendingDrafts, leadLangStats } from "../lib/agent";
 import { getClientByLine } from "../lib/crm";
 import { q } from "../lib/db";
 
@@ -19,6 +19,11 @@ test("language from the message script", () => {
   assert.equal(detectLang("ສະບາຍດີ"), "lo");
   assert.equal(detectLang("ok"), null);
   assert.equal(detectLang("สวัสดีค่ะ filler price"), "th");
+});
+
+test("free times are spread out", () => {
+  const h = (x: string) => `2026-10-30T${x}:00.000Z`;
+  assert.deepEqual(spread([h("03:00"), h("03:30"), h("04:00"), h("06:00"), h("06:30"), h("09:30")]), [h("03:00"), h("06:00"), h("09:30")]);
 });
 
 test("template drafts never quote a price and offer the free times", () => {

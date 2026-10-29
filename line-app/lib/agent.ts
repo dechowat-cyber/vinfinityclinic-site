@@ -29,17 +29,18 @@ export function detectLang(text: string): Lang | null {
 
 const fmt = (iso: string, lang: Lang) => {
   const d = new Date(iso);
-  if (lang === "th" || lang === "lo") return `${thaiDate(d).replace(/^วัน/, "")} ${thaiTime(d)} น.`;
+  if (lang === "th" || lang === "lo") return `${thaiDate(d).replace(/^วัน/, "")} ${thaiTime(d).replace(/\s*น\.?$/, "")} น.`;
   return d.toLocaleString(lang === "zh" ? "zh-CN" : lang === "ja" ? "ja-JP" : lang === "ko" ? "ko-KR" : "en-GB",
     { timeZone: "Asia/Bangkok", weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
 };
 
 /** Template draft (no AI): safe in every language; never quotes a price or a medical opinion. */
 export function templateDraft(o: { lang: Lang; kind: "reply" | "nudge"; name?: string | null; slots: string[]; link: string }) {
+  const k = o.name ? (/^(คุณ|คุน|K\.|น้อง|พี่)/i.test(o.name.trim()) ? ` ${o.name.trim()}` : ` คุณ${o.name.trim()}`) : "";
   const s = o.slots.map((x) => `• ${fmt(x, o.lang)}`).join("\n");
   const th = o.kind === "reply"
-    ? `สวัสดีค่ะ${o.name ? ` คุณ${o.name}` : ""} ขอบคุณที่ทักมานะคะ 😊 สนใจปรึกษาเรื่องไหนเป็นพิเศษคะ คุณหมอจะประเมินและวางแผนให้ก่อนทุกครั้งค่ะ\n\nคิวว่างใกล้ๆ นี้${s ? `\n${s}` : " สอบถามได้เลยค่ะ"}\n\nสะดวกเวลาไหนบอกได้เลย หรือจองเองที่ ${o.link}`
-    : `สวัสดีค่ะ${o.name ? ` คุณ${o.name}` : ""} ยังสนใจนัดปรึกษาคุณหมออยู่ไหมคะ ช่วงนี้มีคิวว่าง${s ? `\n${s}` : ""}\n\nตอบกลับเวลาที่สะดวกได้เลยค่ะ หรือจองเองที่ ${o.link}`;
+    ? `สวัสดีค่ะ${k} ขอบคุณที่ทักมานะคะ 😊 สนใจปรึกษาเรื่องไหนเป็นพิเศษคะ คุณหมอจะประเมินและวางแผนให้ก่อนทุกครั้งค่ะ\n\nคิวว่างใกล้ๆ นี้${s ? `\n${s}` : " สอบถามได้เลยค่ะ"}\n\nสะดวกเวลาไหนบอกได้เลย หรือจองเองที่ ${o.link}`
+    : `สวัสดีค่ะ${k} ยังสนใจนัดปรึกษาคุณหมออยู่ไหมคะ ช่วงนี้มีคิวว่าง${s ? `\n${s}` : ""}\n\nตอบกลับเวลาที่สะดวกได้เลยค่ะ หรือจองเองที่ ${o.link}`;
   const en = o.kind === "reply"
     ? `Hello${o.name ? ` ${o.name}` : ""}, thank you for contacting Vinfinity Clinic 😊 What would you like to consult about? The doctor assesses every case and plans the treatment with you first.\n\nUpcoming free times${s ? `\n${s}` : ": please ask us"}\n\nJust reply with the time that suits you, or book here: ${o.link}`
     : `Hello${o.name ? ` ${o.name}` : ""}, are you still interested in a consultation with our doctor? We have free times soon${s ? `\n${s}` : ""}\n\nReply with a time that suits you, or book here: ${o.link}`;
@@ -57,6 +58,13 @@ You are now drafting a LINE chat message that a clinic team member will review a
 - Never diagnose, never say a treatment suits them, never promise results. Medical questions: the doctor will assess at the consultation.
 - Output only the message text.`;
 
+/** Three real choices instead of 10:00 / 10:30 / 11:00: at least 3 hours apart, so they usually fall on different days or parts of the day. */
+export function spread(starts: string[], n = 3) {
+  const out: string[] = [];
+  for (const x of starts) if (out.every((y) => Math.abs(new Date(x).getTime() - new Date(y).getTime()) >= 3 * 3600e3)) { out.push(x); if (out.length >= n) break; }
+  return out;
+}
+
 /** Builds and stores a draft for this client (pending drafts for them are replaced). Returns the draft id or null. */
 export async function draftFor(clientId: number, kind: "reply" | "nudge" = "reply", now = new Date(), s?: ClinicSettings) {
   s = s ?? (await getSettings());
@@ -68,7 +76,7 @@ export async function draftFor(clientId: number, kind: "reply" | "nudge" = "repl
   if (kind === "reply" && (!lastIn || isAck(String(lastIn.body)) || /^\[\w+\]$/.test(String(lastIn.body)))) return null;
   const lang: Lang = (detectLang(String(lastIn?.body || "")) || (c.language as Lang) || "th");
   if (lang !== "th" && c.language !== lang) await q("update clients set language = $2 where id = $1", [clientId, lang]);
-  const slots = (await nextFreeSlots(s, now, s.doctors[0], 3)).map((x) => x.start);
+  const slots = spread((await nextFreeSlots(s, now, s.doctors[0], 24)).map((x) => x.start), 3);
   const link = bookUrl(c.line_user_id, { src: `agent_${kind}` });
   const name = c.name || c.display_name || null;
   let text = "", engine = "template";
