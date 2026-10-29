@@ -23,3 +23,5 @@ Co-Authored-By: Claude <noreply@anthropic.com>
    - 🟡 รออนุมัติ (branch + its Vercel preview URL if any, one line each — find it with the Vercel tools: project prj_XFPlnUswSwtbbIkGDFGOLdAYjIB1, team team_WkZWImwJ3QKAoDUZaCXb4J8l, deployments for that branch) — or "ไม่มี"
    - ➡️ พรุ่งนี้ (1–3 bullets from the backlog)
    No jargon without a 3-word explanation. No more than ~200 words.
+
+4. EMAIL THE REPORT (required — this is how the doctor receives it): send the same report with the Microsoft 365 tool `outlook_send_mail` (load it with ToolSearch "select:mcp__Microsoft_365__outlook_send_mail") to dechowat@healthtag.io only, subject "[Vinfinity Agent] <AGENT> · <d MMM yyyy in Thai>", bodyType "html" (headings/lists, no images). This is the only email you may send, and only to that address. If the tool is unavailable, say so at the top of your final reply. Do not use Gmail (that connector is not set up for this account).
