@@ -8,7 +8,7 @@ SITE = "https://vinfinityclinic.com"
 # CDP: the staff/LINE app that records web visits (/r/web) — see assets/track.js
 LINE_APP = "https://vinfinity-line.vercel.app"
 # Ad pixels: fill the IDs to switch them on. They load only after the visitor accepts the cookie banner.
-GA4_ID = ""        # G-XXXXXXXXXX
+GA4_ID = "G-390ZZ2GPSP"
 META_PIXEL_ID = ""  # 15-16 digits
 TIKTOK_PIXEL_ID = ""
 from urllib.parse import quote as _q
