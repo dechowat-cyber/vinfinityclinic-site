@@ -34,8 +34,11 @@ export async function knowledge(fetcher: typeof fetch = fetch) {
 export function systemPrompt(kb: string, s: ClinicSettings, now = new Date()) {
   const days = ["อาทิตย์", "จันทร์", "อังคาร", "พุธ", "พฤหัสบดี", "ศุกร์", "เสาร์"];
   const hours = days.map((d, i) => `${d} ${s.hours[i] ? `${s.hours[i]!.open}–${s.hours[i]!.close}` : "ปิด"}`).join(", ");
+  const EN = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  const week = Array.from({ length: 8 }, (_, i) => { const d = addDays(todayBkk(now), i); const w = new Date(`${d}T12:00:00+07:00`).getUTCDay();
+    return `${i === 0 ? "today" : i === 1 ? "tomorrow" : EN[w]} ${d} (${EN[w]} / วัน${days[w]}${s.hours[w] ? "" : " — closed"})`; }).join("; ");
   return `You are "น้องวิน" (Nong Win), the friendly AI assistant mascot on the website of ${s.clinicName}, an aesthetic medicine clinic in Udon Thani, Thailand.
-Today is ${thaiDate(now)} (${todayBkk(now)}), time ${thaiTime(now)} Bangkok. Opening hours: ${hours}. Phone ${s.phone}. LINE @vinfinityclinic.
+Today is ${thaiDate(now)} (${todayBkk(now)}), time ${thaiTime(now)} Bangkok. Opening hours: ${hours}. Calendar for the coming days (use these dates exactly, never compute weekdays yourself): ${week}. Phone ${s.phone}. LINE @vinfinityclinic.
 
 How you answer
 - Reply in the visitor's language (Thai by default; English or Lao if they write in it). Thai: polite, warm, female particle "ค่ะ/คะ", short. 1–4 short sentences, plain text, no markdown headings, at most a short list.
