@@ -1,5 +1,5 @@
 import { q, one } from "./db";
-import { push, broadcast } from "./line";
+import { push, broadcast, narrowcast, type Narrow } from "./line";
 import * as M from "./messages";
 import { logTouch } from "./crm";
 
@@ -117,15 +117,23 @@ export async function createCampaign(o: { name: string; filters: Filters; messag
 }
 
 /** Every friend of the OA (LINE broadcast). One request; LINE de-duplicates a retry with the same key. */
-export async function createBroadcast(o: { name: string; message: string; withBooking: boolean; staffId: number | null; images?: string[]; reach?: number | null }) {
+export async function createBroadcast(o: { name: string; message: string; withBooking: boolean; staffId: number | null; images?: string[]; reach?: number | null; narrow?: Narrow | null }) {
   const message = o.message.trim().slice(0, 1000);
   if (!message) throw new Error("empty_message");
   const imgs = (o.images ?? []).filter((u) => /^https:\/\//.test(u)).slice(0, 4);
-  const c = await one(`insert into campaigns(name, filters, message, with_booking, recipients, created_by, images, kind) values ($1,'{}',$2,$3,$4,$5,$6,'broadcast') returning id`,
-    [o.name.trim().slice(0, 120) || "บรอดแคสต์", message, o.withBooking, Math.max(0, Number(o.reach) || 0), o.staffId, JSON.stringify(imgs)]);
+  const narrow = o.narrow && (o.narrow.max || o.narrow.gender || o.narrow.ageFrom || o.narrow.ageTo) ? o.narrow : null;
+  const est = narrow?.max ? Math.min(narrow.max, Number(o.reach) || narrow.max) : Math.max(0, Number(o.reach) || 0);
+  const c = await one(`insert into campaigns(name, filters, message, with_booking, recipients, created_by, images, kind) values ($1,$2,$3,$4,$5,$6,$7,$8) returning id`,
+    [o.name.trim().slice(0, 120) || "บรอดแคสต์", JSON.stringify(narrow ? { narrow } : {}), message, o.withBooking, est, o.staffId, JSON.stringify(imgs), narrow ? "narrowcast" : "broadcast"]);
   const id = Number(c!.id);
-  await broadcast([...imgs.map((u) => M.image(u, u.replace(/\.jpg$/, "-p.jpg"))), M.broadcastText(message, o.withBooking)], `bcast:${id}`);
-  await q("update campaigns set sent = recipients where id = $1", [id]);
+  const msgs = [...imgs.map((u) => M.image(u, u.replace(/\.jpg$/, "-p.jpg"))), M.broadcastText(message, o.withBooking)];
+  if (narrow) {
+    const rid = await narrowcast(msgs, narrow, `ncast:${id}`);
+    await q("update campaigns set line_request_id = $2 where id = $1", [id, rid]);
+  } else {
+    await broadcast(msgs, `bcast:${id}`);
+    await q("update campaigns set sent = recipients where id = $1", [id]);
+  }
   return { id };
 }
 
@@ -160,7 +168,7 @@ export async function sendCampaignBatch(limit = 200, campaignId?: number) {
 /** Results: bookings made within 14 days and revenue within 30 days of each message. */
 export async function campaignResults(limit = 20) {
   return q(`
-    select k.id, k.name, k.created_at, k.recipients, k.sent, k.message, k.kind,
+    select k.id, k.name, k.created_at, k.recipients, k.sent, k.message, k.kind, k.line_request_id, k.filters,
       (select count(distinct r.client_id)::int from campaign_recipients r join appointments a on a.client_id = r.client_id
         where r.campaign_id = k.id and r.sent_at is not null and a.created_at between r.sent_at and r.sent_at + interval '14 days' and a.status <> 'cancelled') as booked,
       (select coalesce(sum(p.amount), 0)::float from campaign_recipients r join payments p on p.client_id = r.client_id

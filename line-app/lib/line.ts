@@ -63,6 +63,30 @@ export const push = (to: string, messages: Msg[], retryKey?: string) =>
 export const broadcast = (messages: Msg[], retryKey: string) =>
   call("/message/broadcast", { json: { messages: messages.slice(0, 5) }, headers: { "X-Line-Retry-Key": retryUuid(retryKey) } });
 
+export type Narrow = { max?: number; gender?: "female" | "male"; ageFrom?: number; ageTo?: number };
+const AGES = [15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70];
+/** LINE's own audience filter (gender / age are LINE's estimates) and a hard cap on recipients. */
+export function narrowBody(messages: Msg[], n: Narrow) {
+  const and: Record<string, unknown>[] = [];
+  if (n.gender) and.push({ type: "gender", oneOf: [n.gender] });
+  const gte = AGES.includes(Number(n.ageFrom)) ? `age_${n.ageFrom}` : undefined, lt = AGES.includes(Number(n.ageTo)) ? `age_${n.ageTo}` : undefined;
+  if (gte || lt) and.push({ type: "age", ...(gte ? { gte } : {}), ...(lt ? { lt } : {}) });
+  return { messages: messages.slice(0, 5), ...(and.length ? { filter: { demographic: and.length === 1 ? and[0] : { type: "operator", and } } } : {}),
+    ...(n.max ? { limit: { max: Math.max(1, Math.round(n.max)), upToRemainingQuota: true } } : {}) };
+}
+/** Narrowcast is asynchronous: LINE answers 202 with a request id; progress is read separately. */
+export async function narrowcast(messages: Msg[], n: Narrow, retryKey: string): Promise<string | null> {
+  const token = await accessToken();
+  if (!token) { console.warn("[line] no access token; skipped narrowcast"); return null; }
+  const res = await fetch(API + "/message/narrowcast", { method: "POST",
+    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json", "X-Line-Retry-Key": retryUuid(retryKey) }, body: JSON.stringify(narrowBody(messages, n)) });
+  if (!res.ok && res.status !== 409) { const t = await res.text(); console.error("[line] narrowcast", res.status, t); throw new Error(`line_api_${res.status}: ${t.slice(0, 200)}`); }
+  return res.headers.get("x-line-request-id");
+}
+export async function narrowProgress(requestId: string): Promise<{ phase?: string; successCount?: number; failedDescription?: string; targetCount?: number } | null> {
+  try { return (await call(`/message/progress/narrowcast?requestId=${encodeURIComponent(requestId)}`)) as any; } catch { return null; }
+}
+
 /** Monthly quota and what is used so far; plus how many friends a broadcast would reach (LINE's own estimate, from 2 days ago). */
 export async function reachInfo(now = new Date()): Promise<{ limit: number | null; used: number | null; reach: number | null; followers: number | null }> {
   const d = new Date(now.getTime() + 7 * 3600e3 - 2 * 864e5).toISOString().slice(0, 10).replace(/-/g, "");

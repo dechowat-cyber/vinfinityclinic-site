@@ -58,7 +58,9 @@ export async function sendBroadcastAction(fd: FormData) {
   let r: { id: number };
   try {
     r = await createBroadcast({ name: String(fd.get("campaign_name") || ""), message: String(fd.get("message") || ""), withBooking: fd.get("with_booking") === "on",
-      staffId: me.id, images: absImages(mediaSet(String(fd.get("media") || ""))?.images ?? []), reach: Number(fd.get("reach")) || null });
+      staffId: me.id, images: absImages(mediaSet(String(fd.get("media") || ""))?.images ?? []), reach: Number(fd.get("reach")) || null,
+      narrow: { max: Number(fd.get("max")) || undefined, gender: fd.get("gender") === "female" || fd.get("gender") === "male" ? (fd.get("gender") as "female" | "male") : undefined,
+        ageFrom: Number(fd.get("age_from")) || undefined, ageTo: Number(fd.get("age_to")) || undefined } });
   } catch (e) {
     redirect(`/staff/segments?err=${encodeURIComponent((e as Error).message.slice(0, 120))}#broadcast`);
   }

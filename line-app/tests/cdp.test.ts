@@ -9,7 +9,7 @@ import { mergeClients, possibleDuplicates, duplicateGroups } from "../lib/identi
 import { segmentCounts, segmentMembers, createCampaign, campaignResults, filtersFrom, filtersQuery, campaignMessages, createBroadcast } from "../lib/segments";
 import { MEDIA, mediaSet, absImages } from "../lib/campaignMedia";
 import { broadcastText } from "../lib/messages";
-import { reachInfo } from "../lib/line";
+import { reachInfo, narrowBody } from "../lib/line";
 import { existsSync } from "node:fs";
 import { enqueueConversions, sendConversions, sha256, metaEvent } from "../lib/capi";
 import { recordPayment } from "../lib/payments";
@@ -127,6 +127,13 @@ test("broadcast to every friend: recorded as its own kind, button posts into the
   const k = (await q("select kind, recipients, sent, images from campaigns where id = $1", [r.id]))[0];
   assert.deepEqual([k.kind, k.recipients, k.sent, k.images], ["broadcast", 812, 812, ["https://x.example/a.jpg"]]);
   assert.ok((await campaignResults()).some((x) => Number(x.id) === r.id && x.kind === "broadcast"));
+  const nb = narrowBody([{ type: "text", text: "x" }], { max: 50, gender: "female", ageFrom: 25, ageTo: 55 }) as any;
+  assert.deepEqual(nb.limit, { max: 50, upToRemainingQuota: true });
+  assert.deepEqual(nb.filter.demographic, { type: "operator", and: [{ type: "gender", oneOf: ["female"] }, { type: "age", gte: "age_25", lt: "age_55" }] });
+  assert.equal(narrowBody([], {}).filter, undefined);
+  const n = await createBroadcast({ name: "ทดสอบ 50", message: "โปร", withBooking: true, staffId: 1, reach: 351, narrow: { max: 50, gender: "female" } });
+  const nk = (await q("select kind, recipients, filters from campaigns where id = $1", [n.id]))[0];
+  assert.deepEqual([nk.kind, nk.recipients, nk.filters.narrow.max], ["narrowcast", 50, 50]);
   assert.deepEqual(await reachInfo(), { limit: null, used: null, reach: null, followers: null }); // no token → nothing, no crash
 });
 
