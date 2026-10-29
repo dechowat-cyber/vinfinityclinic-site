@@ -19,6 +19,7 @@
     mk: "Send me news and offers on LINE (optional)", confirm: "Book this time", busy: "Booking…",
     done: "Booked ✨", doneTxt: "The team will call to confirm. Add our LINE to get reminders and chat with the clinic:", addLine: "Add LINE @vinfinityclinic",
     err: { slot_taken: "That time was just taken, please pick another.", bad_phone: "Please check the phone number.", bad_name: "Please enter your name.", consent_required: "Please tick the consent box.", x: "Booking didn't go through. Please try again or message LINE @vinfinityclinic." },
+    chatErr: "Sorry, I couldn't answer just now. Please ask again, or message LINE @vinfinityclinic.",
     none: "No free times found online. Message LINE @vinfinityclinic and the team will find one for you.", typing: "Nong Win is typing", reset: "New chat",
   } : {
     name: "น้องวิน", sub: "ผู้ช่วย AI ของ Vinfinity Clinic", hi: "สวัสดีค่ะ น้องวินเองค่ะ 💙 ถามเรื่องหัตถการ ราคา เวลาเปิด หรือให้น้องวินจองคิวปรึกษาคุณหมอได้เลยนะคะ",
@@ -30,6 +31,7 @@
     mk: "รับข่าวสารและสิทธิพิเศษทาง LINE (ไม่บังคับ)", confirm: "ยืนยันจองเวลานี้", busy: "กำลังจอง…",
     done: "จองแล้วค่ะ ✨", doneTxt: "ทีมงานจะโทรยืนยันนัดค่ะ เพิ่มเพื่อน LINE ไว้เพื่อรับการแจ้งเตือนนัดและคุยกับคลินิกได้เลย:", addLine: "เพิ่มเพื่อน LINE @vinfinityclinic",
     err: { slot_taken: "เวลานี้เพิ่งมีคนจองไปค่ะ เลือกเวลาอื่นได้เลย", bad_phone: "เบอร์โทรไม่ถูกต้องค่ะ", bad_name: "กรอกชื่อด้วยนะคะ", consent_required: "ติ๊กช่องยินยอมก่อนนะคะ", x: "จองไม่สำเร็จค่ะ ลองใหม่อีกครั้ง หรือทัก LINE @vinfinityclinic ได้เลย" },
+    chatErr: "ขอโทษค่ะ ตอนนี้น้องวินตอบไม่ได้ ลองถามใหม่อีกครั้ง หรือทัก LINE @vinfinityclinic ได้เลยค่ะ",
     none: "ตอนนี้ไม่พบเวลาว่างออนไลน์ ทัก LINE @vinfinityclinic ทีมงานจะหาเวลาให้ค่ะ", typing: "น้องวินกำลังพิมพ์", reset: "เริ่มคุยใหม่",
   };
 
@@ -157,13 +159,13 @@
       .then(function (r) { return r.json(); })
       .then(function (j) {
         dots.remove();
-        var reply = (j && j.reply) || T.err.x;
+        var reply = (j && j.reply) || T.chatErr;
         push("assistant", reply); bubble("assistant", reply);
         if (j && j.book) booking(j.book.date || null);
         if (window.gtag) gtag("event", "chat_message", { method: "webchat" });
         scroll();
       })
-      .catch(function () { dots.remove(); bubble("assistant", T.err.x); scroll(); })
+      .catch(function () { dots.remove(); bubble("assistant", T.chatErr); scroll(); })
       .then(function () { sending = false; });
   }
 

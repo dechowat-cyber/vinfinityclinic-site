@@ -24,8 +24,11 @@ async function makeRunner(): Promise<Runner> {
   const sql = neon(url);
   return {
     query: async (t, p) => (await sql.query(t, p as any[])) as Row[],
+    // All statements in ONE HTTP round trip (a non-interactive transaction); one-by-one took >30 s on a cold start.
     exec: async (t) => {
-      for (const stmt of t.split(/;\s*\n/).map((s) => s.trim()).filter(Boolean)) await sql.query(stmt);
+      const stmts = t.split(/;\s*\n/).map((s) => s.trim()).filter(Boolean);
+      if (stmts.length === 1) { await sql.query(stmts[0]); return; }
+      await sql.transaction(stmts.map((x) => sql.query(x)));
     },
   };
 }

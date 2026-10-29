@@ -2,7 +2,7 @@ import { cors, allow, knowledge, kbFor, systemPrompt, complete, parseReply } fro
 import { getSettings } from "@/lib/settings";
 
 export const dynamic = "force-dynamic";
-export const maxDuration = 30;
+export const maxDuration = 60;
 
 export async function OPTIONS(req: Request) { return new Response(null, { status: 204, headers: cors(req) }); }
 
