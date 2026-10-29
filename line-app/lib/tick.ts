@@ -271,6 +271,7 @@ export async function runTick(now = new Date()) {
     ["recall", () => recallTick(now, s)],
     ["followups", () => followupTick(now)],
     ["campaigns", () => sendCampaignBatch(200)],
+    ["agentNudge", async () => (after(now, "10:00") && !after(now, "20:00") ? (await import("./agent")).nudgeTick(now) : 0)],
     ["capi", () => capiTick(now)],
     ["reminderD1", async () => (after(now, "18:00") && !after(now, "21:00") ? sendReminders(now) : 0)],
     ["evening", async () => (after(now, "20:00") && (await once(`eve-run:${todayBkk(now)}`)) ? eveningRun(now) : 0)],

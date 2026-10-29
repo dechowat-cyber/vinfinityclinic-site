@@ -1,6 +1,11 @@
 import { q } from "@/lib/db";
 import { leadUpdate } from "@/lib/actions";
 import { requireStaff } from "@/lib/session";
+import { pendingDrafts, leadLangStats, LANG_LABEL, type Lang } from "@/lib/agent";
+import { sendDraft, doneDraft, dismissDraft } from "@/lib/agentActions";
+import { botInfo, chatUrl } from "@/lib/line";
+import { aiConfigured } from "@/lib/ai";
+import { CopyOpen } from "./copy-open";
 
 export const dynamic = "force-dynamic";
 
@@ -14,9 +19,11 @@ function ago(d: Date | string | null, now: Date) {
   return m < 60 ? `${m} นาที` : m < 1440 ? `${Math.floor(m / 60)} ชม.` : `${Math.floor(m / 1440)} วัน`;
 }
 
-export default async function Leads({ searchParams }: { searchParams: Promise<{ s?: string }> }) {
+export default async function Leads({ searchParams }: { searchParams: Promise<{ s?: string; agent?: string }> }) {
   await requireStaff(["BM", "AD", "CS", "MK"]);
-  const { s } = await searchParams;
+  const { s, agent } = await searchParams;
+  const [drafts, langs, bot] = await Promise.all([pendingDrafts(30), leadLangStats(), botInfo()]);
+  const AGENT_ERR: Record<string, string> = { quota: "ส่งจากระบบไม่ได้ เพราะโควตาข้อความ LINE เดือนนี้หมด · ใช้ “คัดลอก + เปิดแชท” แทน (ตอบในแชทไม่นับโควตา)", fail: "ส่งไม่สำเร็จ ลองอีกครั้ง หรือใช้ “คัดลอก + เปิดแชท”", gone: "ร่างนี้ถูกใช้ไปแล้ว" };
   const now = new Date();
   const filter = s === "all" ? "" : s ? "where l.status = $1" : "where l.status in ('New','Contacted','Qualified','Nurture')";
   const rows = await q(
@@ -37,6 +44,31 @@ export default async function Leads({ searchParams }: { searchParams: Promise<{ 
     <>
       <div><div className="eyebrow">LEAD INBOX · S09</div><h1>Leads / แชท</h1></div>
       <p className="muted" style={{ margin: 0 }}>ตอบลูกค้าในแอป LINE OA Manager ตามปกติ แล้วกด <b>ตอบแล้ว</b> ที่นี่ เพื่อนับเวลาตอบ (เป้า ≤ 5 นาที) แถวสีแดงคือรอเกิน 10 นาที</p>
+      <section className="card" id="agent">
+        <div className="row" style={{ justifyContent: "space-between" }}>
+          <div className="eyebrow">AGENT · ร่างคำตอบให้แล้ว {drafts.length ? `(${drafts.length})` : ""}</div>
+          <small className="muted">lead 7 วัน: {langs.map((l) => `${LANG_LABEL[l.lang as Lang] ?? l.lang} ${l.n}`).join(" · ") || "-"} · {aiConfigured() && process.env.ANTHROPIC_API_KEY ? "AI เขียน" : "แบบฟอร์มสำเร็จรูป (ใส่ ANTHROPIC_API_KEY เพื่อให้ AI เขียน)"}</small>
+        </div>
+        {agent && <div className="card err" style={{ marginTop: 8 }}>{AGENT_ERR[agent] ?? agent}</div>}
+        {drafts.length === 0 ? <p className="muted" style={{ margin: "8px 0 0" }}>ยังไม่มีร่าง · ลูกค้าทักมาเมื่อไร ระบบจะร่างคำตอบภาษาเดียวกับลูกค้าให้ที่นี่ และร่างข้อความตามคนที่เงียบไป 1–7 วันให้เองวันละครั้ง</p> :
+          drafts.map((d) => (
+            <form key={d.id} id={`d${d.id}`} action={sendDraft} className="card" style={{ marginTop: 10, padding: 14 }}>
+              <input type="hidden" name="id" value={d.id} />
+              <div className="row" style={{ justifyContent: "space-between" }}>
+                <div><a href={`/staff/clients/${d.client_id}`}><b>{d.name || d.display_name || `#${d.client_id}`}</b></a>{" "}
+                  <span className="tag">{LANG_LABEL[d.lang as Lang] ?? d.lang}</span>{" "}<span className="tag">{d.kind === "nudge" ? "ตามลูกค้า" : "ตอบแชท"}</span></div>
+                <small className="muted">{ago(d.created_at, now)}</small>
+              </div>
+              {d.last_in && <p className="muted" style={{ margin: "6px 0" }}>ลูกค้า: {String(d.last_in).slice(0, 200)}</p>}
+              <textarea name="body" rows={6} defaultValue={d.body} style={{ width: "100%" }} />
+              <div className="row" style={{ marginTop: 6 }}>
+                <CopyOpen formId={`d${d.id}`} url={chatUrl(bot?.userId, d.line_user_id)} />
+                <button formAction={doneDraft} className="btn ghost small">ส่งในแชทแล้ว ✓</button>
+                <button className="btn ghost small">ส่งจากระบบ (นับโควตา)</button>
+                <button formAction={dismissDraft} className="btn ghost small">ไม่ใช้</button>
+              </div>
+            </form>))}
+      </section>
       <div className="row">
         {[["", "กำลังดำเนินการ"], ...STATUSES.map((x) => [x, TH[x]]), ["all", "ทั้งหมด"]].map(([k, l]) =>
           <a key={k} className={`btn small ${(s || "") === k ? "" : "ghost"}`} href={`/staff/leads${k ? `?s=${k}` : ""}`}>{l}</a>)}

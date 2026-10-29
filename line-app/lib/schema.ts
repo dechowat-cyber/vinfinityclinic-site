@@ -532,4 +532,18 @@ alter table slips add column if not exists to_name_read text;
 alter table campaigns add column if not exists images jsonb not null default '[]';
 alter table campaigns add column if not exists kind text not null default 'segment';
 alter table campaigns add column if not exists line_request_id text;
+create table if not exists agent_drafts (
+  id bigserial primary key,
+  client_id bigint not null,
+  kind text not null default 'reply',
+  lang text not null default 'th',
+  body text not null,
+  engine text not null default 'template',
+  slots jsonb not null default '[]',
+  status text not null default 'pending',
+  created_at timestamptz not null default now(),
+  done_at timestamptz,
+  done_by bigint
+);
+create index if not exists agent_drafts_pending on agent_drafts(status, created_at desc);
 `;

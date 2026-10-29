@@ -97,6 +97,15 @@ export async function reachInfo(now = new Date()): Promise<{ limit: number | nul
   return { limit: q?.type === "limited" ? n(q.value) : null, used: n(c?.totalUsage), reach: f?.status === "ready" ? n(f.targetedReaches) : null, followers: f?.status === "ready" ? n(f.followers) : null };
 }
 
+const gb = globalThis as unknown as { __bot?: { userId?: string; basicId?: string } };
+/** The OA's own ids (for links into LINE OA Manager chat). Cached per instance. */
+export async function botInfo(): Promise<{ userId?: string; basicId?: string } | null> {
+  if (gb.__bot) return gb.__bot;
+  try { const r = (await call("/info", { signal: AbortSignal.timeout(3000) })) as any; if (r?.userId) gb.__bot = r; return r; } catch { return null; }
+}
+/** Opens this person's conversation in LINE OA Manager (replies there do not use the push quota). */
+export const chatUrl = (botUserId: string | undefined, userId: string) => (botUserId ? `https://chat.line.biz/${botUserId}/chat/${userId}` : "https://chat.line.biz/");
+
 export async function profile(userId: string): Promise<{ displayName?: string; pictureUrl?: string; language?: string } | null> {
   try { return (await call(`/profile/${userId}`)) as any; } catch { return null; }
 }
