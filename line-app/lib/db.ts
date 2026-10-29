@@ -30,9 +30,22 @@ async function makeRunner(): Promise<Runner> {
   };
 }
 
+/** Runs the schema + seed only when they changed since the last run (one cheap check per cold start).
+ *  Before this, every cold serverless instance replayed the whole schema statement by statement over HTTP (~25 s). */
+async function migrate(runner: Runner) {
+  const { createHash } = await import("node:crypto");
+  const hash = createHash("sha256").update(SCHEMA).update(String(seedWith)).digest("hex").slice(0, 16);
+  await runner.exec("create table if not exists _meta (k text primary key, v text not null)");
+  const cur = await runner.query("select v from _meta where k = 'schema'");
+  if (cur[0]?.v === hash) return;
+  await runner.exec(SCHEMA);
+  await seedWith(runner);
+  await runner.query("insert into _meta(k, v) values ('schema', $1) on conflict (k) do update set v = excluded.v", [hash]);
+}
+
 export async function db(): Promise<Runner> {
   const runner = await (st.runner ??= makeRunner());
-  await (st.ready ??= runner.exec(SCHEMA).then(() => seedWith(runner)));
+  await (st.ready ??= migrate(runner).catch((e) => { st.ready = null; throw e; }));
   return runner;
 }
 

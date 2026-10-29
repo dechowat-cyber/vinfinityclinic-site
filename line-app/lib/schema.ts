@@ -546,4 +546,5 @@ create table if not exists agent_drafts (
   done_by bigint
 );
 create index if not exists agent_drafts_pending on agent_drafts(status, created_at desc);
+create table if not exists webchat_usage (k text not null, day date not null, n int not null default 0, primary key (k, day));
 `;

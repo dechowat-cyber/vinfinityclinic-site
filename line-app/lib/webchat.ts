@@ -100,7 +100,6 @@ export function parseReply(text: string): { reply: string; book: null | { date: 
 
 /** Small abuse guard: per-visitor and whole-site daily caps. Only a salted hash of the IP is stored. */
 export async function allow(ip: string, now = new Date(), perIp = 60, perDay = 3000) {
-  await q("create table if not exists webchat_usage (k text not null, day date not null, n int not null default 0, primary key (k, day))");
   const day = todayBkk(now);
   const k = crypto.createHash("sha256").update(`${process.env.SESSION_SECRET || "vf"}|${ip}`).digest("hex").slice(0, 32);
   const r = await one("insert into webchat_usage(k, day, n) values ($1,$2,1) on conflict (k, day) do update set n = webchat_usage.n + 1 returning n", [k, day]);
