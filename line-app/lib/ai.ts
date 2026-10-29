@@ -12,7 +12,7 @@ export async function askAI(o: { system?: string; messages: AiMsg[]; images?: Ai
   const imgs = o.images ?? [];
   const last = o.messages.length - 1;
   if (process.env.ANTHROPIC_API_KEY) {
-    const model = o.fast ? (process.env.WEBCHAT_MODEL_DIRECT || "claude-haiku-4-5") : (process.env.VISION_MODEL_DIRECT || "claude-sonnet-4-5");
+    const model = o.fast ? (process.env.WEBCHAT_MODEL_DIRECT || "claude-haiku-4-5") : (process.env.VISION_MODEL_DIRECT || "claude-sonnet-5-5");
     const messages = o.messages.map((m, i) => ({ role: m.role, content: i === last && imgs.length
       ? [...imgs.map((x) => ({ type: "image", source: { type: "base64", media_type: x.mime, data: x.data.toString("base64") } })), { type: "text", text: m.content }]
       : m.content }));
@@ -30,7 +30,7 @@ export async function askAI(o: { system?: string; messages: AiMsg[]; images?: Ai
   const { getVercelOidcToken } = await import("@vercel/oidc");
   const token = process.env.AI_GATEWAY_API_KEY || (await getVercelOidcToken().catch(() => ""));
   if (!token) throw new AiUnavailable("no_ai_credentials");
-  const model = o.fast ? (process.env.WEBCHAT_MODEL || "anthropic/claude-haiku-4.5") : (process.env.FORM_READER_MODEL || "anthropic/claude-sonnet-4.5");
+  const model = o.fast ? (process.env.WEBCHAT_MODEL || "anthropic/claude-haiku-4.5") : (process.env.FORM_READER_MODEL || "anthropic/claude-sonnet-5.5");
   const messages = [...(o.system ? [{ role: "system", content: o.system }] : []), ...o.messages.map((m, i) => ({ role: m.role, content: i === last && imgs.length
     ? [{ type: "text", text: m.content }, ...imgs.map((x) => ({ type: "image_url", image_url: { url: `data:${x.mime};base64,${x.data.toString("base64")}` } }))]
     : m.content }))];
