@@ -22,9 +22,14 @@ export type Filters = {
   newDays?: number;
   /** nothing booked from today on */
   noUpcoming?: boolean;
+  /** has had a skin treatment, or asked about skin (lead interest) */
+  skin?: boolean;
   /** only those who can receive a LINE campaign */
   reachableOnly?: boolean;
 };
+
+/** Words that mean a lead asked about skin work. */
+export const SKIN_RE = "ผิว|สกิน|skin|booster|บูสเตอร์|vitaran|ไวทาราน|rejuran|รีจูรัน|\\mpn\\M|รูขุมขน|ฝ้า|microneedle|ไมโครนีดเดิ้ล|หน้าใส";
 
 export const SEGMENT_ROLES = ["BM", "MK"];
 export const SEND_ROLES = ["BM"];
@@ -42,6 +47,8 @@ function where(f: Filters, now: Date, params: unknown[]) {
   if (f.minVisits) w.push(`x.visits >= ${p(f.minVisits)}`);
   if (f.newDays) w.push(`x.created_at >= ${p(new Date(now.getTime() - f.newDays * 864e5).toISOString())}`);
   if (f.noUpcoming) w.push(`not exists (select 1 from appointments a where a.client_id = x.id and a.start_at >= ${p(now.toISOString())} and a.status not in ('cancelled','no_show'))`);
+  if (f.skin) w.push(`(exists (select 1 from treatments t join catalog k on k.id = t.catalog_id where t.client_id = x.id and (k.category in ('สกินบูสเตอร์','ผิว') or k.aftercare_key in ('skinbooster','microneedle')))
+    or exists (select 1 from leads l where l.client_id = x.id and l.interest ~* ${p(SKIN_RE)}))`);
   if (f.reachableOnly) w.push("x.reachable");
   return w.length ? `where ${w.join(" and ")}` : "";
 }
@@ -75,7 +82,7 @@ export function filtersFrom(get: (k: string) => string | null, getAll: (k: strin
   const f: Filters = {
     sources: getAll("source").filter(Boolean), treated: ids("treated"), notTreated: ids("not_treated"),
     lapsedDays: n("lapsed"), recentDays: n("recent"), minSpend: n("min_spend"), minVisits: n("min_visits"), newDays: n("new"),
-    noUpcoming: get("no_upcoming") === "on" || get("no_upcoming") === "1", reachableOnly: get("reachable") === "on" || get("reachable") === "1",
+    noUpcoming: get("no_upcoming") === "on" || get("no_upcoming") === "1", skin: get("skin") === "on" || get("skin") === "1", reachableOnly: get("reachable") === "on" || get("reachable") === "1",
   };
   for (const k of Object.keys(f) as (keyof Filters)[]) { const v = f[k]; if (v === undefined || v === false || (Array.isArray(v) && !v.length)) delete f[k]; }
   return f;
@@ -89,28 +96,36 @@ export function filtersQuery(f: Filters) {
   const map: [keyof Filters, string][] = [["lapsedDays", "lapsed"], ["recentDays", "recent"], ["minSpend", "min_spend"], ["minVisits", "min_visits"], ["newDays", "new"]];
   for (const [k, qk] of map) if (f[k]) p.set(qk, String(f[k]));
   if (f.noUpcoming) p.set("no_upcoming", "1");
+  if (f.skin) p.set("skin", "1");
   if (f.reachableOnly) p.set("reachable", "1");
   return p.toString();
 }
 
 /** Creates a campaign for the reachable members and sends the first batch. The scheduler sends the rest. */
-export async function createCampaign(o: { name: string; filters: Filters; message: string; withBooking: boolean; staffId: number | null; segmentId?: number | null; now?: Date }) {
+export async function createCampaign(o: { name: string; filters: Filters; message: string; withBooking: boolean; staffId: number | null; segmentId?: number | null; now?: Date; images?: string[] }) {
   const message = o.message.trim().slice(0, 1000);
   if (!message) throw new Error("empty_message");
   const members = (await segmentMembers(o.filters, o.now)).filter((m) => m.reachable);
   if (!members.length) throw new Error("no_recipients");
-  const c = await one(`insert into campaigns(segment_id, name, filters, message, with_booking, recipients, created_by) values ($1,$2,$3,$4,$5,$6,$7) returning id`,
-    [o.segmentId ?? null, o.name.trim().slice(0, 120) || "แคมเปญ", JSON.stringify(o.filters), message, o.withBooking, members.length, o.staffId]);
+  const c = await one(`insert into campaigns(segment_id, name, filters, message, with_booking, recipients, created_by, images) values ($1,$2,$3,$4,$5,$6,$7,$8) returning id`,
+    [o.segmentId ?? null, o.name.trim().slice(0, 120) || "แคมเปญ", JSON.stringify(o.filters), message, o.withBooking, members.length, o.staffId,
+      JSON.stringify((o.images ?? []).filter((u) => /^https:\/\//.test(u)).slice(0, 4))]);
   const id = Number(c!.id);
   await q("insert into campaign_recipients(campaign_id, client_id) select $1, unnest($2::bigint[]) on conflict do nothing", [id, members.map((m) => m.id)]);
   await sendCampaignBatch(50, id);
   return { id, recipients: members.length };
 }
 
+/** Pictures first, then the text (with the booking button). One push = one message off the OA quota. */
+export function campaignMessages(userId: string, r: { message: string; with_booking: boolean; campaign_id: unknown; images?: unknown }) {
+  const imgs = (Array.isArray(r.images) ? r.images : []).filter((u): u is string => typeof u === "string" && /^https:\/\//.test(u)).slice(0, 4);
+  return [...imgs.map((u) => M.image(u, u.replace(/\.jpg$/, "-p.jpg"))), M.campaign(userId, r.message, r.with_booking, Number(r.campaign_id))];
+}
+
 /** Sends up to `limit` pending messages (all campaigns, or one). Consent is re-checked at send time. */
 export async function sendCampaignBatch(limit = 200, campaignId?: number) {
   const rows = await q(`
-    select r.campaign_id, r.client_id, c.line_user_id, c.followed, k.message, k.with_booking,
+    select r.campaign_id, r.client_id, c.line_user_id, c.followed, k.message, k.with_booking, k.images,
       (select g.granted from consents g where g.client_id = c.id and g.type = 'marketing' order by g.created_at desc, g.id desc limit 1) as mk
     from campaign_recipients r join campaigns k on k.id = r.campaign_id join clients c on c.id = r.client_id
     where r.sent_at is null ${campaignId ? "and r.campaign_id = $2" : ""} order by r.campaign_id limit $1`, campaignId ? [limit, campaignId] : [limit]);
@@ -118,7 +133,7 @@ export async function sendCampaignBatch(limit = 200, campaignId?: number) {
   const one_ = async (r: (typeof rows)[number]) => {
     const ok = r.line_user_id && r.followed && r.mk === true;
     try {
-      if (ok) await push(r.line_user_id, [M.campaign(r.line_user_id, r.message, r.with_booking, Number(r.campaign_id))], `camp:${r.campaign_id}:${r.client_id}`);
+      if (ok) await push(r.line_user_id, campaignMessages(r.line_user_id, r as any), `camp:${r.campaign_id}:${r.client_id}`);
       await q("update campaign_recipients set sent_at = now() where campaign_id = $1 and client_id = $2", [r.campaign_id, r.client_id]);
       if (ok) { await logTouch(Number(r.client_id), "out", "campaign", String(r.campaign_id), "system"); sent++; }
     } catch (e) { console.error("[campaign] push", r.campaign_id, r.client_id, e); }

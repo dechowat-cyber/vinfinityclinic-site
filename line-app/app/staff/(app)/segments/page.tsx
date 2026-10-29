@@ -5,11 +5,13 @@ import { saveSegment, deleteSegment, sendCampaignAction } from "@/lib/cdpActions
 import { SOURCE_LABEL } from "@/lib/reports";
 import { baht } from "@/lib/payments";
 import { thaiDate } from "@/lib/time";
+import { MEDIA, mediaSet } from "@/lib/campaignMedia";
 
 export const dynamic = "force-dynamic";
 
 const ERR: Record<string, string> = { confirm: "ติ๊กยืนยันก่อนส่ง", paused: "ระบบหยุดส่งข้อความอัตโนมัติอยู่ (ตั้งค่า)", empty_message: "พิมพ์ข้อความก่อน", no_recipients: "ไม่มีลูกค้าในกลุ่มนี้ที่ส่ง LINE ได้" };
 const PRESETS: [string, string][] = [
+  ["เคยทำผิว / สนใจงานผิว", "skin=1&reachable=1"],
   ["หายไป 6 เดือน (ยังไม่มีนัด)", "lapsed=180&no_upcoming=1"],
   ["ลูกค้าใหม่ 30 วัน ยังไม่ได้ทำ", "new=30&min_visits=0&no_upcoming=1"],
   ["ลูกค้าประจำ (มา 3 ครั้งขึ้นไป)", "min_visits=3"],
@@ -27,6 +29,7 @@ function describe(f: Filters, cat: Map<number, string>) {
   if (f.minSpend) out.push(`ใช้จ่าย ≥ ${baht(f.minSpend)}`);
   if (f.minVisits) out.push(`มา ≥ ${f.minVisits} ครั้ง`);
   if (f.newDays) out.push(`ลูกค้าใหม่ใน ${f.newDays} วัน`);
+  if (f.skin) out.push("เคยทำผิว หรือสนใจงานผิว");
   if (f.noUpcoming) out.push("ยังไม่มีนัด");
   if (f.reachableOnly) out.push("ส่ง LINE ได้เท่านั้น");
   return out.join(" · ") || "ลูกค้าทั้งหมด";
@@ -47,6 +50,8 @@ export default async function Segments({ searchParams }: { searchParams: Promise
   const catMap = new Map(cat.map((c) => [Number(c.id), c.name as string]));
   const canSend = SEND_ROLES.includes(me.role);
   const err = typeof sp.err === "string" ? sp.err : null;
+  const media = mediaSet(typeof sp.media === "string" ? sp.media : null);
+  const fq = filtersQuery(f);
   const hidden = (prefix = "") => <>{[...new URLSearchParams(filtersQuery(f))].map(([k, v], i) => <input key={prefix + k + i} type="hidden" name={k} value={v} />)}</>;
 
   return (
@@ -74,6 +79,7 @@ export default async function Segments({ searchParams }: { searchParams: Promise
           <label className="field">ลูกค้าใหม่ภายใน (วัน)<input name="new" type="number" min={0} defaultValue={f.newDays ?? ""} /></label>
         </div>
         <div className="row">
+          <label className="check"><input type="checkbox" name="skin" defaultChecked={f.skin} /> เคยทำผิว หรือสนใจงานผิว</label>
           <label className="check"><input type="checkbox" name="no_upcoming" defaultChecked={f.noUpcoming} /> ยังไม่มีนัด</label>
           <label className="check"><input type="checkbox" name="reachable" defaultChecked={f.reachableOnly} /> เฉพาะคนที่ส่ง LINE ได้</label>
           <button className="btn">ดูผล</button><a className="btn ghost" href="/staff/segments">ล้าง</a>
@@ -96,10 +102,17 @@ export default async function Segments({ searchParams }: { searchParams: Promise
             <button formAction={deleteSegment} name="id" value={s.id} className="btn ghost small">ลบ</button></li>)}</ul>}
         </form>
         {canSend ? (
-          <form className="card" action={sendCampaignAction}>
+          <form className="card" id="send" action={sendCampaignAction}>
             <div className="eyebrow">ส่ง LINE ถึงกลุ่มนี้ · {counts.reachable} คน</div>{hidden("c")}
-            <div className="field" style={{ marginTop: 10 }}><label>ชื่อแคมเปญ (ภายใน)</label><input name="campaign_name" placeholder="เช่น ชวนกลับ ต.ค." /></div>
-            <div className="field"><label>ข้อความ</label><textarea name="message" rows={4} maxLength={1000} required placeholder="สวัสดีค่ะ …" /></div>
+            <div className="field" style={{ marginTop: 10 }}><label>ชุดรูป (ส่งก่อนข้อความ)</label>
+              <div className="row">{[null, ...MEDIA].map((m) => <a key={m?.key ?? "none"} className={`btn small ${media?.key === (m?.key ?? undefined) || (!media && !m) ? "" : "ghost"}`}
+                href={`?${fq}${m ? `${fq ? "&" : ""}media=${m.key}` : ""}#send`}>{m ? m.label : "ไม่มีรูป"}</a>)}</div>
+              {media && <><input type="hidden" name="media" value={media.key} />
+                <div className="row" style={{ marginTop: 8 }}>{media.previews.map((u) => <img key={u} src={u} alt="" style={{ width: 96, borderRadius: 8, border: "1px solid var(--line, #ddd)" }} />)}</div>
+                {media.segment && media.segment !== fq && <p className="muted" style={{ margin: "6px 0 0" }}>กลุ่มที่แนะนำสำหรับชุดนี้: <a href={`?${media.segment}&media=${media.key}#send`}>เคยทำผิว / สนใจงานผิว</a></p>}</>}
+            </div>
+            <div className="field"><label>ชื่อแคมเปญ (ภายใน)</label><input name="campaign_name" placeholder="เช่น ชวนกลับ ต.ค." defaultValue={media ? media.label : ""} /></div>
+            <div className="field"><label>ข้อความ</label><textarea key={media?.key ?? "none"} name="message" rows={media ? 9 : 4} maxLength={1000} required placeholder="สวัสดีค่ะ …" defaultValue={media?.message ?? ""} /></div>
             <label className="check"><input type="checkbox" name="with_booking" defaultChecked /> ใส่ปุ่ม “จองคิว”</label>
             <label className="check"><input type="checkbox" name="confirm" /> ยืนยันส่งถึง {counts.reachable} คน (นับโควตาข้อความ LINE OA · ข้อความโฆษณาต้องผ่าน ฆสพ.)</label>
             <button className="btn" disabled={!counts.reachable}>ส่งแคมเปญ</button>

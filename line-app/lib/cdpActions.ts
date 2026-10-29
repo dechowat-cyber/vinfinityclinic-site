@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { q } from "./db";
 import { requireStaff } from "./session";
 import { mergeClients } from "./identity";
+import { mediaSet, absImages } from "./campaignMedia";
 import { filtersFrom, createCampaign, SEGMENT_ROLES, SEND_ROLES } from "./segments";
 import { getSettings } from "./settings";
 
@@ -42,7 +43,7 @@ export async function sendCampaignAction(fd: FormData) {
   let r: { id: number; recipients: number };
   try {
     r = await createCampaign({ name: String(fd.get("campaign_name") || ""), filters: form(fd), message: String(fd.get("message") || ""),
-      withBooking: fd.get("with_booking") === "on", staffId: me.id });
+      withBooking: fd.get("with_booking") === "on", staffId: me.id, images: absImages(mediaSet(String(fd.get("media") || ""))?.images ?? []) });
   } catch (e) {
     redirect(`/staff/segments?err=${encodeURIComponent((e as Error).message)}`);
   }

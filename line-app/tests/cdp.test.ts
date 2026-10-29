@@ -6,7 +6,9 @@ import { upsertClientByLine, recordConsent } from "../lib/crm";
 import { parseSource, deepLink } from "../lib/source";
 import { deriveSource, recordVisit } from "../lib/attribution";
 import { mergeClients, possibleDuplicates, duplicateGroups } from "../lib/identity";
-import { segmentCounts, segmentMembers, createCampaign, campaignResults, filtersFrom, filtersQuery } from "../lib/segments";
+import { segmentCounts, segmentMembers, createCampaign, campaignResults, filtersFrom, filtersQuery, campaignMessages } from "../lib/segments";
+import { MEDIA, mediaSet, absImages } from "../lib/campaignMedia";
+import { existsSync } from "node:fs";
 import { enqueueConversions, sendConversions, sha256, metaEvent } from "../lib/capi";
 import { recordPayment } from "../lib/payments";
 import { q, one } from "../lib/db";
@@ -85,6 +87,33 @@ test("segments: filters, reachability needs marketing consent, campaign sends an
   const res = (await campaignResults()).find((r) => Number(r.id) === camp.id)!;
   assert.equal(res.booked, 1);
   await assert.rejects(createCampaign({ name: "x", filters: { minSpend: 99999999 }, message: "hi", withBooking: false, staffId: 1 }), /no_recipients/);
+});
+
+test("campaign with a picture set: skin segment, https images first, then the text", async () => {
+  const s1 = await upsertClientByLine("USKIN1", {}); await recordConsent(s1.id, "marketing", true, "v1");
+  await q("insert into treatments(client_id, catalog_id, name, done_at) select $1, id, name, now() - interval '40 days' from catalog where code = 'SKB'", [s1.id]);
+  const s2 = await upsertClientByLine("USKIN2", {}); await recordConsent(s2.id, "marketing", true, "v1");
+  await q("insert into leads(client_id, source, interest, status) values ($1, 'line', 'สนใจ Vitaran ผิวโทรม', 'Lost')", [s2.id]);
+  const s3 = await upsertClientByLine("USKIN3", {}); await recordConsent(s3.id, "marketing", true, "v1");
+  await q("insert into leads(client_id, source, interest, status) values ($1, 'line', 'ฟิลเลอร์ปาก', 'Lost')", [s3.id]);
+  const f = filtersFrom((k) => ({ skin: "1", reachable: "1" } as Record<string, string>)[k] ?? null, () => []);
+  assert.deepEqual(f, { skin: true, reachableOnly: true });
+  assert.equal(filtersQuery(f), "skin=1&reachable=1");
+  const ids = (await segmentMembers(f)).map((m) => Number(m.id));
+  assert.ok(ids.includes(s1.id) && ids.includes(s2.id) && !ids.includes(s3.id));
+
+  for (const m of MEDIA) for (const u of [...m.images, ...m.previews]) assert.ok(existsSync("public" + u), u);
+  const set = mediaSet("vitaran-2610-1x1")!;
+  const imgs = absImages(set.images, "https://line.example.com");
+  assert.equal(imgs.length, 3); assert.deepEqual(absImages(set.images, ""), []); // no base → no images, never relative URLs
+  const camp = await createCampaign({ name: set.label, filters: f, message: set.message, withBooking: true, staffId: 1, images: [...imgs, "http://bad.example/x.jpg"] });
+  const k = (await q("select images from campaigns where id = $1", [camp.id]))[0];
+  assert.deepEqual(k.images, imgs);
+  const msgs = campaignMessages("USKIN1", { message: set.message, with_booking: true, campaign_id: camp.id, images: k.images });
+  assert.equal(msgs.length, 4);
+  assert.deepEqual(msgs.slice(0, 3).map((m: any) => m.type), ["image", "image", "image"]);
+  assert.equal((msgs[0] as any).previewImageUrl, "https://line.example.com/campaign/vitaran-2610/1-1x1-p.jpg");
+  assert.equal((msgs[3] as any).type, "flex");
 });
 
 test("conversion API: hashed, consent-gated, idempotent", async () => {

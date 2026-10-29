@@ -154,6 +154,11 @@ export function noShow(userId: string | null) {
     ] }, footer: { type: "box", layout: "vertical", contents: [btn("จองเวลาใหม่", { type: "uri", uri: bookUrl(userId, { src: "noshow" }) })] } } };
 }
 
+/** Campaign picture. LINE needs https for both; the preview must be ≤ 1 MB (our files are ~150 KB). */
+export function image(url: string, preview?: string) {
+  return { type: "image", originalContentUrl: url, previewImageUrl: preview || url };
+}
+
 /** Segment campaign (marketing): the manager's text, optionally with a booking button. */
 export function campaign(userId: string | null, text: string, withBooking: boolean, campaignId: number) {
   if (!withBooking) return txt(text);
