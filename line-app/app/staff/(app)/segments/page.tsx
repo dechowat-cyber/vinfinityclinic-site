@@ -66,7 +66,7 @@ export default async function Segments({ searchParams }: { searchParams: Promise
     <>
       <div><div className="eyebrow">CDP · SEGMENTS</div><h1>กลุ่มลูกค้าและแคมเปญ</h1></div>
       {err && <div className="card err">{ERR[err] ?? err}</div>}
-      {sp.bsent && <div className="card" style={{ borderColor: "var(--ok)" }}>ส่งบรอดแคสต์ #{String(sp.bsent)} ถึงเพื่อนทั้งหมดแล้ว · คนที่กด “จองคิว / สอบถาม” จะเข้ามาในแชท / Leads</div>}
+      {sp.bsent && <div className="card" style={{ borderColor: "var(--ok)" }}>ส่งแคมเปญ #{String(sp.bsent)} ให้ LINE แล้ว · ดูสถานะและจำนวนผู้รับในตารางแคมเปญด้านล่าง · คนที่กด “จองคิว / สอบถาม” จะเข้ามาในแชท / Leads</div>}
       {sp.sent && <div className="card" style={{ borderColor: "var(--ok)" }}>เริ่มส่งแคมเปญ #{String(sp.sent)} แล้ว · ส่วนที่เหลือระบบจะทยอยส่งทุก 5 นาที</div>}
 
       <div className="row">{PRESETS.map(([l, qs]) => <a key={l} className="btn ghost small" href={`?${qs}`}>{l}</a>)}
