@@ -17,11 +17,14 @@ export async function POST(req: Request) {
     .slice(-12).map((m: any) => ({ role: m.role, content: String(m.content).slice(0, 1000) }));
   if (!msgs.length || msgs[msgs.length - 1].role !== "user") return Response.json({ error: "no_message" }, { status: 400, headers: h });
   const ip = (req.headers.get("x-forwarded-for") || "").split(",")[0].trim() || "0";
+  const t0 = Date.now();
   if (!(await allow(ip).catch(() => true))) return Response.json({ reply: "วันนี้คุยกันเยอะแล้ว ทัก LINE @vinfinityclinic ต่อได้เลยนะคะ ทีมงานตอบให้ค่ะ", book: null, limited: true }, { headers: h });
   try {
     const s = await getSettings();
+    const t1 = Date.now(); const kb = await knowledge(); const t2 = Date.now();
     const recent = msgs.filter((m: any) => m.role === "user").slice(-3).map((m: any) => m.content).join(" ");
-    const text = await complete(systemPrompt(kbFor(await knowledge(), recent), s), msgs);
+    const text = await complete(systemPrompt(kbFor(kb, recent), s), msgs);
+    console.log(`[webchat] timing allow+settings ${t1 - t0}ms kb ${t2 - t1}ms model ${Date.now() - t2}ms`);
     return Response.json(parseReply(text), { headers: { ...h, "Cache-Control": "no-store" } });
   } catch (e) {
     console.error("[webchat]", e);
