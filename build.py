@@ -753,6 +753,44 @@ if __name__ == "__main__":
     build_en_all()
 
 
+def write_sitemap():
+    """sitemap.xml from every indexable page built this run (Thai + English twin).
+    lastmod = last git commit of the page's body template (today if it has uncommitted edits);
+    priority is kept from the existing sitemap. Article pages list their hero image."""
+    import re, subprocess, datetime
+    today = datetime.date.today().isoformat()
+    old = (ROOT / "sitemap.xml").read_text(encoding="utf-8") if (ROOT / "sitemap.xml").exists() else ""
+    prio = dict(re.findall(r"<loc>([^<]+)</loc>(?:<lastmod>[^<]*</lastmod>)?<priority>([^<]+)</priority>", old))
+
+    def lastmod(src):
+        rel = str(src.relative_to(ROOT))
+        try:
+            dirty = subprocess.run(["git", "status", "--porcelain", "--", rel], cwd=ROOT, capture_output=True, text=True).stdout.strip()
+            d = subprocess.run(["git", "log", "-1", "--format=%cs", "--", rel], cwd=ROOT, capture_output=True, text=True).stdout.strip()
+        except OSError:
+            return today
+        return today if dirty or not d else d
+
+    rows = []
+    for lang in ("th", "en"):
+        for out, path, body_file, _f, _x in REGISTRY:
+            src = ROOT / "pages" / ("en" if lang == "en" else "") / body_file
+            url_path = en_path(path) if lang == "en" else path
+            if not src.exists() or not (ROOT / (out if lang == "th" else "en/" + out)).exists():
+                continue
+            loc = SITE + url_path
+            row = "<url><loc>%s</loc><lastmod>%s</lastmod><priority>%s</priority>" % (loc, lastmod(src), prio.get(loc, "0.8"))
+            img = page_img(url_path)
+            if img.startswith("/assets/img/articles/"):
+                row += "<image:image><image:loc>%s%s</image:loc></image:image>" % (SITE, img)
+            rows.append(row + "</url>")
+    xml = ('<?xml version="1.0" encoding="UTF-8"?>\n'
+           '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n'
+           + "\n".join(rows) + "\n</urlset>\n")
+    (ROOT / "sitemap.xml").write_text(xml, encoding="utf-8")
+    return len(rows)
+
+
 def write_kb():
     """kb.txt: what the website's chat assistant (น้องวิน, served by the LINE app) may answer from.
     llms.txt for clinic facts + the visible text of the service, price, doctor and home pages (Thai)."""
@@ -780,3 +818,5 @@ def write_kb():
 
 
 print("kb.txt", write_kb(), "chars")
+if REGISTRY:
+    print("sitemap.xml", write_sitemap(), "urls")
