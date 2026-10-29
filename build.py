@@ -587,8 +587,8 @@ def article_ld(path, headline, desc, cites, date="2026-10-03"):
 
 if __name__ == "__main__":
     build("index.html",
-          "Vinfinity Clinic อุดรธานี คลินิกความงามโดยแพทย์ | ฟิลเลอร์อุดร สกินบูสเตอร์ ยกกระชับ",
-          "Vinfinity Clinic อุดรธานี คลินิกฟิลเลอร์ สกินบูสเตอร์ และยกกระชับในตัวเมืองอุดร ออกแบบการรักษาเป็นชั้นเฉพาะใบหน้า แพทย์ประเมินและฉีดเองทุกเคส เปิด 10:00–19:00 (ปิดวันอังคาร) นัดทาง LINE @vinfinityclinic",
+          "คลินิกความงาม อุดรธานี ฟิลเลอร์ สกินบูสเตอร์ ยกกระชับ | Vinfinity Clinic",
+          "Vinfinity Clinic อุดรธานี คลินิกฟิลเลอร์ สกินบูสเตอร์ และยกกระชับในตัวเมืองอุดร แพทย์ประเมินและฉีดเองทุกเคส เปิด 10:00–19:00 (ปิดวันอังคาร) นัดทาง LINE @vinfinityclinic",
           "/", "ฟิลเลอร์ อุดร, ฟิลเลอร์ อุดรธานี, สกินบูสเตอร์ อุดร, สกินบูสเตอร์ อุดรธานี, คลินิกความงาม อุดรธานี, ยกกระชับ อุดร, Doublo อุดร, หมอบาส Vinfinity",
           "home.html", HOME_FAQ)
     build("filler/tear-trough/index.html",
@@ -644,7 +644,7 @@ if __name__ == "__main__":
               "https://pmc.ncbi.nlm.nih.gov/articles/PMC12931948/", "https://doi.org/10.2147/CCID.S437942"])])
     build("price/index.html",
           "ราคาฟิลเลอร์ โบท็อก ยกกระชับ สกินบูสเตอร์ อุดรธานี 2569 | Vinfinity Clinic",
-          "ราคาฟิลเลอร์ อุดร เริ่มต้น 9,990 บาท/cc Sculptra 24,995 บาท โบท็อกเริ่ม 1,500 บาท ยกกระชับ New Doublo 2.0 เริ่ม 22,222 บาท สกินบูสเตอร์เริ่ม 8,900 บาท ปรึกษาแพทย์ฟรี ที่ Vinfinity Clinic อุดรธานี",
+          "ราคาฟิลเลอร์ อุดร เริ่มต้น 9,990 บาท/cc Sculptra 24,995 บาท โบท็อกเริ่ม 1,500 บาท ยกกระชับ New Doublo 2.0 เริ่ม 22,222 บาท สกินบูสเตอร์เริ่ม 8,900 บาท ปรึกษาแพทย์ฟรี Vinfinity Clinic อุดร",
           "/price/", "ราคาฟิลเลอร์ อุดร, ฟิลเลอร์ อุดร ราคา, โบท็อก อุดร ราคา, Sculptra ราคา อุดร, ยกกระชับ ราคา อุดร, สกินบูสเตอร์ ราคา, คลินิกความงาม อุดรธานี ราคา",
           "price.html", PRICE_FAQ, [crumb_ld(("ราคา", "/price/"))])
     build("sculptra/index.html",
@@ -664,7 +664,7 @@ if __name__ == "__main__":
           "filler-lips.html", LIPS_FAQ, [crumb_ld(("ฟิลเลอร์อุดร", "/filler/"), ("ฟิลเลอร์ปาก", "/filler/lips/")), {"@context": "https://schema.org", "@type": "MedicalWebPage", "name": 'ฟิลเลอร์ปาก อุดรธานี', "url": SITE + '/filler/lips/', "inLanguage": "th", "lastReviewed": "2026-10-06", "reviewedBy": {"@id": SITE + "/#dr-dechowat"}, "about": {"@type": "MedicalProcedure", "name": 'Lip filler', "alternateName": 'ฟิลเลอร์ปาก อุดรธานี', "procedureType": 'https://schema.org/NoninvasiveProcedure'}}])
     build("filler/chin/index.html",
           "ฟิลเลอร์คาง อุดรธานี ราคา ปรับสัดส่วนหน้า ไม่ผ่าตัด | Vinfinity Clinic",
-          "ฟิลเลอร์คาง อุดร ปรับความยาวและรูปทรงคางให้สมดุลกับโครงหน้า ไม่ต้องผ่าตัด เห็นผลทันที ฉีดโดยแพทย์ทุกเคส ราคาเริ่มต้น 9,990 บาท/cc ที่ Vinfinity Clinic อุดรธานี",
+          "ฟิลเลอร์คาง อุดร ปรับความยาวและรูปทรงคางให้สมดุลกับโครงหน้า ไม่ต้องผ่าตัด ฉีดโดยแพทย์ทุกเคส ราคาเริ่มต้น 9,990 บาท/cc ที่ Vinfinity Clinic อุดรธานี",
           "/filler/chin/", "ฟิลเลอร์คาง อุดร, ฟิลเลอร์คาง อุดรธานี, ฉีดคาง อุดร, เสริมคาง ไม่ผ่าตัด, คางสั้น, ฟิลเลอร์คาง ราคา",
           "filler-chin.html", CHIN_FAQ, [crumb_ld(("ฟิลเลอร์อุดร", "/filler/"), ("ฟิลเลอร์คาง", "/filler/chin/")), {"@context": "https://schema.org", "@type": "MedicalWebPage", "name": 'ฟิลเลอร์คาง อุดรธานี', "url": SITE + '/filler/chin/', "inLanguage": "th", "lastReviewed": "2026-10-06", "reviewedBy": {"@id": SITE + "/#dr-dechowat"}, "about": {"@type": "MedicalProcedure", "name": 'Chin filler', "alternateName": 'ฟิลเลอร์คาง อุดรธานี', "procedureType": 'https://schema.org/NoninvasiveProcedure'}}])
     a4 = "PN โมเลกุลใหญ่ (HMW) กับโมเลกุลเล็ก (LMW) ต่างกันอย่างไร"
@@ -743,7 +743,7 @@ if __name__ == "__main__":
               "https://pmc.ncbi.nlm.nih.gov/articles/PMC12202259/", "https://pubmed.ncbi.nlm.nih.gov/33300562/",
               "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10082303/", "https://doi.org/10.1007/s00266-025-05060-y"], "2026-10-10"),
               crumb_ld(("บทความ", "/articles/"), ("ฉีดยกเอ็น", "/articles/ligament-lift-injection/"))])
-    build("doctor/index.html", "นพ.เดโชวัต พรมดา The Filler Architect | ประวัติแพทย์ Vinfinity Clinic อุดรธานี",
+    build("doctor/index.html", "นพ.เดโชวัต พรมดา The Filler Architect | ประวัติแพทย์ Vinfinity Clinic",
           "ประวัติ นพ.เดโชวัต พรมดา แพทย์ผู้ก่อตั้ง Vinfinity Clinic แนวคิด Data-driven precision, Art-driven result ประวัติการสอนแพทย์และนักศึกษา รางวัลในและต่างประเทศ KOL Vivacy MNB IMCAS",
           "/doctor/", "หมอบาส, นพ.เดโชวัต พรมดา, Dechowat Promda, The Filler Architect, หมอฉีดฟิลเลอร์ อุดร, แพทย์ความงาม อุดรธานี",
           "doctor.html", DOCTOR_FAQ, [crumb_ld(("แพทย์", "/doctor/")), {"@context": "https://schema.org", "@type": "ProfilePage", "name": "นพ.เดโชวัต พรมดา", "url": SITE + "/doctor/", "inLanguage": "th", "dateModified": "2026-10-06", "mainEntity": {"@id": SITE + "/#dr-dechowat"}}])
