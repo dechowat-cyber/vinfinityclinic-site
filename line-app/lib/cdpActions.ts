@@ -5,7 +5,7 @@ import { q } from "./db";
 import { requireStaff } from "./session";
 import { mergeClients } from "./identity";
 import { mediaSet, absImages } from "./campaignMedia";
-import { filtersFrom, createCampaign, SEGMENT_ROLES, SEND_ROLES } from "./segments";
+import { filtersFrom, createCampaign, createBroadcast, SEGMENT_ROLES, SEND_ROLES } from "./segments";
 import { getSettings } from "./settings";
 
 export async function mergeAction(fd: FormData) {
@@ -49,4 +49,19 @@ export async function sendCampaignAction(fd: FormData) {
   }
   revalidatePath("/staff/segments");
   redirect(`/staff/segments?sent=${r.id}#campaigns`);
+}
+
+export async function sendBroadcastAction(fd: FormData) {
+  const me = await requireStaff(SEND_ROLES);
+  if (fd.get("confirm_all") !== "on") redirect(`/staff/segments?err=confirm#broadcast`);
+  if ((await getSettings()).paused) redirect(`/staff/segments?err=paused#broadcast`);
+  let r: { id: number };
+  try {
+    r = await createBroadcast({ name: String(fd.get("campaign_name") || ""), message: String(fd.get("message") || ""), withBooking: fd.get("with_booking") === "on",
+      staffId: me.id, images: absImages(mediaSet(String(fd.get("media") || ""))?.images ?? []), reach: Number(fd.get("reach")) || null });
+  } catch (e) {
+    redirect(`/staff/segments?err=${encodeURIComponent((e as Error).message.slice(0, 120))}#broadcast`);
+  }
+  revalidatePath("/staff/segments");
+  redirect(`/staff/segments?bsent=${r.id}#campaigns`);
 }

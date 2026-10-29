@@ -59,6 +59,19 @@ export function retryUuid(key: string) {
 export const push = (to: string, messages: Msg[], retryKey?: string) =>
   call("/message/push", { json: { to, messages: messages.slice(0, 5) }, headers: retryKey ? { "X-Line-Retry-Key": retryUuid(retryKey) } : {} });
 
+/** Every friend of the OA. Counts one message per friend against the monthly quota. */
+export const broadcast = (messages: Msg[], retryKey: string) =>
+  call("/message/broadcast", { json: { messages: messages.slice(0, 5) }, headers: { "X-Line-Retry-Key": retryUuid(retryKey) } });
+
+/** Monthly quota and what is used so far; plus how many friends a broadcast would reach (LINE's own estimate, from 2 days ago). */
+export async function reachInfo(now = new Date()): Promise<{ limit: number | null; used: number | null; reach: number | null; followers: number | null }> {
+  const d = new Date(now.getTime() + 7 * 3600e3 - 2 * 864e5).toISOString().slice(0, 10).replace(/-/g, "");
+  const safe = async (path: string) => { try { return (await call(path)) as any; } catch { return null; } };
+  const [q, c, f] = await Promise.all([safe("/message/quota"), safe("/message/quota/consumption"), safe(`/insight/followers?date=${d}`)]);
+  const n = (v: unknown) => (typeof v === "number" ? v : null);
+  return { limit: q?.type === "limited" ? n(q.value) : null, used: n(c?.totalUsage), reach: f?.status === "ready" ? n(f.targetedReaches) : null, followers: f?.status === "ready" ? n(f.followers) : null };
+}
+
 export async function profile(userId: string): Promise<{ displayName?: string; pictureUrl?: string; language?: string } | null> {
   try { return (await call(`/profile/${userId}`)) as any; } catch { return null; }
 }

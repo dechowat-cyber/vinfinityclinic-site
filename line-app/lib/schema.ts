@@ -530,4 +530,5 @@ alter table slips add column if not exists amount_read numeric;
 alter table slips add column if not exists paid_at_read text;
 alter table slips add column if not exists to_name_read text;
 alter table campaigns add column if not exists images jsonb not null default '[]';
+alter table campaigns add column if not exists kind text not null default 'segment';
 `;

@@ -6,8 +6,10 @@ import { upsertClientByLine, recordConsent } from "../lib/crm";
 import { parseSource, deepLink } from "../lib/source";
 import { deriveSource, recordVisit } from "../lib/attribution";
 import { mergeClients, possibleDuplicates, duplicateGroups } from "../lib/identity";
-import { segmentCounts, segmentMembers, createCampaign, campaignResults, filtersFrom, filtersQuery, campaignMessages } from "../lib/segments";
+import { segmentCounts, segmentMembers, createCampaign, campaignResults, filtersFrom, filtersQuery, campaignMessages, createBroadcast } from "../lib/segments";
 import { MEDIA, mediaSet, absImages } from "../lib/campaignMedia";
+import { broadcastText } from "../lib/messages";
+import { reachInfo } from "../lib/line";
 import { existsSync } from "node:fs";
 import { enqueueConversions, sendConversions, sha256, metaEvent } from "../lib/capi";
 import { recordPayment } from "../lib/payments";
@@ -114,6 +116,18 @@ test("campaign with a picture set: skin segment, https images first, then the te
   assert.deepEqual(msgs.slice(0, 3).map((m: any) => m.type), ["image", "image", "image"]);
   assert.equal((msgs[0] as any).previewImageUrl, "https://line.example.com/campaign/vitaran-2610/1-1x1-p.jpg");
   assert.equal((msgs[3] as any).type, "flex");
+});
+
+test("broadcast to every friend: recorded as its own kind, button posts into the chat", async () => {
+  const b = broadcastText("โปร", true) as any;
+  assert.equal(b.contents.footer.contents[0].action.type, "message");
+  assert.deepEqual(broadcastText("โปร", false), { type: "text", text: "โปร" });
+  await assert.rejects(createBroadcast({ name: "x", message: "  ", withBooking: true, staffId: 1 }), /empty_message/);
+  const r = await createBroadcast({ name: "Vitaran ทุกคน", message: "โปร", withBooking: true, staffId: 1, images: ["https://x.example/a.jpg"], reach: 812 });
+  const k = (await q("select kind, recipients, sent, images from campaigns where id = $1", [r.id]))[0];
+  assert.deepEqual([k.kind, k.recipients, k.sent, k.images], ["broadcast", 812, 812, ["https://x.example/a.jpg"]]);
+  assert.ok((await campaignResults()).some((x) => Number(x.id) === r.id && x.kind === "broadcast"));
+  assert.deepEqual(await reachInfo(), { limit: null, used: null, reach: null, followers: null }); // no token → nothing, no crash
 });
 
 test("conversion API: hashed, consent-gated, idempotent", async () => {

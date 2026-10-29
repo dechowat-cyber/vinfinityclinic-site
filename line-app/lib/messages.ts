@@ -167,6 +167,14 @@ export function campaign(userId: string | null, text: string, withBooking: boole
       footer: { type: "box", layout: "vertical", contents: [btn("จองคิว", { type: "uri", uri: bookUrl(userId, { src: `camp_${campaignId}` }) })] } } };
 }
 
+/** Broadcast to every friend: no per-person link, so the button posts a chat message the team answers (and the person enters the CRM). */
+export function broadcastText(text: string, withBooking: boolean, ask = "สนใจโปรนี้ ขอจองคิวค่ะ") {
+  if (!withBooking) return { type: "text", text };
+  return { type: "flex", altText: text.slice(0, 380),
+    contents: { type: "bubble", body: { type: "box", layout: "vertical", paddingAll: "18px", contents: [txt(text, { size: "sm", color: NAVY })] },
+      footer: { type: "box", layout: "vertical", contents: [btn("จองคิว / สอบถาม", { type: "message", label: "จองคิว / สอบถาม", text: ask })] } } };
+}
+
 /** Recall: the same treatment is coming due again. Draft wording, sent only with marketing consent. */
 export function recall(userId: string | null, treatment: string, lastDate: string) {
   return { type: "flex", altText: `ใกล้ครบรอบ${treatment}แล้วค่ะ จองคิวได้เลย`,

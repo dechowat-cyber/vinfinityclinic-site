@@ -1,7 +1,8 @@
 import { q } from "@/lib/db";
 import { requireStaff } from "@/lib/session";
 import { SEGMENT_ROLES, SEND_ROLES, filtersFrom, filtersQuery, segmentMembers, segmentCounts, campaignResults, type Filters } from "@/lib/segments";
-import { saveSegment, deleteSegment, sendCampaignAction } from "@/lib/cdpActions";
+import { saveSegment, deleteSegment, sendCampaignAction, sendBroadcastAction } from "@/lib/cdpActions";
+import { reachInfo } from "@/lib/line";
 import { SOURCE_LABEL } from "@/lib/reports";
 import { baht } from "@/lib/payments";
 import { thaiDate } from "@/lib/time";
@@ -49,6 +50,8 @@ export default async function Segments({ searchParams }: { searchParams: Promise
   ]);
   const catMap = new Map(cat.map((c) => [Number(c.id), c.name as string]));
   const canSend = SEND_ROLES.includes(me.role);
+  const reach = canSend ? await reachInfo(now) : null;
+  const left = reach?.limit != null && reach.used != null ? reach.limit - reach.used : null;
   const err = typeof sp.err === "string" ? sp.err : null;
   const media = mediaSet(typeof sp.media === "string" ? sp.media : null);
   const fq = filtersQuery(f);
@@ -58,6 +61,7 @@ export default async function Segments({ searchParams }: { searchParams: Promise
     <>
       <div><div className="eyebrow">CDP · SEGMENTS</div><h1>กลุ่มลูกค้าและแคมเปญ</h1></div>
       {err && <div className="card err">{ERR[err] ?? err}</div>}
+      {sp.bsent && <div className="card" style={{ borderColor: "var(--ok)" }}>ส่งบรอดแคสต์ #{String(sp.bsent)} ถึงเพื่อนทั้งหมดแล้ว · คนที่กด “จองคิว / สอบถาม” จะเข้ามาในแชท / Leads</div>}
       {sp.sent && <div className="card" style={{ borderColor: "var(--ok)" }}>เริ่มส่งแคมเปญ #{String(sp.sent)} แล้ว · ส่วนที่เหลือระบบจะทยอยส่งทุก 5 นาที</div>}
 
       <div className="row">{PRESETS.map(([l, qs]) => <a key={l} className="btn ghost small" href={`?${qs}`}>{l}</a>)}
@@ -120,6 +124,27 @@ export default async function Segments({ searchParams }: { searchParams: Promise
         ) : <div className="card muted">ส่งแคมเปญได้เฉพาะผู้จัดการสาขา</div>}
       </div>
 
+      {canSend && (
+        <form className="card" id="broadcast" action={sendBroadcastAction}>
+          <div className="eyebrow">ส่งถึงเพื่อนทั้งหมดใน LINE OA (บรอดแคสต์)</div>
+          <p className="muted" style={{ margin: "6px 0 0" }}>ไม่กรองกลุ่ม · ถึงทุกคนที่แอดและไม่ได้บล็อก{reach?.reach != null ? <> · ประมาณ <b>{reach.reach.toLocaleString("th-TH")}</b> คน</> : " · LINE ยังไม่มีตัวเลขผู้รับ"}
+            {left != null && <> · โควตาเหลือ <b>{left.toLocaleString("th-TH")}</b>/{reach!.limit!.toLocaleString("th-TH")} ข้อความเดือนนี้</>}</p>
+          {reach?.reach != null && left != null && reach.reach > left && <div className="card err" style={{ marginTop: 8 }}>โควตาไม่พอสำหรับเพื่อนทั้งหมด LINE จะไม่ส่งเลย · อัปแพ็กเกจใน LINE OA Manager หรือส่งแบบเลือกกลุ่มแทน</div>}
+          <input type="hidden" name="reach" value={reach?.reach ?? ""} />
+          <div className="field" style={{ marginTop: 10 }}><label>ชุดรูป</label>
+            <div className="row">{[null, ...MEDIA].map((m) => <a key={m?.key ?? "none"} className={`btn small ${(media?.key ?? null) === (m?.key ?? null) ? "" : "ghost"}`}
+              href={`?${fq}${m ? `${fq ? "&" : ""}media=${m.key}` : ""}#broadcast`}>{m ? m.label : "ไม่มีรูป"}</a>)}</div>
+            {media && <><input type="hidden" name="media" value={media.key} />
+              <div className="row" style={{ marginTop: 8 }}>{media.previews.map((u) => <img key={u} src={u} alt="" style={{ width: 96, borderRadius: 8, border: "1px solid var(--line, #ddd)" }} />)}</div></>}
+          </div>
+          <div className="field"><label>ชื่อแคมเปญ (ภายใน)</label><input name="campaign_name" defaultValue={media ? `${media.label} · ทุกคน` : ""} placeholder="เช่น โปร Vitaran ทุกคน" /></div>
+          <div className="field"><label>ข้อความ</label><textarea key={"b" + (media?.key ?? "none")} name="message" rows={media ? 9 : 4} maxLength={1000} required defaultValue={media?.message ?? ""} /></div>
+          <label className="check"><input type="checkbox" name="with_booking" defaultChecked /> ใส่ปุ่ม “จองคิว / สอบถาม” (กดแล้วส่งข้อความเข้าแชทคลินิก)</label>
+          <label className="check"><input type="checkbox" name="confirm_all" /> ยืนยันส่งถึงเพื่อนทั้งหมด{reach?.reach != null ? ` ~${reach.reach.toLocaleString("th-TH")} คน` : ""} · ส่งแล้วยกเลิกไม่ได้ · นับโควตาตามจำนวนผู้รับ</label>
+          <button className="btn">ส่งบรอดแคสต์</button>
+        </form>
+      )}
+
       <table className="t">
         <thead><tr><th>ลูกค้า</th><th>ช่องทาง</th><th>มาล่าสุด</th><th>ครั้ง</th><th>ใช้จ่าย</th><th>LINE</th></tr></thead>
         <tbody>
@@ -137,7 +162,7 @@ export default async function Segments({ searchParams }: { searchParams: Promise
         {results.length === 0 ? <p className="muted">ยังไม่มี</p> :
           <table className="t" style={{ marginTop: 10 }}><thead><tr><th>แคมเปญ</th><th>ส่งแล้ว</th><th>จองใน 14 วัน</th><th>รายรับใน 30 วัน</th></tr></thead>
             <tbody>{results.map((r) => (
-              <tr key={r.id}><td><b>{r.name}</b><br /><small className="muted">{day(r.created_at)} · {String(r.message).slice(0, 60)}</small></td>
+              <tr key={r.id}><td><b>{r.name}</b>{r.kind === "broadcast" && <span className="tag" style={{ marginLeft: 6 }}>ทุกคน</span>}<br /><small className="muted">{day(r.created_at)} · {String(r.message).slice(0, 60)}</small></td>
                 <td>{r.sent}/{r.recipients}</td><td>{r.booked} <small className="muted">{r.sent ? `${Math.round((r.booked / r.sent) * 100)}%` : ""}</small></td><td>{baht(r.revenue)}</td></tr>))}</tbody></table>}
       </section>
     </>
