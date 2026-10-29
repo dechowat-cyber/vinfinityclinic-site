@@ -241,8 +241,14 @@ async function formFromGroup(ev: Ev, groupId: string, s: ClinicSettings) {
     const { ingestFormImage } = await import("./salesForm");
     const text = await ingestFormImage(ev.message.id, groupId, img.data, img.mime);
     if (!text) return; // not a sales form (e.g. a normal photo)
-    if (s.execGroupId) await line.push(s.execGroupId, [{ type: "text", text }], `form:${ev.message.id}`);
-    if (groupId !== s.execGroupId && ev.replyToken) await line.reply(ev.replyToken, [{ type: "text", text: "รับฟอร์มยอดขายแล้วค่ะ ระบบตรวจทานและรวมในรายงานผู้บริหารให้แล้ว 🙏" }]);
+    // Posted in the management group: answer with the reply token (free, no push quota).
+    if (groupId === s.execGroupId && ev.replyToken) { await line.reply(ev.replyToken, [{ type: "text", text }]); return; }
+    // Posted in the staff group: money figures go to the management group only (push = quota); the staff group gets a receipt.
+    let pushed = false;
+    if (s.execGroupId) pushed = await line.push(s.execGroupId, [{ type: "text", text }], `form:${ev.message.id}`).then(() => true, (e) => { console.error("[form] push exec", e); return false; });
+    if (ev.replyToken) await line.reply(ev.replyToken, [{ type: "text", text: pushed
+      ? "รับฟอร์มยอดขายแล้วค่ะ ระบบตรวจทานและรวมในรายงานผู้บริหารให้แล้ว 🙏"
+      : `รับฟอร์มยอดขายแล้วค่ะ บันทึกในระบบแล้ว (ส่งสรุปเข้ากลุ่มผู้บริหารไม่ได้เพราะโควตา LINE เดือนนี้หมด) ดูสรุปได้ที่ ${process.env.APP_URL || ""}/staff/finance` }]);
   } catch (e) {
     console.error("[form] read failed", e);
     if ((e as Error)?.name === "AiUnavailable") {
