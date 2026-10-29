@@ -33,6 +33,7 @@ async function call(path: string, init: RequestInit & { json?: unknown } = {}) {
     method: init.method ?? (init.json ? "POST" : "GET"),
     headers: { Authorization: `Bearer ${token}`, ...(init.json ? { "Content-Type": "application/json" } : {}), ...(init.headers || {}) },
     body: init.json ? JSON.stringify(init.json) : (init.body as any),
+    signal: init.signal,
   });
   // 409 with a retry key = LINE already accepted this exact request earlier; treat as sent.
   if (res.status === 409 && (init.headers as Record<string, string> | undefined)?.["X-Line-Retry-Key"]) return null;
@@ -84,13 +85,13 @@ export async function narrowcast(messages: Msg[], n: Narrow, retryKey: string): 
   return res.headers.get("x-line-request-id");
 }
 export async function narrowProgress(requestId: string): Promise<{ phase?: string; successCount?: number; failedDescription?: string; targetCount?: number } | null> {
-  try { return (await call(`/message/progress/narrowcast?requestId=${encodeURIComponent(requestId)}`)) as any; } catch { return null; }
+  try { return (await call(`/message/progress/narrowcast?requestId=${encodeURIComponent(requestId)}`, { signal: AbortSignal.timeout(3000) })) as any; } catch { return null; }
 }
 
 /** Monthly quota and what is used so far; plus how many friends a broadcast would reach (LINE's own estimate, from 2 days ago). */
 export async function reachInfo(now = new Date()): Promise<{ limit: number | null; used: number | null; reach: number | null; followers: number | null }> {
   const d = new Date(now.getTime() + 7 * 3600e3 - 2 * 864e5).toISOString().slice(0, 10).replace(/-/g, "");
-  const safe = async (path: string) => { try { return (await call(path)) as any; } catch { return null; } };
+  const safe = async (path: string) => { try { return (await call(path, { signal: AbortSignal.timeout(3000) })) as any; } catch { return null; } };
   const [q, c, f] = await Promise.all([safe("/message/quota"), safe("/message/quota/consumption"), safe(`/insight/followers?date=${d}`)]);
   const n = (v: unknown) => (typeof v === "number" ? v : null);
   return { limit: q?.type === "limited" ? n(q.value) : null, used: n(c?.totalUsage), reach: f?.status === "ready" ? n(f.targetedReaches) : null, followers: f?.status === "ready" ? n(f.followers) : null };
