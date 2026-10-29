@@ -132,6 +132,7 @@ export default async function Segments({ searchParams }: { searchParams: Promise
       {canSend && (
         <form className="card" id="broadcast" action={sendBroadcastAction}>
           <div className="eyebrow">ส่งถึงเพื่อนทั้งหมดใน LINE OA (บรอดแคสต์)</div>
+          {typeof sp.berr === "string" && <div className="card err" style={{ marginTop: 8 }}>ยังไม่ได้ส่ง · {ERR[sp.berr] ?? sp.berr}</div>}
           <p className="muted" style={{ margin: "6px 0 0" }}>ไม่กรองกลุ่ม · ถึงทุกคนที่แอดและไม่ได้บล็อก{reach?.reach != null ? <> · ประมาณ <b>{reach.reach.toLocaleString("th-TH")}</b> คน</> : " · LINE ยังไม่มีตัวเลขผู้รับ"}
             {left != null && <> · โควตาเหลือ <b>{left.toLocaleString("th-TH")}</b>/{reach!.limit!.toLocaleString("th-TH")} ข้อความเดือนนี้</>}</p>
           {reach?.reach != null && left != null && reach.reach > left && <div className="card err" style={{ marginTop: 8 }}>โควตาไม่พอสำหรับเพื่อนทั้งหมด · ถ้าไม่จำกัดจำนวน LINE จะไม่ส่งเลย · ใส่ “จำนวนสูงสุด” ไม่เกิน {left} คนด้านล่าง</div>}

@@ -53,8 +53,9 @@ export async function sendCampaignAction(fd: FormData) {
 
 export async function sendBroadcastAction(fd: FormData) {
   const me = await requireStaff(SEND_ROLES);
-  if (fd.get("confirm_all") !== "on") redirect(`/staff/segments?err=confirm#broadcast`);
-  if ((await getSettings()).paused) redirect(`/staff/segments?err=paused#broadcast`);
+  const m = fd.get("media") ? `&media=${encodeURIComponent(String(fd.get("media")))}` : "";
+  if (fd.get("confirm_all") !== "on") redirect(`/staff/segments?berr=confirm${m}#broadcast`);
+  if ((await getSettings()).paused) redirect(`/staff/segments?berr=paused${m}#broadcast`);
   let r: { id: number };
   try {
     r = await createBroadcast({ name: String(fd.get("campaign_name") || ""), message: String(fd.get("message") || ""), withBooking: fd.get("with_booking") === "on",
@@ -62,7 +63,7 @@ export async function sendBroadcastAction(fd: FormData) {
       narrow: { max: Number(fd.get("max")) || undefined, gender: fd.get("gender") === "female" || fd.get("gender") === "male" ? (fd.get("gender") as "female" | "male") : undefined,
         ageFrom: Number(fd.get("age_from")) || undefined, ageTo: Number(fd.get("age_to")) || undefined } });
   } catch (e) {
-    redirect(`/staff/segments?err=${encodeURIComponent((e as Error).message.slice(0, 120))}#broadcast`);
+    redirect(`/staff/segments?berr=${encodeURIComponent((e as Error).message.slice(0, 120))}${m}#broadcast`);
   }
   revalidatePath("/staff/segments");
   redirect(`/staff/segments?bsent=${r.id}#campaigns`);
