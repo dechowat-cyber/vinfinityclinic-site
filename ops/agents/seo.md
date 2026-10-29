@@ -13,6 +13,8 @@
 10. Add hreflang alternates (xhtml:link) to the generated sitemap so Google pairs TH/EN even if a page's head changes.
 
 ## Log
+### 2026-10-29 (doctor, via main session)
+- Approved and merged agent/seo-20261029 (banned-word fixes) to main. Galderma trainer lines on /doctor/ (TH/EN) changed to past tense. Still open: medicalSpecialty "Dermatology" — waiting for the doctor's answer, do not change yet.
 ### 2026-10-29
 - First run: audited 51 built pages. No duplicate titles/descriptions, all canonical + hreflang (th/en/x-default) present and correct, every indexable page in sitemap, all JSON-LD parses, 0 broken internal links, robots.txt OK. /menu/ is noindex on purpose. Alt="" only on decorative logo mark and duplicate before/after slider images (intended).
 - Live check: vinfinityclinic.com is blocked from this sandbox (proxy 403); checked production deployment dpl_CdimzPFThsfo1rMgRVEJccdbixGa (READY, commit be3aaa6) via Vercel — /filler/tear-trough/ renders 200 with full JSON-LD.
