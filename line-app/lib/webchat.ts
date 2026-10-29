@@ -31,6 +31,30 @@ export async function knowledge(fetcher: typeof fetch = fetch) {
   return g.__kb?.text ?? "";
 }
 
+const TOPICS: [RegExp, RegExp][] = [
+  [/^ฟิลเลอร์ใต้ตา/, /ใต้ตา|ถุงใต้ตา|ร่องใต้ตา|tear|under.?eye|eye bag/i],
+  [/^ฟิลเลอร์ปาก/, /ปาก|lip/i],
+  [/^ฟิลเลอร์คาง/, /คาง|chin/i],
+  [/^สลายฟิลเลอร์/, /สลาย|dissolv|hyaluronidase/i],
+  [/^ฟิลเลอร์ \(/, /ฟิลเลอร์|filler|ขมับ|แก้ม|จมูก|temple|cheek|nose/i],
+  [/^สกินบูสเตอร์/, /สกิน|บูสเตอร์|booster|vitaran|ไวทาราน|\bpn\b|rejuran|ผิว|skin|รูขุมขน|pore/i],
+  [/^Sculptra/, /sculptra|สกัลป์ตร้า|คอลลาเจน|collagen/i],
+  [/^โบท็อก/, /โบท็อก|botox|toxin|ท็อกซิน|ริ้วรอย|wrinkle|กราม|jaw|หน้าผาก|forehead/i],
+  [/^ยกกระชับ/, /ยก|hifu|doublo|ไฮฟู|lift|หย่อน|sagg/i],
+  [/^แพทย์/, /หมอ|แพทย์|doctor|dr\.|ประวัติ|รางวัล|award/i],
+];
+/** Only the parts of kb.txt this conversation needs (clinic facts + prices always, plus up to 2 matching service pages):
+ *  a much smaller prompt, so the answer comes back several times faster. */
+export function kbFor(kb: string, text: string, max = 2) {
+  const parts = kb.split(/\n(?==== )/);
+  const head = parts[0];
+  const sec = parts.slice(1).map((p) => ({ title: p.replace(/^=== /, ""), body: p }));
+  const price = sec.find((x) => /^ราคา/.test(x.title));
+  const hit = TOPICS.filter(([, re]) => re.test(text)).map(([t]) => sec.find((x) => t.test(x.title))).filter((x): x is { title: string; body: string } => !!x);
+  const picked = [...new Set(hit)].slice(0, max);
+  return [head, price?.body, ...picked.map((x) => x.body)].filter(Boolean).join("\n\n");
+}
+
 export function systemPrompt(kb: string, s: ClinicSettings, now = new Date()) {
   const days = ["อาทิตย์", "จันทร์", "อังคาร", "พุธ", "พฤหัสบดี", "ศุกร์", "เสาร์"];
   const hours = days.map((d, i) => `${d} ${s.hours[i] ? `${s.hours[i]!.open}–${s.hours[i]!.close}` : "ปิด"}`).join(", ");
@@ -41,7 +65,7 @@ export function systemPrompt(kb: string, s: ClinicSettings, now = new Date()) {
 Today is ${thaiDate(now)} (${todayBkk(now)}), time ${thaiTime(now)} Bangkok. Opening hours: ${hours}. Calendar for the coming days (use these dates exactly, never compute weekdays yourself): ${week}. Phone ${s.phone}. LINE @vinfinityclinic.
 
 How you answer
-- Reply in the visitor's language (Thai by default; English or Lao if they write in it). Thai: polite, warm, female particle "ค่ะ/คะ", short. 1–4 short sentences, plain text, no markdown headings, at most a short list.
+- Reply in the visitor's language (Thai by default; English or Lao if they write in it). Thai: polite, warm, female particle "ค่ะ/คะ", short. When replying in English (or any language other than Thai), write only in that language: no Thai particles such as ค่ะ/คะ/นะคะ and no Thai words, and give dates as e.g. "Saturday 31 October". 1–4 short sentences, plain text, no markdown headings, at most a short list.
 - Use ONLY the clinic information below. If something is not in it (a price, a product, a promotion, a schedule), say you are not sure and the team will confirm on LINE @vinfinityclinic or by phone. Never invent prices, promotions, doctors or results.
 - You are an AI assistant, not a doctor or a person. You do not diagnose, recommend doses or say whether a treatment suits someone; the doctor assesses every case before treatment. Say results vary from person to person when talking about results.
 - Never use: ดีที่สุด, อันดับ 1, 100%, การันตี, หายขาด, เห็นผลทันที, ถาวร, ไม่เจ็บ, เชี่ยวชาญ, ปลอดภัย 100% (English: best, guaranteed, permanent, instant, painless, expert, risk-free). Do not name botulinum toxin brands.
@@ -63,7 +87,7 @@ export async function complete(system: string, messages: { role: "user" | "assis
     return /จอง|นัด|book/i.test(last) ? "ได้เลยค่ะ เลือกเวลาที่สะดวกด้านล่างนะคะ [[BOOK]]" : `น้องวินตอบ (ทดสอบ): ${last}`;
   }
   const { askAI } = await import("./ai");
-  return askAI({ system, messages, fast: true, maxTokens: 500, temperature: 0.3 });
+  return askAI({ system, messages, fast: true, maxTokens: 350, temperature: 0.3 });
 }
 
 const BANNED = /ดีที่สุด|อันดับ\s?1|100\s?%|การันตี|หายขาด|เห็นผลทันที|ไม่เจ็บเลย|\bguarantee[ds]?\b|\bpainless\b|\brisk-free\b/gi;

@@ -1,4 +1,4 @@
-import { cors, allow, knowledge, systemPrompt, complete, parseReply } from "@/lib/webchat";
+import { cors, allow, knowledge, kbFor, systemPrompt, complete, parseReply } from "@/lib/webchat";
 import { getSettings } from "@/lib/settings";
 
 export const dynamic = "force-dynamic";
@@ -20,7 +20,8 @@ export async function POST(req: Request) {
   if (!(await allow(ip).catch(() => true))) return Response.json({ reply: "วันนี้คุยกันเยอะแล้ว ทัก LINE @vinfinityclinic ต่อได้เลยนะคะ ทีมงานตอบให้ค่ะ", book: null, limited: true }, { headers: h });
   try {
     const s = await getSettings();
-    const text = await complete(systemPrompt(await knowledge(), s), msgs);
+    const recent = msgs.filter((m: any) => m.role === "user").slice(-3).map((m: any) => m.content).join(" ");
+    const text = await complete(systemPrompt(kbFor(await knowledge(), recent), s), msgs);
     return Response.json(parseReply(text), { headers: { ...h, "Cache-Control": "no-store" } });
   } catch (e) {
     console.error("[webchat]", e);

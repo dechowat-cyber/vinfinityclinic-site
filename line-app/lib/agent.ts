@@ -2,7 +2,7 @@ import { q, one } from "./db";
 import { getSettings, type ClinicSettings } from "./settings";
 import { nextFreeSlots, isAck } from "./webhook";
 import { askAI, aiConfigured } from "./ai";
-import { knowledge, systemPrompt } from "./webchat";
+import { knowledge, kbFor, systemPrompt } from "./webchat";
 import { thaiDate, thaiTime } from "./time";
 import { bookUrl } from "./link";
 
@@ -85,7 +85,7 @@ export async function draftFor(clientId: number, kind: "reply" | "nudge" = "repl
       const kb = await knowledge();
       const free = slots.map((x) => fmt(x, lang)).join(" / ") || "(none in the next days — ask them which day suits)";
       const convo = hist.map((h) => `${h.direction === "in" ? "Customer" : "Clinic"}: ${String(h.body).slice(0, 400)}`).join("\n");
-      text = (await askAI({ system: systemPrompt(kb, s, now) + AGENT_RULES(kind, lang), fast: true, maxTokens: 500, temperature: 0.3,
+      text = (await askAI({ system: systemPrompt(kbFor(kb, hist.filter((h) => h.direction === "in").map((h) => String(h.body)).join(" ")), s, now) + AGENT_RULES(kind, lang), fast: true, maxTokens: 500, temperature: 0.3,
         messages: [{ role: "user", content: `Customer name: ${name ?? "-"}\nFree times: ${free}\nBooking link: ${link}\n\nConversation so far:\n${convo || "(none)"}\n\nWrite the ${kind === "reply" ? "reply" : "follow-up"}.` }] })).trim();
       if (text) engine = "ai";
     } catch (e) { console.error("[agent] ai", (e as Error).message); text = ""; }
