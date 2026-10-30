@@ -20,7 +20,7 @@ Current promotion: Vitaran (PN skin booster) — 1 box 9,990 ฿ · 4+ boxes 8,9
 | Fri 31 Oct | FB + IG feed | Vitaran PN promo — cool/dry season starts | "หน้าหนาวมาแล้ว ผิวพร้อมหรือยัง?" | ทัก LINE @vinfinityclinic ประเมินผิว | assets/img/treatment.jpg |
 | Sun 2 Nov | IG + FB (EN-first) | Foreign patients: how a consultation works | "New to Udon Thani? Here's how your first visit works." | LINE @vinfinityclinic / vinfinityclinic.com/en | assets/img/reception.jpg |
 | Tue 4 Nov | FB + IG carousel | Tear-trough filler, consented cases (PRE/POST, organic only) | "ใต้ตาคล้ำ ไม่ใช่ทุกคนต้องเติมฟิลเลอร์" | อ่านบทความ /articles/tear-trough-filler-candidates | assets/img/ba/case01-a/b, case09-a/b + articles/tear-trough-types-filler-candidate.jpg |
-| Thu 6 Nov | TikTok / Reels | Sculptra vs HA filler — timeline | "เติมทันที vs สร้างค่อยเป็นค่อยไป ต่างกันยังไง" | ลิงก์ /articles/sculptra-ellanse-vs-ha-filler | articles/sculptra-ellanse-ha-filler-timeline.jpg |
+| Thu 6 Nov | TikTok / Reels | Sculptra vs HA filler — timeline | "เติมปริมาตร vs กระตุ้นคอลลาเจน ต่างกันยังไง" | ลิงก์ /articles/sculptra-ellanse-vs-ha-filler | articles/sculptra-ellanse-ha-filler-timeline.jpg |
 | Sat 8 Nov | FB + IG | PN HMW vs LMW education (supports promo) | "PN ไม่ได้มีแบบเดียว" | /articles/pn-molecular-weight + LINE | articles/pn-hmw-lmw-polynucleotide.jpg |
 | Mon 10 Nov | LINE broadcast (week 2, if approved) | Vitaran 4-box price for past skin-booster patients | "ราคา 4 กล่อง 8,990 ฿/กล่อง" | ทักกลับเพื่อจองคิว | treatment.jpg |
 | Tue 11 Nov | FB + IG Story | 11.11 reminder (no extra discount — current promo only) | "11.11 นี้ ดูแลผิวแบบวางแผน" | LINE | clinic-lounge.jpg |
