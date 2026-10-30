@@ -168,7 +168,7 @@ export function campaign(userId: string | null, text: string, withBooking: boole
 }
 
 /** Broadcast to every friend: no per-person link, so the button posts a chat message the team answers (and the person enters the CRM). */
-export function broadcastText(text: string, withBooking: boolean, ask = "สนใจโปรนี้ ขอจองคิวค่ะ") {
+export function broadcastText(text: string, withBooking: boolean, ask = "สนใจโปรนี้ ขอจองคิวค่ะ") { // keep in sync with BROADCAST_ASK in segments.ts
   if (!withBooking) return { type: "text", text };
   return { type: "flex", altText: text.slice(0, 380),
     contents: { type: "bubble", body: { type: "box", layout: "vertical", paddingAll: "18px", contents: [txt(text, { size: "sm", color: NAVY })] },

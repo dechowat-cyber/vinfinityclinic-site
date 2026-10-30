@@ -51,6 +51,9 @@ export default async function Segments({ searchParams }: { searchParams: Promise
   const PHASE: Record<string, string> = { waiting: "LINE กำลังเตรียมส่ง", sending: "กำลังส่ง", succeeded: "ส่งสำเร็จ", failed: "ส่งไม่สำเร็จ" };
   const progress = new Map<number, string>(await Promise.all(results.filter((r) => r.kind === "narrowcast" && r.line_request_id).slice(0, 3).map(async (r) => {
     const p = await narrowProgress(String(r.line_request_id));
+    if (p?.phase === "succeeded" && typeof p.successCount === "number" && Number(r.sent) !== p.successCount) {
+      await q("update campaigns set sent = $2 where id = $1", [r.id, p.successCount]); r.sent = p.successCount;
+    }
     return [Number(r.id), p ? `${PHASE[p.phase ?? ""] ?? p.phase}${p.successCount != null ? ` ${p.successCount} คน` : ""}${p.failedDescription ? ` · ${p.failedDescription}` : ""}` : "LINE กลุ่มเป้าหมาย"] as [number, string];
   })));
   const catMap = new Map(cat.map((c) => [Number(c.id), c.name as string]));
@@ -175,10 +178,10 @@ export default async function Segments({ searchParams }: { searchParams: Promise
       <section className="card" id="campaigns">
         <div className="eyebrow">แคมเปญที่ส่งแล้ว</div>
         {results.length === 0 ? <p className="muted">ยังไม่มี</p> :
-          <table className="t" style={{ marginTop: 10 }}><thead><tr><th>แคมเปญ</th><th>ส่งแล้ว</th><th>จองใน 14 วัน</th><th>รายรับใน 30 วัน</th></tr></thead>
+          <table className="t" style={{ marginTop: 10 }}><thead><tr><th>แคมเปญ</th><th>ส่งแล้ว</th><th>กดสนใจ</th><th>จองใน 14 วัน</th><th>รายรับใน 30 วัน</th></tr></thead>
             <tbody>{results.map((r) => (
               <tr key={r.id}><td><b>{r.name}</b>{r.kind === "broadcast" && <span className="tag" style={{ marginLeft: 6 }}>ทุกคน</span>}{r.kind === "narrowcast" && <span className="tag" style={{ marginLeft: 6 }}>{progress.get(Number(r.id)) ?? "LINE กลุ่มเป้าหมาย"}</span>}<br /><small className="muted">{day(r.created_at)} · {String(r.message).slice(0, 60)}</small></td>
-                <td>{r.sent}/{r.recipients}</td><td>{r.booked} <small className="muted">{r.sent ? `${Math.round((r.booked / r.sent) * 100)}%` : ""}</small></td><td>{baht(r.revenue)}</td></tr>))}</tbody></table>}
+                <td>{r.sent}/{r.recipients}</td><td>{r.kind === "segment" ? "-" : r.replied}</td><td>{r.booked} <small className="muted">{r.sent ? `${Math.round((r.booked / r.sent) * 100)}%` : ""}</small></td><td>{baht(r.revenue)}</td></tr>))}</tbody></table>}
       </section>
     </>
   );

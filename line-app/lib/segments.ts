@@ -166,12 +166,27 @@ export async function sendCampaignBatch(limit = 200, campaignId?: number) {
 }
 
 /** Results: bookings made within 14 days and revenue within 30 days of each message. */
+/** Broadcasts have no recipient list, so they are measured by who pressed the button (it posts BROADCAST_ASK into the chat). */
+export const BROADCAST_ASK = "สนใจโปรนี้ ขอจองคิวค่ะ";
+
 export async function campaignResults(limit = 20) {
   return q(`
+    with resp as (
+      select k.id as campaign_id, t.client_id, min(t.created_at) as at from campaigns k
+      join touchpoints t on t.direction = 'in' and t.kind = 'message' and t.body like $2
+        and t.created_at between k.created_at and k.created_at + interval '14 days'
+      where k.kind in ('broadcast','narrowcast') group by 1, 2)
     select k.id, k.name, k.created_at, k.recipients, k.sent, k.message, k.kind, k.line_request_id, k.filters,
-      (select count(distinct r.client_id)::int from campaign_recipients r join appointments a on a.client_id = r.client_id
-        where r.campaign_id = k.id and r.sent_at is not null and a.created_at between r.sent_at and r.sent_at + interval '14 days' and a.status <> 'cancelled') as booked,
-      (select coalesce(sum(p.amount), 0)::float from campaign_recipients r join payments p on p.client_id = r.client_id
-        where r.campaign_id = k.id and r.sent_at is not null and p.voided_at is null and p.created_at between r.sent_at and r.sent_at + interval '30 days') as revenue
-    from campaigns k order by k.id desc limit $1`, [limit]);
+      (select count(*)::int from resp where resp.campaign_id = k.id) as replied,
+      case when k.kind in ('broadcast','narrowcast') then
+        (select count(distinct resp.client_id)::int from resp join appointments a on a.client_id = resp.client_id
+          where resp.campaign_id = k.id and a.created_at between resp.at and resp.at + interval '14 days' and a.status <> 'cancelled')
+      else (select count(distinct r.client_id)::int from campaign_recipients r join appointments a on a.client_id = r.client_id
+        where r.campaign_id = k.id and r.sent_at is not null and a.created_at between r.sent_at and r.sent_at + interval '14 days' and a.status <> 'cancelled') end as booked,
+      case when k.kind in ('broadcast','narrowcast') then
+        (select coalesce(sum(p.amount), 0)::float from resp join payments p on p.client_id = resp.client_id
+          where resp.campaign_id = k.id and p.voided_at is null and p.created_at between resp.at and resp.at + interval '30 days')
+      else (select coalesce(sum(p.amount), 0)::float from campaign_recipients r join payments p on p.client_id = r.client_id
+        where r.campaign_id = k.id and r.sent_at is not null and p.voided_at is null and p.created_at between r.sent_at and r.sent_at + interval '30 days') end as revenue
+    from campaigns k order by k.id desc limit $1`, [limit, `%${BROADCAST_ASK}%`]);
 }
