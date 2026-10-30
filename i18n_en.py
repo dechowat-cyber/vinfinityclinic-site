@@ -352,5 +352,5 @@ EN_DOCTOR_FAQ = [
     ("How can I verify the doctor's license?", "Medical license no. 48943. You can check the name on the Medical Council of Thailand website."),
     ("Does the doctor inject every patient personally?", "Yes. A physician assesses and treats every patient. Injections are never delegated to non-physicians."),
     ("What is The Filler Architect?", "The doctor's approach of reading the face like architecture: assessing each layer from bone to skin, planning what each layer needs, using only what is necessary, and following up until the plan is complete."),
-    ("Where does the doctor teach or speak?", "He has trained physicians in Northeast Thailand for Galderma, served as faculty at IMCAS Asia, and lectures on Digital Health master's programs at KMITL, Chulalongkorn University and Khon Kaen University."),
+    ("Where does the doctor teach or speak?", "He served as faculty and took part in a Live Demonstration at IMCAS Asia 2023, is a KOL for Vivacy · MNB · IMCAS, previously trained physicians in Northeast Thailand for Galderma, and lectures on Digital Health master's programs at KMITL, Chulalongkorn University and Khon Kaen University."),
 ]
