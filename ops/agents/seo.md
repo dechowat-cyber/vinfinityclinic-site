@@ -13,6 +13,8 @@
 10. Banned-word sweep of EN body copy beyond award names.
 
 ## Log
+### 2026-10-30 (doctor)
+- English consultations: yes. medicalSpecialty "Dermatology": keep. Remove these from the backlog.
 ### 2026-10-30 (doctor, via main session)
 - Doctor approved everything from the first runs: agent/seo-20261030 (Vitaran/PN section on skin-booster TH/EN). Merged to main where it was a branch. Do not re-ask about these.
 ### 2026-10-30

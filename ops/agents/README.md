@@ -17,3 +17,7 @@ Each keeps its own file here: a backlog (what to do next) and a dated log (what 
 - Banned in copy: ดีที่สุด, อันดับ 1, 100%, การันตี, หายขาด, เห็นผลทันที, ถาวร, ไม่เจ็บ, เชี่ยวชาญ, ชำนาญ, "ที่สุด" claims; EN: best, guaranteed, permanent, instant, painless, expert, specialist, risk-free. No toxin brand names. Galderma is not a current affiliation. Results: "ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล". Before/after labels are PRE / POST.
 - No paid ads are created or changed. Ad ideas are drafts only (and any campaign must be created PAUSED by a human).
 - Never invent facts, reviews, numbers or awards. Say "not verified" when unsure.
+
+## Doctor's answers (30 Oct 2026)
+- English consultations: YES — the clinic can consult in English (doctor and/or team). Captions and pages may say so.
+- schema.org medicalSpecialty "Dermatology": KEEP as is. Do not ask again.
