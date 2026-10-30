@@ -1,18 +1,26 @@
 # seo agent
 
 ## Backlog (top = next)
-1. Doctor to decide: JSON-LD `medicalSpecialty: "Dermatology"` on MedicalClinic + Physician (build.py) — is that accurate? If not, remove it (technical fix on main once confirmed). Also Physician `award` lists Galderma awards (historical; README says Galderma is not a current affiliation — wording on /doctor/ says "Galderma AART trainer" in present tense).
-2. GA4 / Meta / TikTok IDs are empty in `window.VF` on every page → no analytics. Ask the doctor for the GA4 ID; set up Google Search Console access so this agent can read real queries.
-3. Content gap (branch draft, max 1/week): skin-booster page never mentions Vitaran or PN by name in TH/EN even though the mission targets "Vitaran อุดร" / "PN อุดร". Price page already lists Vitaran (PN) 8,990 บาท/กล่อง — propose a Vitaran/PN section on /skin-booster/ (TH+EN) that reuses those facts; other claims need the doctor.
-4. Trim the remaining long titles: TH price (74), TH chin (70 incl. marks), EN tear-trough (70), EN articles (headline + suffix 80–100 chars → add a short `seo_title` separate from the on-page headline).
-5. Long TH meta descriptions still >170: doctor (178), price (187 raw), filler (187 raw) — trim without touching prices.
+1. Doctor to decide: JSON-LD `medicalSpecialty: "Dermatology"` on MedicalClinic + Physician (build.py) — is that accurate? Waiting for the doctor's answer; do not change yet. Physician `award` still lists Galderma awards (historical, OK as past awards).
+2. Doctor to approve branch agent/seo-20261030 (Vitaran/PN section on /skin-booster/ TH+EN). Also ask: skin-booster FAQ says "ราคาเริ่มต้น 8,900 บาทต่อครั้ง" but the price page lists Vitaran 9,990/box (8,990 for 4+) — which is right? (price = doctor only).
+3. Meta/TikTok pixel IDs still empty in `window.VF` (GA4 now set: G-390ZZ2GPSP). Set up Google Search Console access so this agent can read real queries/impressions.
+4. Long TH meta descriptions >170: doctor (178), price (187), filler (187), facial-ligaments (178), PN article (189), dissolve article (183), toxin (175) — trim without touching prices.
+5. Remaining long TH titles (codepoints incl. tone marks; visual width is shorter): home 72, price 74, filler 72, skin-booster 71, chin 70. EN tear-trough 70.
 6. Off-site: Thai SERPs for "ฟิลเลอร์ใต้ตา อุดรธานี" are dominated by HDmall/aggregators; EN "filler clinic Udon Thani" by WhatClinic/Thaiger deals. Hand to marketing agent: claim/verify listings (no paid ads).
-7. Lao (LO) pages do not exist yet — build only has TH/EN. If Vientiane patients matter, plan /lo/ with hreflang lo.
-8. Check image weight: list largest files in assets/img and convert to WebP/AVIF with width/height kept.
-9. Banned-word sweep of EN body copy beyond award names ("Best Result on Difficult Case" is a proper noun — OK).
-10. Add hreflang alternates (xhtml:link) to the generated sitemap so Google pairs TH/EN even if a page's head changes.
+7. Next content gap (after Vitaran): EN "botox Udon Thani"/"anti-wrinkle Udon Thani" and TH "ฟิลเลอร์ขมับ อุดร" (temple filler listed in schema knowsAbout but no page) — check SERPs, propose 1 page next week.
+8. Lao (LO) pages do not exist yet — build only has TH/EN. If Vientiane patients matter, plan /lo/ with hreflang lo.
+9. ~180 <img> tags lack loading="lazy"; check which are below the fold and add lazy loading (images are already WebP, largest 217 KB — weight is fine).
+10. Banned-word sweep of EN body copy beyond award names.
 
 ## Log
+### 2026-10-30
+- Main (technical, commit a949aac): short search titles for all 12 EN articles (80–102 → 52–65 chars, via `_SEO_TITLES` in i18n_en.py; on-page H1 and JSON-LD headline unchanged) and 3 TH articles (facial-ligaments 85→52, sculptra-ellanse 80→66, filler-long-term 78→69) in build.py.
+- Main (same commit): sitemap.xml now carries hreflang pairs (th/en/x-default `xhtml:link`) for all 50 URLs, generated in `write_sitemap()`; xmllint OK. Backlog item 10 done.
+- Audit: 51 pages, 0 duplicate titles/descriptions, all JSON-LD parses, canonical everywhere except /menu/ (noindex, intended). Images: all served as WebP, largest 217 KB — backlog item 8 closed.
+- Live: latest production deployment dpl_78wHx26xU8tqirKk1NAwB5H3TnPK (commit 00e50f7) READY; /skin-booster/ renders 200 with valid schema. GA4 ID is now set (G-390ZZ2GPSP).
+- Keyword check: web search "Vitaran อุดรธานี คลินิก" shows no clinic page ranking for it (only unrelated directories) → opportunity.
+- Branch agent/seo-20261030 (commit 8ffb2c3, needs doctor approval): Vitaran (PN) section on /skin-booster/ TH+EN using only facts already on the site (20 mg/mL, Vitaran I/II, price 9,990 / 8,990 for 4+, Lift & Glow, Foundation programs) + link to PN article.
+- Found: skin-booster FAQ "เริ่มต้น 8,900 บาทต่อครั้ง" vs price page Vitaran 9,990/box — not changed (prices are doctor-only); asked in backlog.
 ### 2026-10-29 (doctor, via main session)
 - Approved and merged agent/seo-20261029 (banned-word fixes) to main. Galderma trainer lines on /doctor/ (TH/EN) changed to past tense. Still open: medicalSpecialty "Dermatology" — waiting for the doctor's answer, do not change yet.
 ### 2026-10-29
