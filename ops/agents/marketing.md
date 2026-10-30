@@ -33,6 +33,8 @@ Notes: before/after only from assets/img/ba (consented, already on site), labell
 - Week of 9 Nov: Vitaran 4-box offer → target: patients who had skin booster in last 12 months. Expected size: not verified (need LINE OA segment count; keep ≤100 to fit quota).
 
 ## Log
+### 2026-10-30 (doctor, via main session)
+- Doctor approved everything from the first runs: all drafts and the 2-week calendar from the first run. Merged to main where it was a branch. Do not re-ask about these.
 ### 2026-10-30
 - First run: audited site offers (filler, toxin, skin booster, Sculptra, lifting/Doublo, price page), assets (19 photos, 14 consented B/A cases in assets/img/ba, 13 article graphics, doctor photos, menu images) and set up backlog + 2-week calendar above.
 - Verified Vitaran price on /price/ = 9,990 ฿/box, 4+ boxes 8,990 ฿/box, 2 cc/box (matches brief).

@@ -24,6 +24,8 @@
 "IMCAS Asia 2023 Live Demonstration — what a live demo teaches about planning": 1 carousel (5 slides) + 1 short article section. Facts allowed: faculty + live demo at IMCAS Asia 2023 (photo /assets/img/doctor/imcas-asia-2023-live-demo.jpg), the doctor's layered/ligament approach as already written in /articles/layered-injection-anatomy/ and /articles/facial-ligaments-aging/. No patient faces, no product brands, no outcome claims; end with "ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล" + LINE CTA. Draft only, doctor approves.
 
 ## Log
+### 2026-10-30 (doctor, via main session)
+- Doctor approved everything from the first runs: agent/branding-20261030 (doctor credentials lead with IMCAS Asia 2023 + current KOL roles; Galderma as past). Merged to main where it was a branch. Do not re-ask about these.
 ### 2026-10-30
 - First run. Audit area: website (TH/EN; no LO pages exist). CI tokens in assets/styles.css match the Royal Blue & Silver spec; fonts Montserrat + Kanit only. README CI line was outdated (old navy #041738, Anuphan/Cormorant) → corrected on main.
 - Found: "Galderma" appears in 24 TH + EN generated pages (Physician JSON-LD awards), and on /doctor (5 photos, timeline, awards). Highest-visibility spots presented Galderma as the lead credential: the /doctor hero badge and the /filler trust bullet; TH FAQ "คุณหมอสอนที่ไหน" read the Galderma trainer role in present tense (compliance/reputation risk).

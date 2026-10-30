@@ -22,6 +22,8 @@
 | 2026-10-30 | vinfinityclinic.com (domain) | No | unrelated "Infinity" clinics |
 
 ## Log
+### 2026-10-30 (doctor, via main session)
+- Doctor approved everything from the first runs: all work from the first run. Merged to main where it was a branch. Do not re-ask about these.
 ### 2026-10-30
 - First run audit. robots.txt already allows all AI crawlers (GPTBot, OAI-SearchBot, ClaudeBot, PerplexityBot, Google-Extended, Applebot-Extended). OK.
 - JSON-LD: 50 pages parse cleanly; MedicalClinic + Physician on all, FAQPage on 24 service pages (TH+EN), MedicalProcedure via MedicalWebPage.about. NAP (address/hours/phone) matches build.py + i18n_en.py.

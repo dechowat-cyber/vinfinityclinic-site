@@ -13,6 +13,8 @@
 10. Banned-word sweep of EN body copy beyond award names.
 
 ## Log
+### 2026-10-30 (doctor, via main session)
+- Doctor approved everything from the first runs: agent/seo-20261030 (Vitaran/PN section on skin-booster TH/EN). Merged to main where it was a branch. Do not re-ask about these.
 ### 2026-10-30
 - Main (technical, commit a949aac): short search titles for all 12 EN articles (80–102 → 52–65 chars, via `_SEO_TITLES` in i18n_en.py; on-page H1 and JSON-LD headline unchanged) and 3 TH articles (facial-ligaments 85→52, sculptra-ellanse 80→66, filler-long-term 78→69) in build.py.
 - Main (same commit): sitemap.xml now carries hreflang pairs (th/en/x-default `xhtml:link`) for all 50 URLs, generated in `write_sitemap()`; xmllint OK. Backlog item 10 done.
