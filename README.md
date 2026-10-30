@@ -2,7 +2,7 @@
 
 - แก้เนื้อหาใน `pages/*.html` แล้วรัน `python3 build.py` เพื่อสร้าง `index.html`, `filler/`, `skin-booster/`
 - header/footer, SEO meta, Open Graph และ JSON-LD (MedicalClinic, Physician, FAQPage) อยู่ใน `build.py`
-- CI: navy #041738 · silver #C9CED6 · mist #E6E9EE · pearl #F4F6F9 · ฟอนต์ Anuphan + Cormorant Garamond (self-host ใน `assets/fonts`)
+- CI (Royal Blue & Silver, tokens in `assets/styles.css` :root): navy #0B142E · navy-2 #1A326B · royal #1E3470 · sapphire #3A5496 · silver #D5DDEE · mist #EEF2F8 · ฟอนต์ Montserrat (EN) + Kanit (TH) self-host ใน `assets/fonts` · brand book: ops/agents/branding.md
 - Deploy: Vercel แบบ static ไม่ต้อง build — `vercel --prod` จากโฟลเดอร์นี้ แล้วผูกโดเมน vinfinityclinic.com และ www
 
 ## ต้องเติมก่อนขึ้นจริง (ค้นหา `[` ในไฟล์ pages/ และ build.py)
