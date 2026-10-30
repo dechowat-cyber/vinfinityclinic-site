@@ -34,6 +34,11 @@ test("asking about HArmonyCa → image + promo as a free reply, once per person"
   assert.ok(!again || !JSON.stringify(again.messages).includes("36,900"));
 });
 
+test("a bare 'สนใจ' gets the running promo", async () => {
+  const r = await handleEvent(msg("UPR3", "สนใจ"), fri, DEFAULTS);
+  assert.match(JSON.stringify(r?.messages ?? []), /36,900/);
+});
+
 test("no promo for complaints, unrelated chat, or after the deadline", async () => {
   for (const t of ["ฉีดฟิลเลอร์ไปแล้วบวมแดงค่ะ", "สลายฟิลเลอร์ราคาเท่าไหร่", "พรุ่งนี้เปิดกี่โมงคะ"]) {
     const r = await handleEvent(msg(`UPR-${t.length}`, t), fri, DEFAULTS);

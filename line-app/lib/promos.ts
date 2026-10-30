@@ -63,7 +63,9 @@ export function promoMessages(p: Promo) {
 /** Free auto-reply: once per client per promo, only while it runs, never to a complaint. */
 export async function promoReply(clientId: number, text: string, now = new Date()) {
   if (!text || text.length > 300 || NOT_SALES.test(text)) return null;
-  const p = activePromos(now).find((x) => x.trigger.test(text));
+  // a bare "สนใจ" / "ขอรายละเอียด" while a promo runs almost always means the promo
+  const bare = text.trim().length <= 24 && /^(สนใจ|ขอรายละเอียด|ขอข้อมูล|ขอราคา|มีโปร|interested)/i.test(text.trim());
+  const p = activePromos(now).find((x) => x.trigger.test(text)) ?? (bare ? activePromos(now)[0] : undefined);
   if (!p) return null;
   if (await one("select 1 from touchpoints where client_id = $1 and kind in ('promo','promo_manual') and body = $2", [clientId, p.key])) return null;
   await logTouch(clientId, "out", "promo", p.key);
