@@ -320,9 +320,25 @@ EN_PAGES = {
     },
 }
 
+# Short <title> for search results (Google cuts ~60 chars); the on-page H1/headline stays the long one.
+_SEO_TITLES = {
+    "/articles/filler-safety-evidence/": "Filler Safety: What 2021–2026 Research Shows",
+    "/articles/layered-injection-anatomy/": "Facial Layers and Layered Filler Injection",
+    "/articles/choosing-filler-clinic-udon/": "Filler Clinic in Udon Thani: 7 Things to Check",
+    "/articles/pn-molecular-weight/": "PN HMW vs LMW: Molecular Weight Explained",
+    "/articles/filler-long-term/": "How Long Filler Really Lasts: 5 Facts",
+    "/articles/dissolve-filler-native-tissue/": "Does Dissolving Filler Harm Your Own Tissue?",
+    "/articles/same-filler-different-results/": "Same Filler, Different Results: Why It Happens",
+    "/articles/tear-trough-filler-candidates/": "Who Suits Tear Trough Filler (and Who Doesn't)",
+    "/articles/sculptra-ellanse-vs-ha-filler/": "Sculptra vs Ellansé vs HA Filler: Differences",
+    "/articles/skincare-routine-filler-botox/": "Skincare Before and After Facial Injections",
+    "/articles/facial-ligaments-aging/": "Do Facial Ligaments Loosen With Age?",
+    "/articles/ligament-lift-injection/": "Do Ligament Lift Injections Work?",
+}
+
 for _path, (_headline, _desc, _kw, _crumb) in _ARTICLES.items():
     EN_PAGES[_path] = {
-        "title": _headline + _SUFFIX,
+        "title": _SEO_TITLES.get(_path, _headline) + _SUFFIX,
         "headline": _headline,
         "desc": _desc,
         "keywords": _kw,

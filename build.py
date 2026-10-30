@@ -678,7 +678,7 @@ if __name__ == "__main__":
               crumb_ld(("บทความ", "/articles/"), ("PN โมเลกุลใหญ่กับโมเลกุลเล็ก", "/articles/pn-molecular-weight/"))])
     a5 = "ฟิลเลอร์อยู่นานกว่าที่คิด 5 เรื่องที่ไม่ค่อยมีใครบอกก่อนฉีด"
     d5 = "MRI พบฟิลเลอร์อยู่ในหน้าอย่างน้อย 2 ปีและนานถึง 15 ปี การเติมซ้ำทับของเดิม ฟิลเลอร์ดูดน้ำทำให้ใต้ตาบวม หน้าเต็มเกิน และอาการที่มาทีหลัง สรุปจากงานวิจัยโดย นพ.เดโชวัต พรมดา"
-    build("articles/filler-long-term/index.html", a5 + " | Vinfinity Clinic", d5,
+    build("articles/filler-long-term/index.html", "ฟิลเลอร์อยู่นานกว่าที่คิด 5 เรื่องที่ควรรู้ก่อนฉีด | Vinfinity Clinic", d5,
           "/articles/filler-long-term/", "ฟิลเลอร์อยู่ได้นานแค่ไหน, ฟิลเลอร์ไม่สลาย, ฟิลเลอร์ MRI, หน้าเต็มเกิน, overfilled face, ฟิลเลอร์ใต้ตาบวม, ฟิลเลอร์เคลื่อน, ฟิลเลอร์ อุดรธานี",
           "article-filler-hidden-truths.html", [], [article_ld("/articles/filler-long-term/", a5, d5, [
               "https://doi.org/10.1097/GOX.0000000000005934", "https://doi.org/10.1111/jocd.70879", "https://eyewiki.org/Complications_of_Hyaluronic_Acid_Fillers",
@@ -711,7 +711,7 @@ if __name__ == "__main__":
               crumb_ld(("บทความ", "/articles/"), ("ใต้ตาแบบไหนฉีดฟิลเลอร์ได้", "/articles/tear-trough-filler-candidates/"))])
     a9 = "Sculptra, Ellansé กับฟิลเลอร์ HA ต่างกันอย่างไร เลือกแบบไหนดี"
     d9 = "เทียบ Sculptra (PLLA) Ellansé (PCL) และฟิลเลอร์ HA เรื่องการทำงาน เห็นผลเมื่อไร อยู่ได้นานแค่ไหน สลายได้ไหม และเหมาะกับใคร สรุปจากงานวิจัยโดย นพ.เดโชวัต พรมดา"
-    build("articles/sculptra-ellanse-vs-ha-filler/index.html", a9 + " | Vinfinity Clinic", d9,
+    build("articles/sculptra-ellanse-vs-ha-filler/index.html", "Sculptra, Ellansé กับฟิลเลอร์ HA ต่างกันอย่างไร | Vinfinity Clinic", d9,
           "/articles/sculptra-ellanse-vs-ha-filler/", "Sculptra กับฟิลเลอร์ ต่างกันอย่างไร, Ellansé, Sculptra Ellanse, PLLA, PCL, ฟิลเลอร์ HA, สารกระตุ้นคอลลาเจน, Sculptra อุดร",
           "article-collagen-stimulators.html", [], [article_ld("/articles/sculptra-ellanse-vs-ha-filler/", a9, d9, [
               "https://doi.org/10.1093/asj/sjaf121", "https://doi.org/10.1007/s00266-025-05412-8", "https://doi.org/10.2147/CCID.S229054",
@@ -727,7 +727,7 @@ if __name__ == "__main__":
               crumb_ld(("บทความ", "/articles/"), ("สกินแคร์กับการฉีดหน้า", "/articles/skincare-routine-filler-botox/"))])
     a11 = "เอ็นยึดใบหน้าหย่อนตามอายุจริงไหม งานวิจัยใหม่พบว่าเอ็นกลับแข็งขึ้น"
     d11 = "เดิมเชื่อว่าหน้าย้อยเพราะเอ็นยึดใบหน้ายืดและหลวม งานวิจัยปี 2023 พบว่าเอ็นไม่ได้หลวมขึ้น แต่แข็งขึ้น แล้วอะไรที่ทำให้หน้าย้อย และเปลี่ยนการวางแผนรักษาอย่างไร โดย นพ.เดโชวัต พรมดา"
-    build("articles/facial-ligaments-aging/index.html", a11 + " | Vinfinity Clinic", d11,
+    build("articles/facial-ligaments-aging/index.html", "เอ็นยึดใบหน้าหย่อนตามอายุจริงไหม | Vinfinity Clinic", d11,
           "/articles/facial-ligaments-aging/", "เอ็นยึดใบหน้า, retaining ligament, หน้าย้อย สาเหตุ, เหนียง, ร่องมุมปาก, zygomatic ligament, mandibular ligament, หน้าหย่อน อุดร, ฟิลเลอร์ อุดรธานี",
           "article-ligament-aging.html", [], [article_ld("/articles/facial-ligaments-aging/", a11, d11, [
               "https://doi.org/10.1093/asj/sjad235", "https://doi.org/10.1093/asj/sjad291", "https://pubmed.ncbi.nlm.nih.gov/23855010/",
@@ -780,12 +780,16 @@ def write_sitemap():
                 continue
             loc = SITE + url_path
             row = "<url><loc>%s</loc><lastmod>%s</lastmod><priority>%s</priority>" % (loc, lastmod(src), prio.get(loc, "0.8"))
+            if (ROOT / "en" / out).exists() and (ROOT / "pages" / "en" / body_file).exists():
+                # hreflang pairs, same as the <link rel="alternate"> tags in each page head
+                for hl, href in (("th", path), ("en", en_path(path)), ("x-default", path)):
+                    row += '<xhtml:link rel="alternate" hreflang="%s" href="%s%s"/>' % (hl, SITE, href)
             img = page_img(url_path)
             if img.startswith("/assets/img/articles/"):
                 row += "<image:image><image:loc>%s%s</image:loc></image:image>" % (SITE, img)
             rows.append(row + "</url>")
     xml = ('<?xml version="1.0" encoding="UTF-8"?>\n'
-           '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n'
+           '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n'
            + "\n".join(rows) + "\n</urlset>\n")
     (ROOT / "sitemap.xml").write_text(xml, encoding="utf-8")
     return len(rows)
