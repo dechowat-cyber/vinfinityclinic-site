@@ -2,7 +2,8 @@ import { q } from "@/lib/db";
 import { leadUpdate } from "@/lib/actions";
 import { requireStaff } from "@/lib/session";
 import { pendingDrafts, leadLangStats, LANG_LABEL, type Lang } from "@/lib/agent";
-import { sendDraft, doneDraft, dismissDraft } from "@/lib/agentActions";
+import { sendDraft, doneDraft, dismissDraft, promoSent } from "@/lib/agentActions";
+import { activePromos, promoProspects, promoStats } from "@/lib/promos";
 import { botInfo, chatUrl } from "@/lib/line";
 import { aiConfigured } from "@/lib/ai";
 import { CopyOpen } from "./copy-open";
@@ -23,6 +24,9 @@ export default async function Leads({ searchParams }: { searchParams: Promise<{ 
   await requireStaff(["BM", "AD", "CS", "MK"]);
   const { s, agent } = await searchParams;
   const [drafts, langs, bot] = await Promise.all([pendingDrafts(30), leadLangStats(), botInfo()]);
+  const promo = activePromos()[0] ?? null;
+  const [prospects, pstats] = promo ? await Promise.all([promoProspects(promo, 50), promoStats(promo)]) : [[], null];
+  const toSend = prospects.filter((r) => !r.sent_at);
   const AGENT_ERR: Record<string, string> = { quota: "ส่งจากระบบไม่ได้ เพราะโควตาข้อความ LINE เดือนนี้หมด · ใช้ “คัดลอก + เปิดแชท” แทน (ตอบในแชทไม่นับโควตา)", fail: "ส่งไม่สำเร็จ ลองอีกครั้ง หรือใช้ “คัดลอก + เปิดแชท”", gone: "ร่างนี้ถูกใช้ไปแล้ว" };
   const now = new Date();
   const filter = s === "all" ? "" : s ? "where l.status = $1" : "where l.status in ('New','Contacted','Qualified','Nurture')";
@@ -69,6 +73,44 @@ export default async function Leads({ searchParams }: { searchParams: Promise<{ 
               </div>
             </form>))}
       </section>
+      {promo && (
+        <section className="card" id="promo">
+          <div className="row" style={{ justifyContent: "space-between" }}>
+            <div className="eyebrow">โปรที่กำลังวิ่ง · {promo.label}</div>
+            <small className="muted">ส่งแล้ว {pstats?.sent ?? 0} (บอทตอบเอง {pstats?.auto ?? 0}) · ตอบกลับ {pstats?.replied ?? 0} · จองแล้ว {pstats?.booked ?? 0}</small>
+          </div>
+          <p className="muted" style={{ margin: "6px 0" }}>ไม่กินโควตา LINE ทั้งสองทาง: ใครทักถามเรื่องนี้ บอทตอบรูปโปรให้เองครั้งเดียว · รายชื่อด้านล่างให้ทีมส่งเองในแชท OA Manager
+            (1) <a href={promo.image} target="_blank" download>บันทึกรูปโปร</a> ไว้ในเครื่องครั้งเดียว (2) กด “คัดลอก + เปิดแชท” แนบรูป วางข้อความ ส่ง (3) กด “ส่งแล้ว ✓”
+            · รายชื่อ = คนที่เคยถามเรื่องนี้เอง แล้วตามด้วยลูกค้าเก่าสายฟิลเลอร์/ยกกระชับที่ยินยอมรับข่าวสาร (ไม่รวมคนที่ปฏิเสธ)</p>
+          <div className="row" style={{ alignItems: "flex-start", gap: 14 }}>
+            <img src={promo.preview} alt="" style={{ width: 150, borderRadius: 10 }} />
+            <form id="promo-msg" style={{ flex: 1, minWidth: 260 }}><textarea rows={11} defaultValue={promo.text} style={{ width: "100%" }} /></form>
+          </div>
+          <table className="t" style={{ marginTop: 10 }}>
+            <thead><tr><th>ลูกค้า ({toSend.length} รอส่ง)</th><th>ทำไมอยู่ในรายชื่อ</th><th>ล่าสุด</th><th></th></tr></thead>
+            <tbody>
+              {prospects.length === 0 && <tr><td colSpan={4} className="muted">ยังไม่มีรายชื่อที่ตรง</td></tr>}
+              {prospects.map((r) => {
+                const nm = (r.name || r.display_name || "").trim();
+                const hi = nm ? `สวัสดีค่ะ ${/^(คุณ|คุน|K\.|น้อง|พี่)/i.test(nm) ? nm : `คุณ${nm}`} 😊\n` : "สวัสดีค่ะ 😊\n";
+                return (
+                  <tr key={r.id} style={r.sent_at ? { opacity: .55 } : undefined}>
+                    <td><a href={`/staff/clients/${r.id}`}><b>{nm || `#${r.id}`}</b></a>{r.phone ? <><br /><small className="muted">{r.phone}</small></> : null}</td>
+                    <td><small>{r.inquired ? <span className="tag warn">เคยถามเอง</span> : null} {r.did ? `เคยทำ: ${r.did}` : ""}
+                      {r.asked || r.interest ? <><br /><span className="muted">“{String(r.asked || r.interest).slice(0, 90)}”</span></> : null}</small></td>
+                    <td><small className="muted">{ago(r.asked_at || r.last_in || r.did_at, now)}</small></td>
+                    <td>{r.sent_at
+                      ? <small>{r.sent_how === "promo" ? "บอทตอบแล้ว" : "ส่งแล้ว"} {ago(r.sent_at, now)}{r.booked ? <> · <span className="tag ok">จองแล้ว</span></> : null}</small>
+                      : <div className="row">
+                          <CopyOpen formId="promo-msg" url={chatUrl(bot?.userId, r.line_user_id)} prefix={hi} />
+                          <form action={promoSent}><input type="hidden" name="client" value={r.id} /><input type="hidden" name="key" value={promo.key} /><button className="btn ghost small">ส่งแล้ว ✓</button></form>
+                        </div>}</td>
+                  </tr>);
+              })}
+            </tbody>
+          </table>
+        </section>
+      )}
       <div className="row">
         {[["", "กำลังดำเนินการ"], ...STATUSES.map((x) => [x, TH[x]]), ["all", "ทั้งหมด"]].map(([k, l]) =>
           <a key={k} className={`btn small ${(s || "") === k ? "" : "ghost"}`} href={`/staff/leads${k ? `?s=${k}` : ""}`}>{l}</a>)}

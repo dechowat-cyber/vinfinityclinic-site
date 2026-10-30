@@ -46,3 +46,13 @@ export async function dismissDraft(fd: FormData) {
   await finish(Number(fd.get("id")), me.id, "dismissed");
   revalidatePath("/staff/leads");
 }
+
+/** The team sent the running promo to this client in LINE OA Manager chat (free); recorded for the promo's results. */
+export async function promoSent(fd: FormData) {
+  const me = await requireStaff(ROLES);
+  const id = Number(fd.get("client"));
+  const key = String(fd.get("key") || "");
+  if (id && key && !(await one("select 1 from touchpoints where client_id = $1 and kind in ('promo','promo_manual') and body = $2", [id, key])))
+    await logTouch(id, "out", "promo_manual", key, me.name);
+  revalidatePath("/staff/leads");
+}

@@ -18,7 +18,20 @@ const VITARAN_MSG = `✨ งานผิวตัวดังไตรมาส�
 แพทย์ประเมินผิวก่อนทุกครั้ง · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล
 กดจองคิว หรือพิมพ์ทักแชทนี้ได้เลยค่ะ`;
 
+const HACA_MSG = `✨ HArmonyCa (HA + CaHA) ฟิลเลอร์ไฮบริด
+เติมเต็ม + กระชับ ในเข็มเดียว
+
+💙 Early Bird จองภายใน 31 ต.ค. นี้
+2 cc เหลือ 36,900.- (ปกติ 59,800.-)
+1 cc 29,900.-
+หลัง 31 ต.ค. 2 cc ราคา 39,990.-
+
+แพทย์ประเมินโครงหน้าก่อนทุกครั้ง · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล
+กดจองคิว หรือพิมพ์ทักแชทนี้ได้เลยค่ะ`;
+
 export const MEDIA: MediaSet[] = [
+  set("haca-2610-1x1", "HArmonyCa Early Bird (ถึง 31 ต.ค. 69) · 1:1", "haca-2610", 1, "1x1", HACA_MSG, "reachable=1"),
+  set("haca-2610-4x5", "HArmonyCa Early Bird (ถึง 31 ต.ค. 69) · 4:5", "haca-2610", 1, "4x5", HACA_MSG, "reachable=1"),
   set("vitaran-2610-1x1", "Vitaran ต.ค. 69 · 3 รูป 1:1", "vitaran-2610", 3, "1x1", VITARAN_MSG, "skin=1&reachable=1"),
   set("vitaran-2610-4x5", "Vitaran ต.ค. 69 · 3 รูป 4:5", "vitaran-2610", 3, "4x5", VITARAN_MSG, "skin=1&reachable=1"),
 ];

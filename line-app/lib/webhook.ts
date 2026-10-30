@@ -9,6 +9,7 @@ import { addDays, todayBkk } from "./time";
 import * as line from "./line";
 import * as M from "./messages";
 import * as FR from "./faceReport";
+import { promoReply } from "./promos";
 import { parts, minutes } from "./time";
 
 export function isOpen(s: ClinicSettings, now = new Date()) {
@@ -182,6 +183,11 @@ export async function handleEvent(ev: Ev, now = new Date(), s?: ClinicSettings):
         return { replyToken: ev.replyToken, messages: [{ type: "text", text: "ได้รับสลิปแล้วค่ะ ขอบคุณนะคะ ทีมจะตรวจสอบยอดและส่งใบเสร็จให้ค่ะ" }] };
       }
       if (kind === "duplicate") return { replyToken: ev.replyToken, messages: [{ type: "text", text: "สลิปนี้ได้รับแล้วค่ะ ไม่ต้องส่งซ้ำนะคะ 🙏" }] };
+    }
+    // running promotion: asked about it → the promo once, as a free reply (lib/promos.ts)
+    if (ev.message?.type === "text") {
+      const promo = await promoReply(c.id, text, now).catch((e) => { console.error("[promo]", e); return null; });
+      if (promo) return { replyToken: ev.replyToken, messages: promo as line.Msg[] };
     }
     const msgs: line.Msg[] = [];
     if (/จอง|นัด|คิว|book/i.test(text) && text.length < 40) msgs.push(M.bookingPrompt(userId));

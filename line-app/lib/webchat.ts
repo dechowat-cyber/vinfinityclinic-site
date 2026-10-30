@@ -7,6 +7,7 @@ import { notifyStaff } from "./notify";
 import { deepLink } from "./source";
 import { newVisitCode } from "./attribution";
 import { todayBkk, addDays, parts, thaiDate, thaiTime } from "./time";
+import { promoKb } from "./promos";
 
 // Web chat ("น้องวิน" on vinfinityclinic.com): answers from the site's own content, and hands booking to
 // a deterministic form (slots + name + phone + consent) — the model never books or stores anything itself.
@@ -76,8 +77,8 @@ Booking
 - When the visitor wants to book, see the doctor, or asks about free times, say one short line and put the tag [[BOOK]] at the very end of your reply. If they named a day, use [[BOOK:YYYY-MM-DD]]. The website then shows free times and a short form; you never collect their name or phone in chat.
 - A first consultation with the doctor is the usual first step.
 
-Clinic information (from the website)
-${kb || "(not available right now — answer only with the hours, phone and LINE above, and offer booking)"}`;
+${promoKb(now) ? `${promoKb(now)}\n\n` : ""}Clinic information (from the website)
+${kb ||"(not available right now — answer only with the hours, phone and LINE above, and offer booking)"}`;
 }
 
 /** Calls the model (lib/ai.ts: Anthropic key or Vercel AI Gateway). */
