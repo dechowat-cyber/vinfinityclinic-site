@@ -547,4 +547,16 @@ create table if not exists agent_drafts (
 );
 create index if not exists agent_drafts_pending on agent_drafts(status, created_at desc);
 create table if not exists webchat_usage (k text not null, day date not null, n int not null default 0, primary key (k, day));
+create table if not exists promo_claims (
+  id bigserial primary key,
+  promo_key text not null,
+  client_id bigint not null,
+  seat int not null,
+  status text not null default 'held',
+  created_at timestamptz not null default now(),
+  expires_at timestamptz not null,
+  done_at timestamptz,
+  done_by bigint
+);
+create index if not exists promo_claims_key on promo_claims(promo_key, status);
 `;

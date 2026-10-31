@@ -6,7 +6,7 @@ import { reachInfo, narrowProgress } from "@/lib/line";
 import { SOURCE_LABEL } from "@/lib/reports";
 import { baht } from "@/lib/payments";
 import { thaiDate } from "@/lib/time";
-import { MEDIA, mediaSet } from "@/lib/campaignMedia";
+import { liveMedia, mediaSet } from "@/lib/campaignMedia";
 
 export const dynamic = "force-dynamic";
 
@@ -117,7 +117,7 @@ export default async function Segments({ searchParams }: { searchParams: Promise
           <form className="card" id="send" action={sendCampaignAction}>
             <div className="eyebrow">ส่ง LINE ถึงกลุ่มนี้ · {counts.reachable} คน</div>{hidden("c")}
             <div className="field" style={{ marginTop: 10 }}><label>ชุดรูป (ส่งก่อนข้อความ)</label>
-              <div className="row">{[null, ...MEDIA].map((m) => <a key={m?.key ?? "none"} className={`btn small ${media?.key === (m?.key ?? undefined) || (!media && !m) ? "" : "ghost"}`}
+              <div className="row">{[null, ...liveMedia()].map((m) => <a key={m?.key ?? "none"} className={`btn small ${media?.key === (m?.key ?? undefined) || (!media && !m) ? "" : "ghost"}`}
                 href={`?${fq}${m ? `${fq ? "&" : ""}media=${m.key}` : ""}#send`}>{m ? m.label : "ไม่มีรูป"}</a>)}</div>
               {media && <><input type="hidden" name="media" value={media.key} />
                 <div className="row" style={{ marginTop: 8 }}>{media.previews.map((u) => <img key={u} src={u} alt="" style={{ width: 96, borderRadius: 8, border: "1px solid var(--line, #ddd)" }} />)}</div>
@@ -141,7 +141,7 @@ export default async function Segments({ searchParams }: { searchParams: Promise
           {reach?.reach != null && left != null && reach.reach > left && <div className="card err" style={{ marginTop: 8 }}>โควตาไม่พอสำหรับเพื่อนทั้งหมด · ถ้าไม่จำกัดจำนวน LINE จะไม่ส่งเลย · ใส่ “จำนวนสูงสุด” ไม่เกิน {left} คนด้านล่าง</div>}
           <input type="hidden" name="reach" value={reach?.reach ?? ""} />
           <div className="field" style={{ marginTop: 10 }}><label>ชุดรูป</label>
-            <div className="row">{[null, ...MEDIA].map((m) => <a key={m?.key ?? "none"} className={`btn small ${(media?.key ?? null) === (m?.key ?? null) ? "" : "ghost"}`}
+            <div className="row">{[null, ...liveMedia()].map((m) => <a key={m?.key ?? "none"} className={`btn small ${(media?.key ?? null) === (m?.key ?? null) ? "" : "ghost"}`}
               href={`?${fq}${m ? `${fq ? "&" : ""}media=${m.key}` : ""}#broadcast`}>{m ? m.label : "ไม่มีรูป"}</a>)}</div>
             {media && <><input type="hidden" name="media" value={media.key} />
               <div className="row" style={{ marginTop: 8 }}>{media.previews.map((u) => <img key={u} src={u} alt="" style={{ width: 96, borderRadius: 8, border: "1px solid var(--line, #ddd)" }} />)}</div></>}

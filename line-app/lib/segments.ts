@@ -1,3 +1,4 @@
+import { promoByKey, promoMessages } from "./promos";
 import { q, one } from "./db";
 import { push, broadcast, narrowcast, type Narrow } from "./line";
 import * as M from "./messages";
@@ -109,7 +110,7 @@ export async function createCampaign(o: { name: string; filters: Filters; messag
   if (!members.length) throw new Error("no_recipients");
   const c = await one(`insert into campaigns(segment_id, name, filters, message, with_booking, recipients, created_by, images) values ($1,$2,$3,$4,$5,$6,$7,$8) returning id`,
     [o.segmentId ?? null, o.name.trim().slice(0, 120) || "แคมเปญ", JSON.stringify(o.filters), message, o.withBooking, members.length, o.staffId,
-      JSON.stringify((o.images ?? []).filter((u) => /^https:\/\//.test(u)).slice(0, 4))]);
+      JSON.stringify((o.images ?? []).filter((u) => /^https:\/\//.test(u) || u.startsWith("promo:")).slice(0, 4))]);
   const id = Number(c!.id);
   await q("insert into campaign_recipients(campaign_id, client_id) select $1, unnest($2::bigint[]) on conflict do nothing", [id, members.map((m) => m.id)]);
   await sendCampaignBatch(50, id);
@@ -120,13 +121,15 @@ export async function createCampaign(o: { name: string; filters: Filters; messag
 export async function createBroadcast(o: { name: string; message: string; withBooking: boolean; staffId: number | null; images?: string[]; reach?: number | null; narrow?: Narrow | null }) {
   const message = o.message.trim().slice(0, 1000);
   if (!message) throw new Error("empty_message");
-  const imgs = (o.images ?? []).filter((u) => /^https:\/\//.test(u)).slice(0, 4);
+  const promo = promoByKey((o.images ?? []).find((u) => u.startsWith("promo:"))?.slice(6));
+  const imgs = promo ? [`promo:${promo.key}`] : (o.images ?? []).filter((u) => /^https:\/\//.test(u)).slice(0, 4);
   const narrow = o.narrow && (o.narrow.max || o.narrow.gender || o.narrow.ageFrom || o.narrow.ageTo) ? o.narrow : null;
   const est = narrow?.max ? Math.min(narrow.max, Number(o.reach) || narrow.max) : Math.max(0, Number(o.reach) || 0);
   const c = await one(`insert into campaigns(name, filters, message, with_booking, recipients, created_by, images, kind) values ($1,$2,$3,$4,$5,$6,$7,$8) returning id`,
     [o.name.trim().slice(0, 120) || "บรอดแคสต์", JSON.stringify(narrow ? { narrow } : {}), message, o.withBooking, est, o.staffId, JSON.stringify(imgs), narrow ? "narrowcast" : "broadcast"]);
   const id = Number(c!.id);
-  const msgs = [...imgs.map((u) => M.image(u, u.replace(/\.jpg$/, "-p.jpg"))), M.broadcastText(message, o.withBooking)];
+  const msgs = promo ? [{ type: "text", text: message }, ...promoMessages(promo)]
+    : [...imgs.map((u) => M.image(u, u.replace(/\.jpg$/, "-p.jpg"))), M.broadcastText(message, o.withBooking)];
   if (narrow) {
     const rid = await narrowcast(msgs, narrow, `ncast:${id}`);
     await q("update campaigns set line_request_id = $2 where id = $1", [id, rid]);
@@ -139,6 +142,9 @@ export async function createBroadcast(o: { name: string; message: string; withBo
 
 /** Pictures first, then the text (with the booking button). One push = one message off the OA quota. */
 export function campaignMessages(userId: string, r: { message: string; with_booking: boolean; campaign_id: unknown; images?: unknown }) {
+  // a promo campaign: the text, then the promo card with its "กดรับสิทธิ์" button (lib/promos.ts)
+  const promo = promoByKey((Array.isArray(r.images) ? r.images : []).find((u): u is string => typeof u === "string" && u.startsWith("promo:"))?.slice(6));
+  if (promo) return [{ type: "text", text: r.message }, ...promoMessages(promo)];
   const imgs = (Array.isArray(r.images) ? r.images : []).filter((u): u is string => typeof u === "string" && /^https:\/\//.test(u)).slice(0, 4);
   return [...imgs.map((u) => M.image(u, u.replace(/\.jpg$/, "-p.jpg"))), M.campaign(userId, r.message, r.with_booking, Number(r.campaign_id))];
 }

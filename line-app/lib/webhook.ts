@@ -9,7 +9,7 @@ import { addDays, todayBkk } from "./time";
 import * as line from "./line";
 import * as M from "./messages";
 import * as FR from "./faceReport";
-import { promoReply } from "./promos";
+import { promoReply, promoForWelcome } from "./promos";
 import { parts, minutes } from "./time";
 
 export function isOpen(s: ClinicSettings, now = new Date()) {
@@ -52,7 +52,7 @@ export async function handleEvent(ev: Ev, now = new Date(), s?: ClinicSettings):
     const c = await upsertClientByLine(userId, prof ?? {});
     await markInbound(c.id);
     await logTouch(c.id, "in", "follow");
-    const msgs = [...M.welcome(s), M.bookingPrompt(userId)];
+    const msgs = [...M.welcome(s), M.bookingPrompt(userId), ...(await promoForWelcome(c.id, now).catch(() => []))] as line.Msg[];
     await logTouch(c.id, "out", "welcome");
     return { replyToken: ev.replyToken, messages: msgs };
   }
@@ -186,7 +186,7 @@ export async function handleEvent(ev: Ev, now = new Date(), s?: ClinicSettings):
     }
     // running promotion: asked about it → the promo once, as a free reply (lib/promos.ts)
     if (ev.message?.type === "text") {
-      const promo = await promoReply(c.id, text, now).catch((e) => { console.error("[promo]", e); return null; });
+      const promo = await promoReply(c.id, text, now, userId).catch((e) => { console.error("[promo]", e); return null; });
       if (promo) return { replyToken: ev.replyToken, messages: promo as line.Msg[] };
     }
     const msgs: line.Msg[] = [];

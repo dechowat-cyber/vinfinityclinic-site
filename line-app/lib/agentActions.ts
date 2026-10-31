@@ -56,3 +56,12 @@ export async function promoSent(fd: FormData) {
     await logTouch(id, "out", "promo_manual", key, me.name);
   revalidatePath("/staff/leads");
 }
+
+/** Staff confirm a seat (paid / booked by phone) or give it back to the pool. */
+export async function promoClaimSet(fd: FormData) {
+  const me = await requireStaff(ROLES);
+  const to = String(fd.get("to"));
+  if (to === "confirmed" || to === "released")
+    await q("update promo_claims set status = $2, done_at = now(), done_by = $3 where id = $1 and status <> 'released'", [Number(fd.get("id")), to, me.id]);
+  revalidatePath("/staff/leads");
+}

@@ -2,8 +2,8 @@ import { q } from "@/lib/db";
 import { leadUpdate } from "@/lib/actions";
 import { requireStaff } from "@/lib/session";
 import { pendingDrafts, leadLangStats, LANG_LABEL, type Lang } from "@/lib/agent";
-import { sendDraft, doneDraft, dismissDraft, promoSent } from "@/lib/agentActions";
-import { activePromos, promoProspects, promoStats } from "@/lib/promos";
+import { sendDraft, doneDraft, dismissDraft, promoSent, promoClaimSet } from "@/lib/agentActions";
+import { activePromos, promoProspects, promoStats, promoClaims } from "@/lib/promos";
 import { botInfo, chatUrl } from "@/lib/line";
 import { aiConfigured } from "@/lib/ai";
 import { CopyOpen } from "./copy-open";
@@ -24,8 +24,10 @@ export default async function Leads({ searchParams }: { searchParams: Promise<{ 
   await requireStaff(["BM", "AD", "CS", "MK"]);
   const { s, agent } = await searchParams;
   const [drafts, langs, bot] = await Promise.all([pendingDrafts(30), leadLangStats(), botInfo()]);
-  const promo = activePromos()[0] ?? null;
-  const [prospects, pstats] = promo ? await Promise.all([promoProspects(promo, 50), promoStats(promo)]) : [[], null];
+  const promo = activePromos().find((p) => p.limit) ?? activePromos()[0] ?? null;
+  const [prospects, pstats, claims] = promo ? await Promise.all([promoProspects(promo, 50), promoStats(promo), promo.limit ? promoClaims(promo) : Promise.resolve([])]) : [[], null, []];
+  const liveClaims = claims.filter((c) => c.live);
+  const oaLink = bot?.basicId ? `https://line.me/R/oaMessage/${bot.basicId}/?${encodeURIComponent("โปรเดือนนี้")}` : null;
   const toSend = prospects.filter((r) => !r.sent_at);
   const AGENT_ERR: Record<string, string> = { quota: "ส่งจากระบบไม่ได้ เพราะโควตาข้อความ LINE เดือนนี้หมด · ใช้ “คัดลอก + เปิดแชท” แทน (ตอบในแชทไม่นับโควตา)", fail: "ส่งไม่สำเร็จ ลองอีกครั้ง หรือใช้ “คัดลอก + เปิดแชท”", gone: "ร่างนี้ถูกใช้ไปแล้ว" };
   const now = new Date();
@@ -82,7 +84,36 @@ export default async function Leads({ searchParams }: { searchParams: Promise<{ 
           <p className="muted" style={{ margin: "6px 0" }}>ไม่กินโควตา LINE ทั้งสองทาง: ใครทักถามเรื่องนี้ บอทตอบรูปโปรให้เองครั้งเดียว · รายชื่อด้านล่างให้ทีมส่งเองในแชท OA Manager
             (1) <a href={promo.image} target="_blank" download>บันทึกรูปโปร</a> ไว้ในเครื่องครั้งเดียว (2) กด “คัดลอก + เปิดแชท” แนบรูป วางข้อความ ส่ง (3) กด “ส่งแล้ว ✓”
             · รายชื่อ = คนที่เคยถามเรื่องนี้เอง แล้วตามด้วยลูกค้าเก่าสายฟิลเลอร์/ยกกระชับที่ยินยอมรับข่าวสาร (ไม่รวมคนที่ปฏิเสธ)</p>
-          <div className="row" style={{ alignItems: "flex-start", gap: 14 }}>
+          {promo.limit ? (
+            <div style={{ marginTop: 10 }}>
+              <div className="row" style={{ justifyContent: "space-between" }}>
+                <b>สิทธิ์ที่ถูกกดแล้ว {liveClaims.length}/{promo.limit}</b>
+                <small className="muted">ลูกค้ากด “กดรับสิทธิ์” หรือพิมพ์ “รับสิทธิ์” → ได้ลำดับทันที ถือสิทธิ์ {promo.holdHours ?? 48} ชม. · จองนัดในเวลานั้น = ยืนยันอัตโนมัติ · ไม่จอง = คืนสิทธิ์เอง</small>
+              </div>
+              <table className="t" style={{ marginTop: 6 }}>
+                <thead><tr><th>#</th><th>ลูกค้า</th><th>สถานะ</th><th></th></tr></thead>
+                <tbody>
+                  {claims.length === 0 && <tr><td colSpan={4} className="muted">ยังไม่มีคนกดรับสิทธิ์</td></tr>}
+                  {claims.map((c) => {
+                    const st = c.status === "released" ? "คืนสิทธิ์แล้ว" : c.status === "confirmed" ? "ยืนยันแล้ว" : c.booked ? "จองนัดแล้ว ✓" : c.live ? `รอจองนัด · เหลือ ${Math.max(0, Math.round((new Date(c.expires_at).getTime() - now.getTime()) / 3600000))} ชม.` : "หมดเวลา (สิทธิ์คืนแล้ว)";
+                    return (
+                      <tr key={c.id} style={c.live ? undefined : { opacity: .55 }}>
+                        <td>{c.seat}</td>
+                        <td><a href={`/staff/clients/${c.client_id}`}><b>{c.name || c.display_name || `#${c.client_id}`}</b></a>{c.phone ? <><br /><small className="muted">{c.phone}</small></> : null}</td>
+                        <td><span className={`tag ${c.booked || c.status === "confirmed" ? "ok" : c.live ? "warn" : ""}`}>{st}</span></td>
+                        <td className="row">
+                          <a className="btn ghost small" href={chatUrl(bot?.userId, c.line_user_id)} target="_blank">เปิดแชท</a>
+                          {c.live && c.status === "held" && <form action={promoClaimSet}><input type="hidden" name="id" value={c.id} /><input type="hidden" name="to" value="confirmed" /><button className="btn ghost small">ยืนยันสิทธิ์</button></form>}
+                          {c.live && <form action={promoClaimSet}><input type="hidden" name="id" value={c.id} /><input type="hidden" name="to" value="released" /><button className="btn ghost small">คืนสิทธิ์</button></form>}
+                        </td>
+                      </tr>);
+                  })}
+                </tbody>
+              </table>
+            </div>
+          ) : null}
+          {oaLink && <p className="muted" style={{ margin: "8px 0 0" }}>ลิงก์ให้ลูกค้ากดแล้วทักเข้ามาเอง (ใส่โพสต์ FB/IG/สตอรี่/เว็บ — บอทตอบโปรให้ฟรี): <code style={{ userSelect: "all" }}>{oaLink}</code></p>}
+          <div className="row" style={{ alignItems: "flex-start", gap: 14, marginTop: 10 }}>
             <img src={promo.preview} alt="" style={{ width: 150, borderRadius: 10 }} />
             <form id="promo-msg" style={{ flex: 1, minWidth: 260 }}><textarea rows={11} defaultValue={promo.text} style={{ width: "100%" }} /></form>
           </div>
