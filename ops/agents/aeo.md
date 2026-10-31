@@ -1,14 +1,14 @@
 # aeo agent
 
 ## Backlog (top = next)
-1. Content branch: rewrite EN FAQ answers on /en/filler/tear-trough/ and /en/filler/ to 40–60 words, answer-first (66 of 68 EN FAQ answers are under 40 words). Then TH equivalents.
-2. Content branch: English FAQ block for foreign patients (Vientiane/expats): language, payment, how to book from Laos, how long to stay after treatment — only facts the doctor confirms.
-3. Doctor task list (external citations): claim/complete listings on HDmall, WhatClinic (Udon Thani page exists), Wongnai, Bookimed, Thaiger Deals; check Google Business Profile NAP matches site exactly.
-4. Find out why vinfinityclinic.com does not appear even for a brand/domain search in the web search tool — check Bing Webmaster Tools indexing (Bing feeds ChatGPT/Copilot); doctor task: verify site in Bing Webmaster + submit sitemap.
-5. Add an `/llms-full.txt`? Only if kb.txt is not enough — decide after Bing indexing is confirmed.
-6. Check page titles/H1 on /toxin/ use "โบท็อก" (a brand name) — flag to doctor vs README "no toxin brand names" rule (content, do not change on main).
-7. Add answer-first summary paragraph (one 40–60 word "สรุปสั้น") at top of each service page — content branch.
-8. Keep llms.txt in sync whenever a page/article is added (compare with sitemap.xml each run).
+1. Doctor approval pending: branch agent/aeo-20261031 (EN filler + tear trough FAQ, 40–60 words). After approval: same rewrite for EN lips, chin, dissolve, skin-booster, Sculptra, toxin, lifting, price FAQs (content branch), then TH equivalents.
+2. Doctor task (biggest blocker): verify vinfinityclinic.com in Bing Webmaster Tools + Google Search Console and submit sitemap.xml — 0 of 12 searches over 2 runs show the site, even the domain search. Bing feeds ChatGPT/Copilot.
+3. Doctor task list (external citations): claim/complete listings on WhatClinic (Udon Thani page exists), HDmall, Wongnai, Bookimed (fix "Vincent Clinic" confusion), Thaiger Deals; check Google Business Profile NAP matches site exactly.
+4. Content branch: English FAQ block for foreign patients (Vientiane/expats): English consultations (confirmed 30 Oct), how to book from Laos, how long to stay after treatment — only facts the doctor confirms.
+5. Add answer-first "สรุปสั้น" (40–60 words) at top of each service page — content branch.
+6. Check page titles/H1 on /toxin/ use "โบท็อก" (a brand name) — flag to doctor vs README rule (content, do not change on main).
+7. Keep llms.txt in sync with sitemap.xml each run (script: compare <loc> list with llms.txt).
+8. `/llms-full.txt` — only if kb.txt not enough; decide after indexing confirmed.
 
 ## Results table (AI/web-search visibility)
 | Date | Query | Vinfinity appears? | Sources the answer cites |
@@ -20,6 +20,11 @@
 | 2026-10-30 | ฉีดฟิลเลอร์ อุดร ที่ไหนดี | No | ktc.co.th, hdmall, th.my-best.com, khaosod PR |
 | 2026-10-30 | Vinfinity Clinic อุดรธานี (brand) | No | bookimed "Vincent Clinic" (confusion) |
 | 2026-10-30 | vinfinityclinic.com (domain) | No | unrelated "Infinity" clinics |
+| 2026-10-31 | คลินิกฟิลเลอร์ อุดรธานี Vinfinity | No | thaipbs, wongnai (DS clinic Udon), hdmall, gangnamunni, ktc |
+| 2026-10-31 | Sculptra Udon Thani clinic | No | whatclinic (Udon Thani), bookimed, deals.thethaiger, hdmall |
+| 2026-10-31 | ฟิลเลอร์คาง อุดรธานี คลินิก | No | hdmall reviews (other clinics), wongnai, thaipbs |
+| 2026-10-31 | Dechowat Promda filler (doctor name) | No | Wikipedia/journals, bookimed doctor list (Thailand) |
+| 2026-10-31 | vinfinityclinic.com (domain) | No | unrelated "Infinity"/"Vincent" clinics |
 
 ## Log
 ### 2026-10-30 (doctor, via main session)
@@ -31,3 +36,8 @@
 - Visibility: 0 of 7 searches show Vinfinity — not even brand or domain. Likely not indexed by the search provider; top cited sources for local queries are hdmall, ktc, my-best, whatclinic, bookimed, thethaiger.
 - Found: 66/68 EN FAQ answers are under 40 words (too short for AI extraction). Proposed as content branch next run.
 - Could not fetch the live site from the sandbox (proxy blocks vinfinityclinic.com) — checks are on the repo build.
+### 2026-10-31
+- Visibility: 0 of 5 searches show Vinfinity (12/12 misses over 2 runs), including doctor-name and domain searches → site still not in the search index; local answers cite hdmall, wongnai, whatclinic, bookimed, thethaiger.
+- Fixed llms.txt (main, 70d53fb): 12 English article URLs were missing vs sitemap; added them + "consultations in English available" (doctor-confirmed 30 Oct). kb.txt regenerated. Now all 50 sitemap URLs are in llms.txt.
+- Checked: 205 JSON-LD blocks on all pages parse cleanly; FAQPage on 24 pages.
+- Content branch agent/aeo-20261031 (defe19c): EN filler (7) + tear trough (6) FAQ answers rewritten to 47–55 words, answer-first; only facts already on the site; banned-word check clean. Waiting for doctor approval.
