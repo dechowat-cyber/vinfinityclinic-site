@@ -13,7 +13,7 @@
 10. Physician JSON-LD `award` lists Galderma awards (historical, OK as past awards) — leave.
 
 ## Log
-### 2026-10-31
+### 2026-10-31 (commit eaf176e)
 - Main (technical): trimmed 12 TH meta descriptions 171–189 → 136–165 codepoints in build.py (filler, price, sculptra, toxin, lips, doctor + 6 articles). Prices and facts unchanged; only "ที่ Vinfinity Clinic อุดรธานี"/"โดย นพ.…" tails and filler words removed. Article JSON-LD descriptions follow the same vars.
 - Main (same commit): footer stacked logo now loading="lazy" decoding="async" on all TH/EN pages (only below-fold image without it). Remaining 130 non-lazy imgs = header logos + hero/article cover images (above the fold, correct).
 - Rebuild also refreshed sitemap lastmod (39 URLs → 2026-10-28, from the tear-trough case-33 commit that hadn't been rebuilt).
