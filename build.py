@@ -308,7 +308,7 @@ def footer_en():
 <div class="wrap">
 <div class="cols">
 <div>
-<a class="brand brand-stack" href="/en/"><img src="/assets/vinfinity-logo-stacked.svg" alt="Vinfinity Clinic" width="96" height="114"><span class="brand-tag">INFINITE BEAUTY, PRECISELY</span></a>
+<a class="brand brand-stack" href="/en/"><img src="/assets/vinfinity-logo-stacked.svg" alt="Vinfinity Clinic" width="96" height="114" loading="lazy" decoding="async"><span class="brand-tag">INFINITE BEAUTY, PRECISELY</span></a>
 <p style="margin-top:18px;max-width:340px">Physician-led aesthetic clinic, under the care of Dr. Dechowat Promda · Udon Thani, Thailand and Vientiane, Laos</p>
 </div>
 <div>
@@ -358,7 +358,7 @@ def footer_th():
 <div class="wrap">
 <div class="cols">
 <div>
-<a class="brand brand-stack" href="/"><img src="/assets/vinfinity-logo-stacked.svg" alt="Vinfinity Clinic" width="96" height="114"><span class="brand-tag">INFINITE BEAUTY, PRECISELY</span></a>
+<a class="brand brand-stack" href="/"><img src="/assets/vinfinity-logo-stacked.svg" alt="Vinfinity Clinic" width="96" height="114" loading="lazy" decoding="async"><span class="brand-tag">INFINITE BEAUTY, PRECISELY</span></a>
 <p style="margin-top:18px;max-width:340px">คลินิกเวชกรรมด้านความงาม ดูแลโดย นพ.เดโชวัต พรมดา · สาขาอุดรธานี และเวียงจันทน์ สปป.ลาว</p>
 </div>
 <div>
@@ -620,7 +620,7 @@ if __name__ == "__main__":
               crumb_ld(("บทความ", "/articles/"), ("เลือกคลินิกฟิลเลอร์", "/articles/choosing-filler-clinic-udon/"))])
     build("filler/index.html",
           "ฟิลเลอร์อุดร ราคาเริ่ม 9,990 บาท ฉีดโดยแพทย์ | Vinfinity Clinic อุดรธานี",
-          "ฟิลเลอร์อุดร ฉีดโดยแพทย์ทุกเคส ใต้ตา ขมับ คาง กรอบหน้า ร่องแก้ม ปาก ออกแบบตามโครงหน้าโดย นพ.เดโชวัต พรมดา ฟิลเลอร์ HA ขึ้นทะเบียน อย. ราคาเริ่มต้น 9,990 บาทต่อ cc คลินิกในตัวเมืองอุดรธานี",
+          "ฟิลเลอร์อุดร ฉีดโดยแพทย์ทุกเคส ใต้ตา ขมับ คาง กรอบหน้า ร่องแก้ม ปาก ออกแบบโดย นพ.เดโชวัต พรมดา ฟิลเลอร์ HA ขึ้นทะเบียน อย. เริ่มต้น 9,990 บาท/cc",
           "/filler/", "ฟิลเลอร์อุดร, ฟิลเลอร์ อุดร, ฟิลเลอร์ อุดรธานี, ฉีดฟิลเลอร์ อุดร, ฉีดฟิลเลอร์ อุดรธานี, ฟิลเลอร์ ราคา อุดร, ฟิลเลอร์ใต้ตา อุดร, ฟิลเลอร์คาง อุดร, ฟิลเลอร์ปาก อุดร, ฟิลเลอร์ขมับ, ฟิลเลอร์ร่องแก้ม, คลินิกฟิลเลอร์ อุดร",
           "filler.html", FILLER_FAQ, [crumb_ld(("ฟิลเลอร์อุดร", "/filler/"))])
     build("skin-booster/index.html",
@@ -629,7 +629,7 @@ if __name__ == "__main__":
           "/skin-booster/", "สกินบูสเตอร์ อุดร, สกินบูสเตอร์ อุดรธานี, skin booster อุดร, ฉีดผิว อุดร, ฉีดผิวฉ่ำ อุดรธานี, PN อุดร, PDRN อุดร, ผิวฉ่ำ อุดร, ผิวโกลว์",
           "skin-booster.html", BOOSTER_FAQ, [crumb_ld(("สกินบูสเตอร์", "/skin-booster/"))])
     a1 = "ฉีดฟิลเลอร์ให้ปลอดภัย: งานวิจัยปี 2021–2026 บอกอะไรเรา"
-    d1 = "สรุปหลักฐานล่าสุดเรื่องความปลอดภัยของฟิลเลอร์ หลอดเลือดกลางใบหน้า เข็มกับแคนนูลา การดูดทดสอบ อัลตราซาวด์ Doppler และการรับมือภาวะหลอดเลือดอุดตัน เรียบเรียงโดย นพ.เดโชวัต พรมดา"
+    d1 = "สรุปหลักฐานล่าสุดเรื่องความปลอดภัยของฟิลเลอร์ หลอดเลือดกลางใบหน้า เข็มกับแคนนูลา การดูดทดสอบ อัลตราซาวด์ Doppler และการรับมือภาวะหลอดเลือดอุดตัน"
     build("articles/filler-safety-evidence/index.html", a1 + " | Vinfinity Clinic", d1,
           "/articles/filler-safety-evidence/", "ฟิลเลอร์ ปลอดภัย, ฟิลเลอร์ หลอดเลือดอุดตัน, cannula vs needle, ultrasound filler, hyaluronidase, ฟิลเลอร์ อุดรธานี",
           "article-filler-safety.html", [], [article_ld("/articles/filler-safety-evidence/", a1, d1, [
@@ -644,22 +644,22 @@ if __name__ == "__main__":
               "https://pmc.ncbi.nlm.nih.gov/articles/PMC12931948/", "https://doi.org/10.2147/CCID.S437942"])])
     build("price/index.html",
           "ราคาฟิลเลอร์ โบท็อก ยกกระชับ สกินบูสเตอร์ อุดรธานี 2569 | Vinfinity Clinic",
-          "ราคาฟิลเลอร์ อุดร เริ่มต้น 9,990 บาท/cc Sculptra 24,995 บาท โบท็อกเริ่ม 1,500 บาท ยกกระชับ New Doublo 2.0 เริ่ม 22,222 บาท สกินบูสเตอร์เริ่ม 8,900 บาท ปรึกษาแพทย์ฟรี Vinfinity Clinic อุดร",
+          "ราคาฟิลเลอร์ อุดร เริ่มต้น 9,990 บาท/cc Sculptra 24,995 บาท โบท็อกเริ่ม 1,500 บาท ยกกระชับ New Doublo 2.0 เริ่ม 22,222 บาท สกินบูสเตอร์เริ่ม 8,900 บาท ปรึกษาแพทย์ฟรี",
           "/price/", "ราคาฟิลเลอร์ อุดร, ฟิลเลอร์ อุดร ราคา, โบท็อก อุดร ราคา, Sculptra ราคา อุดร, ยกกระชับ ราคา อุดร, สกินบูสเตอร์ ราคา, คลินิกความงาม อุดรธานี ราคา",
           "price.html", PRICE_FAQ, [crumb_ld(("ราคา", "/price/"))])
     build("sculptra/index.html",
           "Sculptra อุดรธานี ราคา กระตุ้นคอลลาเจน ฉีดโดยแพทย์ | Vinfinity Clinic",
-          "Sculptra อุดร กระตุ้นคอลลาเจนให้ผิวกลับมาแน่น ผลค่อย ๆ ขึ้นและอยู่ได้ถึง 2 ปี ราคา 24,995 บาท/ขวด แพทย์ประเมินจำนวนขวดและจำนวนครั้งก่อนทุกเคส ที่ Vinfinity Clinic อุดรธานี",
+          "Sculptra อุดร กระตุ้นคอลลาเจนให้ผิวกลับมาแน่น ผลค่อย ๆ ขึ้นและอยู่ได้ถึง 2 ปี ราคา 24,995 บาท/ขวด แพทย์ประเมินจำนวนขวดและจำนวนครั้งก่อนทุกเคส",
           "/sculptra/", "Sculptra อุดร, Sculptra อุดรธานี, สกัลป์ตร้า อุดร, ฉีดกระตุ้นคอลลาเจน อุดร, PLLA อุดร, Sculptra ราคา, หน้าหย่อน อุดร",
           "sculptra.html", SCULPTRA_FAQ, [crumb_ld(("Sculptra", "/sculptra/")), {"@context": "https://schema.org", "@type": "MedicalWebPage", "name": 'Sculptra อุดรธานี', "url": SITE + '/sculptra/', "inLanguage": "th", "lastReviewed": "2026-10-06", "reviewedBy": {"@id": SITE + "/#dr-dechowat"}, "about": {"@type": "MedicalProcedure", "name": 'Poly-L-lactic acid injection (Sculptra)', "alternateName": 'Sculptra อุดรธานี', "procedureType": 'https://schema.org/NoninvasiveProcedure'}}])
     build("toxin/index.html",
           "โบท็อก อุดรธานี ราคา ลดริ้วรอย กรามเล็ก หน้าเรียว | Vinfinity Clinic",
-          "ฉีดโบท็อก อุดร ลดริ้วรอยหน้าผาก ระหว่างคิ้ว หางตา และปรับกรามให้หน้าเรียว แพทย์กำหนดยูนิตเฉพาะกล้ามเนื้อของแต่ละคน ราคาเริ่มต้น 1,500 บาท/ตำแหน่ง ที่ Vinfinity Clinic อุดรธานี",
+          "ฉีดโบท็อก อุดร ลดริ้วรอยหน้าผาก ระหว่างคิ้ว หางตา และปรับกรามให้หน้าเรียว แพทย์กำหนดยูนิตตามกล้ามเนื้อแต่ละคน เริ่มต้น 1,500 บาท/ตำแหน่ง",
           "/toxin/", "โบท็อก อุดร, โบท็อก อุดรธานี, ฉีดโบท็อก อุดร, botox อุดร, โบท็อกกราม อุดร, ลดริ้วรอย อุดร, โบท็อก ราคา อุดร",
           "toxin.html", TOXIN_FAQ, [crumb_ld(("โบท็อก", "/toxin/")), {"@context": "https://schema.org", "@type": "MedicalWebPage", "name": 'โบท็อก อุดรธานี', "url": SITE + '/toxin/', "inLanguage": "th", "lastReviewed": "2026-10-06", "reviewedBy": {"@id": SITE + "/#dr-dechowat"}, "about": {"@type": "MedicalProcedure", "name": 'Botulinum toxin injection', "alternateName": 'โบท็อก อุดรธานี', "procedureType": 'https://schema.org/NoninvasiveProcedure'}}])
     build("filler/lips/index.html",
           "ฟิลเลอร์ปาก อุดรธานี ราคา ปากอิ่มเป็นธรรมชาติ | Vinfinity Clinic",
-          "ฟิลเลอร์ปาก อุดร ออกแบบรูปปากตามสัดส่วนใบหน้า ทั้งขอบปาก ความอิ่ม และมุมปาก ฉีดโดยแพทย์ทุกเคส ราคาเริ่มต้น 9,990 บาท/cc ผลิตภัณฑ์ขึ้นทะเบียน อย. ที่ Vinfinity Clinic อุดรธานี",
+          "ฟิลเลอร์ปาก อุดร ออกแบบรูปปากตามสัดส่วนใบหน้า ทั้งขอบปาก ความอิ่ม และมุมปาก ฉีดโดยแพทย์ทุกเคส เริ่มต้น 9,990 บาท/cc ผลิตภัณฑ์ขึ้นทะเบียน อย.",
           "/filler/lips/", "ฟิลเลอร์ปาก อุดร, ฟิลเลอร์ปาก อุดรธานี, ฉีดปาก อุดร, ปากอิ่ม, ปากกระจับ, ฟิลเลอร์ปาก ราคา",
           "filler-lips.html", LIPS_FAQ, [crumb_ld(("ฟิลเลอร์อุดร", "/filler/"), ("ฟิลเลอร์ปาก", "/filler/lips/")), {"@context": "https://schema.org", "@type": "MedicalWebPage", "name": 'ฟิลเลอร์ปาก อุดรธานี', "url": SITE + '/filler/lips/', "inLanguage": "th", "lastReviewed": "2026-10-06", "reviewedBy": {"@id": SITE + "/#dr-dechowat"}, "about": {"@type": "MedicalProcedure", "name": 'Lip filler', "alternateName": 'ฟิลเลอร์ปาก อุดรธานี', "procedureType": 'https://schema.org/NoninvasiveProcedure'}}])
     build("filler/chin/index.html",
@@ -668,7 +668,7 @@ if __name__ == "__main__":
           "/filler/chin/", "ฟิลเลอร์คาง อุดร, ฟิลเลอร์คาง อุดรธานี, ฉีดคาง อุดร, เสริมคาง ไม่ผ่าตัด, คางสั้น, ฟิลเลอร์คาง ราคา",
           "filler-chin.html", CHIN_FAQ, [crumb_ld(("ฟิลเลอร์อุดร", "/filler/"), ("ฟิลเลอร์คาง", "/filler/chin/")), {"@context": "https://schema.org", "@type": "MedicalWebPage", "name": 'ฟิลเลอร์คาง อุดรธานี', "url": SITE + '/filler/chin/', "inLanguage": "th", "lastReviewed": "2026-10-06", "reviewedBy": {"@id": SITE + "/#dr-dechowat"}, "about": {"@type": "MedicalProcedure", "name": 'Chin filler', "alternateName": 'ฟิลเลอร์คาง อุดรธานี', "procedureType": 'https://schema.org/NoninvasiveProcedure'}}])
     a4 = "PN โมเลกุลใหญ่ (HMW) กับโมเลกุลเล็ก (LMW) ต่างกันอย่างไร"
-    d4 = "PN กับ PDRN ต่างกันที่ความยาวสาย DNA ขนาดโมเลกุลเปลี่ยนความชุ่มชื้น ความหนืด และเวลาที่อยู่ในผิวอย่างไร หลักฐานที่มีแล้วและที่ยังไม่มี เรียบเรียงจากงานวิจัยปี 2018–2026 โดย นพ.เดโชวัต พรมดา"
+    d4 = "PN กับ PDRN ต่างกันที่ความยาวสาย DNA ขนาดโมเลกุลเปลี่ยนความชุ่มชื้น ความหนืด และเวลาที่อยู่ในผิวอย่างไร สรุปงานวิจัยปี 2018–2026 โดย นพ.เดโชวัต พรมดา"
     build("articles/pn-molecular-weight/index.html", a4 + " | Vinfinity Clinic", d4,
           "/articles/pn-molecular-weight/", "PN HMW LMW, polynucleotide molecular weight, PN กับ PDRN ต่างกัน, สกินบูสเตอร์ PN, PN โมเลกุลใหญ่, PDRN อุดร, PN อุดรธานี",
           "article-pn-molecular-weight.html", [], [article_ld("/articles/pn-molecular-weight/", a4, d4, [
@@ -677,7 +677,7 @@ if __name__ == "__main__":
               "https://doi.org/10.2147/CCID.S557226", "https://doi.org/10.25259/JCAS_65_2025"], "2026-10-06"),
               crumb_ld(("บทความ", "/articles/"), ("PN โมเลกุลใหญ่กับโมเลกุลเล็ก", "/articles/pn-molecular-weight/"))])
     a5 = "ฟิลเลอร์อยู่นานกว่าที่คิด 5 เรื่องที่ไม่ค่อยมีใครบอกก่อนฉีด"
-    d5 = "MRI พบฟิลเลอร์อยู่ในหน้าอย่างน้อย 2 ปีและนานถึง 15 ปี การเติมซ้ำทับของเดิม ฟิลเลอร์ดูดน้ำทำให้ใต้ตาบวม หน้าเต็มเกิน และอาการที่มาทีหลัง สรุปจากงานวิจัยโดย นพ.เดโชวัต พรมดา"
+    d5 = "MRI พบฟิลเลอร์อยู่ในหน้าอย่างน้อย 2 ปีและนานถึง 15 ปี การเติมซ้ำทับของเดิม ฟิลเลอร์ดูดน้ำทำให้ใต้ตาบวม หน้าเต็มเกิน และอาการที่มาทีหลัง สรุปจากงานวิจัย"
     build("articles/filler-long-term/index.html", "ฟิลเลอร์อยู่นานกว่าที่คิด 5 เรื่องที่ควรรู้ก่อนฉีด | Vinfinity Clinic", d5,
           "/articles/filler-long-term/", "ฟิลเลอร์อยู่ได้นานแค่ไหน, ฟิลเลอร์ไม่สลาย, ฟิลเลอร์ MRI, หน้าเต็มเกิน, overfilled face, ฟิลเลอร์ใต้ตาบวม, ฟิลเลอร์เคลื่อน, ฟิลเลอร์ อุดรธานี",
           "article-filler-hidden-truths.html", [], [article_ld("/articles/filler-long-term/", a5, d5, [
@@ -686,7 +686,7 @@ if __name__ == "__main__":
               "https://doi.org/10.1111/jocd.15071"], "2026-10-06"),
               crumb_ld(("บทความ", "/articles/"), ("ฟิลเลอร์อยู่นานกว่าที่คิด", "/articles/filler-long-term/"))])
     a6 = "สลายฟิลเลอร์แล้ว ผิวเดิมจะเสียไหม สิ่งที่งานวิจัยบอก"
-    d6 = "เอนไซม์สลายฟิลเลอร์ (hyaluronidase) ทำงานอย่างไร ไฮยาลูรอนิกของร่างกายกลับมาเองไหม ทำไมบางคนดูโทรมหลังสลาย ทำไมบางเคสสลายยาก โอกาสแพ้ และควรรอนานแค่ไหนก่อนฉีดใหม่ โดย นพ.เดโชวัต พรมดา"
+    d6 = "เอนไซม์สลายฟิลเลอร์ทำงานอย่างไร ไฮยาลูรอนิกของร่างกายกลับมาเองไหม ทำไมบางคนดูโทรมหลังสลาย โอกาสแพ้ และควรรอนานแค่ไหนก่อนฉีดใหม่ โดย นพ.เดโชวัต พรมดา"
     build("articles/dissolve-filler-native-tissue/index.html", a6 + " | Vinfinity Clinic", d6,
           "/articles/dissolve-filler-native-tissue/", "สลายฟิลเลอร์ ผิวเสียไหม, hyaluronidase, สลายฟิลเลอร์ หน้าตอบ, สลายฟิลเลอร์ แพ้, สลายฟิลเลอร์ อุดร, เอนไซม์สลายฟิลเลอร์",
           "article-dissolve-native.html", [], [article_ld("/articles/dissolve-filler-native-tissue/", a6, d6, [
@@ -702,7 +702,7 @@ if __name__ == "__main__":
               "https://doi.org/10.1093/asjof/ojag030", "https://doi.org/10.1097/GOX.0000000000005934"], "2026-10-06"),
               crumb_ld(("บทความ", "/articles/"), ("ฟิลเลอร์ตัวเดียวกัน ผลไม่เหมือนกัน", "/articles/same-filler-different-results/"))])
     a8 = "ใต้ตาแบบไหนฉีดฟิลเลอร์ได้ แบบไหนไม่ควรฉีด"
-    d8 = "ร่องใต้ตา ถุงไขมัน คล้ำจากเม็ดสี คล้ำจากเส้นเลือด และบวมน้ำ ต่างกันอย่างไร ใครเหมาะกับฟิลเลอร์ใต้ตา ใครควรเลือกวิธีอื่น พร้อมตัวเลขจากงานวิจัย 2,048 ราย โดย นพ.เดโชวัต พรมดา"
+    d8 = "ร่องใต้ตา ถุงไขมัน คล้ำจากเม็ดสี คล้ำจากเส้นเลือด และบวมน้ำ ต่างกันอย่างไร ใครเหมาะกับฟิลเลอร์ใต้ตา ใครควรเลือกวิธีอื่น พร้อมตัวเลขจากงานวิจัย 2,048 ราย"
     build("articles/tear-trough-filler-candidates/index.html", a8 + " | Vinfinity Clinic", d8,
           "/articles/tear-trough-filler-candidates/", "ฟิลเลอร์ใต้ตา, ใต้ตาคล้ำ, ถุงใต้ตา, ร่องใต้ตา, ฟิลเลอร์ใต้ตาบวม, ฟิลเลอร์ใต้ตา ใครไม่ควรฉีด, ฟิลเลอร์ใต้ตา อุดร",
           "article-tear-trough-candidates.html", [], [article_ld("/articles/tear-trough-filler-candidates/", a8, d8, [
@@ -726,7 +726,7 @@ if __name__ == "__main__":
               "https://jcadonline.com/minimizing-bruising-following-fillers-and-other-cosmetic-injectables/"], "2026-10-07"),
               crumb_ld(("บทความ", "/articles/"), ("สกินแคร์กับการฉีดหน้า", "/articles/skincare-routine-filler-botox/"))])
     a11 = "เอ็นยึดใบหน้าหย่อนตามอายุจริงไหม งานวิจัยใหม่พบว่าเอ็นกลับแข็งขึ้น"
-    d11 = "เดิมเชื่อว่าหน้าย้อยเพราะเอ็นยึดใบหน้ายืดและหลวม งานวิจัยปี 2023 พบว่าเอ็นไม่ได้หลวมขึ้น แต่แข็งขึ้น แล้วอะไรที่ทำให้หน้าย้อย และเปลี่ยนการวางแผนรักษาอย่างไร โดย นพ.เดโชวัต พรมดา"
+    d11 = "เดิมเชื่อว่าหน้าย้อยเพราะเอ็นยึดใบหน้ายืดหลวม งานวิจัยปี 2023 พบว่าเอ็นไม่ได้หลวมขึ้นแต่แข็งขึ้น แล้วอะไรทำให้หน้าย้อย และเปลี่ยนการวางแผนรักษาอย่างไร"
     build("articles/facial-ligaments-aging/index.html", "เอ็นยึดใบหน้าหย่อนตามอายุจริงไหม | Vinfinity Clinic", d11,
           "/articles/facial-ligaments-aging/", "เอ็นยึดใบหน้า, retaining ligament, หน้าย้อย สาเหตุ, เหนียง, ร่องมุมปาก, zygomatic ligament, mandibular ligament, หน้าหย่อน อุดร, ฟิลเลอร์ อุดรธานี",
           "article-ligament-aging.html", [], [article_ld("/articles/facial-ligaments-aging/", a11, d11, [
@@ -744,7 +744,7 @@ if __name__ == "__main__":
               "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10082303/", "https://doi.org/10.1007/s00266-025-05060-y"], "2026-10-10"),
               crumb_ld(("บทความ", "/articles/"), ("ฉีดยกเอ็น", "/articles/ligament-lift-injection/"))])
     build("doctor/index.html", "นพ.เดโชวัต พรมดา The Filler Architect | ประวัติแพทย์ Vinfinity Clinic",
-          "ประวัติ นพ.เดโชวัต พรมดา แพทย์ผู้ก่อตั้ง Vinfinity Clinic แนวคิด Data-driven precision, Art-driven result ประวัติการสอนแพทย์และนักศึกษา รางวัลในและต่างประเทศ KOL Vivacy MNB IMCAS",
+          "ประวัติ นพ.เดโชวัต พรมดา แพทย์ผู้ก่อตั้ง Vinfinity Clinic แนวคิด Data-driven precision, Art-driven result การสอนแพทย์ รางวัล และบทบาท KOL Vivacy MNB IMCAS",
           "/doctor/", "หมอบาส, นพ.เดโชวัต พรมดา, Dechowat Promda, The Filler Architect, หมอฉีดฟิลเลอร์ อุดร, แพทย์ความงาม อุดรธานี",
           "doctor.html", DOCTOR_FAQ, [crumb_ld(("แพทย์", "/doctor/")), {"@context": "https://schema.org", "@type": "ProfilePage", "name": "นพ.เดโชวัต พรมดา", "url": SITE + "/doctor/", "inLanguage": "th", "dateModified": "2026-10-06", "mainEntity": {"@id": SITE + "/#dr-dechowat"}}])
     build("articles/index.html", "บทความ Advanced Injection อ้างอิงงานวิจัย | Vinfinity Clinic",

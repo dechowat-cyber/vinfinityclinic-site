@@ -1,18 +1,26 @@
 # seo agent
 
 ## Backlog (top = next)
-1. Doctor to decide: JSON-LD `medicalSpecialty: "Dermatology"` on MedicalClinic + Physician (build.py) — is that accurate? Waiting for the doctor's answer; do not change yet. Physician `award` still lists Galderma awards (historical, OK as past awards).
-2. Doctor to approve branch agent/seo-20261030 (Vitaran/PN section on /skin-booster/ TH+EN). Also ask: skin-booster FAQ says "ราคาเริ่มต้น 8,900 บาทต่อครั้ง" but the price page lists Vitaran 9,990/box (8,990 for 4+) — which is right? (price = doctor only).
-3. Meta/TikTok pixel IDs still empty in `window.VF` (GA4 now set: G-390ZZ2GPSP). Set up Google Search Console access so this agent can read real queries/impressions.
-4. Long TH meta descriptions >170: doctor (178), price (187), filler (187), facial-ligaments (178), PN article (189), dissolve article (183), toxin (175) — trim without touching prices.
-5. Remaining long TH titles (codepoints incl. tone marks; visual width is shorter): home 72, price 74, filler 72, skin-booster 71, chin 70. EN tear-trough 70.
-6. Off-site: Thai SERPs for "ฟิลเลอร์ใต้ตา อุดรธานี" are dominated by HDmall/aggregators; EN "filler clinic Udon Thani" by WhatClinic/Thaiger deals. Hand to marketing agent: claim/verify listings (no paid ads).
-7. Next content gap (after Vitaran): EN "botox Udon Thani"/"anti-wrinkle Udon Thani" and TH "ฟิลเลอร์ขมับ อุดร" (temple filler listed in schema knowsAbout but no page) — check SERPs, propose 1 page next week.
+1. Content (week of 2026-11-02, max 1/week): TH "ฟิลเลอร์ขมับ อุดร" page — 2026-10-31 search shows only HDmall/aggregator pages, no Udon clinic page; temple filler is in schema knowsAbout and on the price table but has no page. Draft as branch agent/seo-<date>, facts from site only.
+2. Ask doctor (strategy, do not change): titles/URLs use "โบท็อก" (brand-derived word) while the mission says toxin without brand names. Thai search volume is on "โบท็อก"; keep or switch to "ฉีดลดริ้วรอย/โบทูลินัมท็อกซิน"?
+3. Set up Google Search Console access so this agent can read real queries/impressions (Adspirer connector has a google_search_console tool — check if the account is linked). Meta/TikTok pixel IDs still empty in `window.VF`.
+4. Remaining TH meta descriptions 164–168 codepoints (home, lifting, dissolve page, same-filler article, price 165 incl. prices) — fine visually, trim only if Search Console shows truncation.
+5. Remaining long TH titles (codepoints incl. tone marks): home 72, price 74, filler 72, skin-booster 71, chin 70. EN tear-trough 70.
+6. Off-site: Thai SERPs for "ฟิลเลอร์ใต้ตา อุดรธานี" / "ฟิลเลอร์ขมับ อุดรธานี" dominated by HDmall; EN by WhatClinic/Thaiger. Hand to marketing agent: claim/verify listings (no paid ads).
+7. EN "botox Udon Thani"/"anti-wrinkle Udon Thani" — check SERPs, consider after temple page.
 8. Lao (LO) pages do not exist yet — build only has TH/EN. If Vientiane patients matter, plan /lo/ with hreflang lo.
-9. ~180 <img> tags lack loading="lazy"; check which are below the fold and add lazy loading (images are already WebP, largest 217 KB — weight is fine).
-10. Banned-word sweep of EN body copy beyond award names.
+9. Banned-word sweep of EN body copy beyond award names.
+10. Physician JSON-LD `award` lists Galderma awards (historical, OK as past awards) — leave.
 
 ## Log
+### 2026-10-31
+- Main (technical): trimmed 12 TH meta descriptions 171–189 → 136–165 codepoints in build.py (filler, price, sculptra, toxin, lips, doctor + 6 articles). Prices and facts unchanged; only "ที่ Vinfinity Clinic อุดรธานี"/"โดย นพ.…" tails and filler words removed. Article JSON-LD descriptions follow the same vars.
+- Main (same commit): footer stacked logo now loading="lazy" decoding="async" on all TH/EN pages (only below-fold image without it). Remaining 130 non-lazy imgs = header logos + hero/article cover images (above the fold, correct).
+- Rebuild also refreshed sitemap lastmod (39 URLs → 2026-10-28, from the tear-trough case-33 commit that hadn't been rebuilt).
+- Audit: 51 pages, 0 duplicate titles/descriptions, 0 broken internal links, all JSON-LD parses, canonical everywhere except /menu/ (noindex, intended).
+- Live: production dpl_DhDnp2J4fLDh4hMUgNKNfmrsGZRi (commit dcd6569) READY; /price/ renders 200 with valid schema.
+- Resolved old question: "สกินบูสเตอร์เริ่ม 8,900" matches Ejal 40 (8,900/ครั้ง) on the price page — not a conflict with Vitaran 9,990.
+- Keyword: "ฟิลเลอร์ขมับ อุดรธานี" — no Udon clinic page ranks (HDmall/KTC/gangnamunni only) → backlog #1 for next week.
 ### 2026-10-30 (doctor)
 - English consultations: yes. medicalSpecialty "Dermatology": keep. Remove these from the backlog.
 ### 2026-10-30 (doctor, via main session)
