@@ -30,19 +30,19 @@ EN_HOME_FAQ = [
 
 EN_FILLER_FAQ = [
     ("How much does dermal filler cost in Udon Thani?",
-     "The price depends on the treatment area and the amount used. The doctor explains the plan and the full cost before every treatment. Prices start at THB 9,990 per cc."),
+     "Dermal filler at Vinfinity Clinic Udon Thani starts at THB 9,990 per cc. The total depends on which areas are treated and how much product your face needs. The doctor assesses you first, explains the plan and confirms the full cost before any injection. The first consultation and skin analysis are free."),
     ("Does filler injection hurt?",
-     "In most cases a numbing cream is applied first, and many products also contain a local anesthetic. How it feels depends on the area and on the person."),
+     "Most people feel only mild discomfort. A numbing cream is applied before treatment, and many filler products also contain a local anesthetic. How it feels depends on the area treated and on the person; lips are usually more sensitive than cheeks or chin. Tell the doctor at any time if you need a pause."),
     ("Is there any downtime after filler?",
-     "Most people return to their normal routine straight away. Mild swelling or bruising may last 2–7 days. The doctor gives you personal aftercare advice."),
+     "Most people return to their normal routine the same day. Mild swelling or bruising can last about 2–7 days, depending on the area and the person. The doctor gives you personal aftercare advice before you leave, and you can contact the clinic on LINE @vinfinityclinic if anything worries you."),
     ("How long does filler last?",
-     "Hyaluronic acid (HA) filler generally lasts about 6–18 months, depending on the product, the area and your metabolism."),
+     "Hyaluronic acid (HA) filler generally lasts about 6–18 months. How long yours lasts depends on the product, the treated area and your own metabolism; areas that move less tend to keep results longer. The doctor plans follow-ups and only tops up when it is needed. Results vary between individuals."),
     ("Can it be corrected if I'm not happy with the result?",
-     "Hyaluronic acid filler can be dissolved with an enzyme by a doctor. Please see a doctor for an assessment first."),
+     "Yes, in most cases. Hyaluronic acid filler can be dissolved with an enzyme by a doctor. The doctor first examines you to see what was injected and where, then decides whether to dissolve, adjust or simply wait. Filler from another clinic can also be assessed; bring any product details you have."),
     ("How do I know the product is genuine?",
-     "The clinic uses products registered with the Thai FDA and opens the box in front of you so you can check it before the injection."),
+     "Vinfinity Clinic uses only filler registered with the Thai FDA, and the box is opened in front of you before the injection. You can check the product name and its Thai FDA registration yourself. Ask the doctor any question about the product before treatment starts, and it will be answered before the first injection."),
     ("Where should I get filler in Udon Thani, and what should I look for?",
-     "Choose a licensed medical facility where the injector is a doctor you can verify with the Medical Council of Thailand, the products are Thai FDA-registered, and you are assessed before you are quoted a price. Read the full checklist in our article on 7 things to check before choosing a filler clinic in Udon Thani."),
+     "Choose a licensed medical facility where a doctor, whom you can verify with the Medical Council of Thailand, does the injecting. Check that products are Thai FDA-registered and that you are assessed before being quoted a price. Our article lists 7 things to check before choosing a filler clinic in Udon Thani."),
     ("Where is Vinfinity Clinic Udon Thani, and when is it open?",
      f"The clinic is at {ADDR_EN}. {HOURS_EN}. Book ahead on LINE @vinfinityclinic or call {TEL}."),
 ]
@@ -75,17 +75,17 @@ EN_DISSOLVE_FAQ = [
 
 EN_TT_FAQ = [
     ("How much does tear trough filler cost in Udon Thani?",
-     "Filler at Vinfinity Clinic starts at THB 9,990 per cc. The amount needed under the eyes depends on how deep your tear trough is. The doctor confirms the full cost after your assessment, before treatment."),
+     "Tear trough filler at Vinfinity Clinic Udon Thani starts at THB 9,990 per cc. The amount you need depends on how deep your tear trough is and on the cheek beside it. The doctor assesses you first and confirms the full cost before treatment. You can send photos on LINE @vinfinityclinic for a first opinion."),
     ("Does tear trough filler hurt?",
-     "A numbing cream is applied first, and most products contain a local anesthetic. Most people feel only slight tightness or pressure during the injection."),
+     "Most people feel only slight tightness or pressure. A numbing cream is applied first, and most tear trough products contain a local anesthetic. The skin under the eyes is thin, so the doctor injects slowly and checks with you during treatment. You can ask for a pause at any time."),
     ("How long does tear trough filler last?",
-     "It depends on the product and your metabolism. The under-eye area moves relatively little, so results often last longer than in some other areas. The doctor will see you for regular follow-ups."),
+     "Tear trough filler often lasts longer than filler in more mobile areas, because the under-eye area moves relatively little. How long it lasts depends on the product and your metabolism. The doctor sees you for regular follow-ups and tops up only when needed. Results vary between individuals."),
     ("How long does swelling last after tear trough filler?",
-     "Most people have mild swelling or bruising for 2–7 days. Some people retain fluid under the eyes more easily than others, and the doctor assesses this before injecting."),
+     "Most people have mild swelling or bruising for about 2–7 days. Some people hold fluid under the eyes more easily than others, so the doctor checks for this before injecting and adjusts the plan. Follow the aftercare advice you are given, and contact the clinic if swelling lasts longer."),
     ("I have large under-eye bags. Can filler help?",
-     "In some cases filler can smooth the junction between the bag and the cheek, but if the fat bags are very large, surgery may be more suitable. The doctor will tell you honestly after the assessment."),
+     "Sometimes, but not always. Filler can smooth the junction between a mild under-eye bag and the cheek. If the fat bags are large, surgery may suit you better, and filler could make them look heavier. The doctor will tell you honestly after the assessment whether filler is a good option."),
     ("Can tear trough filler be corrected if I'm not happy with it?",
-     "Hyaluronic acid filler can be dissolved with an enzyme by a doctor. Please come back so the doctor can assess you first."),
+     "Yes. Hyaluronic acid filler under the eyes can be dissolved with an enzyme by a doctor. Come back so the doctor can examine the area first and decide whether to dissolve, adjust or wait. If you had filler elsewhere, bring any details of the product used so the plan can be made safely."),
 ]
 
 EN_PRICE_FAQ = [
