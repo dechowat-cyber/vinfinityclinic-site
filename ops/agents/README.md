@@ -1,14 +1,17 @@
 # Vinfinity daily agents (internal — not deployed, see /.vercelignore)
 
-Four scheduled agents run every morning (Bangkok) and email a progress report to Dr. Dechowat.
-Each keeps its own file here: a backlog (what to do next) and a dated log (what was done).
+One scheduled agent ("Growth", 07:30 Bangkok, since 31 Oct 2026) replaces the four daily agents to save cost: one setup, one combined email report to Dr. Dechowat.
+Each area keeps its own file here: a backlog (what to do next) and a dated log (what was done).
 
-| Agent | Time (BKK) | File |
+| Area | When | File |
 |---|---|---|
-| SEO | 07:10 | seo.md |
-| AEO (AI-search answers) | 07:20 | aeo.md |
-| Marketing | 07:30 | marketing.md |
-| Branding | 07:40 | branding.md |
+| Marketing (light) | every day | marketing.md |
+| SEO | Monday | seo.md |
+| AEO (AI-search answers) | Wednesday | aeo.md |
+| Branding | Friday | branding.md |
+| Live-site check only | Tue / Thu / Sat / Sun | — |
+
+The old per-area scheduled tasks (SEO 07:10, AEO 07:20, Branding 07:40) are paused, not deleted, and can be switched back on.
 
 ## Rules every agent follows
 - Technical SEO fixes may go straight to `main` (meta title/description, canonical, hreflang, JSON-LD validity, sitemap, robots, alt text, broken links, internal links, page speed). Run `python3 build.py`, check the diff, commit, push.
