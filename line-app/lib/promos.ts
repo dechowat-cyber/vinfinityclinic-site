@@ -104,14 +104,16 @@ export function promoKb(now = new Date()) {
 const t = (text: string, o: Record<string, unknown> = {}) => ({ type: "text", text, wrap: true, ...o });
 
 /** A promo as LINE messages: a card with a claim button for limited promos, otherwise image + text with a reply button. */
-export function promoMessages(p: Promo): Msg[] {
+export function promoMessages(p: Promo, left?: number | null): Msg[] {
   if (p.card) {
     const [hero] = absImages([p.card.hero]);
     const c = p.card;
+    const urgent = left != null && p.limit ? [t(`🔥 เหลืออีก ${left} สิทธิ์ จาก ${p.limit}`, { weight: "bold", size: "sm", color: "#F2622A" })] : [];
     return [{ type: "flex", altText: `${c.title} ${c.price} · สิทธิ์จำกัด`, contents: { type: "bubble",
       ...(hero ? { hero: { type: "image", url: hero, size: "full", aspectRatio: "1:1", aspectMode: "cover", action: { type: "message", label: "รับสิทธิ์", text: c.claimText } } } : {}),
       body: { type: "box", layout: "vertical", spacing: "sm", paddingAll: "18px", contents: [
         t(c.title, { weight: "bold", size: "md", color: NAVY }),
+        ...urgent,
         { type: "box", layout: "baseline", spacing: "sm", contents: [t(c.price, { weight: "bold", size: "xl", color: NAVY, flex: 0 }), ...(c.was ? [t(c.was, { size: "xs", color: MUTED, decoration: "line-through", flex: 0 })] : [])] },
         ...c.lines.map((l) => t(l, { size: "xs", color: MUTED })),
       ] },
@@ -240,4 +242,32 @@ export async function promoStats(p: Promo) {
       count(*) filter (where exists (select 1 from touchpoints t where t.client_id = s.client_id and t.direction = 'in' and t.created_at > s.at))::int replied,
       count(*) filter (where exists (select 1 from appointments a where a.client_id = s.client_id and a.created_at >= s.at and a.status not in ('cancelled','no_show')))::int booked
     from s`, [p.key])) ?? { sent: 0, auto: 0, replied: 0, booked: 0 };
+}
+
+/** Placeholder in a campaign message that becomes the live number of seats left when it is sent. */
+export const LEFT_TOKEN = "{เหลือ}";
+
+/**
+ * Campaign images may carry a promo marker: "promo:<key>" (card) or "promo:<key>@left" (card + live seats left).
+ * At send time "@left" becomes the real number ("@7") and {เหลือ} in the text is filled in. Throws promo_full / promo_closed.
+ */
+export async function resolvePromoMarker(images: string[], message: string, now = new Date()) {
+  const m = images.find((u) => u.startsWith("promo:"));
+  if (!m) return { images, message };
+  const [key, flag] = m.slice(6).split("@");
+  const p = promoByKey(key);
+  if (!p || !activePromos(now).includes(p)) throw new Error("promo_closed");
+  if (flag !== "left" || !p.limit) return { images: [`promo:${p.key}`], message: message.split(LEFT_TOKEN).join("") };
+  const left = Math.max(0, p.limit - (await seatsUsed(p, now)));
+  if (left <= 0) throw new Error("promo_full");
+  return { images: [`promo:${p.key}@${left}`], message: message.split(LEFT_TOKEN).join(String(left)) };
+}
+
+/** "promo:<key>@7" → the promo and its seats-left number (null when none). */
+export function parsePromoMarker(images: unknown): { promo: Promo; left: number | null } | null {
+  const m = (Array.isArray(images) ? images : []).find((u): u is string => typeof u === "string" && u.startsWith("promo:"));
+  if (!m) return null;
+  const [key, n] = m.slice(6).split("@");
+  const promo = promoByKey(key);
+  return promo ? { promo, left: n && /^\d+$/.test(n) ? Number(n) : null } : null;
 }

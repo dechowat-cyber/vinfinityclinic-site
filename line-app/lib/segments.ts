@@ -1,4 +1,4 @@
-import { promoByKey, promoMessages } from "./promos";
+import { promoMessages, resolvePromoMarker, parsePromoMarker } from "./promos";
 import { q, one } from "./db";
 import { push, broadcast, narrowcast, type Narrow } from "./line";
 import * as M from "./messages";
@@ -104,6 +104,7 @@ export function filtersQuery(f: Filters) {
 
 /** Creates a campaign for the reachable members and sends the first batch. The scheduler sends the rest. */
 export async function createCampaign(o: { name: string; filters: Filters; message: string; withBooking: boolean; staffId: number | null; segmentId?: number | null; now?: Date; images?: string[] }) {
+  ({ images: o.images, message: o.message } = await resolvePromoMarker(o.images ?? [], o.message, o.now));
   const message = o.message.trim().slice(0, 1000);
   if (!message) throw new Error("empty_message");
   const members = (await segmentMembers(o.filters, o.now)).filter((m) => m.reachable);
@@ -119,16 +120,17 @@ export async function createCampaign(o: { name: string; filters: Filters; messag
 
 /** Every friend of the OA (LINE broadcast). One request; LINE de-duplicates a retry with the same key. */
 export async function createBroadcast(o: { name: string; message: string; withBooking: boolean; staffId: number | null; images?: string[]; reach?: number | null; narrow?: Narrow | null }) {
+  ({ images: o.images, message: o.message } = await resolvePromoMarker(o.images ?? [], o.message));
   const message = o.message.trim().slice(0, 1000);
   if (!message) throw new Error("empty_message");
-  const promo = promoByKey((o.images ?? []).find((u) => u.startsWith("promo:"))?.slice(6));
-  const imgs = promo ? [`promo:${promo.key}`] : (o.images ?? []).filter((u) => /^https:\/\//.test(u)).slice(0, 4);
+  const pm = parsePromoMarker(o.images);
+  const imgs = pm ? (o.images ?? []).filter((u) => u.startsWith("promo:")).slice(0, 1) : (o.images ?? []).filter((u) => /^https:\/\//.test(u)).slice(0, 4);
   const narrow = o.narrow && (o.narrow.max || o.narrow.gender || o.narrow.ageFrom || o.narrow.ageTo) ? o.narrow : null;
   const est = narrow?.max ? Math.min(narrow.max, Number(o.reach) || narrow.max) : Math.max(0, Number(o.reach) || 0);
   const c = await one(`insert into campaigns(name, filters, message, with_booking, recipients, created_by, images, kind) values ($1,$2,$3,$4,$5,$6,$7,$8) returning id`,
     [o.name.trim().slice(0, 120) || "บรอดแคสต์", JSON.stringify(narrow ? { narrow } : {}), message, o.withBooking, est, o.staffId, JSON.stringify(imgs), narrow ? "narrowcast" : "broadcast"]);
   const id = Number(c!.id);
-  const msgs = promo ? [{ type: "text", text: message }, ...promoMessages(promo)]
+  const msgs = pm ? [{ type: "text", text: message }, ...promoMessages(pm.promo, pm.left)]
     : [...imgs.map((u) => M.image(u, u.replace(/\.jpg$/, "-p.jpg"))), M.broadcastText(message, o.withBooking)];
   if (narrow) {
     const rid = await narrowcast(msgs, narrow, `ncast:${id}`);
@@ -143,8 +145,8 @@ export async function createBroadcast(o: { name: string; message: string; withBo
 /** Pictures first, then the text (with the booking button). One push = one message off the OA quota. */
 export function campaignMessages(userId: string, r: { message: string; with_booking: boolean; campaign_id: unknown; images?: unknown }) {
   // a promo campaign: the text, then the promo card with its "กดรับสิทธิ์" button (lib/promos.ts)
-  const promo = promoByKey((Array.isArray(r.images) ? r.images : []).find((u): u is string => typeof u === "string" && u.startsWith("promo:"))?.slice(6));
-  if (promo) return [{ type: "text", text: r.message }, ...promoMessages(promo)];
+  const pm = parsePromoMarker(r.images);
+  if (pm) return [{ type: "text", text: r.message }, ...promoMessages(pm.promo, pm.left)];
   const imgs = (Array.isArray(r.images) ? r.images : []).filter((u): u is string => typeof u === "string" && /^https:\/\//.test(u)).slice(0, 4);
   return [...imgs.map((u) => M.image(u, u.replace(/\.jpg$/, "-p.jpg"))), M.campaign(userId, r.message, r.with_booking, Number(r.campaign_id))];
 }

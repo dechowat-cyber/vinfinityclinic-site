@@ -122,3 +122,23 @@ test("promo broadcast/campaign sends text + claim card", () => {
   assert.deepEqual(mediaImages(mediaSet("sculptra-2611-card", nov2)), ["promo:sculptra-2611"]);
   assert.equal(mediaSet("sculptra-2611-card", fri), null);
 });
+
+test("round two: live seats left filled in at send time; refuses when full or closed", async () => {
+  const { resolvePromoMarker, parsePromoMarker } = await import("../lib/promos");
+  const r2 = mediaSet("sculptra-2611-r2", nov2)!;
+  assert.deepEqual(mediaImages(r2), ["promo:sculptra-2611@left"]);
+  const t1 = new Date("2026-11-10T05:00:00Z");
+  const used = await seatsUsed(S, t1);
+  assert.ok(used < 10);
+  const out = await resolvePromoMarker(mediaImages(r2), r2.message, t1);
+  assert.equal(out.images[0], `promo:sculptra-2611@${10 - used}`);
+  assert.match(out.message, new RegExp(`เหลืออีก ${10 - used} สิทธิ์`));
+  const pm = parsePromoMarker(out.images)!;
+  assert.match(J(campaignMessages("U1", { message: out.message, with_booking: true, campaign_id: 2, images: out.images })), new RegExp(`🔥 เหลืออีก ${pm.left} สิทธิ์`));
+  for (let i = used; i < 10; i++) {
+    const c = (await getClientByLine("USC50"))!;
+    await q("insert into promo_claims(promo_key, client_id, seat, status, expires_at) values ($1,$2,$3,'confirmed',$4)", [S.key, c.id, i + 1, "2026-11-30T00:00:00Z"]);
+  }
+  await assert.rejects(resolvePromoMarker(mediaImages(r2), r2.message, t1), /promo_full/);
+  await assert.rejects(resolvePromoMarker(["promo:sculptra-2611@left"], "x", new Date("2026-11-20T00:00:00Z")), /promo_closed/);
+});

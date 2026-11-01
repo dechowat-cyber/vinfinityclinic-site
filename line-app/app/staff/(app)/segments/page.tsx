@@ -7,10 +7,11 @@ import { SOURCE_LABEL } from "@/lib/reports";
 import { baht } from "@/lib/payments";
 import { thaiDate } from "@/lib/time";
 import { liveMedia, mediaSet } from "@/lib/campaignMedia";
+import { promoByKey, seatsUsed } from "@/lib/promos";
 
 export const dynamic = "force-dynamic";
 
-const ERR: Record<string, string> = { confirm: "ติ๊กยืนยันก่อนส่ง", paused: "ระบบหยุดส่งข้อความอัตโนมัติอยู่ (ตั้งค่า)", empty_message: "พิมพ์ข้อความก่อน", no_recipients: "ไม่มีลูกค้าในกลุ่มนี้ที่ส่ง LINE ได้" };
+const ERR: Record<string, string> = { confirm: "ติ๊กยืนยันก่อนส่ง", paused: "ระบบหยุดส่งข้อความอัตโนมัติอยู่ (ตั้งค่า)", empty_message: "พิมพ์ข้อความก่อน", no_recipients: "ไม่มีลูกค้าในกลุ่มนี้ที่ส่ง LINE ได้", promo_full: "สิทธิ์โปรนี้ครบแล้ว ไม่ต้องยิงรอบนี้", promo_closed: "โปรนี้ปิดแล้วหรือยังไม่เริ่ม" };
 const PRESETS: [string, string][] = [
   ["เคยทำผิว / สนใจงานผิว", "skin=1&reachable=1"],
   ["หายไป 6 เดือน (ยังไม่มีนัด)", "lapsed=180&no_upcoming=1"],
@@ -63,6 +64,8 @@ export default async function Segments({ searchParams }: { searchParams: Promise
   const err = typeof sp.err === "string" ? sp.err : null;
   const media = mediaSet(typeof sp.media === "string" ? sp.media : null);
   const fq = filtersQuery(f);
+  const mp = media?.promo ? promoByKey(media.promo) : null;
+  const seatsLeft = mp?.limit ? mp.limit - (await seatsUsed(mp, now)) : null;
   const hidden = (prefix = "") => <>{[...new URLSearchParams(filtersQuery(f))].map(([k, v], i) => <input key={prefix + k + i} type="hidden" name={k} value={v} />)}</>;
 
   return (
@@ -156,6 +159,7 @@ export default async function Segments({ searchParams }: { searchParams: Promise
             <small className="muted">ตั้งจำนวนสูงสุดแล้ว LINE จะสุ่มผู้รับในกลุ่มให้ไม่เกินจำนวนนี้ และไม่เกินโควตาที่เหลือ</small>
           </div>
           <div className="field"><label>ชื่อแคมเปญ (ภายใน)</label><input name="campaign_name" defaultValue={media ? `${media.label} · ทุกคน` : ""} placeholder="เช่น โปร Vitaran ทุกคน" /></div>
+          {media?.liveLeft && <p className="muted" style={{ margin: 0 }}>“{"{เหลือ}"}” ในข้อความและบนการ์ด ระบบใส่จำนวนสิทธิ์ที่เหลือจริงตอนกดส่ง{seatsLeft != null ? ` (ตอนนี้เหลือ ${seatsLeft})` : ""} · ถ้าสิทธิ์ครบแล้วระบบจะไม่ส่ง</p>}
           <div className="field"><label>ข้อความ</label><textarea key={"b" + (media?.key ?? "none")} name="message" rows={media ? 9 : 4} maxLength={1000} required defaultValue={media?.message ?? ""} /></div>
           <label className="check"><input type="checkbox" name="with_booking" defaultChecked /> ใส่ปุ่ม “จองคิว / สอบถาม” (กดแล้วส่งข้อความเข้าแชทคลินิก)</label>
           <label className="check"><input type="checkbox" name="confirm_all" /> ยืนยันส่งตามกลุ่มเป้าหมายด้านบน (ถ้าเว้นว่างคือเพื่อนทั้งหมด{reach?.reach != null ? ` ~${reach.reach.toLocaleString("th-TH")} คน` : ""}) · ส่งแล้วยกเลิกไม่ได้ · นับโควตาตามจำนวนผู้รับ</label>
