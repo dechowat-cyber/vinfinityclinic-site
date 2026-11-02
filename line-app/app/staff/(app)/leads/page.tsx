@@ -2,7 +2,7 @@ import { q } from "@/lib/db";
 import { leadUpdate } from "@/lib/actions";
 import { requireStaff } from "@/lib/session";
 import { pendingDrafts, leadLangStats, LANG_LABEL, type Lang } from "@/lib/agent";
-import { sendDraft, doneDraft, dismissDraft, promoSent, promoClaimSet } from "@/lib/agentActions";
+import { sendDraft, doneDraft, dismissDraft, promoSent, promoClaimSet, promoClaimAdd } from "@/lib/agentActions";
 import { activePromos, promoProspects, promoStats, promoClaims } from "@/lib/promos";
 import { botInfo, chatUrl } from "@/lib/line";
 import { aiConfigured } from "@/lib/ai";
@@ -99,10 +99,10 @@ export default async function Leads({ searchParams }: { searchParams: Promise<{ 
                     return (
                       <tr key={c.id} style={c.live ? undefined : { opacity: .55 }}>
                         <td>{c.seat}</td>
-                        <td><a href={`/staff/clients/${c.client_id}`}><b>{c.name || c.display_name || `#${c.client_id}`}</b></a>{c.phone ? <><br /><small className="muted">{c.phone}</small></> : null}</td>
+                        <td>{c.client_id ? <a href={`/staff/clients/${c.client_id}`}><b>{c.name || c.display_name || `#${c.client_id}`}</b></a> : <b>{c.note || "นอกระบบ"}</b>}{c.phone ? <><br /><small className="muted">{c.phone}</small></> : null}{c.client_id && c.note ? <><br /><small className="muted">{c.note}</small></> : null}</td>
                         <td><span className={`tag ${c.booked || c.status === "confirmed" ? "ok" : c.live ? "warn" : ""}`}>{st}</span></td>
                         <td className="row">
-                          <a className="btn ghost small" href={chatUrl(bot?.userId, c.line_user_id)} target="_blank">เปิดแชท</a>
+                          {c.line_user_id && <a className="btn ghost small" href={chatUrl(bot?.userId, c.line_user_id)} target="_blank">เปิดแชท</a>}
                           {c.live && c.status === "held" && <form action={promoClaimSet}><input type="hidden" name="id" value={c.id} /><input type="hidden" name="to" value="confirmed" /><button className="btn ghost small">ยืนยันสิทธิ์</button></form>}
                           {c.live && <form action={promoClaimSet}><input type="hidden" name="id" value={c.id} /><input type="hidden" name="to" value="released" /><button className="btn ghost small">คืนสิทธิ์</button></form>}
                         </td>
@@ -110,6 +110,12 @@ export default async function Leads({ searchParams }: { searchParams: Promise<{ 
                   })}
                 </tbody>
               </table>
+              {liveClaims.length < promo.limit && (
+                <form action={promoClaimAdd} className="row" style={{ marginTop: 6 }}>
+                  <input type="hidden" name="key" value={promo.key} />
+                  <input name="note" placeholder="ชื่อ / เบอร์ลูกค้า (จองทางแชท โทร หรือหน้าร้าน)" style={{ flex: 1, minWidth: 220, border: "1px solid var(--line)", borderRadius: 10, padding: "6px 8px" }} />
+                  <button className="btn ghost small">+ บันทึก 1 สิทธิ์ที่ขายนอกปุ่ม</button>
+                </form>)}
             </div>
           ) : null}
           {oaLink && <p className="muted" style={{ margin: "8px 0 0" }}>ลิงก์ให้ลูกค้ากดแล้วทักเข้ามาเอง (ใส่โพสต์ FB/IG/สตอรี่/เว็บ — บอทตอบโปรให้ฟรี): <code style={{ userSelect: "all" }}>{oaLink}</code></p>}

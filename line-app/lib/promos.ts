@@ -158,7 +158,7 @@ export async function claimPromo(clientId: number, userId: string, p: Promo, now
   }
   const expires = new Date(now.getTime() + (p.holdHours ?? 48) * 3600e3);
   const seat = used + 1;
-  await q("insert into promo_claims(promo_key, client_id, seat, expires_at) values ($1,$2,$3,$4)", [p.key, clientId, seat, expires.toISOString()]);
+  await q("insert into promo_claims(promo_key, client_id, seat, expires_at, created_at) values ($1,$2,$3,$4,$5)", [p.key, clientId, seat, expires.toISOString(), nowIso]);
   await logTouch(clientId, "in", "promo_claim", p.key);
   if (!(await one("select 1 from touchpoints where client_id = $1 and kind in ('promo','promo_manual') and body = $2", [clientId, p.key]))) await logTouch(clientId, "out", "promo", p.key);
   await notifyStaff(`🎁 มีคนกดรับสิทธิ์ ${p.label} · สิทธิ์ที่ ${seat}/${limit} · ${process.env.APP_URL || ""}/staff/leads#promo`, `claim:${p.key}:${clientId}`).catch(() => false);
@@ -204,7 +204,7 @@ export async function promoForWelcome(clientId: number, now = new Date()): Promi
 export async function promoClaims(p: Promo, now = new Date()) {
   return q(`select pc.*, ${LIVE} as live, c.name, c.display_name, c.phone, c.line_user_id,
       exists (select 1 from appointments a where a.client_id = pc.client_id and a.created_at >= pc.created_at and a.status not in ('cancelled','no_show')) as booked
-    from promo_claims pc join clients c on c.id = pc.client_id where pc.promo_key = $1 order by pc.id`, [p.key, now.toISOString()]);
+    from promo_claims pc left join clients c on c.id = pc.client_id where pc.promo_key = $1 order by pc.id`, [p.key, now.toISOString()]);
 }
 
 /**
@@ -270,4 +270,14 @@ export function parsePromoMarker(images: unknown): { promo: Promo; left: number 
   const [key, n] = m.slice(6).split("@");
   const promo = promoByKey(key);
   return promo ? { promo, left: n && /^\d+$/.test(n) ? Number(n) : null } : null;
+}
+
+/** A seat taken outside the button (chat, phone, walk-in): recorded by staff so the counter and "เหลือ X" stay true. */
+export async function addManualClaim(p: Promo, o: { clientId?: number | null; note?: string; staffId?: number | null }, now = new Date()) {
+  if (!p.limit) throw new Error("not_limited");
+  const used = await seatsUsed(p, now);
+  if (used >= p.limit) throw new Error("promo_full");
+  await q(`insert into promo_claims(promo_key, client_id, seat, status, expires_at, done_at, done_by, note, created_at) values ($1,$2,$3,'confirmed',$4,$7,$5,$6,$7)`,
+    [p.key, o.clientId ?? null, used + 1, new Date(now.getTime() + 30 * 864e5).toISOString(), o.staffId ?? null, (o.note || "").slice(0, 120) || null, now.toISOString()]);
+  return used + 1;
 }

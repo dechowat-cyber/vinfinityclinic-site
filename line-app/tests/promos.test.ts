@@ -142,3 +142,14 @@ test("round two: live seats left filled in at send time; refuses when full or cl
   await assert.rejects(resolvePromoMarker(mediaImages(r2), r2.message, t1), /promo_full/);
   await assert.rejects(resolvePromoMarker(["promo:sculptra-2611@left"], "x", new Date("2026-11-20T00:00:00Z")), /promo_closed/);
 });
+
+test("staff can record a seat sold by chat/phone; it counts toward the 10", async () => {
+  const { addManualClaim } = await import("../lib/promos");
+  const t2 = new Date("2026-11-12T05:00:00Z");
+  await q("update promo_claims set status = 'released' where promo_key = $1", [S.key]);
+  assert.equal(await seatsUsed(S, t2), 0);
+  assert.equal(await addManualClaim(S, { note: "คุณเอ 081" }, t2), 1);
+  assert.equal(await seatsUsed(S, t2), 1);
+  const list = await promoClaims(S, t2);
+  assert.ok(list.some((c) => c.note === "คุณเอ 081" && c.client_id === null));
+});

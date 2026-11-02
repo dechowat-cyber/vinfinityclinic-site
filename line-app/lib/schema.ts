@@ -559,4 +559,6 @@ create table if not exists promo_claims (
   done_by bigint
 );
 create index if not exists promo_claims_key on promo_claims(promo_key, status);
+alter table promo_claims alter column client_id drop not null;
+alter table promo_claims add column if not exists note text;
 `;

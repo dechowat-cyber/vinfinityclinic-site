@@ -65,3 +65,12 @@ export async function promoClaimSet(fd: FormData) {
     await q("update promo_claims set status = $2, done_at = now(), done_by = $3 where id = $1 and status <> 'released'", [Number(fd.get("id")), to, me.id]);
   revalidatePath("/staff/leads");
 }
+
+/** Staff record a seat sold by chat / phone / walk-in. */
+export async function promoClaimAdd(fd: FormData) {
+  const me = await requireStaff(ROLES);
+  const { promoByKey, addManualClaim } = await import("./promos");
+  const p = promoByKey(String(fd.get("key") || ""));
+  if (p) await addManualClaim(p, { note: String(fd.get("note") || ""), staffId: me.id }).catch(() => null);
+  revalidatePath("/staff/leads");
+}
