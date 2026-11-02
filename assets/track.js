@@ -53,6 +53,16 @@
     if (window.gtag) gtag("event", "generate_lead", { method: "line" });
   }, true);
 
+  // WhatsApp / Messenger buttons on English pages (foreign patients)
+  document.addEventListener("click", function (e) {
+    var el = e.target.closest && e.target.closest("a[data-vf-chat]");
+    if (!el) return;
+    var m = el.getAttribute("data-vf-chat");
+    if (window.fbq) fbq("track", "Contact");
+    if (window.ttq) ttq.track("Contact");
+    if (window.gtag) gtag("event", "generate_lead", { method: m });
+  }, true);
+
   // ---- consent-gated pixels ----
   if (!(C.ga4 || C.meta || C.tiktok)) return;
   function load() {

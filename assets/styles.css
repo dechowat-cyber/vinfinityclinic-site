@@ -530,3 +530,11 @@ html[lang=en] .hero h1 .ln{white-space:normal}
 .story-grid .s-f{grid-column:span 2}.story-grid .s-f img{aspect-ratio:4/5;object-position:60% 50%}
 @media (max-width:760px){.story-grid{grid-template-columns:1fr 1fr;gap:12px}.story-grid figure{grid-column:span 2!important}.story-grid .s-c img,.story-grid .s-f img{aspect-ratio:4/5}}
 .ch-media.trio figure:not(:first-child) img{object-position:center 22%}
+
+/* English pages: chat options for foreign patients (WhatsApp / Messenger / LINE) */
+.chat-strip{background:var(--navy);color:#fff;padding:22px 0;margin-top:48px}
+.chat-strip .wrap{display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.chat-strip b{display:block;font-size:1.05rem}
+.chat-strip span{color:var(--silver);font-size:.9rem}
+.chat-strip .chat-btns{display:flex;gap:8px;flex-wrap:wrap}
+.btn-ghost-light{background:transparent;color:#fff;border:1px solid rgba(213,221,238,.5)}.btn-ghost-light:hover{color:#fff;border-color:#fff}

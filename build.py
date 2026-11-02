@@ -17,6 +17,10 @@ from urllib.parse import quote as _q
 LINE = "https://line.me/R/oaMessage/%40vinfinityclinic/?" + _q("สวัสดีค่ะ สนใจปรึกษาคุณหมอ (จากเว็บไซต์)")
 LINE_EN = "https://line.me/R/oaMessage/%40vinfinityclinic/?" + _q("Hello, I'd like to consult the doctor (from website)")
 MSG = "https://m.me/Vinfinity.Clinic"
+MSG_EN = MSG + "?ref=en_site"
+# WhatsApp for foreign patients (most do not use LINE). International digits only, e.g. "66824622963"; empty = buttons hidden.
+WHATSAPP = ""
+WA_EN = f"https://wa.me/{WHATSAPP}?text=" + _q("Hello, I'd like to consult the doctor (from website)") if WHATSAPP else ""
 TEL = "082-462-2963"
 # NAP — keep identical everywhere (site, Google Business Profile, Facebook)
 ADDR_STREET = "106/27-28 อาคารธนารักษ์"
@@ -148,6 +152,8 @@ def clinic_info_html(lang="th"):
 <div><small>Opening hours</small><b>{HOURS_EN}</b></div>
 <div><small>Phone</small><a href="tel:+66{TEL.replace('-', '')[1:]}"><b>+66 {TEL[1:]}</b></a></div>
 <div><small>LINE</small><a href="{LINE_EN}"><b>@vinfinityclinic</b></a></div>
+{f'<div><small>WhatsApp</small><a href="{WA_EN}" data-vf-chat="whatsapp"><b>+{WHATSAPP}</b></a></div>' if WA_EN else ""}
+<div><small>Facebook Messenger</small><a href="{MSG_EN}" data-vf-chat="messenger"><b>Vinfinity.Clinic</b></a></div>
 <a class="btn btn-navy" style="margin-top:auto" href="{MAPS_URL}" target="_blank" rel="noopener">Open in Google Maps</a>"""
     return f"""<div><small>ที่อยู่</small><b>{ADDR_LINE}</b></div>
 <div><small>เวลาทำการ</small><b>{HOURS_TEXT}</b></div>
@@ -302,8 +308,20 @@ def footer(lang="th"):
     return footer_th()
 
 
+def chat_strip_en():
+    """Shown above the footer on every English page: foreign patients rarely use LINE."""
+    wa = f'<a class="btn btn-silver" href="{WA_EN}" data-vf-chat="whatsapp">WhatsApp</a>' if WA_EN else ""
+    return f"""<section class="chat-strip" aria-label="Message the clinic">
+<div class="wrap">
+<div><b>Not on LINE? Message us in English.</b><span>Consultations with the doctor in English · Udon Thani, a short drive from the Horticultural Expo</span></div>
+<div class="chat-btns">{wa}<a class="btn btn-silver" href="{MSG_EN}" data-vf-chat="messenger">Messenger</a><a class="btn btn-ghost-light" href="{LINE_EN}">LINE</a></div>
+</div>
+</section>"""
+
+
 def footer_en():
-    return f"""</main>
+    return f"""{chat_strip_en()}
+</main>
 <footer class="site-footer">
 <div class="wrap">
 <div class="cols">
@@ -330,7 +348,8 @@ def footer_en():
 <div>
 <h4>Contact</h4>
 <p><a href="{LINE_EN}">LINE @vinfinityclinic</a></p>
-<p><a href="{MSG}">Facebook Messenger</a></p>
+{f'<p><a href="{WA_EN}" data-vf-chat="whatsapp">WhatsApp +{WHATSAPP}</a></p>' if WA_EN else ""}
+<p><a href="{MSG_EN}" data-vf-chat="messenger">Facebook Messenger</a></p>
 <p><a href="tel:+66{TEL.replace('-', '')[1:]}">Phone +66 {TEL[1:]}</a></p>
 <p><a href="/" hreflang="th" lang="th">ภาษาไทย</a></p>
 </div>
