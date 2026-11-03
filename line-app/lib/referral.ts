@@ -12,7 +12,7 @@ import { absImages } from "./campaignMedia";
 export const REF_EVENT = {
   key: "friends-2611",
   label: "ชวนเพื่อนมาสวยด้วยกัน",
-  from: "2026-11-16T00:00:00+07:00",
+  from: "2026-11-03T00:00:00+07:00", // doctor moved the start to 3 Nov (Sculptra closing; share its last places)
   until: "2026-12-15T23:59:59+07:00",
   friendCredit: 1_000,
   referrerCredit: 1_500,
@@ -53,7 +53,8 @@ export async function shareCard(clientId: number, userId: string, now = new Date
   const link = inviteLink(code);
   const ev = refEventActive(now);
   const mine = referrerCreditAt(now);
-  const shareText = `มาลองปรึกษาคุณหมอที่ Vinfinity Clinic อุดรธานีด้วยกันนะ 😊 กดลิงก์นี้รับสิทธิ์เพื่อนใหม่ ปรึกษาฟรี และรับเครดิต ${baht(REF_EVENT.friendCredit)} เมื่อทำครั้งแรก 👉 ${link}`;
+  const hot = await hotPromo(now);
+  const shareText = `มาลองปรึกษาคุณหมอที่ Vinfinity Clinic อุดรธานีด้วยกันนะ 😊 กดลิงก์นี้รับสิทธิ์เพื่อนใหม่ ปรึกษาฟรี และรับเครดิต ${baht(REF_EVENT.friendCredit)} เมื่อทำครั้งแรก${hot ? ` · ตอนนี้ ${hot.title} ${hot.price} เหลือ ${hot.left} สิทธิ์สุดท้าย กดลิงก์แล้วรับสิทธิ์ได้เลย` : ""} 👉 ${link}`;
   const done = ev ? await eventPaidCount(clientId) : 0;
   return { type: "flex", altText: `ชวนเพื่อน รับเครดิต ${baht(mine)}`, contents: { type: "bubble",
     body: { type: "box", layout: "vertical", spacing: "sm", paddingAll: "18px", contents: [
@@ -61,12 +62,34 @@ export async function shareCard(clientId: number, userId: string, now = new Date
       t("ส่งลิงก์นี้ให้เพื่อนได้เลยค่ะ", { weight: "bold", size: "md", color: NAVY }),
       t(`เพื่อนได้ปรึกษาฟรี + เครดิต ${baht(REF_EVENT.friendCredit)} · คุณได้เครดิต ${baht(mine)} เมื่อเพื่อนมาทำครั้งแรก ${baht(REF_EVENT.minPayment)} ขึ้นไป`, { size: "sm", color: MUTED }),
       ...(ev ? [t(`ชวนสำเร็จครบ ${REF_EVENT.milestone} คน รับ ${REF_EVENT.milestoneReward} ฟรี · ตอนนี้ ${Math.min(done, REF_EVENT.milestone)}/${REF_EVENT.milestone} · ถึง 15 ธ.ค.`, { size: "sm", color: ORANGE, weight: "bold" })] : []),
+      ...(hot ? [t(`🔥 ${hot.title} ${hot.price} เหลือ ${hot.left} สิทธิ์สุดท้าย — เพื่อนกดลิงก์ของคุณแล้วรับสิทธิ์นี้ได้ทันที`, { size: "sm", color: ORANGE })] : []),
       t(`รหัสของคุณ ${code}`, { size: "xs", color: MUTED }),
     ] },
     footer: { type: "box", layout: "vertical", spacing: "sm", contents: [
       { type: "button", style: "primary", color: ROYAL, action: { type: "uri", label: "ส่งให้เพื่อนใน LINE", uri: `https://line.me/R/share?text=${encodeURIComponent(shareText)}` } },
       { type: "button", style: "link", action: { type: "uri", label: "เปิดลิงก์ของฉัน (ไว้แชร์ FB/IG)", uri: link } },
     ] } } };
+}
+
+/** A running promo with places left (e.g. Sculptra's last seats), to pass on with an invite. */
+export async function hotPromo(now = new Date()) {
+  const P = await import("./promos");
+  for (const p of P.activePromos(now)) {
+    if (!p.limit || !p.card) continue;
+    const left = p.limit - (await P.seatsUsed(p, now));
+    if (left > 0) return { promo: p, left, title: p.card.title.replace(/ กระตุ้นคอลลาเจน$/, ""), price: p.card.price };
+  }
+  return null;
+}
+
+/** What a new friend sees under the welcome: the running promo card with its live places left (they can claim it). */
+export async function promoForFriend(clientId: number, now = new Date()): Promise<Msg[]> {
+  const hot = await hotPromo(now);
+  if (!hot) return [];
+  const P = await import("./promos");
+  const { logTouch } = await import("./crm");
+  await logTouch(clientId, "out", "promo", hot.promo.key);
+  return P.promoMessages(hot.promo, hot.left);
 }
 
 /** The welcome a new friend gets when they arrive with someone's code. */
@@ -91,7 +114,7 @@ export function friendArrived(inviteeFirstName: string, now = new Date()): Msg {
 /** Line for น้องวิน / lead drafts while the event runs. */
 export function refEventKb(now = new Date()) {
   return refEventActive(now)
-    ? `- Friend referral event ${REF_EVENT.label}, 16 Nov – 15 Dec 2026: an existing client types "ชวนเพื่อน" in the clinic's LINE to get a personal invite link. The new friend gets a free consultation and ${REF_EVENT.friendCredit} THB credit on a first treatment of ${REF_EVENT.minPayment} THB or more; the inviter gets ${REF_EVENT.referrerCredit} THB credit per friend, and ${REF_EVENT.milestoneReward} free after 3 friends.`
+    ? `- Friend referral event ${REF_EVENT.label}, 3 Nov – 15 Dec 2026: an existing client types "ชวนเพื่อน" in the clinic's LINE to get a personal invite link. The new friend gets a free consultation and ${REF_EVENT.friendCredit} THB credit on a first treatment of ${REF_EVENT.minPayment} THB or more; the inviter gets ${REF_EVENT.referrerCredit} THB credit per friend, and ${REF_EVENT.milestoneReward} free after 3 friends.`
     : "";
 }
 
@@ -116,7 +139,7 @@ export function inviteBroadcastCard(): Msg {
     body: { type: "box", layout: "vertical", spacing: "sm", paddingAll: "18px", contents: [
       t(REF_EVENT.label, { weight: "bold", size: "md", color: NAVY }),
       t(`เพื่อนใหม่ได้ปรึกษาฟรี + เครดิต ${baht(REF_EVENT.friendCredit)} · คุณได้ ${baht(REF_EVENT.referrerCredit)} ต่อเพื่อน 1 คน · ครบ ${REF_EVENT.milestone} คน รับ ${REF_EVENT.milestoneReward} ฟรี`, { size: "sm", color: MUTED }),
-      t(`16 พ.ย. – 15 ธ.ค. · เครดิตเมื่อเพื่อนทำครั้งแรก ${baht(REF_EVENT.minPayment)} ขึ้นไป`, { size: "xs", color: MUTED }),
+      t(`ถึง 15 ธ.ค. · เครดิตเมื่อเพื่อนทำครั้งแรก ${baht(REF_EVENT.minPayment)} ขึ้นไป`, { size: "xs", color: MUTED }),
     ] },
     footer: { type: "box", layout: "vertical", contents: [
       { type: "button", style: "primary", color: ROYAL, action: { type: "message", label: "รับลิงก์ชวนเพื่อนของฉัน", text: "ชวนเพื่อน" } },

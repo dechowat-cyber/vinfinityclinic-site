@@ -2,7 +2,7 @@ import { q } from "@/lib/db";
 import { leadUpdate } from "@/lib/actions";
 import { requireStaff } from "@/lib/session";
 import { pendingDrafts, leadLangStats, LANG_LABEL, type Lang } from "@/lib/agent";
-import { sendDraft, doneDraft, dismissDraft, promoSent, promoClaimSet, promoClaimAdd, referralRewardGiven } from "@/lib/agentActions";
+import { sendDraft, doneDraft, dismissDraft, promoSent, promoClaimSet, promoClaimAdd, referralRewardGiven, promoShareToClaimers } from "@/lib/agentActions";
 import { REF_EVENT, refEventActive, referralBoard } from "@/lib/referral";
 import { activePromos, promoProspects, promoStats, promoClaims } from "@/lib/promos";
 import { botInfo, chatUrl } from "@/lib/line";
@@ -32,6 +32,7 @@ export default async function Leads({ searchParams }: { searchParams: Promise<{ 
   const showRef = refEventActive() || refBoard.some((r) => r.reward === "pending");
   const oaLink = bot?.basicId ? `https://line.me/R/oaMessage/${bot.basicId}/?${encodeURIComponent("โปรเดือนนี้")}` : null;
   const toSend = prospects.filter((r) => !r.sent_at);
+  const sharedN = /^shared_(\d+)$/.exec(agent || "")?.[1];
   const AGENT_ERR: Record<string, string> = { quota: "ส่งจากระบบไม่ได้ เพราะโควตาข้อความ LINE เดือนนี้หมด · ใช้ “คัดลอก + เปิดแชท” แทน (ตอบในแชทไม่นับโควตา)", fail: "ส่งไม่สำเร็จ ลองอีกครั้ง หรือใช้ “คัดลอก + เปิดแชท”", gone: "ร่างนี้ถูกใช้ไปแล้ว" };
   const now = new Date();
   const filter = s === "all" ? "" : s ? "where l.status = $1" : "where l.status in ('New','Contacted','Qualified','Nurture')";
@@ -58,7 +59,8 @@ export default async function Leads({ searchParams }: { searchParams: Promise<{ 
           <div className="eyebrow">AGENT · ร่างคำตอบให้แล้ว {drafts.length ? `(${drafts.length})` : ""}</div>
           <small className="muted">lead 7 วัน: {langs.map((l) => `${LANG_LABEL[l.lang as Lang] ?? l.lang} ${l.n}`).join(" · ") || "-"} · {aiConfigured() && process.env.ANTHROPIC_API_KEY ? "AI เขียน" : "แบบฟอร์มสำเร็จรูป (ใส่ ANTHROPIC_API_KEY เพื่อให้ AI เขียน)"}</small>
         </div>
-        {agent && <div className="card err" style={{ marginTop: 8 }}>{AGENT_ERR[agent] ?? agent}</div>}
+        {agent && !sharedN && <div className="card err" style={{ marginTop: 8 }}>{AGENT_ERR[agent] ?? agent}</div>}
+        {sharedN && <div className="card" style={{ marginTop: 8 }}>ส่งการ์ดชวนเพื่อนแล้ว {sharedN} คน</div>}
         {drafts.length === 0 ? <p className="muted" style={{ margin: "8px 0 0" }}>ยังไม่มีร่าง · ลูกค้าทักมาเมื่อไร ระบบจะร่างคำตอบภาษาเดียวกับลูกค้าให้ที่นี่ และร่างข้อความตามคนที่เงียบไป 1–7 วันให้เองวันละครั้ง</p> :
           drafts.map((d) => (
             <form key={d.id} id={`d${d.id}`} action={sendDraft} className="card" style={{ marginTop: 10, padding: 14 }}>
@@ -113,6 +115,12 @@ export default async function Leads({ searchParams }: { searchParams: Promise<{ 
                   })}
                 </tbody>
               </table>
+              {refEventActive() && liveClaims.some((c) => c.line_user_id) && liveClaims.length < promo.limit && (
+                <form action={promoShareToClaimers} className="row" style={{ marginTop: 6 }}>
+                  <input type="hidden" name="key" value={promo.key} />
+                  <button className="btn small">🎁 ส่งการ์ดชวนเพื่อนให้ผู้ได้สิทธิ์ {liveClaims.filter((c) => c.line_user_id).length} คน</button>
+                  <small className="muted">ให้ช่วยชวนเพื่อนมารับ {promo.limit - liveClaims.length} สิทธิ์สุดท้าย · นับโควตาคนละ 1 ข้อความ · ส่งซ้ำคนเดิมไม่ได้</small>
+                </form>)}
               {liveClaims.length < promo.limit && (
                 <form action={promoClaimAdd} className="row" style={{ marginTop: 6 }}>
                   <input type="hidden" name="key" value={promo.key} />
@@ -154,7 +162,7 @@ export default async function Leads({ searchParams }: { searchParams: Promise<{ 
       {showRef && (
         <section className="card" id="friends">
           <div className="row" style={{ justifyContent: "space-between" }}>
-            <div className="eyebrow">อีเวนต์ · {REF_EVENT.label} (16 พ.ย. – 15 ธ.ค.)</div>
+            <div className="eyebrow">อีเวนต์ · {REF_EVENT.label} (3 พ.ย. – 15 ธ.ค.)</div>
             <small className="muted">เพื่อนใหม่ได้ {REF_EVENT.friendCredit.toLocaleString()} · คนชวนได้ {REF_EVENT.referrerCredit.toLocaleString()} ต่อเพื่อนที่จ่ายครั้งแรก {REF_EVENT.minPayment.toLocaleString()}+ · ครบ {REF_EVENT.milestone} คน รับ {REF_EVENT.milestoneReward}</small>
           </div>
           <p className="muted" style={{ margin: "6px 0" }}>ลูกค้าพิมพ์ “ชวนเพื่อน” (หรือกดปุ่มในการ์ดโปร) จะได้ลิงก์ส่วนตัว เครดิตเข้าระบบเองเมื่อออกใบเสร็จ · รางวัลครบ {REF_EVENT.milestone} คน ทีมนัดลูกค้าแล้วกด “ให้รางวัลแล้ว”</p>

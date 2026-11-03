@@ -17,9 +17,9 @@ process.env.APP_URL = "https://app.test";
 const msg = (u: string, text: string) => ({ type: "message", replyToken: "t", source: { type: "user", userId: u }, message: { type: "text", text } });
 const J = (x: unknown) => JSON.stringify(x ?? null);
 const inEvent = new Date("2026-11-20T05:00:00Z");
-const before = new Date("2026-11-10T05:00:00Z");
+const before = new Date("2026-11-02T05:00:00Z");
 
-test("event window 16 Nov – 15 Dec; น้องวิน knows it only while it runs", () => {
+test("event window 3 Nov – 15 Dec; น้องวิน knows it only while it runs", () => {
   assert.ok(!refEventActive(before));
   assert.ok(refEventActive(inEvent));
   assert.ok(!refEventActive(new Date("2026-12-15T17:00:01Z")));
@@ -80,4 +80,16 @@ test("launch broadcast: text + generic invite card; its button asks for the pers
   assert.equal(m[0].type, "text");
   assert.match(J(m[1]), /friends-2611\/1-1x1\.jpg/);
   assert.match(J(m[1]), /"text":"ชวนเพื่อน"/);
+});
+
+test("Sculptra last places ride along: invite card says how many are left, the friend gets the claim card", async () => {
+  const d = new Date("2026-11-05T05:00:00Z");
+  await handleEvent(msg("URF_S", "สวัสดีค่ะ"), d, DEFAULTS);
+  const share = await handleEvent(msg("URF_S", "ชวนเพื่อน"), d, DEFAULTS);
+  assert.match(J(share?.messages), /สิทธิ์สุดท้าย/);
+  const s = (await getClientByLine("URF_S"))!; const code = await ensureRefCode(s.id);
+  const w = await handleEvent(msg("URF_SF", `สวัสดีค่ะ สนใจปรึกษาคุณหมอ (รหัสแนะนำ ${code})`), d, DEFAULTS);
+  assert.match(J(w?.messages), /สิทธิ์เพื่อนใหม่/);
+  assert.match(J(w?.messages), /กดรับสิทธิ์/);
+  assert.match(J(w?.messages), /🔥 เหลืออีก \d+ สิทธิ์/);
 });

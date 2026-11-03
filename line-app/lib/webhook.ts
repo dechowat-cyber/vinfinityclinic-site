@@ -160,7 +160,8 @@ export async function handleEvent(ev: Ev, now = new Date(), s?: ClinicSettings):
         if (inv?.line_user_id && inv.followed)
           await line.push(inv.line_user_id, [R.friendArrived(String(me?.n || "เพื่อนของคุณ").split(" ")[0], now)], `refjoin:${inviter}:${c.id}`).catch((e) => console.error("[ref] push", e));
         await logTouch(c.id, "out", "ref_welcome", String(inviter));
-        return { replyToken: ev.replyToken, messages: [R.friendWelcome(userId, inv?.n ? String(inv.n).split(" ")[0] : null)] };
+        const extra = await R.promoForFriend(c.id, now).catch(() => []);
+        return { replyToken: ev.replyToken, messages: [R.friendWelcome(userId, inv?.n ? String(inv.n).split(" ")[0] : null), ...extra] as line.Msg[] };
       }
     }
     // "ชวนเพื่อน": the person's own invite link and progress (free reply)

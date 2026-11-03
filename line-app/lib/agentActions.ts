@@ -81,3 +81,23 @@ export async function referralRewardGiven(fd: FormData) {
   await q("update referral_rewards set status = 'given', given_at = now(), given_by = $2 where id = $1 and status = 'pending'", [Number(fd.get("id")), me.id]);
   revalidatePath("/staff/leads");
 }
+
+/** Sends each person who holds a promo seat their own invite card (one push each), so they can pass the last places on. */
+export async function promoShareToClaimers(fd: FormData) {
+  const me = await requireStaff(ROLES);
+  const { promoByKey, promoClaims } = await import("./promos");
+  const { shareCard } = await import("./referral");
+  const p = promoByKey(String(fd.get("key") || ""));
+  if (!p) redirect("/staff/leads#promo");
+  const rows = (await promoClaims(p)).filter((c) => c.live && c.line_user_id && c.client_id);
+  let sent = 0, quota = false;
+  for (const c of rows) {
+    try {
+      await push(c.line_user_id, [{ type: "text", text: "ขอบคุณที่จองสิทธิ์ไว้นะคะ 🙏 ส่งต่อให้เพื่อนที่สนใจได้เลย เพื่อนได้เครดิต 1,000 คุณได้ 1,500 เมื่อเพื่อนมาทำ" }, await shareCard(Number(c.client_id), c.line_user_id)], `refshare:${p.key}:${c.client_id}`);
+      await logTouch(Number(c.client_id), "out", "ref_share", p.key, me.name);
+      sent++;
+    } catch (e) { if (/429|quota|limit/i.test((e as Error).message)) { quota = true; break; } }
+  }
+  revalidatePath("/staff/leads");
+  redirect(`/staff/leads?agent=${quota ? "quota" : `shared_${sent}`}#promo`);
+}
