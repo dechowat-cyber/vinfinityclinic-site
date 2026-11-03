@@ -145,3 +145,24 @@ export function inviteBroadcastCard(): Msg {
       { type: "button", style: "primary", color: ROYAL, action: { type: "message", label: "รับลิงก์ชวนเพื่อนของฉัน", text: "ชวนเพื่อน" } },
     ] } } };
 }
+
+/** Day 7 after a treatment, under the aftercare text: a soft invite (results are showing, the visit is fresh). */
+export function referralNudge(now = new Date()): Msg {
+  const ev = refEventActive(now);
+  return { type: "flex", altText: "ชวนเพื่อนมาด้วยกัน รับเครดิต", contents: { type: "bubble", size: "kilo",
+    body: { type: "box", layout: "vertical", spacing: "sm", paddingAll: "16px", contents: [
+      t("ถ้าประทับใจ ส่งต่อให้เพื่อนได้นะคะ 🎁", { weight: "bold", size: "sm", color: NAVY }),
+      t(`เพื่อนได้ปรึกษาฟรี + เครดิต ${baht(REF_EVENT.friendCredit)} · คุณได้ ${baht(referrerCreditAt(now))} เมื่อเพื่อนมาทำ${ev ? ` · ครบ ${REF_EVENT.milestone} คน รับ ${REF_EVENT.milestoneReward} ฟรี (ถึง 15 ธ.ค.)` : ""}`, { size: "xs", color: MUTED }),
+    ] },
+    footer: { type: "box", layout: "vertical", contents: [
+      { type: "button", style: "secondary", height: "sm", action: { type: "message", label: "รับลิงก์ชวนเพื่อนของฉัน", text: "ชวนเพื่อน" } },
+    ] } } };
+}
+
+/** Ask only someone whose recovery is going fine, and at most once in 60 days. */
+export async function nudgeEligible(clientId: number, since: Date | string, now = new Date()) {
+  const problem = await one("select 1 from care_requests where client_id = $1 and created_at >= $2", [clientId, new Date(since).toISOString()]).catch(() => null);
+  if (problem) return false;
+  const recent = await one("select 1 from touchpoints where client_id = $1 and kind = 'ref_nudge' and created_at > $2", [clientId, new Date(now.getTime() - 60 * 864e5).toISOString()]);
+  return !recent;
+}

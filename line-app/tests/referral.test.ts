@@ -100,3 +100,17 @@ test("broadcast can leave out an audience (promo seat holders)", async () => {
   assert.deepEqual(b.recipient, { type: "operator", not: { type: "audience", audienceGroupId: 123 } });
   assert.equal(b.filter, undefined); assert.equal(b.limit, undefined);
 });
+
+test("day-7 invite: only when recovery went fine, at most once in 60 days", async () => {
+  const { referralNudge, nudgeEligible } = await import("../lib/referral");
+  const { logTouch } = await import("../lib/crm");
+  assert.match(J(referralNudge(inEvent)), /1,500 บาท/);
+  assert.match(J(referralNudge(new Date("2026-12-20T05:00:00Z"))), /1,000 บาท เมื่อเพื่อนมาทำ"/);
+  const ok = await upsertClientByLine("URF_N1", {}), bad = await upsertClientByLine("URF_N2", {});
+  const done = new Date("2026-11-13T05:00:00Z");
+  assert.equal(await nudgeEligible(ok.id, done, inEvent), true);
+  await q("insert into care_requests(client_id, created_at) values ($1, $2)", [bad.id, "2026-11-14T05:00:00Z"]);
+  assert.equal(await nudgeEligible(bad.id, done, inEvent), false);
+  await logTouch(ok.id, "out", "ref_nudge", "1", "system");
+  assert.equal(await nudgeEligible(ok.id, done, new Date()), false);
+});

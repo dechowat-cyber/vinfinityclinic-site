@@ -182,13 +182,18 @@ export const BROADCAST_ASK = "สนใจโปรนี้ ขอจองค�
 
 export async function campaignResults(limit = 20) {
   return q(`
-    with resp as (
+    with pressed as (
       select k.id as campaign_id, t.client_id, min(t.created_at) as at from campaigns k
-      join touchpoints t on t.direction = 'in' and t.kind = 'message' and t.body like $2
+      join touchpoints t on t.direction = 'in' and t.kind = 'message' and (t.body like $2 or t.body ~ '(รับสิทธิ์|^ชวนเพื่อน$|^โปรเดือนนี้$)')
         and t.created_at between k.created_at and k.created_at + interval '14 days'
+      where k.kind in ('broadcast','narrowcast') group by 1, 2),
+    resp as ( -- everyone who wrote to the clinic within 48 h of the broadcast (pressed a button or typed a question)
+      select k.id as campaign_id, t.client_id, min(t.created_at) as at from campaigns k
+      join touchpoints t on t.direction = 'in' and t.kind = 'message' and t.created_at between k.created_at and k.created_at + interval '48 hours'
       where k.kind in ('broadcast','narrowcast') group by 1, 2)
     select k.id, k.name, k.created_at, k.recipients, k.sent, k.message, k.kind, k.line_request_id, k.filters,
-      (select count(*)::int from resp where resp.campaign_id = k.id) as replied,
+      (select count(*)::int from pressed where pressed.campaign_id = k.id) as replied,
+      (select count(*)::int from resp where resp.campaign_id = k.id) as engaged,
       case when k.kind in ('broadcast','narrowcast') then
         (select count(distinct resp.client_id)::int from resp join appointments a on a.client_id = resp.client_id
           where resp.campaign_id = k.id and a.created_at between resp.at and resp.at + interval '14 days' and a.status <> 'cancelled')
