@@ -58,10 +58,19 @@ export async function sendBroadcastAction(fd: FormData) {
   if ((await getSettings()).paused) redirect(`/staff/segments?berr=paused${m}#broadcast`);
   let r: { id: number };
   try {
+    // leave out people who already hold a seat in a running promo (they do not need the pitch again)
+    let excl: number | null = null;
+    if (fd.get("exclude_holders") === "on") {
+      const { activePromos, promoClaims } = await import("./promos");
+      const { excludeAudience } = await import("./line");
+      const ids: string[] = [];
+      for (const p of activePromos().filter((x) => x.limit)) for (const c of await promoClaims(p)) if (c.live && c.line_user_id) ids.push(c.line_user_id);
+      excl = await excludeAudience(`ไม่ส่งซ้ำ ผู้ได้สิทธิ์โป ${new Date().toISOString().slice(0, 16)}`, ids);
+    }
     r = await createBroadcast({ name: String(fd.get("campaign_name") || ""), message: String(fd.get("message") || ""), withBooking: fd.get("with_booking") === "on",
       staffId: me.id, images: mediaImages(mediaSet(String(fd.get("media") || ""))), reach: Number(fd.get("reach")) || null,
       narrow: { max: Number(fd.get("max")) || undefined, gender: fd.get("gender") === "female" || fd.get("gender") === "male" ? (fd.get("gender") as "female" | "male") : undefined,
-        ageFrom: Number(fd.get("age_from")) || undefined, ageTo: Number(fd.get("age_to")) || undefined } });
+        ageFrom: Number(fd.get("age_from")) || undefined, ageTo: Number(fd.get("age_to")) || undefined, excludeAudience: excl ?? undefined } });
   } catch (e) {
     redirect(`/staff/segments?berr=${encodeURIComponent((e as Error).message.slice(0, 120))}${m}#broadcast`);
   }

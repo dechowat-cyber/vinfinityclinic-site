@@ -127,7 +127,7 @@ export async function createBroadcast(o: { name: string; message: string; withBo
   const pm = parsePromoMarker(o.images);
   const invite = (o.images ?? []).includes("invite:friends");
   const imgs = invite ? ["invite:friends"] : pm ? (o.images ?? []).filter((u) => u.startsWith("promo:")).slice(0, 1) : (o.images ?? []).filter((u) => /^https:\/\//.test(u)).slice(0, 4);
-  const narrow = o.narrow && (o.narrow.max || o.narrow.gender || o.narrow.ageFrom || o.narrow.ageTo) ? o.narrow : null;
+  const narrow = o.narrow && (o.narrow.max || o.narrow.gender || o.narrow.ageFrom || o.narrow.ageTo || o.narrow.excludeAudience) ? o.narrow : null;
   const est = narrow?.max ? Math.min(narrow.max, Number(o.reach) || narrow.max) : Math.max(0, Number(o.reach) || 0);
   const c = await one(`insert into campaigns(name, filters, message, with_booking, recipients, created_by, images, kind) values ($1,$2,$3,$4,$5,$6,$7,$8) returning id`,
     [o.name.trim().slice(0, 120) || "บรอดแคสต์", JSON.stringify(narrow ? { narrow } : {}), message, o.withBooking, est, o.staffId, JSON.stringify(imgs), narrow ? "narrowcast" : "broadcast"]);

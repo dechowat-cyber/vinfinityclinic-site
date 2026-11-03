@@ -93,3 +93,10 @@ test("Sculptra last places ride along: invite card says how many are left, the f
   assert.match(J(w?.messages), /กดรับสิทธิ์/);
   assert.match(J(w?.messages), /🔥 เหลืออีก \d+ สิทธิ์/);
 });
+
+test("broadcast can leave out an audience (promo seat holders)", async () => {
+  const { narrowBody } = await import("../lib/line");
+  const b: any = narrowBody([{ type: "text", text: "x" }], { excludeAudience: 123 });
+  assert.deepEqual(b.recipient, { type: "operator", not: { type: "audience", audienceGroupId: 123 } });
+  assert.equal(b.filter, undefined); assert.equal(b.limit, undefined);
+});
