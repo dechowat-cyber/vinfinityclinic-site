@@ -74,3 +74,10 @@ export async function promoClaimAdd(fd: FormData) {
   if (p) await addManualClaim(p, { note: String(fd.get("note") || ""), staffId: me.id }).catch(() => null);
   revalidatePath("/staff/leads");
 }
+
+/** Staff handed out a referral milestone reward (e.g. Vitaran 1 cc). */
+export async function referralRewardGiven(fd: FormData) {
+  const me = await requireStaff(ROLES);
+  await q("update referral_rewards set status = 'given', given_at = now(), given_by = $2 where id = $1 and status = 'pending'", [Number(fd.get("id")), me.id]);
+  revalidatePath("/staff/leads");
+}

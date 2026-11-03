@@ -2,7 +2,8 @@ import { q } from "@/lib/db";
 import { leadUpdate } from "@/lib/actions";
 import { requireStaff } from "@/lib/session";
 import { pendingDrafts, leadLangStats, LANG_LABEL, type Lang } from "@/lib/agent";
-import { sendDraft, doneDraft, dismissDraft, promoSent, promoClaimSet, promoClaimAdd } from "@/lib/agentActions";
+import { sendDraft, doneDraft, dismissDraft, promoSent, promoClaimSet, promoClaimAdd, referralRewardGiven } from "@/lib/agentActions";
+import { REF_EVENT, refEventActive, referralBoard } from "@/lib/referral";
 import { activePromos, promoProspects, promoStats, promoClaims } from "@/lib/promos";
 import { botInfo, chatUrl } from "@/lib/line";
 import { aiConfigured } from "@/lib/ai";
@@ -27,6 +28,8 @@ export default async function Leads({ searchParams }: { searchParams: Promise<{ 
   const promo = activePromos().find((p) => p.limit) ?? activePromos()[0] ?? null;
   const [prospects, pstats, claims] = promo ? await Promise.all([promoProspects(promo, 50), promoStats(promo), promo.limit ? promoClaims(promo) : Promise.resolve([])]) : [[], null, []];
   const liveClaims = claims.filter((c) => c.live);
+  const refBoard = await referralBoard(30).catch(() => []);
+  const showRef = refEventActive() || refBoard.some((r) => r.reward === "pending");
   const oaLink = bot?.basicId ? `https://line.me/R/oaMessage/${bot.basicId}/?${encodeURIComponent("โปรเดือนนี้")}` : null;
   const toSend = prospects.filter((r) => !r.sent_at);
   const AGENT_ERR: Record<string, string> = { quota: "ส่งจากระบบไม่ได้ เพราะโควตาข้อความ LINE เดือนนี้หมด · ใช้ “คัดลอก + เปิดแชท” แทน (ตอบในแชทไม่นับโควตา)", fail: "ส่งไม่สำเร็จ ลองอีกครั้ง หรือใช้ “คัดลอก + เปิดแชท”", gone: "ร่างนี้ถูกใช้ไปแล้ว" };
@@ -144,6 +147,29 @@ export default async function Leads({ searchParams }: { searchParams: Promise<{ 
                         </div>}</td>
                   </tr>);
               })}
+            </tbody>
+          </table>
+        </section>
+      )}
+      {showRef && (
+        <section className="card" id="friends">
+          <div className="row" style={{ justifyContent: "space-between" }}>
+            <div className="eyebrow">อีเวนต์ · {REF_EVENT.label} (16 พ.ย. – 15 ธ.ค.)</div>
+            <small className="muted">เพื่อนใหม่ได้ {REF_EVENT.friendCredit.toLocaleString()} · คนชวนได้ {REF_EVENT.referrerCredit.toLocaleString()} ต่อเพื่อนที่จ่ายครั้งแรก {REF_EVENT.minPayment.toLocaleString()}+ · ครบ {REF_EVENT.milestone} คน รับ {REF_EVENT.milestoneReward}</small>
+          </div>
+          <p className="muted" style={{ margin: "6px 0" }}>ลูกค้าพิมพ์ “ชวนเพื่อน” (หรือกดปุ่มในการ์ดโปร) จะได้ลิงก์ส่วนตัว เครดิตเข้าระบบเองเมื่อออกใบเสร็จ · รางวัลครบ {REF_EVENT.milestone} คน ทีมนัดลูกค้าแล้วกด “ให้รางวัลแล้ว”</p>
+          <table className="t">
+            <thead><tr><th>คนชวน</th><th>เพื่อนที่ชวนมา</th><th>จ่ายแล้ว</th><th>รางวัล</th></tr></thead>
+            <tbody>
+              {refBoard.length === 0 && <tr><td colSpan={4} className="muted">ยังไม่มีคนชวนเพื่อนในช่วงอีเวนต์</td></tr>}
+              {refBoard.map((r) => (
+                <tr key={r.id}>
+                  <td><a href={`/staff/clients/${r.id}`}><b>{r.n || `#${r.id}`}</b></a>{r.phone ? <><br /><small className="muted">{r.phone}</small></> : null}</td>
+                  <td>{r.invited}</td>
+                  <td>{r.paid}/{REF_EVENT.milestone}</td>
+                  <td>{r.reward === "pending" ? <form action={referralRewardGiven} className="row"><input type="hidden" name="id" value={r.reward_id} /><span className="tag warn">รอให้ {REF_EVENT.milestoneReward}</span><button className="btn ghost small">ให้รางวัลแล้ว ✓</button></form>
+                    : r.reward === "given" ? <span className="tag ok">ให้แล้ว</span> : <small className="muted">-</small>}</td>
+                </tr>))}
             </tbody>
           </table>
         </section>

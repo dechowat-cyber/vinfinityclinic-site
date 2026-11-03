@@ -561,4 +561,15 @@ create table if not exists promo_claims (
 create index if not exists promo_claims_key on promo_claims(promo_key, status);
 alter table promo_claims alter column client_id drop not null;
 alter table promo_claims add column if not exists note text;
+create table if not exists referral_rewards (
+  id bigserial primary key,
+  event_key text not null,
+  client_id bigint not null,
+  reward text not null,
+  status text not null default 'pending',
+  created_at timestamptz not null default now(),
+  given_at timestamptz,
+  given_by bigint,
+  unique (event_key, client_id)
+);
 `;

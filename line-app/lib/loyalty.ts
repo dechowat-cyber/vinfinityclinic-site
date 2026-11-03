@@ -124,7 +124,7 @@ export async function afterPayment(clientId: number, now = new Date(), paymentId
   if (paymentId) {
     const { creditsFor } = await import("./wallet");
     const cr = await creditsFor(paymentId, now).catch((e) => { console.error("[credit]", e); return null; });
-    if (cr?.referral && cr.referrer) await notifyReferral(cr.referrer, clientId);
+    if (cr?.referral && cr.referrer) await notifyReferral(cr.referrer, clientId, (cr as any).referrerAmount || 1000, !!(cr as any).milestone);
   }
   if (!r?.changed || !r.up) return r;
   const c = await one("select line_user_id, followed from clients where id = $1", [clientId]);
@@ -138,10 +138,10 @@ export async function afterPayment(clientId: number, now = new Date(), paymentId
 }
 
 /** V Circle: tell the person who invited a friend that both got their credit. */
-async function notifyReferral(referrerId: number, friendId: number) {
+async function notifyReferral(referrerId: number, friendId: number, amount = 1000, milestone = false) {
   const [a, f] = await Promise.all([one("select line_user_id, followed from clients where id = $1", [referrerId]), one("select coalesce(name, display_name) n from clients where id = $1", [friendId])]);
   if (!a?.line_user_id || !a.followed) return;
   const { push } = await import("./line");
   const M = await import("./messages");
-  await push(a.line_user_id, [M.referralThanks(a.line_user_id, String(f?.n || "เพื่อนของคุณ").split(" ")[0])], `ref:${referrerId}:${friendId}`).catch((e) => console.error("[ref] push", e));
+  await push(a.line_user_id, [M.referralThanks(a.line_user_id, String(f?.n || "เพื่อนของคุณ").split(" ")[0], amount, milestone)], `ref:${referrerId}:${friendId}`).catch((e) => console.error("[ref] push", e));
 }

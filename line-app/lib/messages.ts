@@ -312,11 +312,13 @@ export function offerCard(userId: string | null, title: string, detail: string, 
         btn("บัตรสมาชิกของฉัน", { type: "uri", uri: cardUrl(userId) }, "secondary")] } } };
 }
 
-export function referralThanks(userId: string | null, friend: string) {
-  return { type: "flex", altText: "V Circle: ได้รับเครดิต 1,000 บาทแล้ว", contents: { type: "bubble", body: { type: "box", layout: "vertical", spacing: "sm", paddingAll: "18px", contents: [
+export function referralThanks(userId: string | null, friend: string, amount = 1000, milestone = false) {
+  const a = amount.toLocaleString("en-US");
+  return { type: "flex", altText: `V Circle: ได้รับเครดิต ${a} บาทแล้ว`, contents: { type: "bubble", body: { type: "box", layout: "vertical", spacing: "sm", paddingAll: "18px", contents: [
     txt("V CIRCLE", { size: "xxs", color: MUTED, weight: "bold" }),
     txt("ขอบคุณที่แนะนำเพื่อนมาที่ Vinfinity ค่ะ", { weight: "bold", size: "md", color: NAVY }),
-    txt(`${friend} มารับบริการแล้ว คุณและเพื่อนได้รับเครดิตคนละ 1,000 บาท ใช้ได้กับทุกบริการ`, { size: "sm", color: MUTED })] },
+    txt(`${friend} มารับบริการแล้ว คุณได้รับเครดิต ${a} บาท และเพื่อนได้ 1,000 บาท ใช้ได้กับทุกบริการ`, { size: "sm", color: MUTED }),
+    ...(milestone ? [txt("🎁 ชวนสำเร็จครบ 3 คนแล้ว! รับ Vitaran 1 cc ฟรี ทีมจะทักไปนัดวันให้นะคะ", { size: "sm", color: "#F2622A", weight: "bold" })] : [])] },
     footer: { type: "box", layout: "vertical", contents: [btn("ดูเครดิตในบัตรสมาชิก", { type: "uri", uri: cardUrl(userId) })] } } };
 }
 

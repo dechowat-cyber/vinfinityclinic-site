@@ -81,16 +81,19 @@ export async function creditsFor(paymentId: number, now = new Date()) {
     cashback = Math.floor(p.amount * rate);
     if (cashback > 0) await add(Number(p.client_id), "cashback", cashback, { paymentId, note: `${tierInfo(c!.tier).name} ${Math.round(rate * 100)}%`, extend: now }).catch(() => { cashback = 0; });
   }
-  let referral = false;
+  let referral = false, referrerAmount = 0, milestone = false;
   if (c?.referred_by && !c.referral_paid_at && p.amount >= REFERRAL_MIN_PAYMENT) {
     const claimed = await one("update clients set referral_paid_at = $2 where id = $1 and referral_paid_at is null returning id", [p.client_id, now.toISOString()]);
     if (claimed) {
       await add(Number(p.client_id), "referral", REFERRAL_CREDIT, { note: "ได้รับคำชวนจากเพื่อน", extend: now });
-      await add(Number(c.referred_by), "referral", REFERRAL_CREDIT, { note: "ชวนเพื่อนสำเร็จ", extend: now });
+      const { referrerCreditAt, checkMilestone } = await import("./referral");
+      referrerAmount = referrerCreditAt(now);
+      await add(Number(c.referred_by), "referral", referrerAmount, { note: "ชวนเพื่อนสำเร็จ", extend: now });
       referral = true;
+      milestone = await checkMilestone(Number(c.referred_by), now).catch(() => false);
     }
   }
-  return { cashback, referral, referrer: referral ? Number(c!.referred_by) : null };
+  return { cashback, referral, referrer: referral ? Number(c!.referred_by) : null, referrerAmount, milestone };
 }
 
 /** Nightly: credit past its date expires (one line that brings the balance to zero). */

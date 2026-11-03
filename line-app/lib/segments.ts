@@ -1,4 +1,5 @@
 import { promoMessages, resolvePromoMarker, parsePromoMarker } from "./promos";
+import { inviteBroadcastCard } from "./referral";
 import { q, one } from "./db";
 import { push, broadcast, narrowcast, type Narrow } from "./line";
 import * as M from "./messages";
@@ -111,7 +112,7 @@ export async function createCampaign(o: { name: string; filters: Filters; messag
   if (!members.length) throw new Error("no_recipients");
   const c = await one(`insert into campaigns(segment_id, name, filters, message, with_booking, recipients, created_by, images) values ($1,$2,$3,$4,$5,$6,$7,$8) returning id`,
     [o.segmentId ?? null, o.name.trim().slice(0, 120) || "แคมเปญ", JSON.stringify(o.filters), message, o.withBooking, members.length, o.staffId,
-      JSON.stringify((o.images ?? []).filter((u) => /^https:\/\//.test(u) || u.startsWith("promo:")).slice(0, 4))]);
+      JSON.stringify((o.images ?? []).filter((u) => /^https:\/\//.test(u) || u.startsWith("promo:") || u === "invite:friends").slice(0, 4))]);
   const id = Number(c!.id);
   await q("insert into campaign_recipients(campaign_id, client_id) select $1, unnest($2::bigint[]) on conflict do nothing", [id, members.map((m) => m.id)]);
   await sendCampaignBatch(50, id);
@@ -124,13 +125,14 @@ export async function createBroadcast(o: { name: string; message: string; withBo
   const message = o.message.trim().slice(0, 1000);
   if (!message) throw new Error("empty_message");
   const pm = parsePromoMarker(o.images);
-  const imgs = pm ? (o.images ?? []).filter((u) => u.startsWith("promo:")).slice(0, 1) : (o.images ?? []).filter((u) => /^https:\/\//.test(u)).slice(0, 4);
+  const invite = (o.images ?? []).includes("invite:friends");
+  const imgs = invite ? ["invite:friends"] : pm ? (o.images ?? []).filter((u) => u.startsWith("promo:")).slice(0, 1) : (o.images ?? []).filter((u) => /^https:\/\//.test(u)).slice(0, 4);
   const narrow = o.narrow && (o.narrow.max || o.narrow.gender || o.narrow.ageFrom || o.narrow.ageTo) ? o.narrow : null;
   const est = narrow?.max ? Math.min(narrow.max, Number(o.reach) || narrow.max) : Math.max(0, Number(o.reach) || 0);
   const c = await one(`insert into campaigns(name, filters, message, with_booking, recipients, created_by, images, kind) values ($1,$2,$3,$4,$5,$6,$7,$8) returning id`,
     [o.name.trim().slice(0, 120) || "บรอดแคสต์", JSON.stringify(narrow ? { narrow } : {}), message, o.withBooking, est, o.staffId, JSON.stringify(imgs), narrow ? "narrowcast" : "broadcast"]);
   const id = Number(c!.id);
-  const msgs = pm ? [{ type: "text", text: message }, ...promoMessages(pm.promo, pm.left)]
+  const msgs = invite ? [{ type: "text", text: message }, inviteBroadcastCard()] : pm ? [{ type: "text", text: message }, ...promoMessages(pm.promo, pm.left)]
     : [...imgs.map((u) => M.image(u, u.replace(/\.jpg$/, "-p.jpg"))), M.broadcastText(message, o.withBooking)];
   if (narrow) {
     const rid = await narrowcast(msgs, narrow, `ncast:${id}`);
@@ -145,6 +147,7 @@ export async function createBroadcast(o: { name: string; message: string; withBo
 /** Pictures first, then the text (with the booking button). One push = one message off the OA quota. */
 export function campaignMessages(userId: string, r: { message: string; with_booking: boolean; campaign_id: unknown; images?: unknown }) {
   // a promo campaign: the text, then the promo card with its "กดรับสิทธิ์" button (lib/promos.ts)
+  if (Array.isArray(r.images) && r.images.includes("invite:friends")) return [{ type: "text", text: r.message }, inviteBroadcastCard()];
   const pm = parsePromoMarker(r.images);
   if (pm) return [{ type: "text", text: r.message }, ...promoMessages(pm.promo, pm.left)];
   const imgs = (Array.isArray(r.images) ? r.images : []).filter((u): u is string => typeof u === "string" && /^https:\/\//.test(u)).slice(0, 4);

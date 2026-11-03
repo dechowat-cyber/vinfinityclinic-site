@@ -6,6 +6,7 @@ import { bookUrl } from "./link";
 import { thaiDate, thaiTime } from "./time";
 import { notifyStaff } from "./notify";
 import type { Msg } from "./line";
+import { refEventKb } from "./referral";
 
 // Time-boxed promotions that work without the LINE message quota (every message here is a reply, which is free):
 //  1) a customer who asks about the product, taps "โปรเดือนนี้" in the rich menu, or adds the OA gets the promo;
@@ -97,8 +98,8 @@ export const promoByKey = (key: string | null | undefined) => PROMOS.find((p) =>
 
 /** Lines for the AI prompt (web chat and lead drafts); empty when nothing runs. */
 export function promoKb(now = new Date()) {
-  const a = activePromos(now);
-  return a.length ? `Current promotions (valid now, quote exactly):\n${a.map((p) => `- ${p.kb}`).join("\n")}` : "";
+  const lines = [...activePromos(now).map((p) => `- ${p.kb}`), refEventKb(now)].filter(Boolean);
+  return lines.length ? `Current promotions (valid now, quote exactly):\n${lines.join("\n")}` : "";
 }
 
 const t = (text: string, o: Record<string, unknown> = {}) => ({ type: "text", text, wrap: true, ...o });
@@ -120,6 +121,7 @@ export function promoMessages(p: Promo, left?: number | null): Msg[] {
       footer: { type: "box", layout: "vertical", spacing: "sm", contents: [
         { type: "button", style: "primary", color: NAVY, action: { type: "message", label: "กดรับสิทธิ์", text: c.claimText } },
         ...(c.detailUrl ? [{ type: "button", style: "link", action: { type: "uri", label: "ดูรายละเอียด", uri: c.detailUrl } }] : []),
+        { type: "button", style: "link", action: { type: "message", label: "🎁 ชวนเพื่อน รับเครดิต", text: "ชวนเพื่อน" } },
       ] } } }];
   }
   const [img] = absImages([p.image]);
@@ -147,6 +149,7 @@ export async function claimPromo(clientId: number, userId: string, p: Promo, now
     footer: { type: "box", layout: "vertical", spacing: "sm", contents: buttons } } });
   const bookBtn = { type: "button", style: "primary", color: NAVY, action: { type: "uri", label: "เลือกวันนัด", uri: book } };
   const callBtn = { type: "button", style: "link", action: { type: "message", label: "ให้ทีมติดต่อกลับ", text: "สะดวกให้ทีมติดต่อกลับค่ะ" } };
+  const shareBtn = { type: "button", style: "link", action: { type: "message", label: "🎁 ชวนเพื่อน รับเครดิต", text: "ชวนเพื่อน" } };
   if (mine?.live) {
     return [card(`สิทธิ์ที่ ${mine.seat} เป็นของคุณอยู่แล้วค่ะ`, [`${p.card?.title ?? p.label} ${p.card?.price ?? ""}`.trim(), mine.status === "held" ? `เลือกวันนัดได้ถึง ${fmt(new Date(mine.expires_at))}` : "ทีมยืนยันสิทธิ์แล้ว แล้วพบกันที่คลินิกค่ะ"], [bookBtn, callBtn])];
   }
@@ -166,7 +169,7 @@ export async function claimPromo(clientId: number, userId: string, p: Promo, now
     `${p.card?.title ?? p.label} ${p.card?.price ?? ""}${p.maxPer ? ` (${p.maxPer})` : ""}`.trim(),
     `กรุณาเลือกวันนัดภายใน ${fmt(expires)} ถ้าเลยเวลา สิทธิ์จะส่งต่อให้คนถัดไปค่ะ`,
     `เหลืออีก ${Math.max(0, limit - seat)} สิทธิ์`,
-  ], [bookBtn, callBtn])];
+  ], [bookBtn, callBtn, shareBtn])];
 }
 
 /**

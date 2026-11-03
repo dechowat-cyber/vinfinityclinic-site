@@ -62,7 +62,8 @@ export async function applySource(clientId: number, leadId: number, found: { sou
   await q("update leads set source = coalesce(source, $2) where id = $1", [leadId, found.source]);
   if (found.refCode) {
     const ref = await one<{ id: number }>("select id from clients where ref_code = $1", [found.refCode]);
-    if (ref && ref.id !== clientId) {
+    const paidBefore = await one("select 1 from payments where client_id = $1 and voided_at is null limit 1", [clientId]);
+    if (ref && ref.id !== clientId && !paidBefore) {
       await q("update clients set referred_by = coalesce(referred_by, $2) where id = $1", [clientId, ref.id]);
       await q("update leads set referred_by = coalesce(referred_by, $2) where id = $1", [leadId, ref.id]);
       return ref.id;

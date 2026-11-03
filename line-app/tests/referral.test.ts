@@ -1,0 +1,83 @@
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { DEFAULTS } from "../lib/settings";
+import { handleEvent } from "../lib/webhook";
+import { getClientByLine, upsertClientByLine } from "../lib/crm";
+import { recordPayment } from "../lib/payments";
+import { creditsFor, balance } from "../lib/wallet";
+import { ensureRefCode } from "../lib/source";
+import { q, one } from "../lib/db";
+import { REF_EVENT, refEventActive, referralBoard } from "../lib/referral";
+import { campaignMessages } from "../lib/segments";
+import { mediaImages, mediaSet } from "../lib/campaignMedia";
+import { promoKb } from "../lib/promos";
+
+process.env.LINE_CHANNEL_ACCESS_TOKEN = "";
+process.env.APP_URL = "https://app.test";
+const msg = (u: string, text: string) => ({ type: "message", replyToken: "t", source: { type: "user", userId: u }, message: { type: "text", text } });
+const J = (x: unknown) => JSON.stringify(x ?? null);
+const inEvent = new Date("2026-11-20T05:00:00Z");
+const before = new Date("2026-11-10T05:00:00Z");
+
+test("event window 16 Nov – 15 Dec; น้องวิน knows it only while it runs", () => {
+  assert.ok(!refEventActive(before));
+  assert.ok(refEventActive(inEvent));
+  assert.ok(!refEventActive(new Date("2026-12-15T17:00:01Z")));
+  assert.match(promoKb(inEvent), /1500 THB/);
+  assert.doesNotMatch(promoKb(before), /1500 THB/);
+});
+
+test("'ชวนเพื่อน' → own link + progress; friend arrives with the code → welcome naming the inviter, once", async () => {
+  await handleEvent(msg("URF_A", "สวัสดีค่ะ"), inEvent, DEFAULTS);
+  const share = await handleEvent(msg("URF_A", "ชวนเพื่อน"), inEvent, DEFAULTS);
+  const a = (await getClientByLine("URF_A"))!;
+  const code = await ensureRefCode(a.id);
+  assert.match(J(share?.messages), new RegExp(`/r/ref_${code}`));
+  assert.match(J(share?.messages), /0\/3/);
+  await q("update clients set name = 'แนน ทดสอบ' where id = $1", [a.id]);
+  const w = await handleEvent(msg("URF_B", `สวัสดีค่ะ สนใจปรึกษาคุณหมอ (รหัสแนะนำ ${code})`), inEvent, DEFAULTS);
+  assert.match(J(w?.messages), /สิทธิ์เพื่อนใหม่/);
+  assert.match(J(w?.messages), /คุณแนน ชวนคุณมา/);
+  const b = (await getClientByLine("URF_B"))!;
+  assert.equal(Number((await one("select referred_by from clients where id = $1", [b.id]))!.referred_by), Number(a.id));
+  const again = await handleEvent(msg("URF_B", `สวัสดีค่ะ สนใจปรึกษาคุณหมอ (รหัสแนะนำ ${code})`), inEvent, DEFAULTS);
+  assert.doesNotMatch(J(again?.messages), /สิทธิ์เพื่อนใหม่/);
+});
+
+test("a client who already paid cannot be bound to a code", async () => {
+  const a = await upsertClientByLine("URF_C", {}); const code = await ensureRefCode(a.id);
+  const old = await upsertClientByLine("URF_OLD", {});
+  await recordPayment({ clientId: old.id, amount: 3_000, method: "cash", staffId: 1 });
+  const r = await handleEvent(msg("URF_OLD", `สวัสดีค่ะ สนใจปรึกษาคุณหมอ (รหัสแนะนำ ${code})`), inEvent, DEFAULTS);
+  assert.doesNotMatch(J(r?.messages), /สิทธิ์เพื่อนใหม่/);
+  assert.equal((await one("select referred_by from clients where id = $1", [old.id]))!.referred_by, null);
+});
+
+test("during the event the inviter gets 1,500, the friend 1,000; 3 paid friends → one pending reward", async () => {
+  const a = await upsertClientByLine("URF_M", {});
+  for (let i = 0; i < 3; i++) {
+    const f = await upsertClientByLine(`URF_F${i}`, {});
+    await q("update clients set referred_by = $2 where id = $1", [f.id, a.id]);
+    const p = await recordPayment({ clientId: f.id, amount: 8_000, method: "cash", staffId: 1 });
+    const r = await creditsFor(p.id, inEvent);
+    assert.equal(r.referral, true);
+    assert.equal((r as any).referrerAmount, 1_500);
+    assert.equal((r as any).milestone, i === 2);
+    assert.equal(await balance(f.id), 1_000);
+  }
+  assert.equal(await balance(a.id), 4_500);
+  const w = await one("select status, reward from referral_rewards where client_id = $1 and event_key = $2", [a.id, REF_EVENT.key]);
+  assert.equal(w?.status, "pending"); assert.equal(w?.reward, "Vitaran 1 cc");
+  const board = await referralBoard();
+  assert.ok(board.some((r) => Number(r.id) === Number(a.id) && r.paid === 3 && r.reward === "pending"));
+});
+
+test("launch broadcast: text + generic invite card; its button asks for the person's own link", () => {
+  const set = mediaSet("friends-2611", inEvent)!;
+  assert.deepEqual(mediaImages(set), ["invite:friends"]);
+  assert.equal(mediaSet("friends-2611", before), null);
+  const m = campaignMessages("U1", { message: set.message, with_booking: false, campaign_id: 9, images: ["invite:friends"] });
+  assert.equal(m[0].type, "text");
+  assert.match(J(m[1]), /friends-2611\/1-1x1\.jpg/);
+  assert.match(J(m[1]), /"text":"ชวนเพื่อน"/);
+});

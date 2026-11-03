@@ -148,7 +148,26 @@ export async function handleEvent(ev: Ev, now = new Date(), s?: ClinicSettings):
     const leadId = await markInbound(c.id);
     await logTouch(c.id, "in", "message", text);
     // FR-01/02: source tag from the pre-filled CTA message
-    if (ev.message?.type === "text") await applySource(c.id, leadId, parseSource(text));
+    if (ev.message?.type === "text") {
+      const found = parseSource(text);
+      const before = found.refCode ? await one("select referred_by from clients where id = $1", [c.id]) : null;
+      const inviter = await applySource(c.id, leadId, found);
+      // a new friend arrived with someone's invite link: free welcome reply + tell the inviter (lib/referral.ts)
+      if (found.refCode && inviter && !before?.referred_by) {
+        const R = await import("./referral");
+        const [inv, me] = await Promise.all([one("select coalesce(name, display_name) n, line_user_id, followed from clients where id = $1", [inviter]),
+          one("select coalesce(name, display_name) n from clients where id = $1", [c.id])]);
+        if (inv?.line_user_id && inv.followed)
+          await line.push(inv.line_user_id, [R.friendArrived(String(me?.n || "เพื่อนของคุณ").split(" ")[0], now)], `refjoin:${inviter}:${c.id}`).catch((e) => console.error("[ref] push", e));
+        await logTouch(c.id, "out", "ref_welcome", String(inviter));
+        return { replyToken: ev.replyToken, messages: [R.friendWelcome(userId, inv?.n ? String(inv.n).split(" ")[0] : null)] };
+      }
+    }
+    // "ชวนเพื่อน": the person's own invite link and progress (free reply)
+    if (ev.message?.type === "text" && /^(ชวนเพื่อน|แชร์ให้เพื่อน|ลิงก์ชวนเพื่อน|รหัสแนะนำ(ของฉัน)?)$/.test(text.trim())) {
+      const R = await import("./referral");
+      return { replyToken: ev.replyToken, messages: [await R.shareCard(c.id, userId, now)] };
+    }
     // FR-09: any reply stops nurture and puts the person back in the inbox
     await q("update leads set status = 'Contacted', nurture_started_at = null where id = $1 and status = 'Nurture'", [leadId]);
     // Face Architecture Report: start / cancel by keyword (the ad's pre-filled message matches TRIGGER)

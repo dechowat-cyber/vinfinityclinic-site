@@ -1,7 +1,7 @@
 // Ready-made image sets for LINE campaigns. Files live in /public/campaign/<key>/ so LINE can fetch them over https.
 // Add a set here when marketing hands over a new broadcast; staff pick it on the segments page.
 
-export type MediaSet = { key: string; label: string; images: string[]; previews: string[]; message: string; segment?: string; promo?: string; liveLeft?: boolean; from?: string; until?: string };
+export type MediaSet = { key: string; label: string; images: string[]; previews: string[]; message: string; segment?: string; promo?: string; liveLeft?: boolean; invite?: boolean; from?: string; until?: string };
 
 const set = (key: string, label: string, dir: string, n: number, size: string, message: string, segment?: string): MediaSet => ({
   key, label, message, segment,
@@ -37,7 +37,13 @@ const SCULPTRA_R2 = `🔥 Sculptra 15,990.- เหลืออีก {เหล�
 ถึง 15 พ.ย. นี้ หรือจนกว่าสิทธิ์จะหมด · คนละไม่เกิน 2 ขวด
 ใครกดรับสิทธิ์ไว้แล้ว ไม่ต้องกดซ้ำนะคะ 🙏 ยังไม่ได้กด กด "กดรับสิทธิ์" ในการ์ดด้านล่าง ระบบจะบอกลำดับทันทีค่ะ 👇`;
 
+const FRIENDS_MSG = `🎁 ชวนเพื่อนมาสวยด้วยกัน 16 พ.ย. – 15 ธ.ค.
+เพื่อนใหม่ได้ปรึกษาฟรี + เครดิต 1,000 บาท · คุณได้เครดิต 1,500 บาทต่อเพื่อน 1 คน
+ชวนสำเร็จครบ 3 คน รับ Vitaran 1 cc ฟรี
+กด "รับลิงก์ชวนเพื่อนของฉัน" ด้านล่าง แล้วส่งให้เพื่อนได้เลยค่ะ 👇`;
+
 export const MEDIA: MediaSet[] = [
+  { ...set("friends-2611", "ชวนเพื่อนมาสวยด้วยกัน · ข้อความ + การ์ด (16 พ.ย. – 15 ธ.ค.)", "friends-2611", 1, "1x1", FRIENDS_MSG, "reachable=1"), invite: true, from: "2026-11-16T00:00:00+07:00", until: "2026-12-15T23:59:59+07:00" },
   { ...set("sculptra-2611-card", "Sculptra 15,990 · ข้อความ + การ์ดกดรับสิทธิ์ (10 สิทธิ์)", "sculptra-2611", 1, "1x1", SCULPTRA_MSG, "reachable=1"), promo: "sculptra-2611", from: "2026-11-01T00:00:00+07:00", until: "2026-11-15T23:59:59+07:00" },
   { ...set("sculptra-2611-r2", "Sculptra รอบ 2 · เหลือ X สิทธิ์ (ใส่ตัวเลขจริงตอนส่ง)", "sculptra-2611", 1, "1x1", SCULPTRA_R2, "reachable=1"), promo: "sculptra-2611", liveLeft: true, from: "2026-11-01T00:00:00+07:00", until: "2026-11-15T23:59:59+07:00" },
   { ...set("haca-2610-1x1", "HArmonyCa Early Bird (ถึง 31 ต.ค. 69) · 1:1", "haca-2610", 1, "1x1", HACA_MSG, "reachable=1"), until: "2026-10-31T23:59:59+07:00" },
@@ -51,7 +57,7 @@ export const liveMedia = (now = new Date()) => MEDIA.filter((m) => (!m.from || n
 export const mediaSet = (key: string | null | undefined, now = new Date()) => liveMedia(now).find((m) => m.key === key) ?? null;
 
 /** What a campaign stores: a promo marker (sent as text + claim card) or the picture URLs. */
-export const mediaImages = (m: MediaSet | null) => (m?.promo ? [`promo:${m.promo}${m.liveLeft ? "@left" : ""}`] : absImages(m?.images ?? []));
+export const mediaImages = (m: MediaSet | null) => (m?.invite ? ["invite:friends"] : m?.promo ? [`promo:${m.promo}${m.liveLeft ? "@left" : ""}`] : absImages(m?.images ?? []));
 
 /** Absolute https URLs (LINE refuses relative or http). Max 4 images so the text still fits in one push (5 objects). */
 export function absImages(paths: string[], base = process.env.APP_URL || "") {
