@@ -3,7 +3,7 @@ import { leadUpdate } from "@/lib/actions";
 import { requireStaff } from "@/lib/session";
 import { pendingDrafts, leadLangStats, LANG_LABEL, type Lang } from "@/lib/agent";
 import { sendDraft, doneDraft, dismissDraft, promoSent, promoClaimSet, promoClaimAdd, referralRewardGiven, promoShareToClaimers } from "@/lib/agentActions";
-import { REF_EVENT, refEventActive, referralBoard } from "@/lib/referral";
+import { REF_EVENT, refEventActive, referralBoard, referralStats } from "@/lib/referral";
 import { activePromos, promoProspects, promoStats, promoClaims } from "@/lib/promos";
 import { botInfo, chatUrl } from "@/lib/line";
 import { aiConfigured } from "@/lib/ai";
@@ -30,6 +30,7 @@ export default async function Leads({ searchParams }: { searchParams: Promise<{ 
   const liveClaims = claims.filter((c) => c.live);
   const refBoard = await referralBoard(30).catch(() => []);
   const showRef = refEventActive() || refBoard.some((r) => r.reward === "pending");
+  const rs = showRef ? await referralStats().catch(() => null) : null;
   const oaLink = bot?.basicId ? `https://line.me/R/oaMessage/${bot.basicId}/?${encodeURIComponent("โปรเดือนนี้")}` : null;
   const toSend = prospects.filter((r) => !r.sent_at);
   const sharedN = /^shared_(\d+)$/.exec(agent || "")?.[1];
@@ -165,6 +166,11 @@ export default async function Leads({ searchParams }: { searchParams: Promise<{ 
             <div className="eyebrow">อีเวนต์ · {REF_EVENT.label} (3 พ.ย. – 15 ธ.ค.)</div>
             <small className="muted">เพื่อนใหม่ได้ {REF_EVENT.friendCredit.toLocaleString()} · คนชวนได้ {REF_EVENT.referrerCredit.toLocaleString()} ต่อเพื่อนที่จ่ายครั้งแรก {REF_EVENT.minPayment.toLocaleString()}+ · ครบ {REF_EVENT.milestone} คน รับ {REF_EVENT.milestoneReward}</small>
           </div>
+          {rs && <div className="kpis" style={{ marginTop: 8 }}>
+            <div className="kpi"><b>{rs.asked}</b><small>ขอลิงก์ชวนเพื่อน (วันนี้ {rs.askedToday})</small></div>
+            <div className="kpi"><b>{rs.friends}</b><small>เพื่อนกดลิงก์เข้ามาแล้ว (วันนี้ {rs.friendsToday})</small></div>
+            <div className="kpi"><b>{rs.paid}</b><small>เพื่อนมาทำแล้ว · เครดิตออกแล้ว</small></div>
+          </div>}
           <p className="muted" style={{ margin: "6px 0" }}>ลูกค้าพิมพ์ “ชวนเพื่อน” (หรือกดปุ่มในการ์ดโปร) จะได้ลิงก์ส่วนตัว เครดิตเข้าระบบเองเมื่อออกใบเสร็จ · รางวัลครบ {REF_EVENT.milestone} คน ทีมนัดลูกค้าแล้วกด “ให้รางวัลแล้ว”</p>
           <table className="t">
             <thead><tr><th>คนชวน</th><th>เพื่อนที่ชวนมา</th><th>จ่ายแล้ว</th><th>รางวัล</th></tr></thead>

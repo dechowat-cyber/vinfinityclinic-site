@@ -166,3 +166,15 @@ export async function nudgeEligible(clientId: number, since: Date | string, now 
   const recent = await one("select 1 from touchpoints where client_id = $1 and kind = 'ref_nudge' and created_at > $2", [clientId, new Date(now.getTime() - 60 * 864e5).toISOString()]);
   return !recent;
 }
+
+/** Event funnel: who asked for their link, how many friends came in through a link, how many of those paid. "today" = since 00:00 Bangkok. */
+export async function referralStats(now = new Date()) {
+  const today = new Date(`${new Date(now.getTime() + 7 * 3600e3).toISOString().slice(0, 10)}T00:00:00+07:00`).toISOString();
+  const r = await one(`select
+      (select count(distinct client_id)::int from touchpoints where direction = 'in' and kind = 'message' and body ~ '^(ชวนเพื่อน|แชร์ให้เพื่อน|ลิงก์ชวนเพื่อน|รหัสแนะนำ(ของฉัน)?)$' and created_at >= $1) asked,
+      (select count(distinct client_id)::int from touchpoints where direction = 'in' and kind = 'message' and body ~ '^(ชวนเพื่อน|แชร์ให้เพื่อน|ลิงก์ชวนเพื่อน|รหัสแนะนำ(ของฉัน)?)$' and created_at >= $2) asked_today,
+      (select count(*)::int from touchpoints where kind = 'ref_welcome' and created_at >= $1) friends,
+      (select count(*)::int from touchpoints where kind = 'ref_welcome' and created_at >= $2) friends_today,
+      (select count(*)::int from clients where referred_by is not null and referral_paid_at >= $1) paid`, [REF_EVENT.from, today]);
+  return { asked: Number(r?.asked ?? 0), askedToday: Number(r?.asked_today ?? 0), friends: Number(r?.friends ?? 0), friendsToday: Number(r?.friends_today ?? 0), paid: Number(r?.paid ?? 0) };
+}

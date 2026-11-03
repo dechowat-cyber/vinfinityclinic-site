@@ -114,3 +114,9 @@ test("day-7 invite: only when recovery went fine, at most once in 60 days", asyn
   await logTouch(ok.id, "out", "ref_nudge", "1", "system");
   assert.equal(await nudgeEligible(ok.id, done, new Date()), false);
 });
+
+test("event funnel counts link requests and friends who came in", async () => {
+  const { referralStats } = await import("../lib/referral");
+  const s = await referralStats(new Date());
+  assert.ok(s.asked >= 2 && s.friends >= 2);
+});
