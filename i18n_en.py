@@ -22,6 +22,8 @@ EN_HOME_FAQ = [
      "It depends on the product, the treatment area and your own metabolism. The doctor will suggest a follow-up schedule that suits you."),
     ("How do I book a consultation?",
      "Message us on LINE @vinfinityclinic or Facebook Messenger with a front-facing photo and a note about what concerns you. Our team will book an assessment with the doctor for you."),
+    ("Can I have my consultation in English?",
+     "Yes. Consultations are available in English, with the doctor and/or our team. Message us in English on LINE @vinfinityclinic or Facebook Messenger with a front-facing photo and a note about what concerns you, and we will book your assessment in Udon Thani. All prices are listed in English on our price page."),
     ("Where is Vinfinity Clinic Udon Thani, and when is it open?",
      f"The clinic is at {ADDR_EN}. {HOURS_EN}. Call {TEL} or book on LINE @vinfinityclinic."),
     ("Do you have a branch in Laos?",
