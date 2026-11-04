@@ -12,7 +12,7 @@ Referral event "ชวนเพื่อนมาสวยด้วยกัน"
 
 ## Backlog (top = next)
 1. Get LINE OA follower count + segment sizes (past skin-booster / filler patients) from LINE OA Manager — broadcast sizes are "not verified" until then. (Ask doctor/team.)
-2. Draft slot Wed 11 Nov (11.11 Story; mention Sculptra promo only if places remain) + Fri 13 Nov (Meet the doctor, EN).
+2. Draft slot Fri 13 Nov (Meet the doctor, EN) — Wed 11 Nov done (Draft 7).
 3. Sculptra promo reminder post ~Mon 9 / Thu 12 Nov only if places remain (team checks the LINE seat counter) — never claim "almost gone" unless verified.
 4. Loy Krathong 2026 = Tue 24 Nov (verified 2026-11-02, PPTV: "วันอังคารที่ 24 พฤศจิกายน"; clinic closed that day). Draft "เตรียมผิวก่อนลอยกระทง" for Sun 15 Nov + a reminder slot Sun 22 / Mon 23 Nov in the next calendar.
 4b. Roll the calendar to 16–29 Nov (next run); Sculptra waitlist post once all 10 places are gone (no 15,990 price after that).
@@ -31,7 +31,7 @@ Weekdays corrected 2026-11-01 (1 Nov 2026 = Sunday; earlier labels were one day 
 | Fri 6 Nov | TikTok / Reels + FB | Sculptra vs HA filler — timeline — DRAFT READY (end with promo CTA, see 2026-11-01 log) | "เติมปริมาตร vs กระตุ้นคอลลาเจน ต่างกันยังไง" | /articles/sculptra-ellanse-vs-ha-filler | articles/sculptra-ellanse-ha-filler-timeline.jpg |
 | Sun 8 Nov | FB + IG | PN HMW vs LMW education (supports Vitaran promo) — DRAFT READY (Draft 6) | "PN ไม่ได้มีแบบเดียว" | /articles/pn-molecular-weight + LINE | articles/pn-hmw-lmw-polynucleotide.jpg |
 | Mon 9 Nov | LINE broadcast (week 2, if approved; moved from Tue 10 = clinic closed) | Vitaran 4-box price for past skin-booster patients | "ราคา 4 กล่อง 8,990 ฿/กล่อง" | ทักกลับเพื่อจองคิว | treatment.jpg |
-| Wed 11 Nov | FB + IG Story | 11.11 reminder (no extra discount — current promo only) | "11.11 นี้ ดูแลผิวแบบวางแผน" | LINE | clinic-lounge.jpg |
+| Wed 11 Nov | FB + IG Story | 11.11 reminder (no extra discount — current promo only) — DRAFT READY (Draft 7, version A/B by Sculptra seats) | "11.11 นี้ ดูแลผิวแบบวางแผน" | LINE | clinic-lounge.jpg |
 | Fri 13 Nov | IG + FB (EN) | Meet the doctor — conference teaching (no Galderma branding) | "Who is The Filler Architect?" | /en/doctor | doctor/imcas-asia-2023-live-demo.jpg |
 | Sun 15 Nov | FB + IG | Pre-Loy Krathong skin plan (PN needs time before photos) — festival Tue 24 Nov (verified) | "อีกไม่กี่สัปดาห์ลอยกระทง ผิวพร้อมถ่ายรูปหรือยัง" | LINE ประเมินผิว | treatment.jpg or clinic-lounge.jpg |
 
@@ -261,3 +261,22 @@ Graphic brief: 1080×1350. Article graphic assets/img/articles/pn-hmw-lmw-polynu
 - Live-site check (Tue): production dpl_5srCqKRrU4x2QiBSHBx7xj7Qweie (commit 493780a) READY; /, /sculptra/, /en/filler/tear-trough/ return 200 and render fully (html closed, schema present).
 - Found: /sculptra/ still shows only the regular 24,995 ฿ (no 15,990 promo), same as 1 Nov. Not changed, because prices are the doctor's decision.
 - NOTE FOR THE 07:30 RUN ON TUE 3 NOV 2026: do no work. Reply and report only "รวมไว้ในรายงานรอบ 00:35 แล้ว". Resume the normal plan on Wed 4 Nov (AEO).
+### 2026-11-04
+- Today's slot Wed 4 Nov = tear-trough carousel (Draft 3, ready; full TH caption in today's report). Foreign-patient plan: first EN post (Wed 4 Nov) due today — drafts are in the doctor's doc, not re-drafted here.
+- Reminder in report: Sculptra LINE round 2 today ~12:30, only if places are left after Monday's 48 h holds expire (8/10 taken on day 1). Next drafted slots: Fri 6 Nov reel (Draft 4 + promo ending), Sun 8 Nov PN (Draft 6).
+- Done: Draft 7 for Wed 11 Nov (11.11 Story) below, two versions — A if Sculptra places remain (team checks the LINE seat counter that morning), B if all 10 are gone (referral-event CTA instead; no 15,990 price). No extra 11.11 discount invented. Prices from line-app/lib/promos.ts and line-app/lib/referral.ts terms in this file's header.
+- No market watch (Mondays only). No LINE broadcast proposed this week beyond the doctor's plan.
+
+#### Draft 7 — Wed 11 Nov · FB + IG Story (9:16, 2 frames) · 11.11
+Version A (Sculptra places still open — check the LINE counter first; never say "almost gone" unless the counter shows it):
+TH (frame 1): 11.11 นี้ ไม่ต้องรีบกดตามกระแส ✨ ดูแลผิวแบบวางแผนกับแพทย์
+TH (frame 2): Sculptra กระตุ้นคอลลาเจน 15,990 บาท/ขวด (ปกติ 24,995) · ถึง 15 พ.ย. หรือจนกว่าสิทธิ์จะหมด · คนละไม่เกิน 2 ขวด · ใช้ร่วมกับโปรอื่นไม่ได้ · แพทย์ประเมินก่อนทุกครั้ง · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล
+ทักไลน์ @vinfinityclinic พิมพ์ “โปรเดือนนี้” หรือกดเมนู 🎁 โปรเดือนนี้
+EN (frame 2 sub-line): 11.11 — plan your skin with a doctor, not a flash sale. Sculptra 15,990 THB/vial until 15 Nov or until places run out. LINE @vinfinityclinic (English OK) · Messenger m.me/Vinfinity.Clinic. Results vary.
+Version B (all 10 Sculptra places taken — no 15,990 price anywhere):
+TH (frame 2): ชวนเพื่อนมาสวยด้วยกัน 💙 เพื่อนใหม่ปรึกษาแพทย์ฟรี + เครดิต 1,000 บาท เมื่อทำหัตถการครั้งแรก 5,000 บาทขึ้นไป · คนชวนรับเครดิต 1,500 บาทต่อเพื่อน 1 คน · ถึง 15 ธ.ค. · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล
+ทักไลน์ @vinfinityclinic พิมพ์ “ชวนเพื่อน” รับลิงก์ของคุณ
+EN (frame 2 sub-line): Bring a friend: your friend gets a free consultation + 1,000 THB credit on a first treatment of 5,000 THB+; you get 1,500 THB credit per friend. Until 15 Dec. LINE @vinfinityclinic.
+Hashtags (if reposted to feed): #VinfinityClinic #1111 #คลินิกอุดร #อุดรธานี #Sculptra #กระตุ้นคอลลาเจน #UdonThani
+Alt text: ห้องรับรองของ Vinfinity Clinic โทนสีกรมท่า พร้อมข้อความ 11.11 ดูแลผิวแบบวางแผนกับแพทย์ / Vinfinity Clinic lounge in navy tones with the text "11.11 — plan your skin with a doctor".
+Graphic brief: 1080×1920, 2 frames. Real photo assets/img/clinic-lounge.jpg, dark navy gradient (#0B142E → #1A326B) over the lower 60%. Frame 1: large silver "11.11" + headline line. Frame 2: offer lines (A or B) in silver #EEF2F8, LINE keyword in a silver chip, link sticker to LINE. Small text footer credit on both frames: "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943 · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล". No white logo band, no product-box shot, no before/after, no countdown or "last chance" wording.
