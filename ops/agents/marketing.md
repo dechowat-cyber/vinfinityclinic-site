@@ -12,7 +12,7 @@ Referral event "ชวนเพื่อนมาสวยด้วยกัน"
 
 ## Backlog (top = next)
 1. Get LINE OA follower count + segment sizes (past skin-booster / filler patients) from LINE OA Manager — broadcast sizes are "not verified" until then. (Ask doctor/team.)
-2. Draft slot Sun 15 Nov (pre-Loy Krathong skin plan) — Fri 13 Nov done (Draft 8). Then Wed 18 Nov referral reminder.
+2. Draft slot Wed 18 Nov referral reminder (Sun 15 Nov done, Draft 9). Then Fri 20 Nov ligaments reel script.
 3. Sculptra promo reminder post ~Mon 9 / Thu 12 Nov only if places remain (team checks the LINE seat counter) — never claim "almost gone" unless verified.
 4. Loy Krathong 2026 = Tue 24 Nov (verified 2026-11-02, PPTV: "วันอังคารที่ 24 พฤศจิกายน"; clinic closed that day). Draft "เตรียมผิวก่อนลอยกระทง" for Sun 15 Nov + a reminder slot Sun 22 / Mon 23 Nov in the next calendar.
 4b. Sculptra waitlist post only if the doctor opens a waitlist (no 15,990 price after 15 Nov or after 10 places). Calendar now runs to 29 Nov; roll again ~22 Nov.
@@ -33,7 +33,7 @@ Weekdays corrected 2026-11-01 (1 Nov 2026 = Sunday; earlier labels were one day 
 | Mon 9 Nov | LINE broadcast (week 2, if approved; moved from Tue 10 = clinic closed) | Vitaran 4-box price for past skin-booster patients | "ราคา 4 กล่อง 8,990 ฿/กล่อง" | ทักกลับเพื่อจองคิว | treatment.jpg |
 | Wed 11 Nov | FB + IG Story | 11.11 reminder (no extra discount — current promo only) — DRAFT READY (Draft 7, version A/B by Sculptra seats) | "11.11 นี้ ดูแลผิวแบบวางแผน" | LINE | clinic-lounge.jpg |
 | Fri 13 Nov | IG + FB (EN) | Meet the doctor — conference teaching (no Galderma branding) — DRAFT READY (Draft 8) | "Who is The Filler Architect?" | /en/doctor | doctor/imcas-asia-2023-live-demo.jpg |
-| Sun 15 Nov | FB + IG | Pre-Loy Krathong skin plan (PN needs time before photos) — festival Tue 24 Nov (verified) | "อีกไม่กี่สัปดาห์ลอยกระทง ผิวพร้อมถ่ายรูปหรือยัง" | LINE ประเมินผิว | treatment.jpg or clinic-lounge.jpg |
+| Sun 15 Nov | FB + IG | Pre-Loy Krathong skin plan (PN needs time before photos) — festival Tue 24 Nov (verified) — DRAFT READY (Draft 9) | "อีกไม่กี่สัปดาห์ลอยกระทง ผิวพร้อมถ่ายรูปหรือยัง" | LINE ประเมินผิว | treatment.jpg or clinic-lounge.jpg |
 | Mon 16 Nov | (foreign plan) | EN post #5 from the doctor's doc "ชุดคอนเทนต์ต่างชาติช่วงพืชสวนโลก" — not re-drafted here | — | Messenger + LINE | per doc |
 | Wed 18 Nov | FB + IG feed | Referral event mid-campaign reminder "ชวนเพื่อนมาสวยด้วยกัน" (Sculptra promo ended 15 Nov — no 15,990 price; waitlist line only if the doctor opens one) — TO DRAFT | "มาด้วยกัน ได้ทั้งคู่" | ทักไลน์ พิมพ์ “ชวนเพื่อน” | clinic-lounge.jpg or reception.jpg |
 | Fri 20 Nov | TikTok / Reels | Ligaments & aging — why the face "drops" (backlog 6, 25 s script) — TO DRAFT | "หน้าหย่อนไม่ได้เริ่มที่ผิว" | /articles/facial-ligaments-aging + LINE | articles/facial-ligaments-aging-anchor.jpg |
@@ -322,3 +322,39 @@ TH caption:
 Hashtags: #TheFillerArchitect #VinfinityClinic #UdonThani #อุดรธานี #คลินิกอุดร #IMCAS #AestheticMedicine #EnglishSpeakingDoctor #UdonThaniExpo
 Alt text: นพ.เดโชวัต พรมดา สาธิตการฉีดบนเวที IMCAS Asia 2023 (เบลอใบหน้าผู้เข้าร่วม) / Dr. Dechowat Promda giving a live demonstration on stage at IMCAS Asia 2023 (participant's face blurred).
 Graphic brief: 1080×1350. Real photo assets/img/doctor/imcas-asia-2023-live-demo.jpg (participant face already blurred — keep it blurred), slide 2 optional: assets/img/dr-bas.jpg portrait. Dark navy gradient (#0B142E → #1A326B) over the lower 50%. Silver headline "The Filler Architect"; sub "Dr. Dechowat Promda · License 48943"; chips "IMCAS Asia 2023 Faculty" · "KOL Vivacy · MNB · IMCAS" · "English consultations". Small text footer credit: "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943 · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล". No white logo band, no Galderma photos or logos, no product boxes, no before/after.
+### 2026-11-06
+- Friday: Marketing light + Branding deep. Today's slot Fri 6 Nov = Sculptra vs HA reel (Draft 4 + promo ending, caption was in yesterday's report). Next slot Sun 8 Nov = PN HMW vs LMW (Draft 6) — full TH caption copied into today's report.
+- Reminder in report: Mon 9 Nov LINE broadcast slot (Vitaran 4-box to past skin-booster patients) is "if approved" — segment size still not verified.
+- Done: Draft 9 for Sun 15 Nov (pre-Loy Krathong skin plan) below. Facts only from /skin-booster/ and /articles/pn-molecular-weight/ (course of several sessions, interval set by the doctor; small bumps/redness 1–3 days). No discount invented; Sculptra promo not mentioned (ends 15 Nov). Clinic closed Tue 24 Nov (Tuesday).
+- No market watch (Mondays only).
+
+#### Draft 9 — Sun 15 Nov · FB + IG feed · Pre-Loy Krathong skin plan
+TH caption:
+อีกไม่กี่วันลอยกระทง (อังคาร 24 พ.ย.) ผิวพร้อมถ่ายรูปหรือยัง? 🏮
+ถ้าอยากให้ผิวดูฉ่ำในรูป ควรวางแผนล่วงหน้า ไม่ใช่ฉีดวันก่อนงาน
+• หลังฉีดสกินบูสเตอร์ อาจมีตุ่มนูนเล็ก ๆ หรือรอยแดงตามจุดฉีดได้ 1–3 วัน จึงควรเว้นระยะก่อนวันถ่ายรูป
+• สกินบูสเตอร์มักทำเป็นคอร์สหลายครั้ง แพทย์จะกำหนดจำนวนครั้งและระยะห่างหลังประเมินผิว
+• ผิวแห้งช่วงลมหนาว ดูแลด้วยมอยส์เจอไรเซอร์และกันแดดทุกวันควบคู่กัน
+
+💙 Vitaran (PN Skin Booster)
+• 1 กล่อง (2 cc) 9,990 บาท
+• 4 กล่องขึ้นไป กล่องละ 8,990 บาท
+ผู้ที่แพ้ปลาหรือผลิตภัณฑ์จากปลา โปรดแจ้งแพทย์ก่อน
+
+📌 วันลอยกระทง (อังคาร 24 พ.ย.) คลินิกปิดทำการ นัดก่อนงานได้ถึงจันทร์ 23 พ.ย.
+💬 ทัก LINE @vinfinityclinic ส่งรูปผิวให้ นพ.เดโชวัต พรมดา (ว.48943) ประเมินก่อนนัดคิว
+📞 082-462-2963
+ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · การทำหัตถการทุกชนิดอาจมีผลข้างเคียง
+
+EN caption:
+Loy Krathong is on Tuesday 24 Nov — planning photos? 🏮
+Skin boosters work best when planned ahead, not the day before.
+• Small bumps or redness at injection points can last 1–3 days, so leave a gap before your photo day.
+• Skin boosters are usually a course of several sessions; the doctor sets the number and spacing after assessing your skin.
+Vitaran (PN, polynucleotide): 1 box (2 cc) 9,990 THB · 4+ boxes 8,990 THB/box. Tell the doctor if you are allergic to fish.
+The clinic is closed on Tue 24 Nov; book up to Mon 23 Nov. LINE @vinfinityclinic or Messenger m.me/Vinfinity.Clinic (consultations in English) · Dr. Dechowat Promda (license ว.48943)
+Results vary from person to person. All procedures carry possible side effects.
+
+Hashtags: #VinfinityClinic #ลอยกระทง2569 #สกินบูสเตอร์ #PN #Vitaran #ผิวหน้าหนาว #คลินิกอุดร #อุดรธานี #Polynucleotide #UdonThani
+Alt text: ห้องทรีตเมนต์ของ Vinfinity Clinic โทนสีกรมท่า พร้อมข้อความ "ลอยกระทงนี้ ผิวพร้อมถ่ายรูป" / Vinfinity Clinic treatment room in navy tones with the text "Skin ready for Loy Krathong photos".
+Graphic brief: 1080×1350. Real photo assets/img/treatment.jpg (alt: clinic-lounge.jpg). Dark navy gradient (#0B142E → #1A326B) over the lower 55%. Silver headline "ลอยกระทงนี้ ผิวพร้อมถ่ายรูป"; sub "วางแผนสกินบูสเตอร์ล่วงหน้า · คลินิกปิด อ. 24 พ.ย."; price line "Vitaran 2 cc 9,990.- · 4 กล่องขึ้นไป 8,990.-/กล่อง". Small text footer credit: "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943 · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล". No white logo band, no krathong stock image unless labelled "ภาพประกอบ", no before/after, no countdown wording.
