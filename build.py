@@ -350,6 +350,7 @@ def footer_en():
 <p><a href="{LINE_EN}">LINE @vinfinityclinic</a></p>
 {f'<p><a href="{WA_EN}" data-vf-chat="whatsapp">WhatsApp +{WHATSAPP}</a></p>' if WA_EN else ""}
 <p><a href="{MSG_EN}" data-vf-chat="messenger">Facebook Messenger</a></p>
+<p><a href="https://www.facebook.com/Vinfinity.Clinic" target="_blank" rel="noopener">Facebook</a> · <a href="https://www.instagram.com/vinfinityclinic/" target="_blank" rel="noopener">Instagram</a></p>
 <p><a href="tel:+66{TEL.replace('-', '')[1:]}">Phone +66 {TEL[1:]}</a></p>
 <p><a href="/" hreflang="th" lang="th">ภาษาไทย</a></p>
 </div>
@@ -400,6 +401,7 @@ def footer_th():
 <h4>ติดต่อ</h4>
 <p><a href="{LINE}">LINE @vinfinityclinic</a></p>
 <p><a href="{MSG}">Facebook Messenger</a></p>
+<p><a href="https://www.facebook.com/Vinfinity.Clinic" target="_blank" rel="noopener">Facebook</a> · <a href="https://www.instagram.com/vinfinityclinic/" target="_blank" rel="noopener">Instagram</a></p>
 <p><a href="tel:{TEL.replace('-', '')}">โทร {TEL}</a></p>
 <p><a href="/en/" hreflang="en">English</a></p>
 </div>
