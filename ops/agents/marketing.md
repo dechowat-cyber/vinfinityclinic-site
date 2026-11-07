@@ -12,7 +12,8 @@ Referral event "ชวนเพื่อนมาสวยด้วยกัน"
 
 ## Backlog (top = next)
 1. Get LINE OA follower count + segment sizes (past skin-booster / filler patients) from LINE OA Manager — broadcast sizes are "not verified" until then. (Ask doctor/team.)
-2. Draft slot Wed 18 Nov referral reminder (Sun 15 Nov done, Draft 9). Then Fri 20 Nov ligaments reel script.
+2. Draft slot Fri 20 Nov ligaments reel script (Wed 18 Nov done, Draft 10). Then Sun 22 Nov Loy Krathong closed-day reminder.
+2b. Doctor to confirm: may a public feed post name the referral credits and the "3 friends → Vitaran 1 cc" reward under the clinic's advertising approval (ฆสพ.)? Draft 10 has a version without the reward line — not verified.
 3. Sculptra promo reminder post ~Mon 9 / Thu 12 Nov only if places remain (team checks the LINE seat counter) — never claim "almost gone" unless verified.
 4. Loy Krathong 2026 = Tue 24 Nov (verified 2026-11-02, PPTV: "วันอังคารที่ 24 พฤศจิกายน"; clinic closed that day). Draft "เตรียมผิวก่อนลอยกระทง" for Sun 15 Nov + a reminder slot Sun 22 / Mon 23 Nov in the next calendar.
 4b. Sculptra waitlist post only if the doctor opens a waitlist (no 15,990 price after 15 Nov or after 10 places). Calendar now runs to 29 Nov; roll again ~22 Nov.
@@ -35,7 +36,7 @@ Weekdays corrected 2026-11-01 (1 Nov 2026 = Sunday; earlier labels were one day 
 | Fri 13 Nov | IG + FB (EN) | Meet the doctor — conference teaching (no Galderma branding) — DRAFT READY (Draft 8) | "Who is The Filler Architect?" | /en/doctor | doctor/imcas-asia-2023-live-demo.jpg |
 | Sun 15 Nov | FB + IG | Pre-Loy Krathong skin plan (PN needs time before photos) — festival Tue 24 Nov (verified) — DRAFT READY (Draft 9) | "อีกไม่กี่สัปดาห์ลอยกระทง ผิวพร้อมถ่ายรูปหรือยัง" | LINE ประเมินผิว | treatment.jpg or clinic-lounge.jpg |
 | Mon 16 Nov | (foreign plan) | EN post #5 from the doctor's doc "ชุดคอนเทนต์ต่างชาติช่วงพืชสวนโลก" — not re-drafted here | — | Messenger + LINE | per doc |
-| Wed 18 Nov | FB + IG feed | Referral event mid-campaign reminder "ชวนเพื่อนมาสวยด้วยกัน" (Sculptra promo ended 15 Nov — no 15,990 price; waitlist line only if the doctor opens one) — TO DRAFT | "มาด้วยกัน ได้ทั้งคู่" | ทักไลน์ พิมพ์ “ชวนเพื่อน” | clinic-lounge.jpg or reception.jpg |
+| Wed 18 Nov | FB + IG feed | Referral event mid-campaign reminder "ชวนเพื่อนมาสวยด้วยกัน" (Sculptra promo ended 15 Nov — no 15,990 price; waitlist line only if the doctor opens one) — DRAFT READY (Draft 10, A/B) | "มาด้วยกัน ได้ทั้งคู่" | ทักไลน์ พิมพ์ “ชวนเพื่อน” | clinic-lounge.jpg or reception.jpg |
 | Fri 20 Nov | TikTok / Reels | Ligaments & aging — why the face "drops" (backlog 6, 25 s script) — TO DRAFT | "หน้าหย่อนไม่ได้เริ่มที่ผิว" | /articles/facial-ligaments-aging + LINE | articles/facial-ligaments-aging-anchor.jpg |
 | Sun 22 Nov | FB + IG Story | Loy Krathong reminder: clinic closed Tue 24 Nov; book Mon 23 / Wed 25 — TO DRAFT (no discount invented) | "ลอยกระทงอังคารนี้ คลินิกปิด 1 วัน" | LINE จองคิว | facade.jpg |
 | Wed 25 Nov | FB + IG carousel | Skincare before/after injections (what to pause, what to keep) — TO DRAFT | "ฉีดฟิลเลอร์แล้ว ทาเรตินอลได้เมื่อไหร่" | /articles/skincare-routine-filler-botox | articles/skincare-before-after-injection.jpg |
@@ -358,3 +359,44 @@ Results vary from person to person. All procedures carry possible side effects.
 Hashtags: #VinfinityClinic #ลอยกระทง2569 #สกินบูสเตอร์ #PN #Vitaran #ผิวหน้าหนาว #คลินิกอุดร #อุดรธานี #Polynucleotide #UdonThani
 Alt text: ห้องทรีตเมนต์ของ Vinfinity Clinic โทนสีกรมท่า พร้อมข้อความ "ลอยกระทงนี้ ผิวพร้อมถ่ายรูป" / Vinfinity Clinic treatment room in navy tones with the text "Skin ready for Loy Krathong photos".
 Graphic brief: 1080×1350. Real photo assets/img/treatment.jpg (alt: clinic-lounge.jpg). Dark navy gradient (#0B142E → #1A326B) over the lower 55%. Silver headline "ลอยกระทงนี้ ผิวพร้อมถ่ายรูป"; sub "วางแผนสกินบูสเตอร์ล่วงหน้า · คลินิกปิด อ. 24 พ.ย."; price line "Vitaran 2 cc 9,990.- · 4 กล่องขึ้นไป 8,990.-/กล่อง". Small text footer credit: "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943 · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล". No white logo band, no krathong stock image unless labelled "ภาพประกอบ", no before/after, no countdown wording.
+### 2026-11-07
+- Saturday: Marketing light + live-site check only. Live check via Vercel production dpl_sXvSH5c44PuxmrXwEVRekgtY4P4s (commit 9674417, READY): / (TH) and /en/skin-booster/ return 200, render fully (closing html, title, canonical/hreflang, 4 JSON-LD blocks on EN page). vinfinityclinic.com itself not reachable from this run (network allowlist).
+- Next slot Sun 8 Nov = PN HMW vs LMW (Draft 6, ready) — full TH caption copied into today's report. Foreign plan: EN post #2 due today (Sat 7 Nov), Lao #2 Sun 8 Nov — both in the doctor's doc.
+- Reminder in report: Mon 9 Nov LINE broadcast slot (Vitaran 4-box to past skin-booster patients) is "if approved"; segment size still not verified.
+- Done: Draft 10 for Wed 18 Nov (referral mid-campaign reminder) below. Terms only from line-app/lib/referral.ts (friend: free consultation + 1,000 THB credit on a first treatment of 5,000+, usable on any service; inviter: 1,500 THB per such friend; 3 friends → Vitaran 1 cc, staff hand it out; until 15 Dec). No Sculptra price (promo ends 15 Nov). Version B leaves out the free-reward line in case the advertising approval does not cover it (backlog 2b).
+- No market watch (Mondays only).
+
+#### Draft 10 — Wed 18 Nov · FB + IG feed · Referral reminder "ชวนเพื่อนมาสวยด้วยกัน"
+TH caption (Version A — full terms):
+มาด้วยกัน ได้ทั้งคู่ 💙
+มีเพื่อนที่อยากปรึกษาเรื่องผิวหรือโครงหน้าแต่ยังไม่กล้ามาคนเดียวไหม? ชวนมาพบคุณหมอด้วยกันได้ถึง 15 ธ.ค. นี้
+
+👭 เพื่อนใหม่
+• ปรึกษาและวิเคราะห์ผิวกับคุณหมอฟรี
+• รับเครดิต 1,000 บาท เมื่อทำหัตถการครั้งแรก 5,000 บาทขึ้นไป ใช้ได้ทุกบริการ
+
+🙋 คนชวน
+• รับเครดิต 1,500 บาท ต่อเพื่อน 1 คนที่มาทำครั้งแรกตามเงื่อนไข
+• ชวนสำเร็จครบ 3 คน รับ Vitaran 1 cc
+
+แพทย์ประเมินก่อนทุกครั้งว่าเหมาะกับหัตถการไหน ไม่จำเป็นต้องทำในวันที่มาปรึกษา
+โดย นพ.เดโชวัต พรมดา (ว.48943) · 📍 Vinfinity Clinic อุดรธานี · 📞 082-462-2963
+คลินิกปิดทุกวันอังคาร
+ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · การทำหัตถการทุกชนิดอาจมีผลข้างเคียง
+
+ทักไลน์ @vinfinityclinic พิมพ์ “ชวนเพื่อน” รับลิงก์ของคุณ
+
+TH caption (Version B — if the doctor prefers no free-reward line in public posts): same as A, delete the line "• ชวนสำเร็จครบ 3 คน รับ Vitaran 1 cc" (the LINE bot still shows it to people who ask).
+
+EN caption:
+Come together, both of you benefit 💙
+Know a friend who'd like a skin or facial consultation but doesn't want to come alone? Bring them along until 15 Dec.
+👭 Your friend: free consultation and skin analysis with the doctor, plus a 1,000 THB credit on a first treatment of 5,000 THB or more (any service).
+🙋 You: 1,500 THB credit for each friend who has a first treatment on these terms. (Version A only: 3 friends → Vitaran 1 cc.)
+The doctor assesses first; no treatment is needed on the consultation day. Dr. Dechowat Promda (license ว.48943) · consultations in English · closed Tuesdays.
+Results vary from person to person. All procedures carry possible side effects.
+Message LINE @vinfinityclinic and type "ชวนเพื่อน" to get your personal link · Messenger m.me/Vinfinity.Clinic
+
+Hashtags: #VinfinityClinic #ชวนเพื่อนมาสวยด้วยกัน #คลินิกอุดร #อุดรธานี #ปรึกษาแพทย์ #สกินบูสเตอร์ #ฟิลเลอร์ #UdonThani
+Alt text: ห้องรับรองโทนสีกรมท่าของ Vinfinity Clinic พร้อมข้อความ "มาด้วยกัน ได้ทั้งคู่" / Vinfinity Clinic lounge in navy tones with the text "Come together, both of you benefit".
+Graphic brief: 1080×1350. Real photo assets/img/clinic-lounge.jpg (alt: reception.jpg). Dark navy gradient (#0B142E → #1A326B) over the lower 55%. Silver headline "มาด้วยกัน ได้ทั้งคู่"; two silver chips "เพื่อนใหม่ · ปรึกษาฟรี + เครดิต 1,000.-" / "คนชวน · เครดิต 1,500.- ต่อเพื่อน"; small line "เงื่อนไข: ทำครั้งแรก 5,000.- ขึ้นไป · ถึง 15 ธ.ค. 69"; LINE keyword chip "พิมพ์ “ชวนเพื่อน”". Small text footer credit: "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943 · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล". No white logo band, no stock models (the LINE card image line-app/public/campaign/friends-2611/1-1x1.jpg may be used for Story only), no before/after, no lucky-draw or "last chance" wording.
