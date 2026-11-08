@@ -2,8 +2,9 @@ import { q } from "@/lib/db";
 import { leadUpdate } from "@/lib/actions";
 import { requireStaff } from "@/lib/session";
 import { pendingDrafts, leadLangStats, LANG_LABEL, type Lang } from "@/lib/agent";
-import { sendDraft, doneDraft, dismissDraft, promoSent, promoClaimSet, promoClaimAdd, referralRewardGiven, promoShareToClaimers } from "@/lib/agentActions";
+import { sendDraft, doneDraft, dismissDraft, promoSent, promoClaimSet, promoClaimAdd, referralRewardGiven, promoShareToClaimers, comebackGiftGiven } from "@/lib/agentActions";
 import { REF_EVENT, refEventActive, referralBoard, referralStats } from "@/lib/referral";
+import { COMEBACK, comebackBoard } from "@/lib/comeback";
 import { activePromos, promoProspects, promoStats, promoClaims } from "@/lib/promos";
 import { botInfo, chatUrl } from "@/lib/line";
 import { aiConfigured } from "@/lib/ai";
@@ -31,6 +32,7 @@ export default async function Leads({ searchParams }: { searchParams: Promise<{ 
   const refBoard = await referralBoard(30).catch(() => []);
   const showRef = refEventActive() || refBoard.some((r) => r.reward === "pending");
   const rs = showRef ? await referralStats().catch(() => null) : null;
+  const cb = await comebackBoard().catch(() => []);
   const oaLink = bot?.basicId ? `https://line.me/R/oaMessage/${bot.basicId}/?${encodeURIComponent("โปรเดือนนี้")}` : null;
   const toSend = prospects.filter((r) => !r.sent_at);
   const sharedN = /^shared_(\d+)$/.exec(agent || "")?.[1];
@@ -156,6 +158,29 @@ export default async function Leads({ searchParams }: { searchParams: Promise<{ 
                         </div>}</td>
                   </tr>);
               })}
+            </tbody>
+          </table>
+        </section>
+      )}
+      {cb.length > 0 && (
+        <section className="card" id="comeback">
+          <div className="row" style={{ justifyContent: "space-between" }}>
+            <div className="eyebrow">แคมเปญ คิดถึงนะ · ลูกค้าเก่า 30 วันล่าสุด</div>
+            <small className="muted">ส่งแล้ว {cb.length} · จองแล้ว {cb.filter((r) => r.booked).length} · จ่ายแล้ว {cb.filter((r) => r.paid > 0).length} · ของขวัญรอให้ {cb.filter((r) => r.gift === "pending").length}</small>
+          </div>
+          <p className="muted" style={{ margin: "6px 0" }}>ของขวัญ: {COMEBACK.gift} เมื่อจ่ายครบ {COMEBACK.minPayment.toLocaleString()} บาท ภายใน {COMEBACK.windowDays} วันหลังได้ข้อความ · ระบบขึ้น “รอให้” เองตอนออกใบเสร็จ · ฉีดให้แล้วกด “ให้แล้ว”</p>
+          <table className="t">
+            <thead><tr><th>ลูกค้า</th><th>กลุ่ม</th><th>จอง</th><th>จ่ายหลังได้ข้อความ</th><th>ของขวัญ</th></tr></thead>
+            <tbody>{cb.filter((r) => r.booked || r.paid > 0 || r.gift).slice(0, 40).map((r) => (
+              <tr key={r.client_id}>
+                <td><a href={`/staff/clients/${r.client_id}`}><b>{r.n || `#${r.client_id}`}</b></a>{r.phone ? <><br /><small className="muted">{r.phone}</small></> : null}</td>
+                <td><small>{String(r.campaign).replace(/ \(.*\)$/, "")}</small></td>
+                <td>{r.booked ? <span className="tag ok">จองแล้ว</span> : "-"}</td>
+                <td>{r.paid > 0 ? `${Number(r.paid).toLocaleString()} บาท` : "-"}</td>
+                <td>{r.gift === "pending" ? <form action={comebackGiftGiven} className="row"><input type="hidden" name="id" value={r.gift_id} /><span className="tag warn">รอให้</span><button className="btn ghost small">ให้แล้ว ✓</button></form>
+                  : r.gift === "given" ? <span className="tag ok">ให้แล้ว</span> : <small className="muted">-</small>}</td>
+              </tr>))}
+              {!cb.some((r) => r.booked || r.paid > 0 || r.gift) && <tr><td colSpan={5} className="muted">ยังไม่มีใครจองหรือจ่ายจากแคมเปญนี้</td></tr>}
             </tbody>
           </table>
         </section>

@@ -59,6 +59,15 @@ export default async function Segments({ searchParams }: { searchParams: Promise
     return [Number(r.id), p ? `${PHASE[p.phase ?? ""] ?? p.phase}${p.successCount != null ? ` ${p.successCount} คน` : ""}${p.failedDescription ? ` · ${p.failedDescription}` : ""}` : "LINE กลุ่มเป้าหมาย"] as [number, string];
   })));
   const catMap = new Map(cat.map((c) => [Number(c.id), c.name as string]));
+  // win-back groups (lib/comeback.ts): past clients, no visit for a while, nothing booked, not messaged in 14 days
+  const codes = await q("select id, code from catalog where code = any($1)", [["TOX", "FIL-HA", "FIL-TT", "DOUBLO", "HIFU", "SCULPTRA"]]);
+  const ids = (cs: string[]) => codes.filter((c) => cs.includes(c.code)).map((c) => `treated=${c.id}`).join("&");
+  const base = "no_upcoming=1&reachable=1&quiet=14";
+  const COMEBACK_PRESETS: [string, string][] = [
+    ["คิดถึงนะ A · ถึงรอบโบทูลินัม", `${ids(["TOX"])}&lapsed=120&${base}&media=comeback-a`],
+    ["คิดถึงนะ B · ฟิลเลอร์/ยกกระชับ", `${ids(["FIL-HA", "FIL-TT", "DOUBLO", "HIFU", "SCULPTRA"])}&lapsed=270&${base}&media=comeback-b`],
+    ["คิดถึงนะ C · สกินบูสเตอร์", `skin=1&lapsed=60&${base}&media=comeback-c`],
+  ];
   const canSend = SEND_ROLES.includes(me.role);
   const reach = canSend ? await reachInfo(now) : null;
   const left = reach?.limit != null && reach.used != null ? reach.limit - reach.used : null;
@@ -78,6 +87,7 @@ export default async function Segments({ searchParams }: { searchParams: Promise
       {sp.bsent && <div className="card" style={{ borderColor: "var(--ok)" }}>ส่งแคมเปญ #{String(sp.bsent)} ให้ LINE แล้ว · ดูสถานะและจำนวนผู้รับในตารางแคมเปญด้านล่าง · คนที่กด “จองคิว / สอบถาม” จะเข้ามาในแชท / Leads</div>}
       {sp.sent && <div className="card" style={{ borderColor: "var(--ok)" }}>เริ่มส่งแคมเปญ #{String(sp.sent)} แล้ว · ส่วนที่เหลือระบบจะทยอยส่งทุก 5 นาที</div>}
 
+      <div className="row" style={{ marginBottom: 6 }}>{COMEBACK_PRESETS.map(([l, qs]) => <a key={l} className="btn small" href={`?${qs}#send`}>{l}</a>)}</div>
       <div className="row">{PRESETS.map(([l, qs]) => <a key={l} className="btn ghost small" href={`?${qs}`}>{l}</a>)}
         {saved.map((s) => <a key={s.id} className="btn ghost small" href={`?${filtersQuery(s.filters as Filters)}`}>★ {s.name}</a>)}</div>
 
@@ -130,6 +140,7 @@ export default async function Segments({ searchParams }: { searchParams: Promise
                 {media.segment && media.segment !== fq && <p className="muted" style={{ margin: "6px 0 0" }}>กลุ่มที่แนะนำสำหรับชุดนี้: <a href={`?${media.segment}&media=${media.key}#send`}>เคยทำผิว / สนใจงานผิว</a></p>}</>}
             </div>
             <div className="field"><label>ชื่อแคมเปญ (ภายใน)</label><input name="campaign_name" placeholder="เช่น ชวนกลับ ต.ค." defaultValue={media ? media.label : ""} /></div>
+            {media?.comeback && <p className="muted" style={{ margin: 0 }}>{"{ชื่อ}"} และ {"{ห่าง}"} ระบบใส่ชื่อลูกค้าและระยะเวลาที่ห่างหายให้รายคน · การ์ดมีกล่องของขวัญ ({"โบทูลินัม Standard 1 จุด เมื่อทำ 5,000+ ภายใน 30 วัน"}) ปุ่มเลือกวันนัดส่วนตัว และปุ่มชวนเพื่อน · ส่งกลุ่ม A ก่อน แล้ว B และ C (คนที่ได้ข้อความแล้วจะถูกตัดออกจากกลุ่มถัดไปเอง)</p>}
             <div className="field"><label>ข้อความ</label><textarea key={media?.key ?? "none"} name="message" rows={media ? 9 : 4} maxLength={1000} required placeholder="สวัสดีค่ะ …" defaultValue={media?.message ?? ""} /></div>
             <label className="check"><input type="checkbox" name="with_booking" defaultChecked /> ใส่ปุ่ม “จองคิว”</label>
             <label className="check"><input type="checkbox" name="confirm" /> ยืนยันส่งถึง {counts.reachable} คน (นับโควตาข้อความ LINE OA · ข้อความโฆษณาต้องผ่าน ฆสพ.)</label>
@@ -147,7 +158,7 @@ export default async function Segments({ searchParams }: { searchParams: Promise
           {reach?.reach != null && left != null && reach.reach > left && <div className="card err" style={{ marginTop: 8 }}>โควตาไม่พอสำหรับเพื่อนทั้งหมด · ถ้าไม่จำกัดจำนวน LINE จะไม่ส่งเลย · ใส่ “จำนวนสูงสุด” ไม่เกิน {left} คนด้านล่าง</div>}
           <input type="hidden" name="reach" value={reach?.reach ?? ""} />
           <div className="field" style={{ marginTop: 10 }}><label>ชุดรูป</label>
-            <div className="row">{[null, ...liveMedia()].map((m) => <a key={m?.key ?? "none"} className={`btn small ${(media?.key ?? null) === (m?.key ?? null) ? "" : "ghost"}`}
+            <div className="row">{[null, ...liveMedia().filter((m) => !m.comeback)].map((m) => <a key={m?.key ?? "none"} className={`btn small ${(media?.key ?? null) === (m?.key ?? null) ? "" : "ghost"}`}
               href={`?${fq}${m ? `${fq ? "&" : ""}media=${m.key}` : ""}#broadcast`}>{m ? m.label : "ไม่มีรูป"}</a>)}</div>
             {media && <><input type="hidden" name="media" value={media.key} />
               <div className="row" style={{ marginTop: 8 }}>{media.previews.map((u) => <img key={u} src={u} alt="" style={{ width: 96, borderRadius: 8, border: "1px solid var(--line, #ddd)" }} />)}</div></>}

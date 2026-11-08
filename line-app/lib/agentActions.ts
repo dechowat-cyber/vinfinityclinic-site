@@ -101,3 +101,10 @@ export async function promoShareToClaimers(fd: FormData) {
   revalidatePath("/staff/leads");
   redirect(`/staff/leads?agent=${quota ? "quota" : `shared_${sent}`}#promo`);
 }
+
+/** Staff gave the comeback gift at the visit. */
+export async function comebackGiftGiven(fd: FormData) {
+  const me = await requireStaff(ROLES);
+  await q("update comeback_gifts set status = 'given', given_at = now(), given_by = $2 where id = $1 and status = 'pending'", [Number(fd.get("id")), me.id]);
+  revalidatePath("/staff/leads");
+}

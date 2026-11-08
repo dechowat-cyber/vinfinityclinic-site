@@ -1,7 +1,7 @@
 // Ready-made image sets for LINE campaigns. Files live in /public/campaign/<key>/ so LINE can fetch them over https.
 // Add a set here when marketing hands over a new broadcast; staff pick it on the segments page.
 
-export type MediaSet = { key: string; label: string; images: string[]; previews: string[]; message: string; segment?: string; promo?: string; liveLeft?: boolean; invite?: boolean; from?: string; until?: string };
+export type MediaSet = { key: string; label: string; images: string[]; previews: string[]; message: string; segment?: string; promo?: string; liveLeft?: boolean; invite?: boolean; comeback?: "A" | "B" | "C"; from?: string; until?: string };
 
 const set = (key: string, label: string, dir: string, n: number, size: string, message: string, segment?: string): MediaSet => ({
   key, label, message, segment,
@@ -42,7 +42,13 @@ const FRIENDS_MSG = `🎁 ชวนเพื่อนมาสวยด้วย
 ชวนสำเร็จครบ 3 คน รับ Vitaran 1 cc ฟรี
 กด "รับลิงก์ชวนเพื่อนของฉัน" ด้านล่าง แล้วส่งให้เพื่อนได้เลยค่ะ 👇`;
 
+const CB = (group: "A" | "B" | "C", label: string, message: string): MediaSet =>
+  ({ key: `comeback-${group.toLowerCase()}`, label: `คิดถึงนะ ${group} · ${label} (การ์ดส่วนตัว + ของขวัญ)`, images: [], previews: [], message, comeback: group });
+
 export const MEDIA: MediaSet[] = [
+  CB("A", "ถึงรอบโบทูลินัม", `สวัสดีค่ะ {ชื่อ} 😊 ห่างหายไป {ห่าง} แล้ว ครบรอบโบทูลินัมพอดีเลยค่ะ ถ้าริ้วรอยเริ่มกลับมา คุณหมอมีคิวว่างสัปดาห์นี้ เลือกวันที่สะดวกได้เลยนะคะ`),
+  CB("B", "ฟิลเลอร์ / ยกกระชับ", `สวัสดีค่ะ {ชื่อ} 😊 ห่างหายไป {ห่าง} แล้ว ถึงเวลาให้คุณหมอประเมินโครงหน้าอีกครั้ง ดูว่าตรงไหนควรเติมหรือดูแลต่อ เลือกวันที่สะดวกได้เลยนะคะ`),
+  CB("C", "สกินบูสเตอร์ห่างหาย", `สวัสดีค่ะ {ชื่อ} 😊 ห่างหายไป {ห่าง} แล้ว สกินบูสเตอร์ได้ผลดีเมื่อทำต่อเนื่องเป็นคอร์สนะคะ กลับมาให้คุณหมอดูผิวและวางแผนรอบถัดไปได้เลยค่ะ`),
   { ...set("friends-2611", "ชวนเพื่อนมาสวยด้วยกัน · ข้อความ + การ์ด (3 พ.ย. – 15 ธ.ค.)", "friends-2611", 1, "1x1", FRIENDS_MSG, "reachable=1"), invite: true, from: "2026-11-03T00:00:00+07:00", until: "2026-12-15T23:59:59+07:00" },
   { ...set("sculptra-2611-card", "Sculptra 15,990 · ข้อความ + การ์ดกดรับสิทธิ์ (10 สิทธิ์)", "sculptra-2611", 1, "1x1", SCULPTRA_MSG, "reachable=1"), promo: "sculptra-2611", from: "2026-11-01T00:00:00+07:00", until: "2026-11-15T23:59:59+07:00" },
   { ...set("sculptra-2611-r2", "Sculptra รอบ 2 · เหลือ X สิทธิ์ (ใส่ตัวเลขจริงตอนส่ง)", "sculptra-2611", 1, "1x1", SCULPTRA_R2, "reachable=1"), promo: "sculptra-2611", liveLeft: true, from: "2026-11-01T00:00:00+07:00", until: "2026-11-15T23:59:59+07:00" },
@@ -57,7 +63,7 @@ export const liveMedia = (now = new Date()) => MEDIA.filter((m) => (!m.from || n
 export const mediaSet = (key: string | null | undefined, now = new Date()) => liveMedia(now).find((m) => m.key === key) ?? null;
 
 /** What a campaign stores: a promo marker (sent as text + claim card) or the picture URLs. */
-export const mediaImages = (m: MediaSet | null) => (m?.invite ? ["invite:friends"] : m?.promo ? [`promo:${m.promo}${m.liveLeft ? "@left" : ""}`] : absImages(m?.images ?? []));
+export const mediaImages = (m: MediaSet | null) => (m?.comeback ? [`comeback:${m.comeback}`] : m?.invite ? ["invite:friends"] : m?.promo ? [`promo:${m.promo}${m.liveLeft ? "@left" : ""}`] : absImages(m?.images ?? []));
 
 /** Absolute https URLs (LINE refuses relative or http). Max 4 images so the text still fits in one push (5 objects). */
 export function absImages(paths: string[], base = process.env.APP_URL || "") {

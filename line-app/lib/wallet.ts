@@ -93,7 +93,9 @@ export async function creditsFor(paymentId: number, now = new Date()) {
       milestone = await checkMilestone(Number(c.referred_by), now).catch(() => false);
     }
   }
-  return { cashback, referral, referrer: referral ? Number(c!.referred_by) : null, referrerAmount, milestone };
+  const { checkComebackGift } = await import("./comeback");
+  const comeback = await checkComebackGift(Number(p.client_id), p.amount, now).catch(() => false);
+  return { cashback, referral, referrer: referral ? Number(c!.referred_by) : null, referrerAmount, milestone, comeback };
 }
 
 /** Nightly: credit past its date expires (one line that brings the balance to zero). */

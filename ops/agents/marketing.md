@@ -446,3 +446,8 @@ Vitaran (PN Skin Booster) 2 cc
 ตอบกลับข้อความนี้พร้อมวัน-เวลาที่สะดวก ทีมงานจะจองคิวให้ค่ะ (ปิดทุกวันอังคาร)
 ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · การทำหัตถการทุกชนิดอาจมีผลข้างเคียง
 Image: assets/img/treatment.jpg with navy gradient + silver price line, footer credit as usual. Not to all friends; not on Tuesday.
+
+## Win-back "คิดถึงนะ กลับมาสวยต่อ" (ส่ง จ. 9 พ.ย. 69 12:00)
+- 3 segment campaigns (personal push, uses quota): A ถึงรอบโบทูลินัม (TOX, lapsed 120d) → B ฟิลเลอร์/ยกกระชับ (FIL-HA, FIL-TT, DOUBLO, HIFU, SCULPTRA, lapsed 270d) → C สกินบูสเตอร์ (skin, lapsed 60d). All: no upcoming appt, reachable (marketing consent), quiet 14d (dedups A/B/C and anyone in recent broadcasts).
+- Gift: โบทูลินัม Standard 1 จุด (ระหว่างคิ้วหรือหางตา มูลค่า 1,900 บาท) when paying 5,000+ within 30 days of the message. Auto-flagged at receipt → /staff/leads#comeback → staff press "ให้แล้ว".
+- Copy says "โบทูลินัม", never brand names. Track: segments page campaign results (booked/paid), leads #comeback board.
