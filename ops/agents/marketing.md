@@ -12,13 +12,13 @@ Referral event "ชวนเพื่อนมาสวยด้วยกัน"
 
 ## Backlog (top = next)
 1. Get LINE OA follower count + segment sizes (past skin-booster / filler patients) from LINE OA Manager — broadcast sizes are "not verified" until then. (Ask doctor/team.)
-2. Draft slot Fri 20 Nov ligaments reel script (Wed 18 Nov done, Draft 10). Then Sun 22 Nov Loy Krathong closed-day reminder.
+2. Draft slot Sun 22 Nov Loy Krathong closed-day reminder (Fri 20 Nov done, Draft 11). Then Wed 25 Nov skincare carousel.
 2b. Doctor to confirm: may a public feed post name the referral credits and the "3 friends → Vitaran 1 cc" reward under the clinic's advertising approval (ฆสพ.)? Draft 10 has a version without the reward line — not verified.
 3. Sculptra promo reminder post ~Mon 9 / Thu 12 Nov only if places remain (team checks the LINE seat counter) — never claim "almost gone" unless verified.
 4. Loy Krathong 2026 = Tue 24 Nov (verified 2026-11-02, PPTV: "วันอังคารที่ 24 พฤศจิกายน"; clinic closed that day). Draft "เตรียมผิวก่อนลอยกระทง" for Sun 15 Nov + a reminder slot Sun 22 / Mon 23 Nov in the next calendar.
 4b. Sculptra waitlist post only if the doctor opens a waitlist (no 15,990 price after 15 Nov or after 10 places). Calendar now runs to 29 Nov; roll again ~22 Nov.
 5. Map menu images (assets/img/menu/th-01…16, en-, lo-) to treatments so calendar can point to exact files.
-6. Short-form video scripts (TikTok/Reels 20–30 s) from existing articles: PN HMW vs LMW, ligaments & aging.
+6. Short-form video scripts (TikTok/Reels 20–30 s) from existing articles: PN HMW vs LMW (ligaments done, Draft 11).
 7. Lao-language caption variant for Vientiane audience (site has lo menu images).
 8. Market watch: Udon Thani-local competitor promos (FB pages) — web search surfaced none on 2026-10-30 and 2026-10-31; needs a human to check FB pages or a different source.
 
@@ -31,13 +31,13 @@ Weekdays corrected 2026-11-01 (1 Nov 2026 = Sunday; earlier labels were one day 
 | Wed 4 Nov | FB + IG carousel | Tear-trough: 5 look-alike types + consented cases (PRE/POST, organic only) — DRAFT READY | "ใต้ตาคล้ำ ไม่ใช่ทุกคนต้องเติมฟิลเลอร์" | /articles/tear-trough-filler-candidates + LINE | articles/tear-trough-types-filler-candidate.jpg; ba/case01-b (PRE) + case01-a (POST); ba/case09-b (PRE) + case09-a (POST) |
 | Fri 6 Nov | TikTok / Reels + FB | Sculptra vs HA filler — timeline — DRAFT READY (end with promo CTA, see 2026-11-01 log) | "เติมปริมาตร vs กระตุ้นคอลลาเจน ต่างกันยังไง" | /articles/sculptra-ellanse-vs-ha-filler | articles/sculptra-ellanse-ha-filler-timeline.jpg |
 | Sun 8 Nov | FB + IG | PN HMW vs LMW education (supports Vitaran promo) — DRAFT READY (Draft 6) | "PN ไม่ได้มีแบบเดียว" | /articles/pn-molecular-weight + LINE | articles/pn-hmw-lmw-polynucleotide.jpg |
-| Mon 9 Nov | LINE broadcast (week 2, if approved; moved from Tue 10 = clinic closed) | Vitaran 4-box price for past skin-booster patients | "ราคา 4 กล่อง 8,990 ฿/กล่อง" | ทักกลับเพื่อจองคิว | treatment.jpg |
+| Mon 9 Nov | LINE broadcast (week 2, if approved; moved from Tue 10 = clinic closed) | Vitaran 4-box price for past skin-booster patients — TEXT READY (Draft 12, 2026-11-08) | "ราคา 4 กล่อง 8,990 ฿/กล่อง" | ทักกลับเพื่อจองคิว | treatment.jpg |
 | Wed 11 Nov | FB + IG Story | 11.11 reminder (no extra discount — current promo only) — DRAFT READY (Draft 7, version A/B by Sculptra seats) | "11.11 นี้ ดูแลผิวแบบวางแผน" | LINE | clinic-lounge.jpg |
 | Fri 13 Nov | IG + FB (EN) | Meet the doctor — conference teaching (no Galderma branding) — DRAFT READY (Draft 8) | "Who is The Filler Architect?" | /en/doctor | doctor/imcas-asia-2023-live-demo.jpg |
 | Sun 15 Nov | FB + IG | Pre-Loy Krathong skin plan (PN needs time before photos) — festival Tue 24 Nov (verified) — DRAFT READY (Draft 9) | "อีกไม่กี่สัปดาห์ลอยกระทง ผิวพร้อมถ่ายรูปหรือยัง" | LINE ประเมินผิว | treatment.jpg or clinic-lounge.jpg |
 | Mon 16 Nov | (foreign plan) | EN post #5 from the doctor's doc "ชุดคอนเทนต์ต่างชาติช่วงพืชสวนโลก" — not re-drafted here | — | Messenger + LINE | per doc |
 | Wed 18 Nov | FB + IG feed | Referral event mid-campaign reminder "ชวนเพื่อนมาสวยด้วยกัน" (Sculptra promo ended 15 Nov — no 15,990 price; waitlist line only if the doctor opens one) — DRAFT READY (Draft 10, A/B) | "มาด้วยกัน ได้ทั้งคู่" | ทักไลน์ พิมพ์ “ชวนเพื่อน” | clinic-lounge.jpg or reception.jpg |
-| Fri 20 Nov | TikTok / Reels | Ligaments & aging — why the face "drops" (backlog 6, 25 s script) — TO DRAFT | "หน้าหย่อนไม่ได้เริ่มที่ผิว" | /articles/facial-ligaments-aging + LINE | articles/facial-ligaments-aging-anchor.jpg |
+| Fri 20 Nov | TikTok / Reels | Ligaments & aging — why the face "drops" (backlog 6, 25 s script) — DRAFT READY (Draft 11) | "หน้าย้อย เพราะเอ็นหลวมจริงไหม" | /articles/facial-ligaments-aging + LINE | articles/facial-ligaments-aging-anchor.jpg |
 | Sun 22 Nov | FB + IG Story | Loy Krathong reminder: clinic closed Tue 24 Nov; book Mon 23 / Wed 25 — TO DRAFT (no discount invented) | "ลอยกระทงอังคารนี้ คลินิกปิด 1 วัน" | LINE จองคิว | facade.jpg |
 | Wed 25 Nov | FB + IG carousel | Skincare before/after injections (what to pause, what to keep) — TO DRAFT | "ฉีดฟิลเลอร์แล้ว ทาเรตินอลได้เมื่อไหร่" | /articles/skincare-routine-filler-botox | articles/skincare-before-after-injection.jpg |
 | Fri 27 Nov | IG + FB | Choosing a filler clinic in Udon Thani — checklist (license check ว.48943 on the Medical Council site) — TO DRAFT | "ก่อนเลือกคลินิก เช็ก 5 ข้อนี้" | /articles/choosing-filler-clinic-udon | articles/filler-clinic-udon-checklist.jpg |
@@ -400,3 +400,49 @@ Message LINE @vinfinityclinic and type "ชวนเพื่อน" to get your
 Hashtags: #VinfinityClinic #ชวนเพื่อนมาสวยด้วยกัน #คลินิกอุดร #อุดรธานี #ปรึกษาแพทย์ #สกินบูสเตอร์ #ฟิลเลอร์ #UdonThani
 Alt text: ห้องรับรองโทนสีกรมท่าของ Vinfinity Clinic พร้อมข้อความ "มาด้วยกัน ได้ทั้งคู่" / Vinfinity Clinic lounge in navy tones with the text "Come together, both of you benefit".
 Graphic brief: 1080×1350. Real photo assets/img/clinic-lounge.jpg (alt: reception.jpg). Dark navy gradient (#0B142E → #1A326B) over the lower 55%. Silver headline "มาด้วยกัน ได้ทั้งคู่"; two silver chips "เพื่อนใหม่ · ปรึกษาฟรี + เครดิต 1,000.-" / "คนชวน · เครดิต 1,500.- ต่อเพื่อน"; small line "เงื่อนไข: ทำครั้งแรก 5,000.- ขึ้นไป · ถึง 15 ธ.ค. 69"; LINE keyword chip "พิมพ์ “ชวนเพื่อน”". Small text footer credit: "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943 · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล". No white logo band, no stock models (the LINE card image line-app/public/campaign/friends-2611/1-1x1.jpg may be used for Story only), no before/after, no lucky-draw or "last chance" wording.
+### 2026-11-08
+- Sunday: Marketing light + live-site check only. Live check via Vercel production dpl_A1SjqS7s9yypNyPs9DupdP1X2C83 (commit 14290cf, READY): /price/ and /articles/facial-ligaments-aging/ return 200 and render fully (closing html, title, canonical/hreflang TH-EN-x-default, 3–4 JSON-LD blocks; Vitaran 9,990 / 4+ boxes 8,990 still on /price/). vinfinityclinic.com itself not reachable from this run (network allowlist).
+- Today's slot Sun 8 Nov = PN HMW vs LMW (Draft 6). Next slot Mon 9 Nov = LINE broadcast Vitaran 4-box (if approved; segment size not verified) — reminder in report. Next ready feed post Wed 11 Nov (Draft 7, A/B by Sculptra seats) — full TH caption (version per seats) in report.
+- promos.ts unchanged: only sculptra-2611 (until 15 Nov) runs; no promo defined after 15 Nov — calendar after that uses /price/ prices + referral only.
+- Done: Draft 11 for Fri 20 Nov (ligaments & aging reel, 25 s) below. Facts only from /articles/facial-ligaments-aging/ (2023 rat study, Aesthetic Surgery Journal; ligament stiffer not looser; animal study, not yet confirmed in humans). No promo, no before/after.
+- Done: Draft 12 = text for the Mon 9 Nov LINE broadcast (Vitaran 4-box, past skin-booster patients only, if the doctor approves); it had no ready text. Prices from /price/ (checked live today).
+- No market watch (Mondays only).
+
+#### Draft 11 — Fri 20 Nov · TikTok / Reels + FB · Ligaments & aging (25 s)
+Script (9:16, doctor to camera in clinic, silver subtitles on navy lower third):
+0–3 s HOOK — text "หน้าย้อย เพราะเอ็นหลวมจริงไหม?" · หมอ: "หลายคนคิดว่าหน้าย้อยเพราะเอ็นยึดใบหน้ายืด"
+3–9 s — B-roll article graphic facial-ligaments-aging-anchor.jpg · "เอ็นยึดใบหน้าเหมือนหมุดที่ตรึงผิวไว้กับกระดูก"
+9–16 s — graphic facial-ligaments-aging-findings.jpg · "งานวิจัยในหนูปี 2023 พบว่าเมื่ออายุมากขึ้น เอ็นไม่ได้หลวม แต่กลับแข็งขึ้น" · small text "งานในสัตว์ทดลอง ยังต้องยืนยันในคน"
+16–22 s — หมอชี้บนใบหน้าตัวเอง/โมเดลกายวิภาค · "สิ่งที่หย่อนคือไขมัน ผิว และกระดูกที่ยุบรอบ ๆ หมุด จึงเห็นเป็นร่องและเหนียง"
+22–25 s — "หมอจึงอ่านหน้าทีละชั้นก่อนเลือกวิธี · อ่านต่อในบทความ" + end card LINE @vinfinityclinic · ว.48943
+TH caption:
+หน้าย้อย เพราะเอ็นหลวมจริงไหม? 🤔
+เดิมเชื่อกันว่าเอ็นยึดใบหน้ายืดตามอายุ หน้าจึงตก แต่งานวิจัยในหนูปี 2023 (Aesthetic Surgery Journal) พบว่าเอ็นไม่ได้หลวมขึ้น กลับแข็งขึ้น
+สิ่งที่เปลี่ยนคือเนื้อเยื่อรอบเอ็น: ไขมันเคลื่อนลง ผิวบางลง กระดูกค่อย ๆ ยุบ จึงเกิดร่องและเหนียงตามแนวเอ็น
+ข้อควรรู้: เป็นงานในสัตว์ทดลอง ยังต้องรอการยืนยันในคน
+หมอจึงประเมินใบหน้าทีละชั้นก่อน แล้วค่อยเลือกว่าควรดูแลชั้นไหน
+📖 อ่านต่อ: vinfinityclinic.com/articles/facial-ligaments-aging
+💬 ทัก LINE @vinfinityclinic ส่งรูปหน้าตรงและด้านข้างให้ นพ.เดโชวัต พรมดา (ว.48943) ประเมินเบื้องต้น · 📞 082-462-2963
+ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · การทำหัตถการทุกชนิดอาจมีผลข้างเคียง
+EN caption:
+Does your face sag because ligaments get loose? 🤔
+A 2023 animal study (Aesthetic Surgery Journal) found facial ligaments don't loosen with age — they get stiffer. What moves is the tissue around them: fat descends, skin thins, bone slowly recedes, so folds form along the ligament lines.
+Note: this was a study in rats and still needs confirmation in humans.
+That's why the doctor reads the face layer by layer before choosing a treatment.
+📖 vinfinityclinic.com/en/articles/facial-ligaments-aging · LINE @vinfinityclinic · Messenger m.me/Vinfinity.Clinic (consultations in English) · Dr. Dechowat Promda (license ว.48943)
+Results vary from person to person. All procedures carry possible side effects.
+Hashtags: #VinfinityClinic #TheFillerArchitect #เอ็นยึดใบหน้า #หน้าย้อย #กายวิภาคใบหน้า #คลินิกอุดร #อุดรธานี #FacialAnatomy #UdonThani
+Alt text (cover): ภาพกราฟิกเปรียบเทียบเอ็นยึดใบหน้าเหมือนหมุดที่ยังยึดแน่น ขณะที่เนื้อเยื่อรอบ ๆ หย่อนลง / Graphic comparing facial ligaments to pins that stay anchored while the surrounding tissue descends.
+Graphic brief (cover 1080×1920): real photo of the doctor (assets/img/dr-bas.jpg or a fresh clinic clip), dark navy gradient (#0B142E → #1A326B) over the lower 50%; silver headline "หน้าย้อย เพราะเอ็นหลวม?"; sub "งานวิจัย 2023 บอกว่าไม่ใช่"; small text footer credit "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943 · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล". No white logo band, no before/after, no Galderma photos, no product names.
+
+#### Draft 12 — Mon 9 Nov ~12:00 · LINE broadcast (only if the doctor approves; segment = past skin-booster patients, size not verified)
+TH text:
+สวัสดีค่ะ จาก Vinfinity Clinic 💙
+ช่วงลมหนาว ผิวแห้งและหมองง่าย ใครที่เคยทำสกินบูสเตอร์กับเรา ถึงรอบดูแลต่อหรือยังคะ
+Vitaran (PN Skin Booster) 2 cc
+• 1 กล่อง 9,990 บาท
+• 4 กล่องขึ้นไป กล่องละ 8,990 บาท (แบ่งใช้เป็นคอร์สได้ตามที่แพทย์วางแผน)
+แพทย์ประเมินผิวก่อนทุกครั้ง ผู้ที่แพ้ปลาโปรดแจ้งแพทย์
+ตอบกลับข้อความนี้พร้อมวัน-เวลาที่สะดวก ทีมงานจะจองคิวให้ค่ะ (ปิดทุกวันอังคาร)
+ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · การทำหัตถการทุกชนิดอาจมีผลข้างเคียง
+Image: assets/img/treatment.jpg with navy gradient + silver price line, footer credit as usual. Not to all friends; not on Tuesday.
