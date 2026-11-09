@@ -1,1 +1,8 @@
 ops/
+line-app/
+tools/
+pages/
+build.py
+i18n_en.py
+README.md
+__pycache__/
