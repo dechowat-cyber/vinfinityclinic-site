@@ -2,9 +2,57 @@
   "cleanUrls": true,
   "trailingSlash": true,
   "headers": [
-    { "source": "/assets/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }] }
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    }
   ],
   "redirects": [
-    { "source": "/(.*)", "has": [{ "type": "host", "value": "www.vinfinityclinic.com" }], "destination": "https://vinfinityclinic.com/$1", "permanent": true }
+    {
+      "source": "/line-app/:path*",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/tools/:path*",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/pages/:path*",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/build.py",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/i18n_en.py",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/README.md",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.vinfinityclinic.com"
+        }
+      ],
+      "destination": "https://vinfinityclinic.com/$1",
+      "permanent": true
+    }
   ]
 }
