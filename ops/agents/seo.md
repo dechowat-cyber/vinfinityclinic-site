@@ -1,6 +1,7 @@
 # seo agent
 
 ## Backlog (top = next)
+0. URGENT, doctor to approve: merge agent/security-20261109 (commit e7280c2) so the public site stops serving source code (/line-app/*, /tools/*, /pages/*, build.py). See 2026-11-09 log.
 1. Content: TH+EN "ฟิลเลอร์ขมับ อุดร" page (/filler/temple/). 2026-11-02: NOT drafted — the site has only 3 sentences on temples (pages/filler.html table row + h3 "ฟิลเลอร์ขมับ และแก้มตอบ"), too thin to write a page from site facts without inventing. Need from the doctor (5 lines is enough): who suits it / not, usual amount range, which layer/technique in plain words, downtime, any consented temple PRE/POST case. Then build as branch agent/seo-<date> modelled on pages/filler-chin.html (CHIN_FAQ + crumb_ld + MedicalWebPage in build.py, EN twin in i18n_en.py).
 2. Ask doctor (strategy, do not change): titles/URLs use "โบท็อก" (brand-derived word) while the mission says toxin without brand names. Thai search volume is on "โบท็อก"; keep or switch to "ฉีดลดริ้วรอย/โบทูลินัมท็อกซิน"?
 3. Set up Google Search Console access so this agent can read real queries/impressions (Adspirer connector has a google_search_console tool — check if the account is linked). Meta/TikTok pixel IDs still empty in `window.VF`.
@@ -9,7 +10,7 @@
 6. Off-site: Thai SERPs for "ฟิลเลอร์ใต้ตา อุดรธานี" / "ฟิลเลอร์ขมับ อุดรธานี" dominated by HDmall; EN by WhatClinic/Thaiger. Hand to marketing agent: claim/verify listings (no paid ads).
 7. EN "botox Udon Thani"/"anti-wrinkle Udon Thani" — check SERPs, consider after temple page.
 8. Lao (LO) pages do not exist yet — build only has TH/EN. If Vientiane patients matter, plan /lo/ with hreflang lo.
-9. Banned-word sweep of EN body copy beyond award names.
+9. Banned-word sweep: branch agent/seo-20261109 waiting. Left as is (not claims): citations "Expert…", "เสียหายถาวร" (ischemia, safety article), award names, "ดีที่สุด" in study context. To check with doctor: "ยกกระชับทันที" (HArmonyCa, /price/).
 10. Physician JSON-LD `award` lists Galderma awards (historical, OK as past awards) — leave.
 
 ## Log
@@ -51,3 +52,10 @@
 - Live: production dpl_5srCqKRrU4x2QiBSHBx7xj7Qweie (commit 493780a) READY; /en/filler/tear-trough/ 200 with new title and valid schema.
 - Weekly content proposal (temple filler page) not drafted — site facts too thin; questions for the doctor in backlog #1.
 - LO: still no /lo/ pages (backlog #8).
+
+### 2026-11-09
+- Audit after rebuild (main a530d15): 53 HTML files, 0 duplicate titles/descriptions, all JSON-LD parses, canonical + hreflang on every indexable page, 1 H1 per page, 0 broken internal links, sitemap 50 URLs all exist and valid, robots OK, largest image 310 KB (JPG fallback). No source change needed on main; only long titles already in backlog 5.
+- FOUND (security): production static site dpl_CNPVhnJyn9TmHt3tj1CtdQeA7aeg serves repo source. Fetched 200: /line-app/lib/promos.ts (SQL + business logic), /build.py, /tools/reel_ligaments/reel.html. Cause: .vercelignore only lists ops/. Pattern scan of tracked files: no real credentials found (.env.example only); no patient data files tracked. Not a proof that nothing sensitive exists in the 185 line-app files.
+- Branch agent/security-20261109 (e7280c2): adds line-app/, tools/, pages/, build.py, i18n_en.py, README.md to .vercelignore. Not merged: deployment config is outside the agent's main-branch list.
+- Branch agent/seo-20261109: banned words — chin FAQ "ผลถาวรกว่า" → "ผลอยู่จนกว่าจะผ่าตัดเอาออก", EN articles index "Instant volume…" → "Volume after injection…".
+- Weekly page proposal: temple page still blocked on the doctor's 5 lines (backlog 1). LO: still none (backlog 8).

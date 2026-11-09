@@ -12,7 +12,7 @@ Referral event "ชวนเพื่อนมาสวยด้วยกัน"
 
 ## Backlog (top = next)
 1. Get LINE OA follower count + segment sizes (past skin-booster / filler patients) from LINE OA Manager — broadcast sizes are "not verified" until then. (Ask doctor/team.)
-2. Draft slot Sun 22 Nov Loy Krathong closed-day reminder (Fri 20 Nov done, Draft 11). Then Wed 25 Nov skincare carousel.
+2. Draft slot Wed 25 Nov skincare carousel (Sun 22 Nov done, Draft 13). Then Fri 27 Nov clinic checklist.
 2b. Doctor to confirm: may a public feed post name the referral credits and the "3 friends → Vitaran 1 cc" reward under the clinic's advertising approval (ฆสพ.)? Draft 10 has a version without the reward line — not verified.
 3. Sculptra promo reminder post ~Mon 9 / Thu 12 Nov only if places remain (team checks the LINE seat counter) — never claim "almost gone" unless verified.
 4. Loy Krathong 2026 = Tue 24 Nov (verified 2026-11-02, PPTV: "วันอังคารที่ 24 พฤศจิกายน"; clinic closed that day). Draft "เตรียมผิวก่อนลอยกระทง" for Sun 15 Nov + a reminder slot Sun 22 / Mon 23 Nov in the next calendar.
@@ -38,7 +38,7 @@ Weekdays corrected 2026-11-01 (1 Nov 2026 = Sunday; earlier labels were one day 
 | Mon 16 Nov | (foreign plan) | EN post #5 from the doctor's doc "ชุดคอนเทนต์ต่างชาติช่วงพืชสวนโลก" — not re-drafted here | — | Messenger + LINE | per doc |
 | Wed 18 Nov | FB + IG feed | Referral event mid-campaign reminder "ชวนเพื่อนมาสวยด้วยกัน" (Sculptra promo ended 15 Nov — no 15,990 price; waitlist line only if the doctor opens one) — DRAFT READY (Draft 10, A/B) | "มาด้วยกัน ได้ทั้งคู่" | ทักไลน์ พิมพ์ “ชวนเพื่อน” | clinic-lounge.jpg or reception.jpg |
 | Fri 20 Nov | TikTok / Reels | Ligaments & aging — why the face "drops" (backlog 6, 25 s script) — DRAFT READY (Draft 11) | "หน้าย้อย เพราะเอ็นหลวมจริงไหม" | /articles/facial-ligaments-aging + LINE | articles/facial-ligaments-aging-anchor.jpg |
-| Sun 22 Nov | FB + IG Story | Loy Krathong reminder: clinic closed Tue 24 Nov; book Mon 23 / Wed 25 — TO DRAFT (no discount invented) | "ลอยกระทงอังคารนี้ คลินิกปิด 1 วัน" | LINE จองคิว | facade.jpg |
+| Sun 22 Nov | FB + IG Story | Loy Krathong reminder: clinic closed Tue 24 Nov; book Mon 23 / Wed 25 — DRAFT READY (Draft 13, no discount invented) | "ลอยกระทงอังคารนี้ คลินิกปิด 1 วัน" | LINE จองคิว | facade.jpg |
 | Wed 25 Nov | FB + IG carousel | Skincare before/after injections (what to pause, what to keep) — TO DRAFT | "ฉีดฟิลเลอร์แล้ว ทาเรตินอลได้เมื่อไหร่" | /articles/skincare-routine-filler-botox | articles/skincare-before-after-injection.jpg |
 | Fri 27 Nov | IG + FB | Choosing a filler clinic in Udon Thani — checklist (license check ว.48943 on the Medical Council site) — TO DRAFT | "ก่อนเลือกคลินิก เช็ก 5 ข้อนี้" | /articles/choosing-filler-clinic-udon | articles/filler-clinic-udon-checklist.jpg |
 | Sun 29 Nov | FB + IG | Vitaran PN cool-season skin (prices from /price/: 9,990 · 4+ boxes 8,990/box) — TO DRAFT | "ลมหนาวมา ผิวแห้งง่าย" | LINE ประเมินผิว | treatment.jpg |
@@ -451,3 +451,22 @@ Image: assets/img/treatment.jpg with navy gradient + silver price line, footer c
 - 3 segment campaigns (personal push, uses quota): A ถึงรอบโบทูลินัม (TOX, lapsed 120d) → B ฟิลเลอร์/ยกกระชับ (FIL-HA, FIL-TT, DOUBLO, HIFU, SCULPTRA, lapsed 270d) → C สกินบูสเตอร์ (skin, lapsed 60d). All: no upcoming appt, reachable (marketing consent), quiet 14d (dedups A/B/C and anyone in recent broadcasts).
 - Gift: โบทูลินัม Standard 1 จุด (ระหว่างคิ้วหรือหางตา มูลค่า 1,900 บาท) when paying 5,000+ within 30 days of the message. Auto-flagged at receipt → /staff/leads#comeback → staff press "ให้แล้ว".
 - Copy says "โบทูลินัม", never brand names. Track: segments page campaign results (booked/paid), leads #comeback board.
+
+### 2026-11-09
+- Monday: Marketing light + SEO. Next ready feed post Wed 11 Nov (Draft 7, A/B by Sculptra seats; full TH in report). Foreign plan: EN #3 due today, Lao #3 Wed 11 Nov (doctor's doc, not re-drafted).
+- Flagged: Draft 12 (Vitaran broadcast, today, if approved) and the win-back C skin-booster campaign (today 12:00) target the same group — recommend sending only one today.
+- promos.ts unchanged: only sculptra-2611 until 15 Nov. No promo defined after 15 Nov.
+- Done: Draft 13 for Sun 22 Nov below (Loy Krathong closed day; no offer invented).
+- Market watch (web search): no Udon Thani clinic promos surfaced again (only HDmall/WhatClinic listings); needs a human on FB pages (backlog 8). PN/"salmon DNA" remains the visible regenerative theme in EN results; no new price point verified.
+
+#### Draft 13 — Sun 22 Nov · FB + IG Story · Loy Krathong closed day
+TH caption:
+ลอยกระทงปีนี้ตรงกับวันอังคารที่ 24 พ.ย. 🏮
+Vinfinity Clinic ปิดทำการวันอังคารตามปกติ เปิดให้บริการวันจันทร์ที่ 23 และวันพุธที่ 25 พ.ย. เวลา 10:00–19:00 น.
+ใครอยากปรึกษาคุณหมอช่วงนี้ ทักมาจองคิวล่วงหน้าได้เลยค่ะ
+💬 LINE @vinfinityclinic · 📞 082-462-2963
+EN caption:
+Loy Krathong falls on Tuesday 24 Nov this year 🏮 We're closed as usual on Tuesdays and open Mon 23 and Wed 25 Nov, 10:00–19:00. To book a consultation, message LINE @vinfinityclinic or Messenger m.me/Vinfinity.Clinic (English OK).
+Hashtags: #VinfinityClinic #ลอยกระทง #คลินิกอุดร #อุดรธานี #UdonThani
+Alt text: ด้านหน้าอาคาร Vinfinity Clinic พร้อมข้อความแจ้งวันปิดทำการวันอังคารที่ 24 พฤศจิกายน / Vinfinity Clinic exterior with a notice that the clinic is closed on Tuesday 24 November.
+Graphic brief: 1080×1920. Real photo assets/img/facade.jpg, dark navy gradient (#0B142E → #1A326B) over the lower 55%. Silver headline "ลอยกระทงอังคารนี้ คลินิกปิด 1 วัน"; sub "เปิด จ. 23 · พ. 25 พ.ย. 10:00–19:00". Small text footer credit "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943". No white logo band, no offer, no before/after.
