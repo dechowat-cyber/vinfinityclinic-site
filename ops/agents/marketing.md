@@ -12,7 +12,7 @@ Referral event "ชวนเพื่อนมาสวยด้วยกัน"
 
 ## Backlog (top = next)
 1. Get LINE OA follower count + segment sizes (past skin-booster / filler patients) from LINE OA Manager — broadcast sizes are "not verified" until then. (Ask doctor/team.)
-2. Draft slot Wed 25 Nov skincare carousel (Sun 22 Nov done, Draft 13). Then Fri 27 Nov clinic checklist.
+2. Draft slot Fri 27 Nov clinic checklist (Wed 25 Nov done, Draft 14). Then Sun 29 Nov Vitaran cool-season (check promos.ts for any promo after 15 Nov first).
 2b. Doctor to confirm: may a public feed post name the referral credits and the "3 friends → Vitaran 1 cc" reward under the clinic's advertising approval (ฆสพ.)? Draft 10 has a version without the reward line — not verified.
 3. Sculptra promo reminder post ~Mon 9 / Thu 12 Nov only if places remain (team checks the LINE seat counter) — never claim "almost gone" unless verified.
 4. Loy Krathong 2026 = Tue 24 Nov (verified 2026-11-02, PPTV: "วันอังคารที่ 24 พฤศจิกายน"; clinic closed that day). Draft "เตรียมผิวก่อนลอยกระทง" for Sun 15 Nov + a reminder slot Sun 22 / Mon 23 Nov in the next calendar.
@@ -39,7 +39,7 @@ Weekdays corrected 2026-11-01 (1 Nov 2026 = Sunday; earlier labels were one day 
 | Wed 18 Nov | FB + IG feed | Referral event mid-campaign reminder "ชวนเพื่อนมาสวยด้วยกัน" (Sculptra promo ended 15 Nov — no 15,990 price; waitlist line only if the doctor opens one) — DRAFT READY (Draft 10, A/B) | "มาด้วยกัน ได้ทั้งคู่" | ทักไลน์ พิมพ์ “ชวนเพื่อน” | clinic-lounge.jpg or reception.jpg |
 | Fri 20 Nov | TikTok / Reels | Ligaments & aging — why the face "drops" (backlog 6, 25 s script) — DRAFT READY (Draft 11) | "หน้าย้อย เพราะเอ็นหลวมจริงไหม" | /articles/facial-ligaments-aging + LINE | articles/facial-ligaments-aging-anchor.jpg |
 | Sun 22 Nov | FB + IG Story | Loy Krathong reminder: clinic closed Tue 24 Nov; book Mon 23 / Wed 25 — DRAFT READY (Draft 13, no discount invented) | "ลอยกระทงอังคารนี้ คลินิกปิด 1 วัน" | LINE จองคิว | facade.jpg |
-| Wed 25 Nov | FB + IG carousel | Skincare before/after injections (what to pause, what to keep) — TO DRAFT | "ฉีดฟิลเลอร์แล้ว ทาเรตินอลได้เมื่อไหร่" | /articles/skincare-routine-filler-botox | articles/skincare-before-after-injection.jpg |
+| Wed 25 Nov | FB + IG carousel | Skincare before/after injections (what to pause, what to keep) — DRAFT READY (Draft 14) | "ฉีดฟิลเลอร์แล้ว ทาเรตินอลได้เมื่อไหร่" | /articles/skincare-routine-filler-botox | articles/skincare-before-after-injection.jpg |
 | Fri 27 Nov | IG + FB | Choosing a filler clinic in Udon Thani — checklist (license check ว.48943 on the Medical Council site) — TO DRAFT | "ก่อนเลือกคลินิก เช็ก 5 ข้อนี้" | /articles/choosing-filler-clinic-udon | articles/filler-clinic-udon-checklist.jpg |
 | Sun 29 Nov | FB + IG | Vitaran PN cool-season skin (prices from /price/: 9,990 · 4+ boxes 8,990/box) — TO DRAFT | "ลมหนาวมา ผิวแห้งง่าย" | LINE ประเมินผิว | treatment.jpg |
 
@@ -470,3 +470,39 @@ Loy Krathong falls on Tuesday 24 Nov this year 🏮 We're closed as usual on Tue
 Hashtags: #VinfinityClinic #ลอยกระทง #คลินิกอุดร #อุดรธานี #UdonThani
 Alt text: ด้านหน้าอาคาร Vinfinity Clinic พร้อมข้อความแจ้งวันปิดทำการวันอังคารที่ 24 พฤศจิกายน / Vinfinity Clinic exterior with a notice that the clinic is closed on Tuesday 24 November.
 Graphic brief: 1080×1920. Real photo assets/img/facade.jpg, dark navy gradient (#0B142E → #1A326B) over the lower 55%. Silver headline "ลอยกระทงอังคารนี้ คลินิกปิด 1 วัน"; sub "เปิด จ. 23 · พ. 25 พ.ย. 10:00–19:00". Small text footer credit "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943". No white logo band, no offer, no before/after.
+
+### 2026-11-10
+- Tuesday (clinic closed): Marketing light + live-site check. Production deployment READY on 2acda1a; /, /en/, /price/ return 200 with correct titles, LINE and phone (fetched via Vercel; direct curl to vinfinityclinic.com is blocked by this sandbox's proxy, not a site fault).
+- Next ready feed post: Wed 11 Nov 11.11 Story (Draft 7) — team checks the LINE Sculptra seat counter in the morning and picks version A (places left) or B (full). Full TH in today's report. Foreign plan: Lao #3 due Wed 11 Nov, EN #4 Thu 12 Nov (doctor's doc, not re-drafted).
+- promos.ts unchanged (only sculptra-2611, until 15 Nov 23:59). /price/ still shows Vitaran 9,990 · 4+ boxes 8,990 (matches header).
+- Done: Draft 14 for Wed 25 Nov skincare carousel below, content taken only from /articles/skincare-routine-filler-botox/ (no new claims). Calendar row updated to DRAFT READY.
+- No LINE broadcast planned for tomorrow; no market watch (Mondays only).
+
+#### Draft 14 — Wed 25 Nov · FB + IG carousel (5 slides, 1080×1350) · Skincare before/after injections
+TH caption:
+ฉีดฟิลเลอร์ โบท็อก หรือสกินบูสเตอร์แล้ว ทาเรตินอลได้เมื่อไหร่? 🧴
+การฉีดไม่ได้ลอกผิวทั้งหน้าเหมือนการลอกผิวด้วยกรดหรือเลเซอร์ สกินแคร์ส่วนใหญ่จึงกลับมาใช้ได้เร็ว แต่มีบางตัวที่ควรพักไว้ก่อน
+
+✅ ใช้ต่อได้: คลีนเซอร์อ่อนโยน มอยส์เจอไรเซอร์ กันแดด เซราไมด์ ไฮยาลูรอนิก
+⏸️ พักในวันฉีด: เรตินอยด์/เรตินอล AHA BHA เบนโซอิลเปอร์ออกไซด์ — กลับมาใช้เมื่อผิวไม่แดง ไม่แสบ
+💄 หลังฉีด งดแต่งหน้าอย่างน้อยหลายชั่วโมง เพื่อลดการปนเปื้อนที่รอยเข็ม
+💊 ยาที่แพทย์สั่ง โดยเฉพาะยาละลายลิ่มเลือด ห้ามหยุดเอง — แจ้งแพทย์ผู้ฉีดก่อนทุกครั้ง
+
+ถ้ายังมีรอยช้ำ แดง หรือแสบ ให้รอจนหายก่อนกลับไปใช้ตัวแรง ปวดมากขึ้นเรื่อย ๆ หรือผิวซีด/ม่วงคล้ำ ให้ติดต่อคลินิกทันที
+อ่านตารางงด–ใช้ต่อฉบับเต็ม: vinfinityclinic.com/articles/skincare-routine-filler-botox/
+เรียบเรียงโดย นพ.เดโชวัต พรมดา (ว.48943) · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล
+💬 สงสัยว่าสกินแคร์ที่ใช้อยู่ต้องพักไหม ทัก LINE @vinfinityclinic ส่งรูปฉลากให้ทีมดูก่อนนัดได้ค่ะ
+
+EN caption:
+Had filler, toxin or a skin booster — when can you go back to retinol? Most skincare comes back quickly: cleanser, moisturiser and sunscreen carry on as usual. Pause retinoids, AHA/BHA and benzoyl peroxide on treatment day and restart once the skin isn't red or stinging. Skip makeup for at least several hours. Never stop a prescribed medicine (especially blood thinners) on your own — tell your doctor. Full guide (Thai): vinfinityclinic.com/articles/skincare-routine-filler-botox/ · Questions in English: LINE @vinfinityclinic or Messenger m.me/Vinfinity.Clinic. Results vary.
+
+Hashtags: #VinfinityClinic #สกินแคร์หลังฉีดฟิลเลอร์ #เรตินอล #ฟิลเลอร์อุดร #คลินิกอุดร #อุดรธานี #skincareafterfiller #UdonThani
+
+Slides (silver text on navy, one idea each):
+1. "ฉีดฟิลเลอร์แล้ว ทาเรตินอลได้เมื่อไหร่" (cover, photo assets/img/articles/skincare-before-after-injection.jpg)
+2. "ใช้ต่อได้" — คลีนเซอร์ · มอยส์เจอไรเซอร์ · กันแดด · เซราไมด์ · ไฮยาลูรอนิก
+3. "พักในวันฉีด" — เรตินอยด์ · AHA/BHA · เบนโซอิลเปอร์ออกไซด์ → กลับมาใช้เมื่อผิวไม่แดง ไม่แสบ
+4. "ยาที่แพทย์สั่ง ห้ามหยุดเอง" — แจ้งแพทย์ผู้ฉีดเพื่อวางแผนร่วมกัน
+5. "อาการที่ต้องติดต่อคลินิกทันที" — ปวดมากขึ้นเรื่อย ๆ · ผิวซีด/ม่วงคล้ำ · ตามัว + CTA LINE @vinfinityclinic
+Alt text: ผลิตภัณฑ์สกินแคร์วางบนโต๊ะ พร้อมข้อความว่าตัวไหนใช้ต่อได้และตัวไหนควรพักหลังฉีดฟิลเลอร์ / Skincare products on a table with text on which to keep and which to pause after filler injections.
+Graphic brief: 1080×1350, 5 slides. Real photo assets/img/articles/skincare-before-after-injection.jpg on slide 1 (and as a faded background on 2–5), dark navy gradient (#0B142E → #1A326B). Silver #EEF2F8 headlines, simple ✓ / ⏸ icons, no product brand names, no before/after. Small text footer credit on every slide: "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943". No white logo band.
