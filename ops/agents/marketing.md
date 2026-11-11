@@ -545,5 +545,5 @@ Alt text: เช็กลิสต์เลือกคลินิกฉีด�
 Graphic brief: 1080×1350, 4 slides. Real photo assets/img/articles/filler-clinic-udon-checklist.jpg on slide 1 (faded background on 2–4), dark navy gradient (#0B142E → #1A326B), silver #EEF2F8 headlines, simple ✓ / ⚠ icons. No competitor names, no product brand names, no before/after, no price. Small text footer credit on every slide: "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943". No white logo band.
 
 ## 11.11 one-day offer (doctor's decision 2026-11-11)
-- New Doublo 2.0 ไม่จำกัดช็อต + Vitaran 1 กล่อง (2 cc) = 11,111 THB. 11 places, 1 per person, claim on 11 Nov only (LINE keyword "11.11" → card → กดรับสิทธิ์), book within 48 h, visit by 30 Nov, not combined with other promos. Defined in line-app/lib/promos.ts (key 1111-2611); broadcast set 1111-2611-card.
+- New Doublo 2.0 ไม่จำกัดช็อต + Vitaran 1 cc = 11,111 THB. 11 places, 1 per person, claim on 11 Nov only (LINE keyword "11.11" → card → กดรับสิทธิ์), book within 48 h, visit by 30 Nov, not combined with other promos. Defined in line-app/lib/promos.ts (key 1111-2611); broadcast set 1111-2611-card.
 - Replaces Draft 7 (11.11 Story) for today. Do not quote 11,111 after 11 Nov.

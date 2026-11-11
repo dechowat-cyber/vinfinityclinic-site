@@ -47,7 +47,7 @@ const CB = (group: "A" | "B" | "C", label: string, message: string): MediaSet =>
 
 const E11_MSG = `🎉 11.11 วันนี้วันเดียวค่ะ
 
-New Doublo 2.0 ไม่จำกัดช็อต + Vitaran 1 กล่อง (2 cc)
+New Doublo 2.0 ไม่จำกัดช็อต + Vitaran 1 cc
 💙 11,111.- เพียง 11 สิทธิ์ (เหลือ {เหลือ} สิทธิ์)
 
 กดรับสิทธิ์ภายในวันนี้ เข้ารับบริการได้ถึง 30 พ.ย.
