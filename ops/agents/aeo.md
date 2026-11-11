@@ -1,11 +1,11 @@
 # aeo agent
 
 ## Backlog (top = next)
-1. Doctor approval pending: agent/aeo-20261031 (EN filler + tear-trough FAQ, 40–60 words) and agent/aeo-20261104 (home FAQ "consult in English?" TH+EN). After approval: same answer-first rewrite for EN lips, chin, dissolve, skin-booster, Sculptra, toxin, lifting, price FAQs, then TH.
+1. Doctor approval pending: agent/aeo-20261031 (EN filler + tear-trough FAQ, 40–60 words), agent/aeo-20261104 (home FAQ "consult in English?" TH+EN) and agent/aeo-20261111 (skin-booster summary box TH+EN). After approval: same answer-first rewrite for EN lips, chin, dissolve, skin-booster, Sculptra, toxin, lifting, price FAQs, then TH.
 2. Doctor task (biggest blocker): verify vinfinityclinic.com in Bing Webmaster Tools + Google Search Console and submit sitemap.xml — 0 of 16 searches over 3 runs show the site, even brand/domain searches. Bing feeds ChatGPT/Copilot.
-3. Doctor task list (external citations): claim/complete listings on WhatClinic (Udon Thani pages exist), Gowabi (lists Udon Thani clinics, new 4 Nov), HDmall, Wongnai, Bookimed (fix "Vincent Clinic" confusion), Thaiger Deals; check Google Business Profile NAP matches site exactly.
+3. Doctor task list (external citations): claim/complete listings on WhatClinic (Udon Thani pages exist; 4 Udon clinics now answer the "English-speaking doctor" query), Gowabi (lists Udon Thani clinics incl. De Charm, V-Sage), HDmall, Wongnai, Bookimed (fix "Vincent Clinic" confusion), Thaiger Deals; check Google Business Profile NAP matches site exactly.
 4. Content branch: English FAQ for foreign patients — how to book from Laos, how long to stay after treatment — only once the doctor confirms the facts (English consult + Messenger now done in 20261104 branch).
-5. Add answer-first "สรุปสั้น" (40–60 words) at top of each service page — content branch.
+5. "สรุปสั้น" box: all TH/EN service pages have one except skin-booster (now on branch agent/aeo-20261111), home and doctor (not needed). After approval: none left.
 6. /toxin/ titles/H1 use "โบท็อก" (a brand name) — flag to doctor vs README rule (content, do not change on main).
 7. Keep llms.txt in sync with sitemap.xml each run (script: compare <loc> list with llms.txt).
 8. `/llms-full.txt` — only if kb.txt not enough; decide after indexing confirmed.
@@ -29,6 +29,10 @@
 | 2026-11-04 | คลินิก Sculptra อุดรธานี | No | hdmall Sculptra listings (Bangkok clinics only) |
 | 2026-11-04 | polynucleotide skin booster clinic Udon Thani English speaking | No | whatclinic polynucleotides (Thailand/Bangkok), dloveveryclinic, UK clinics |
 | 2026-11-04 | ฉีดสกินบูสเตอร์ PN อุดรธานี ราคา | No | hdmall (Bangkok hospital), vsquareclinic, product sellers |
+| 2026-11-11 | ฟิลเลอร์ร่องแก้ม อุดรธานี คลินิก | No | ktc, wongnai (DS Clinic Udon), hdmall (Bangkok clinics) |
+| 2026-11-11 | English speaking aesthetic doctor Udon Thani skin booster | No | whatclinic Udon Thani listings (Klinique Central, Dr Ann, Absolute Klinik), Bangkok Hospital Udon skin dept, bookimed |
+| 2026-11-11 | Vinfinity Clinic (brand) | No | hdmall/bookimed "Vincent Clinic", unrelated "Infinity" clinics |
+| 2026-11-11 | filler clinic Udon Thani for Lao patients from Vientiane | No | whatclinic Udon Thani, gowabi (De Charm Clinic UD, The V-Sage Udon), bookimed |
 
 ## Log
 ### 2026-10-30 (doctor, via main session)
@@ -50,3 +54,8 @@
 - Checked: all 50 sitemap URLs in llms.txt; 205 JSON-LD blocks parse cleanly; FAQPage on 24 pages.
 - Fixed llms.txt (main, 7d519bc): English section now names Facebook Messenger (m.me/Vinfinity.Clinic) for people not on LINE — same as the EN pages' chat strip. kb.txt rebuilt. Production deploy READY.
 - Content branch agent/aeo-20261104 (7b17b41): new home FAQ "ปรึกษาเป็นภาษาอังกฤษได้ไหม / Can I have my consultation in English?" (EN 52 words, answer-first; only doctor-confirmed facts); FAQPage schema follows. Banned-word check clean. Waiting for doctor approval.
+### 2026-11-11
+- Visibility: 0 of 4 searches show Vinfinity (20/20 misses over 4 runs). "English-speaking doctor Udon Thani" now answers with 4 WhatClinic Udon listings + Bangkok Hospital Udon skin dept; brand search still returns "Vincent Clinic" → indexing (Bing/GSC) and directory listings remain the blockers.
+- Checked (main, no change needed): all 50 sitemap URLs in llms.txt; 205 JSON-LD blocks parse; FAQPage on 24 pages; `python3 build.py` gives no diff; llms.txt/kb.txt carry no expired promo prices.
+- Content branch agent/aeo-20261111 (9b254b9): answer-first "สรุปสั้น / In short" box on /skin-booster/ and /en/skin-booster/ (the only service pages without one) — facts and prices copied from the same page, banned-word check clean. Waiting for doctor approval.
+- Noted for doctor: kb.txt (from /doctor/) lists a 2021 Galderma Thailand award — a past award, not an affiliation; left as is.

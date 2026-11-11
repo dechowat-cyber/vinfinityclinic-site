@@ -12,7 +12,7 @@ Referral event "ชวนเพื่อนมาสวยด้วยกัน"
 
 ## Backlog (top = next)
 1. Get LINE OA follower count + segment sizes (past skin-booster / filler patients) from LINE OA Manager — broadcast sizes are "not verified" until then. (Ask doctor/team.)
-2. Draft slot Fri 27 Nov clinic checklist (Wed 25 Nov done, Draft 14). Then Sun 29 Nov Vitaran cool-season (check promos.ts for any promo after 15 Nov first).
+2. Draft slot Sun 29 Nov Vitaran cool-season (Fri 27 Nov done, Draft 15) — check promos.ts for any promo after 15 Nov first. Then roll the calendar to 30 Nov – 13 Dec (~22 Nov at the latest; referral event ends 15 Dec).
 2b. Doctor to confirm: may a public feed post name the referral credits and the "3 friends → Vitaran 1 cc" reward under the clinic's advertising approval (ฆสพ.)? Draft 10 has a version without the reward line — not verified.
 3. Sculptra promo reminder post ~Mon 9 / Thu 12 Nov only if places remain (team checks the LINE seat counter) — never claim "almost gone" unless verified.
 4. Loy Krathong 2026 = Tue 24 Nov (verified 2026-11-02, PPTV: "วันอังคารที่ 24 พฤศจิกายน"; clinic closed that day). Draft "เตรียมผิวก่อนลอยกระทง" for Sun 15 Nov + a reminder slot Sun 22 / Mon 23 Nov in the next calendar.
@@ -40,7 +40,7 @@ Weekdays corrected 2026-11-01 (1 Nov 2026 = Sunday; earlier labels were one day 
 | Fri 20 Nov | TikTok / Reels | Ligaments & aging — why the face "drops" (backlog 6, 25 s script) — DRAFT READY (Draft 11) | "หน้าย้อย เพราะเอ็นหลวมจริงไหม" | /articles/facial-ligaments-aging + LINE | articles/facial-ligaments-aging-anchor.jpg |
 | Sun 22 Nov | FB + IG Story | Loy Krathong reminder: clinic closed Tue 24 Nov; book Mon 23 / Wed 25 — DRAFT READY (Draft 13, no discount invented) | "ลอยกระทงอังคารนี้ คลินิกปิด 1 วัน" | LINE จองคิว | facade.jpg |
 | Wed 25 Nov | FB + IG carousel | Skincare before/after injections (what to pause, what to keep) — DRAFT READY (Draft 14) | "ฉีดฟิลเลอร์แล้ว ทาเรตินอลได้เมื่อไหร่" | /articles/skincare-routine-filler-botox | articles/skincare-before-after-injection.jpg |
-| Fri 27 Nov | IG + FB | Choosing a filler clinic in Udon Thani — checklist (license check ว.48943 on the Medical Council site) — TO DRAFT | "ก่อนเลือกคลินิก เช็ก 5 ข้อนี้" | /articles/choosing-filler-clinic-udon | articles/filler-clinic-udon-checklist.jpg |
+| Fri 27 Nov | IG + FB | Choosing a filler clinic in Udon Thani — checklist (license check ว.48943 on the Medical Council site) — DRAFT READY (Draft 15) | "ก่อนเลือกคลินิก เช็ก 5 ข้อนี้" | /articles/choosing-filler-clinic-udon | articles/filler-clinic-udon-checklist.jpg |
 | Sun 29 Nov | FB + IG | Vitaran PN cool-season skin (prices from /price/: 9,990 · 4+ boxes 8,990/box) — TO DRAFT | "ลมหนาวมา ผิวแห้งง่าย" | LINE ประเมินผิว | treatment.jpg |
 
 Notes: before/after only from assets/img/ba (consented, already on site), labelled PRE / POST, organic only, never in ads. File naming on site: caseNN-b = PRE (before), caseNN-a = POST (after) — see pages/_results_eye.html. Do not use galderma-* doctor photos (not a current affiliation).
@@ -506,3 +506,40 @@ Slides (silver text on navy, one idea each):
 5. "อาการที่ต้องติดต่อคลินิกทันที" — ปวดมากขึ้นเรื่อย ๆ · ผิวซีด/ม่วงคล้ำ · ตามัว + CTA LINE @vinfinityclinic
 Alt text: ผลิตภัณฑ์สกินแคร์วางบนโต๊ะ พร้อมข้อความว่าตัวไหนใช้ต่อได้และตัวไหนควรพักหลังฉีดฟิลเลอร์ / Skincare products on a table with text on which to keep and which to pause after filler injections.
 Graphic brief: 1080×1350, 5 slides. Real photo assets/img/articles/skincare-before-after-injection.jpg on slide 1 (and as a faded background on 2–5), dark navy gradient (#0B142E → #1A326B). Silver #EEF2F8 headlines, simple ✓ / ⏸ icons, no product brand names, no before/after. Small text footer credit on every slide: "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943". No white logo band.
+
+### 2026-11-11
+- Wednesday: Marketing light + AEO. Today's post = Wed 11 Nov 11.11 Story (Draft 7): team checks the LINE Sculptra seat counter this morning → version A (places left) or B (full); full TH in today's report. Foreign plan: Lao #3 due today, EN #4 Thu 12 Nov (doctor's doc, not re-drafted).
+- promos.ts unchanged: only sculptra-2611 (until 15 Nov 23:59); no promo defined after 15 Nov. No LINE broadcast planned for tomorrow (Thu 12 Nov).
+- Done: Draft 15 for Fri 27 Nov (clinic checklist) below — content only from /articles/choosing-filler-clinic-udon/ (official check sources: hss.moph, tmc.or.th, oryor.com). Calendar row → DRAFT READY.
+- No market watch (Mondays only).
+
+#### Draft 15 — Fri 27 Nov · IG + FB feed (carousel 4 slides, 1080×1350) · Choosing a filler clinic in Udon Thani
+TH caption:
+ฉีดฟิลเลอร์ อุดร ที่ไหนดี? ก่อนเลือกคลินิก เช็ก 5 ข้อนี้ ✅
+ไม่ว่าจะเลือกคลินิกไหน ทุกข้อตรวจสอบเองได้จากแหล่งทางการ
+
+1️⃣ คลินิกมีใบอนุญาตสถานพยาบาล — เช็กได้ที่ระบบตรวจสอบสถานพยาบาลเอกชน กรม สบส.
+2️⃣ แพทย์เป็นผู้ฉีดเอง — ถามชื่อแพทย์ แล้วตรวจสอบกับแพทยสภา (tmc.or.th)
+3️⃣ ผลิตภัณฑ์ขึ้นทะเบียน อย. — ขอดูกล่อง เลขทะเบียน วันหมดอายุ เปิดกล่องต่อหน้าก่อนฉีด
+4️⃣ ประเมินก่อนเสนอราคา — อธิบายว่าควรเติมตรงไหนเพราะอะไร และแจ้งค่าใช้จ่ายทั้งหมดก่อนเริ่ม
+5️⃣ บอกความเสี่ยงตรง ๆ และมีแผนรับมือภาวะแทรกซ้อน รวมถึงนัดติดตามผลหลังฉีด
+
+⚠️ สัญญาณที่ควรระวัง: ราคาถูกผิดปกติ ไม่ยอมเปิดกล่อง ไม่บอกชื่อแพทย์ รับประกันผล หรือฉีดนอกสถานพยาบาล
+
+อ่านเช็กลิสต์ฉบับเต็ม 7 ข้อ: vinfinityclinic.com/articles/choosing-filler-clinic-udon/
+Vinfinity Clinic อุดรธานี ดูแลโดย นพ.เดโชวัต พรมดา (ว.48943) ตรวจสอบรายชื่อได้ที่แพทยสภา
+💬 ทัก LINE @vinfinityclinic เพื่อนัดประเมินกับแพทย์ · 📞 082-462-2963
+ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · การทำหัตถการทุกชนิดอาจมีผลข้างเคียง
+
+EN caption:
+Choosing a filler clinic in Udon Thani? Check these 5 things first: (1) the clinic holds a medical-facility licence; (2) a licensed doctor injects — ask the name and check it with the Medical Council of Thailand (tmc.or.th); (3) the product is Thai FDA-registered and the box is opened in front of you; (4) you get an assessment and the full cost before anything starts; (5) risks are explained honestly, with a complication plan and a follow-up visit. Red flags: unusually low prices, no box, no doctor's name, promised results, injections outside a clinic. Full checklist (Thai): vinfinityclinic.com/articles/choosing-filler-clinic-udon/ · Dr. Dechowat Promda (license ว.48943). Consultations in English: LINE @vinfinityclinic or Messenger m.me/Vinfinity.Clinic. Results vary.
+
+Hashtags: #VinfinityClinic #ฉีดฟิลเลอร์อุดร #ฟิลเลอร์อุดร #คลินิกอุดร #อุดรธานี #เลือกคลินิก #UdonThani #DermalFiller
+
+Slides (silver text on navy, one idea each):
+1. "ก่อนเลือกคลินิกฟิลเลอร์ เช็ก 5 ข้อนี้" (cover, photo assets/img/articles/filler-clinic-udon-checklist.jpg)
+2. "ใบอนุญาต + แพทย์ผู้ฉีด" — สถานพยาบาล (สบส.) · ชื่อแพทย์ (แพทยสภา)
+3. "ผลิตภัณฑ์ + การประเมิน" — เลข อย. เปิดกล่องต่อหน้า · ประเมินและแจ้งราคาทั้งหมดก่อนเริ่ม
+4. "ความเสี่ยง + สัญญาณที่ควรระวัง" — มีแผนรับมือภาวะแทรกซ้อน นัดติดตามผล · ระวังราคาถูกผิดปกติ ไม่เปิดกล่อง รับประกันผล + CTA LINE @vinfinityclinic
+Alt text: เช็กลิสต์เลือกคลินิกฉีดฟิลเลอร์ในอุดรธานี ใบอนุญาตสถานพยาบาล แพทย์ผู้ฉีด เลขทะเบียน อย. และการประเมินก่อนฉีด / Checklist for choosing a filler clinic in Udon Thani: facility licence, injecting doctor, Thai FDA registration and assessment before treatment.
+Graphic brief: 1080×1350, 4 slides. Real photo assets/img/articles/filler-clinic-udon-checklist.jpg on slide 1 (faded background on 2–4), dark navy gradient (#0B142E → #1A326B), silver #EEF2F8 headlines, simple ✓ / ⚠ icons. No competitor names, no product brand names, no before/after, no price. Small text footer credit on every slide: "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943". No white logo band.
