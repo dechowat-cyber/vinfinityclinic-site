@@ -53,14 +53,14 @@ export const PROMOS: Promo[] = [{
     hero: "/campaign/1111-2611/1-1x1.jpg",
     title: "11.11 สวยครบ 2 จุด",
     price: "11,111 บาท",
-    lines: ["คุณหมอเลือกให้ 2 จาก 3: ฟิลเลอร์ HA 1 cc · New Doublo 2.0 ไม่จำกัดช็อต · Vitaran 1 cc", "เพียง 11 สิทธิ์ · กดรับสิทธิ์ภายในวันนี้ (11 พ.ย.) · คนละ 1 สิทธิ์ · เลือกวันนัดภายใน 48 ชม. · เข้ารับบริการได้ถึง 30 พ.ย.", "แพทย์เป็นผู้เลือก 2 จุดและจำนวนช็อตตามการประเมิน · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · ใช้ร่วมกับโปร/แพ็กเกจอื่นไม่ได้"],
+    lines: ["คุณหมอเลือกให้ 2 จาก 3: ฟิลเลอร์ HA 1 cc · New Doublo 2.0 หัว Pen ไม่จำกัดช็อต · Vitaran 1 cc", "เพียง 11 สิทธิ์ · กดรับสิทธิ์ภายในวันนี้ (11 พ.ย.) · คนละ 1 สิทธิ์ · เลือกวันนัดภายใน 48 ชม. · เข้ารับบริการได้ถึง 30 พ.ย.", "แพทย์เป็นผู้เลือก 2 จุดและจำนวนช็อตตามการประเมิน · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · ใช้ร่วมกับโปร/แพ็กเกจอื่นไม่ได้"],
     claimText: "ขอรับสิทธิ์ 11.11 ค่ะ",
   },
   text: `🎉 11.11 สวยครบ 2 จุด วันนี้วันเดียว
 
 คุณหมอประเมินรายเคส แล้วเลือกให้ 2 จาก 3
 • ฟิลเลอร์ HA 1 cc
-• New Doublo 2.0 ไม่จำกัดช็อต
+• New Doublo 2.0 หัว Pen ไม่จำกัดช็อต
 • Vitaran 1 cc
 💙 11,111.- เพียง 11 สิทธิ์
 
@@ -68,7 +68,7 @@ export const PROMOS: Promo[] = [{
 แพทย์เป็นผู้เลือก 2 จุดและจำนวนช็อตตามการประเมิน · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · ใช้ร่วมกับโปร/แพ็กเกจอื่นไม่ได้
 👉 กดปุ่ม “กดรับสิทธิ์” ในการ์ดด้านล่าง หรือพิมพ์ “รับสิทธิ์ 11.11” ได้เลยค่ะ`,
   ask: "ขอรับสิทธิ์ 11.11 ค่ะ",
-  kb: "11.11 one-day offer 'สวยครบ 2 จุด' (claim on 11 November 2026 only): 11,111 THB for 2 of these 3, chosen by the doctor after assessing the face: HA filler 1 cc, New Doublo 2.0 with no shot limit (the doctor sets the number of shots), Vitaran 1 cc. Only 11 places, 1 per person, not combined with other promotions. Claim in the clinic's LINE by typing '11.11' and tapping 'กดรับสิทธิ์', choose an appointment within 48 hours, visit by 30 November 2026. Results vary.",
+  kb: "11.11 one-day offer 'สวยครบ 2 จุด' (claim on 11 November 2026 only): 11,111 THB for 2 of these 3, chosen by the doctor after assessing the face: HA filler 1 cc, New Doublo 2.0 Pen handpiece with no shot limit (the doctor sets the number of shots), Vitaran 1 cc. Only 11 places, 1 per person, not combined with other promotions. Claim in the clinic's LINE by typing '11.11' and tapping 'กดรับสิทธิ์', choose an appointment within 48 hours, visit by 30 November 2026. Results vary.",
   categories: ["ยกกระชับ", "สกินบูสเตอร์", "ผิว", "ฟิลเลอร์"],
   interest: "doublo|hifu|ไฮฟู|ยกกระชับ|กระชับ|หย่อน|vitaran|ไวทาแรน|สกินบูสเตอร์|booster|รูขุมขน|ผิว|ฟิลเลอร์|filler|ร่องแก้ม|ใต้ตา|คาง",
 }, {
