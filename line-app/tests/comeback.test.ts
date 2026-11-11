@@ -39,20 +39,20 @@ test("comeback sets: card with gift, own booking link, invite button; no brand n
 });
 
 test("quiet=14 drops anyone messaged by a campaign in the last 14 days", async () => {
-  const a = await upsertClientByLine("U_CBQ1", "Q1");
-  const b = await upsertClientByLine("U_CBQ2", "Q2");
+  const a = await upsertClientByLine("U_CBQ1", { displayName: "Q1" });
+  const b = await upsertClientByLine("U_CBQ2", { displayName: "Q2" });
   const k = await one("insert into campaigns(name, message, created_at) values ('old', 'x', $1) returning id", [new Date(now.getTime() - 5 * 864e5).toISOString()]);
-  await q("insert into campaign_recipients(campaign_id, client_id, sent_at) values ($1,$2,$3)", [k.id, a.id, new Date(now.getTime() - 5 * 864e5).toISOString()]);
+  await q("insert into campaign_recipients(campaign_id, client_id, sent_at) values ($1,$2,$3)", [k!.id, a.id, new Date(now.getTime() - 5 * 864e5).toISOString()]);
   const ids = (await segmentMembers({ quietDays: 14 }, now)).map((r) => Number(r.id));
   assert.ok(!ids.includes(Number(a.id)));
   assert.ok(ids.includes(Number(b.id)));
 });
 
 test("paying 5,000+ within 30 days of the comeback message → gift pending once; staff board shows it", async () => {
-  const c = await upsertClientByLine("U_CBG", "G");
+  const c = await upsertClientByLine("U_CBG", { displayName: "G" });
   const sent = new Date(Date.now() - 2 * 864e5).toISOString();
   const k = await one(`insert into campaigns(name, message, images, created_at) values ('คิดถึงนะ A', 'x', '["comeback:a"]', $1) returning id`, [sent]);
-  await q("insert into campaign_recipients(campaign_id, client_id, sent_at) values ($1,$2,$3)", [k.id, c.id, sent]);
+  await q("insert into campaign_recipients(campaign_id, client_id, sent_at) values ($1,$2,$3)", [k!.id, c.id, sent]);
   const small = await recordPayment({ clientId: c.id, amount: 3_000, method: "cash", staffId: 1 });
   assert.ok(!(await creditsFor(small.id)).comeback);
   const big = await recordPayment({ clientId: c.id, amount: COMEBACK.minPayment, method: "cash", staffId: 1 });
@@ -68,12 +68,12 @@ test("paying 5,000+ within 30 days of the comeback message → gift pending once
 });
 
 test("no gift without a comeback message, or when the message is older than 30 days", async () => {
-  const c = await upsertClientByLine("U_CBN", "N");
+  const c = await upsertClientByLine("U_CBN", { displayName: "N" });
   const p1 = await recordPayment({ clientId: c.id, amount: 8_000, method: "cash", staffId: 1 });
   assert.ok(!(await creditsFor(p1.id)).comeback);
   const old = new Date(Date.now() - 40 * 864e5).toISOString();
   const k = await one(`insert into campaigns(name, message, images, created_at) values ('คิดถึงนะ B', 'x', '["comeback:b"]', $1) returning id`, [old]);
-  await q("insert into campaign_recipients(campaign_id, client_id, sent_at) values ($1,$2,$3)", [k.id, c.id, old]);
+  await q("insert into campaign_recipients(campaign_id, client_id, sent_at) values ($1,$2,$3)", [k!.id, c.id, old]);
   const p2 = await recordPayment({ clientId: c.id, amount: 8_000, method: "cash", staffId: 1 });
   assert.ok(!(await creditsFor(p2.id)).comeback);
 });

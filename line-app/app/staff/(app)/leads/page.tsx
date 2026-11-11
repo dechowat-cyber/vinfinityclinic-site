@@ -5,7 +5,7 @@ import { pendingDrafts, leadLangStats, LANG_LABEL, type Lang } from "@/lib/agent
 import { sendDraft, doneDraft, dismissDraft, promoSent, promoClaimSet, promoClaimAdd, referralRewardGiven, promoShareToClaimers, comebackGiftGiven } from "@/lib/agentActions";
 import { REF_EVENT, refEventActive, referralBoard, referralStats } from "@/lib/referral";
 import { COMEBACK, comebackBoard } from "@/lib/comeback";
-import { activePromos, promoProspects, promoStats, promoClaims } from "@/lib/promos";
+import { activePromos, panelPromos, promoProspects, promoStats, promoClaims } from "@/lib/promos";
 import { botInfo, chatUrl } from "@/lib/line";
 import { aiConfigured } from "@/lib/ai";
 import { CopyOpen } from "./copy-open";
@@ -22,11 +22,12 @@ function ago(d: Date | string | null, now: Date) {
   return m < 60 ? `${m} นาที` : m < 1440 ? `${Math.floor(m / 60)} ชม.` : `${Math.floor(m / 1440)} วัน`;
 }
 
-export default async function Leads({ searchParams }: { searchParams: Promise<{ s?: string; agent?: string }> }) {
+export default async function Leads({ searchParams }: { searchParams: Promise<{ s?: string; agent?: string; promo?: string }> }) {
   await requireStaff(["BM", "AD", "CS", "MK"]);
-  const { s, agent } = await searchParams;
+  const { s, agent, promo: pk } = await searchParams;
   const [drafts, langs, bot] = await Promise.all([pendingDrafts(30), leadLangStats(), botInfo()]);
-  const promo = activePromos().find((p) => p.limit) ?? activePromos()[0] ?? null;
+  const panel = panelPromos();
+  const promo = panel.find((p) => p.key === pk) ?? activePromos().find((p) => p.limit) ?? activePromos()[0] ?? panel[0] ?? null;
   const [prospects, pstats, claims] = promo ? await Promise.all([promoProspects(promo, 50), promoStats(promo), promo.limit ? promoClaims(promo) : Promise.resolve([])]) : [[], null, []];
   const liveClaims = claims.filter((c) => c.live);
   const refBoard = await referralBoard(30).catch(() => []);
@@ -86,9 +87,10 @@ export default async function Leads({ searchParams }: { searchParams: Promise<{ 
       {promo && (
         <section className="card" id="promo">
           <div className="row" style={{ justifyContent: "space-between" }}>
-            <div className="eyebrow">โปรที่กำลังวิ่ง · {promo.label}</div>
+            <div className="eyebrow">{activePromos().includes(promo) ? "โปรที่กำลังวิ่ง" : "โปรที่ปิดรับแล้ว (ยังมีสิทธิ์ค้าง)"} · {promo.label}</div>
             <small className="muted">ส่งแล้ว {pstats?.sent ?? 0} (บอทตอบเอง {pstats?.auto ?? 0}) · ตอบกลับ {pstats?.replied ?? 0} · จองแล้ว {pstats?.booked ?? 0}</small>
           </div>
+          {panel.length > 1 && <div className="row" style={{ margin: "6px 0" }}>{panel.map((x) => <a key={x.key} className={`btn small ${x.key === promo.key ? "" : "ghost"}`} href={`?promo=${x.key}#promo`}>{x.label}</a>)}</div>}
           <p className="muted" style={{ margin: "6px 0" }}>ไม่กินโควตา LINE ทั้งสองทาง: ใครทักถามเรื่องนี้ บอทตอบรูปโปรให้เองครั้งเดียว · รายชื่อด้านล่างให้ทีมส่งเองในแชท OA Manager
             (1) <a href={promo.image} target="_blank" download>บันทึกรูปโปร</a> ไว้ในเครื่องครั้งเดียว (2) กด “คัดลอก + เปิดแชท” แนบรูป วางข้อความ ส่ง (3) กด “ส่งแล้ว ✓”
             · รายชื่อ = คนที่เคยถามเรื่องนี้เอง แล้วตามด้วยลูกค้าเก่าสายฟิลเลอร์/ยกกระชับที่ยินยอมรับข่าวสาร (ไม่รวมคนที่ปฏิเสธ)</p>
