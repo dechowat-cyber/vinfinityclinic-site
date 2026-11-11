@@ -42,32 +42,35 @@ const CLAIM = /รับสิทธิ์/;
 export const PROMOS: Promo[] = [{
   // 11.11 one-day offer (doctor's decision 2026-11-11): first in the list so a bare "รับสิทธิ์" today means this one
   key: "1111-2611",
-  label: "11.11 Doublo ไม่จำกัดช็อต + Vitaran 1 cc 11,111 · 11 สิทธิ์",
+  label: "11.11 สวยครบ 2 จุด 11,111 · 11 สิทธิ์",
   from: "2026-11-11T00:00:00+07:00",
   until: "2026-11-11T23:59:59+07:00",
-  trigger: /11[.\/]11|11,?111|doublo|ดับโบล|ดูโบล|ดับเบิ้ลโล|hifu|ไฮฟู|vitaran|ไวทาแรน|วิทาแรน/i,
+  trigger: /11[.\/]11|11,?111|2\s*จุด|สองจุด|doublo|ดับโบล|ดูโบล|ดับเบิ้ลโล|hifu|ไฮฟู|vitaran|ไวทาแรน|วิทาแรน/i,
   image: "/campaign/1111-2611/1-1x1.jpg",
   preview: "/campaign/1111-2611/1-1x1-p.jpg",
   limit: 11, holdHours: 48, maxPer: "คนละ 1 สิทธิ์",
   card: {
     hero: "/campaign/1111-2611/1-1x1.jpg",
-    title: "11.11 New Doublo 2.0 ไม่จำกัดช็อต + Vitaran 1 cc",
+    title: "11.11 สวยครบ 2 จุด",
     price: "11,111 บาท",
-    lines: ["เพียง 11 สิทธิ์ · กดรับสิทธิ์ภายในวันนี้ (11 พ.ย.) · คนละ 1 สิทธิ์", "เลือกวันนัดภายใน 48 ชม. · เข้ารับบริการได้ถึง 30 พ.ย.", "จำนวนช็อตตามที่แพทย์ประเมินว่าเหมาะกับผิวแต่ละคน · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · ใช้ร่วมกับโปร/แพ็กเกจอื่นไม่ได้"],
+    lines: ["คุณหมอเลือกให้ 2 จาก 3: ฟิลเลอร์ HA 1 cc · New Doublo 2.0 ไม่จำกัดช็อต · Vitaran 1 cc", "เพียง 11 สิทธิ์ · กดรับสิทธิ์ภายในวันนี้ (11 พ.ย.) · คนละ 1 สิทธิ์ · เลือกวันนัดภายใน 48 ชม. · เข้ารับบริการได้ถึง 30 พ.ย.", "แพทย์เป็นผู้เลือก 2 จุดและจำนวนช็อตตามการประเมิน · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · ใช้ร่วมกับโปร/แพ็กเกจอื่นไม่ได้"],
     claimText: "ขอรับสิทธิ์ 11.11 ค่ะ",
   },
-  text: `🎉 11.11 วันนี้วันเดียว
+  text: `🎉 11.11 สวยครบ 2 จุด วันนี้วันเดียว
 
-New Doublo 2.0 ไม่จำกัดช็อต + Vitaran 1 cc
+คุณหมอประเมินรายเคส แล้วเลือกให้ 2 จาก 3
+• ฟิลเลอร์ HA 1 cc
+• New Doublo 2.0 ไม่จำกัดช็อต
+• Vitaran 1 cc
 💙 11,111.- เพียง 11 สิทธิ์
 
 กดรับสิทธิ์ภายในวันนี้ แล้วเลือกวันนัดภายใน 48 ชม. เข้ารับบริการได้ถึง 30 พ.ย.
-จำนวนช็อตตามที่แพทย์ประเมินว่าเหมาะกับผิวแต่ละคน · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · ใช้ร่วมกับโปร/แพ็กเกจอื่นไม่ได้
+แพทย์เป็นผู้เลือก 2 จุดและจำนวนช็อตตามการประเมิน · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · ใช้ร่วมกับโปร/แพ็กเกจอื่นไม่ได้
 👉 กดปุ่ม “กดรับสิทธิ์” ในการ์ดด้านล่าง หรือพิมพ์ “รับสิทธิ์ 11.11” ได้เลยค่ะ`,
   ask: "ขอรับสิทธิ์ 11.11 ค่ะ",
-  kb: "11.11 one-day offer (claim on 11 November 2026 only): New Doublo 2.0 with no shot limit (the doctor sets the number of shots that suits the skin) + Vitaran 1 cc for 11,111 THB. Only 11 places, 1 per person, not combined with other promotions. Claim in the clinic's LINE by typing '11.11' and tapping 'กดรับสิทธิ์', choose an appointment within 48 hours, visit by 30 November 2026. Results vary.",
-  categories: ["ยกกระชับ", "สกินบูสเตอร์", "ผิว"],
-  interest: "doublo|hifu|ไฮฟู|ยกกระชับ|กระชับ|หย่อน|vitaran|ไวทาแรน|สกินบูสเตอร์|booster|รูขุมขน|ผิว",
+  kb: "11.11 one-day offer 'สวยครบ 2 จุด' (claim on 11 November 2026 only): 11,111 THB for 2 of these 3, chosen by the doctor after assessing the face: HA filler 1 cc, New Doublo 2.0 with no shot limit (the doctor sets the number of shots), Vitaran 1 cc. Only 11 places, 1 per person, not combined with other promotions. Claim in the clinic's LINE by typing '11.11' and tapping 'กดรับสิทธิ์', choose an appointment within 48 hours, visit by 30 November 2026. Results vary.",
+  categories: ["ยกกระชับ", "สกินบูสเตอร์", "ผิว", "ฟิลเลอร์"],
+  interest: "doublo|hifu|ไฮฟู|ยกกระชับ|กระชับ|หย่อน|vitaran|ไวทาแรน|สกินบูสเตอร์|booster|รูขุมขน|ผิว|ฟิลเลอร์|filler|ร่องแก้ม|ใต้ตา|คาง",
 }, {
   key: "haca-2610",
   label: "HArmonyCa Early Bird (จองภายใน 31 ต.ค. 69)",
