@@ -12,7 +12,7 @@ Referral event "ชวนเพื่อนมาสวยด้วยกัน"
 
 ## Backlog (top = next)
 1. Get LINE OA follower count + segment sizes (past skin-booster / filler patients) from LINE OA Manager — broadcast sizes are "not verified" until then. (Ask doctor/team.)
-2. Draft slot Sun 29 Nov Vitaran cool-season (Fri 27 Nov done, Draft 15) — check promos.ts for any promo after 15 Nov first. Then roll the calendar to 30 Nov – 13 Dec (~22 Nov at the latest; referral event ends 15 Dec).
+2. Roll the calendar to 30 Nov – 13 Dec (by ~22 Nov; all slots to 29 Nov are DRAFT READY; referral event ends 15 Dec) — check promos.ts for any promo after 15 Nov first; if a December promo appears, add the โปรเดือนนี้ CTA to Draft 16.
 2b. Doctor to confirm: may a public feed post name the referral credits and the "3 friends → Vitaran 1 cc" reward under the clinic's advertising approval (ฆสพ.)? Draft 10 has a version without the reward line — not verified.
 3. Sculptra promo reminder post ~Mon 9 / Thu 12 Nov only if places remain (team checks the LINE seat counter) — never claim "almost gone" unless verified.
 4. Loy Krathong 2026 = Tue 24 Nov (verified 2026-11-02, PPTV: "วันอังคารที่ 24 พฤศจิกายน"; clinic closed that day). Draft "เตรียมผิวก่อนลอยกระทง" for Sun 15 Nov + a reminder slot Sun 22 / Mon 23 Nov in the next calendar.
@@ -41,7 +41,7 @@ Weekdays corrected 2026-11-01 (1 Nov 2026 = Sunday; earlier labels were one day 
 | Sun 22 Nov | FB + IG Story | Loy Krathong reminder: clinic closed Tue 24 Nov; book Mon 23 / Wed 25 — DRAFT READY (Draft 13, no discount invented) | "ลอยกระทงอังคารนี้ คลินิกปิด 1 วัน" | LINE จองคิว | facade.jpg |
 | Wed 25 Nov | FB + IG carousel | Skincare before/after injections (what to pause, what to keep) — DRAFT READY (Draft 14) | "ฉีดฟิลเลอร์แล้ว ทาเรตินอลได้เมื่อไหร่" | /articles/skincare-routine-filler-botox | articles/skincare-before-after-injection.jpg |
 | Fri 27 Nov | IG + FB | Choosing a filler clinic in Udon Thani — checklist (license check ว.48943 on the Medical Council site) — DRAFT READY (Draft 15) | "ก่อนเลือกคลินิก เช็ก 5 ข้อนี้" | /articles/choosing-filler-clinic-udon | articles/filler-clinic-udon-checklist.jpg |
-| Sun 29 Nov | FB + IG | Vitaran PN cool-season skin (prices from /price/: 9,990 · 4+ boxes 8,990/box) — TO DRAFT | "ลมหนาวมา ผิวแห้งง่าย" | LINE ประเมินผิว | treatment.jpg |
+| Sun 29 Nov | FB + IG | Vitaran PN cool-season skin (prices from /price/: 9,990 · 4+ boxes 8,990/box) — DRAFT READY (Draft 16) | "ลมหนาวมา ผิวแห้งง่าย" | LINE ประเมินผิว | treatment.jpg |
 
 Notes: before/after only from assets/img/ba (consented, already on site), labelled PRE / POST, organic only, never in ads. File naming on site: caseNN-b = PRE (before), caseNN-a = POST (after) — see pages/_results_eye.html. Do not use galderma-* doctor photos (not a current affiliation).
 
@@ -547,3 +547,41 @@ Graphic brief: 1080×1350, 4 slides. Real photo assets/img/articles/filler-clini
 ## 11.11 one-day offer (doctor's decision 2026-11-11)
 - "สวยครบ 2 จุด" 11,111 THB: the doctor picks 2 of 3 (HA filler 1 cc · New Doublo 2.0 หัว Pen ไม่จำกัดช็อต · Vitaran 1 cc). 11 places, 1 per person, claim on 11 Nov only (LINE keyword "11.11" → card → กดรับสิทธิ์), book within 48 h, visit by 30 Nov, not combined with other promos. Defined in line-app/lib/promos.ts (key 1111-2611); broadcast set 1111-2611-card.
 - Replaces Draft 7 (11.11 Story) for today. Do not quote 11,111 after 11 Nov.
+
+### 2026-11-12
+- Thursday: Marketing light + live-site check. Production deployment dpl_DvP6ithhLys1cQKEaFkusfcBUoUu (commit c400745) READY; /price/ and /en/ return 200 via Vercel fetch, render fully (title, canonical/hreflang, JSON-LD, footer; EN "Not on LINE?" strip present). /price/ still Vitaran 9,990 · 4+ boxes 8,990. Direct curl to vinfinityclinic.com blocked by this sandbox's proxy (not a site fault).
+- Next ready feed post: Fri 13 Nov "Meet the doctor" (Draft 8, EN-first) — full TH caption in today's report. Foreign plan: EN #4 due today (Thu 12 Nov), Lao #4 Sat 14 Nov (doctor's doc, not re-drafted).
+- promos.ts unchanged: sculptra-2611 runs until 15 Nov 23:59; 1111-2611 ended 11 Nov (do not quote 11,111). No promo defined after 15 Nov. No LINE broadcast planned for tomorrow (Fri 13 Nov). Backlog 3: last Sculptra reminder only if the team sees places left on the LINE counter — promo ends Sun 15 Nov.
+- Done: Draft 16 for Sun 29 Nov (Vitaran cool-season) below — facts only from /skin-booster/ and /price/. Uses LINE ประเมินผิว CTA, not "โปรเดือนนี้", because promos.ts has no running promo on 29 Nov (the keyword would show nothing). Every calendar slot to 29 Nov is now DRAFT READY.
+- No market watch (Mondays only).
+
+#### Draft 16 — Sun 29 Nov · FB + IG feed · Vitaran PN cool-season skin
+TH caption:
+ลมหนาวมา ผิวแห้งง่าย ดูหมองกว่าปกติไหมคะ? 🍃
+ช่วงอากาศเย็นและแห้ง หลายคนเริ่มเห็นผิวขาดความชุ่มชื้น รูขุมขนกว้าง และริ้วรอยเล็ก ๆ ชัดขึ้น
+
+Vitaran (PN) สกินบูสเตอร์กลุ่มโพลีนิวคลีโอไทด์ ช่วยฟื้นฟูและเสริมความแข็งแรงของผิว
+• มี 2 แบบ: Vitaran I สำหรับรอบดวงตา และ Vitaran II สำหรับใบหน้า แพทย์เลือกแบบและตำแหน่งหลังประเมินผิว
+• มักทำเป็นคอร์สหลายครั้ง แพทย์กำหนดจำนวนครั้งและระยะห่างให้เหมาะกับแต่ละคน
+• หลังฉีดอาจมีตุ่มนูนเล็ก ๆ หรือรอยแดงตามจุดฉีดได้ 1–3 วัน
+• ดูแลควบคู่ด้วยมอยส์เจอไรเซอร์และกันแดดทุกวัน
+
+💙 ราคา Vitaran
+• 1 กล่อง (2 cc) 9,990 บาท
+• 4 กล่องขึ้นไป กล่องละ 8,990 บาท
+
+ประเมินและฉีดโดย นพ.เดโชวัต พรมดา (ว.48943)
+📍 Vinfinity Clinic อุดรธานี (ปิดวันอังคาร)
+💬 ทัก LINE @vinfinityclinic ส่งรูปผิวให้แพทย์ประเมินก่อนนัดคิว · 📞 082-462-2963
+ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · การทำหัตถการทุกชนิดอาจมีผลข้างเคียง
+
+EN caption:
+Cool, dry season — skin feeling tight and dull? Vitaran (PN, polynucleotide skin booster) helps restore and strengthen the skin. Vitaran I is for the eye area, Vitaran II for the face; the doctor chooses after assessing your skin. It is usually done as a course; number of sessions and spacing are set per person. Small bumps or redness at injection points can last 1–3 days. Keep up moisturiser and daily sunscreen.
+• 1 box (2 cc): 9,990 THB · 4+ boxes: 8,990 THB per box
+Assessed and treated by Dr. Dechowat Promda (license 48943). Consultations in English: LINE @vinfinityclinic or Messenger m.me/Vinfinity.Clinic · +66 82-462-2963. Closed Tuesdays.
+Results vary from person to person. All procedures carry possible side effects.
+
+Hashtags: #VinfinityClinic #Vitaran #PN #สกินบูสเตอร์ #ผิวหน้าหนาว #คลินิกอุดร #อุดรธานี #Polynucleotide #SkinBooster #UdonThani
+Alt text: ห้องทรีตเมนต์ของ Vinfinity Clinic อุดรธานี พร้อมข้อความ "ลมหนาวมา ผิวแห้งง่าย" และราคา Vitaran / Treatment room at Vinfinity Clinic, Udon Thani, with the text "Cool season, dry skin" and Vitaran prices.
+Graphic brief: 1080×1350. Real photo assets/img/treatment.jpg, dark navy gradient (#0B142E → #1A326B) over the lower 55%. Silver #EEF2F8 headline "ลมหนาวมา ผิวแห้งง่าย"; sub "Vitaran PN 2 cc · 9,990.- | 4 กล่องขึ้นไป 8,990.-/กล่อง". Small text footer credit: "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943 · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล". No white logo band, no product boxes, no before/after.
+
