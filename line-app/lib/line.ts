@@ -64,7 +64,7 @@ export const push = (to: string, messages: Msg[], retryKey?: string) =>
 export const broadcast = (messages: Msg[], retryKey: string) =>
   call("/message/broadcast", { json: { messages: messages.slice(0, 5) }, headers: { "X-Line-Retry-Key": retryUuid(retryKey) } });
 
-export type Narrow = { max?: number; gender?: "female" | "male"; ageFrom?: number; ageTo?: number };
+export type Narrow = { max?: number; gender?: "female" | "male"; ageFrom?: number; ageTo?: number; excludeAudience?: number };
 const AGES = [15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70];
 /** LINE's own audience filter (gender / age are LINE's estimates) and a hard cap on recipients. */
 export function narrowBody(messages: Msg[], n: Narrow) {
@@ -72,9 +72,31 @@ export function narrowBody(messages: Msg[], n: Narrow) {
   if (n.gender) and.push({ type: "gender", oneOf: [n.gender] });
   const gte = AGES.includes(Number(n.ageFrom)) ? `age_${n.ageFrom}` : undefined, lt = AGES.includes(Number(n.ageTo)) ? `age_${n.ageTo}` : undefined;
   if (gte || lt) and.push({ type: "age", ...(gte ? { gte } : {}), ...(lt ? { lt } : {}) });
-  return { messages: messages.slice(0, 5), ...(and.length ? { filter: { demographic: and.length === 1 ? and[0] : { type: "operator", and } } } : {}),
+  return { messages: messages.slice(0, 5),
+    ...(n.excludeAudience ? { recipient: { type: "operator", not: { type: "audience", audienceGroupId: n.excludeAudience } } } : {}),
+    ...(and.length ? { filter: { demographic: and.length === 1 ? and[0] : { type: "operator", and } } } : {}),
     ...(n.max ? { limit: { max: Math.max(1, Math.round(n.max)), upToRemainingQuota: true } } : {}) };
 }
+/**
+ * An audience of specific LINE users (e.g. people who already hold a promo seat), used to leave them out of a narrowcast.
+ * LINE builds it asynchronously; this waits up to ~20 s for READY and throws "audience_pending" otherwise (send again in a minute).
+ */
+export async function excludeAudience(description: string, userIds: string[]): Promise<number | null> {
+  const ids = [...new Set(userIds.filter((u) => /^U[0-9a-f]{32}$/.test(u)))];
+  if (!ids.length) return null;
+  const r: any = await call("/audienceGroup/upload", { json: { description: description.slice(0, 120), isIfaAudience: false, audiences: ids.map((id) => ({ id })) } });
+  const gid = Number(r?.audienceGroupId);
+  if (!gid) throw new Error("audience_failed");
+  for (let i = 0; i < 10; i++) {
+    const s: any = await call(`/audienceGroup/${gid}`).catch(() => null);
+    const st = s?.audienceGroup?.status;
+    if (st === "READY") return gid;
+    if (st === "FAILED" || st === "EXPIRED") throw new Error("audience_failed");
+    await new Promise((res) => setTimeout(res, 2000));
+  }
+  throw new Error("audience_pending");
+}
+
 /** Narrowcast is asynchronous: LINE answers 202 with a request id; progress is read separately. */
 export async function narrowcast(messages: Msg[], n: Narrow, retryKey: string): Promise<string | null> {
   const token = await accessToken();

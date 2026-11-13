@@ -2,8 +2,10 @@ import { q } from "@/lib/db";
 import { leadUpdate } from "@/lib/actions";
 import { requireStaff } from "@/lib/session";
 import { pendingDrafts, leadLangStats, LANG_LABEL, type Lang } from "@/lib/agent";
-import { sendDraft, doneDraft, dismissDraft, promoSent } from "@/lib/agentActions";
-import { activePromos, promoProspects, promoStats } from "@/lib/promos";
+import { sendDraft, doneDraft, dismissDraft, promoSent, promoClaimSet, promoClaimAdd, referralRewardGiven, promoShareToClaimers, comebackGiftGiven } from "@/lib/agentActions";
+import { REF_EVENT, refEventActive, referralBoard, referralStats } from "@/lib/referral";
+import { COMEBACK, comebackBoard } from "@/lib/comeback";
+import { activePromos, panelPromos, promoProspects, promoStats, promoClaims } from "@/lib/promos";
 import { botInfo, chatUrl } from "@/lib/line";
 import { aiConfigured } from "@/lib/ai";
 import { CopyOpen } from "./copy-open";
@@ -20,13 +22,21 @@ function ago(d: Date | string | null, now: Date) {
   return m < 60 ? `${m} นาที` : m < 1440 ? `${Math.floor(m / 60)} ชม.` : `${Math.floor(m / 1440)} วัน`;
 }
 
-export default async function Leads({ searchParams }: { searchParams: Promise<{ s?: string; agent?: string }> }) {
+export default async function Leads({ searchParams }: { searchParams: Promise<{ s?: string; agent?: string; promo?: string }> }) {
   await requireStaff(["BM", "AD", "CS", "MK"]);
-  const { s, agent } = await searchParams;
+  const { s, agent, promo: pk } = await searchParams;
   const [drafts, langs, bot] = await Promise.all([pendingDrafts(30), leadLangStats(), botInfo()]);
-  const promo = activePromos()[0] ?? null;
-  const [prospects, pstats] = promo ? await Promise.all([promoProspects(promo, 50), promoStats(promo)]) : [[], null];
+  const panel = panelPromos();
+  const promo = panel.find((p) => p.key === pk) ?? activePromos().find((p) => p.limit) ?? activePromos()[0] ?? panel[0] ?? null;
+  const [prospects, pstats, claims] = promo ? await Promise.all([promoProspects(promo, 50), promoStats(promo), promo.limit ? promoClaims(promo) : Promise.resolve([])]) : [[], null, []];
+  const liveClaims = claims.filter((c) => c.live);
+  const refBoard = await referralBoard(30).catch(() => []);
+  const showRef = refEventActive() || refBoard.some((r) => r.reward === "pending");
+  const rs = showRef ? await referralStats().catch(() => null) : null;
+  const cb = await comebackBoard().catch(() => []);
+  const oaLink = bot?.basicId ? `https://line.me/R/oaMessage/${bot.basicId}/?${encodeURIComponent("โปรเดือนนี้")}` : null;
   const toSend = prospects.filter((r) => !r.sent_at);
+  const sharedN = /^shared_(\d+)$/.exec(agent || "")?.[1];
   const AGENT_ERR: Record<string, string> = { quota: "ส่งจากระบบไม่ได้ เพราะโควตาข้อความ LINE เดือนนี้หมด · ใช้ “คัดลอก + เปิดแชท” แทน (ตอบในแชทไม่นับโควตา)", fail: "ส่งไม่สำเร็จ ลองอีกครั้ง หรือใช้ “คัดลอก + เปิดแชท”", gone: "ร่างนี้ถูกใช้ไปแล้ว" };
   const now = new Date();
   const filter = s === "all" ? "" : s ? "where l.status = $1" : "where l.status in ('New','Contacted','Qualified','Nurture')";
@@ -53,7 +63,8 @@ export default async function Leads({ searchParams }: { searchParams: Promise<{ 
           <div className="eyebrow">AGENT · ร่างคำตอบให้แล้ว {drafts.length ? `(${drafts.length})` : ""}</div>
           <small className="muted">lead 7 วัน: {langs.map((l) => `${LANG_LABEL[l.lang as Lang] ?? l.lang} ${l.n}`).join(" · ") || "-"} · {aiConfigured() && process.env.ANTHROPIC_API_KEY ? "AI เขียน" : "แบบฟอร์มสำเร็จรูป (ใส่ ANTHROPIC_API_KEY เพื่อให้ AI เขียน)"}</small>
         </div>
-        {agent && <div className="card err" style={{ marginTop: 8 }}>{AGENT_ERR[agent] ?? agent}</div>}
+        {agent && !sharedN && <div className="card err" style={{ marginTop: 8 }}>{AGENT_ERR[agent] ?? agent}</div>}
+        {sharedN && <div className="card" style={{ marginTop: 8 }}>ส่งการ์ดชวนเพื่อนแล้ว {sharedN} คน</div>}
         {drafts.length === 0 ? <p className="muted" style={{ margin: "8px 0 0" }}>ยังไม่มีร่าง · ลูกค้าทักมาเมื่อไร ระบบจะร่างคำตอบภาษาเดียวกับลูกค้าให้ที่นี่ และร่างข้อความตามคนที่เงียบไป 1–7 วันให้เองวันละครั้ง</p> :
           drafts.map((d) => (
             <form key={d.id} id={`d${d.id}`} action={sendDraft} className="card" style={{ marginTop: 10, padding: 14 }}>
@@ -76,13 +87,55 @@ export default async function Leads({ searchParams }: { searchParams: Promise<{ 
       {promo && (
         <section className="card" id="promo">
           <div className="row" style={{ justifyContent: "space-between" }}>
-            <div className="eyebrow">โปรที่กำลังวิ่ง · {promo.label}</div>
+            <div className="eyebrow">{activePromos().includes(promo) ? "โปรที่กำลังวิ่ง" : "โปรที่ปิดรับแล้ว (ยังมีสิทธิ์ค้าง)"} · {promo.label}</div>
             <small className="muted">ส่งแล้ว {pstats?.sent ?? 0} (บอทตอบเอง {pstats?.auto ?? 0}) · ตอบกลับ {pstats?.replied ?? 0} · จองแล้ว {pstats?.booked ?? 0}</small>
           </div>
+          {panel.length > 1 && <div className="row" style={{ margin: "6px 0" }}>{panel.map((x) => <a key={x.key} className={`btn small ${x.key === promo.key ? "" : "ghost"}`} href={`?promo=${x.key}#promo`}>{x.label}</a>)}</div>}
           <p className="muted" style={{ margin: "6px 0" }}>ไม่กินโควตา LINE ทั้งสองทาง: ใครทักถามเรื่องนี้ บอทตอบรูปโปรให้เองครั้งเดียว · รายชื่อด้านล่างให้ทีมส่งเองในแชท OA Manager
             (1) <a href={promo.image} target="_blank" download>บันทึกรูปโปร</a> ไว้ในเครื่องครั้งเดียว (2) กด “คัดลอก + เปิดแชท” แนบรูป วางข้อความ ส่ง (3) กด “ส่งแล้ว ✓”
             · รายชื่อ = คนที่เคยถามเรื่องนี้เอง แล้วตามด้วยลูกค้าเก่าสายฟิลเลอร์/ยกกระชับที่ยินยอมรับข่าวสาร (ไม่รวมคนที่ปฏิเสธ)</p>
-          <div className="row" style={{ alignItems: "flex-start", gap: 14 }}>
+          {promo.limit ? (
+            <div style={{ marginTop: 10 }}>
+              <div className="row" style={{ justifyContent: "space-between" }}>
+                <b>สิทธิ์ที่ถูกกดแล้ว {liveClaims.length}/{promo.limit}</b>
+                <small className="muted">ลูกค้ากด “กดรับสิทธิ์” หรือพิมพ์ “รับสิทธิ์” → ได้ลำดับทันที ถือสิทธิ์ {promo.holdHours ?? 48} ชม. · จองนัดในเวลานั้น = ยืนยันอัตโนมัติ · ไม่จอง = คืนสิทธิ์เอง</small>
+              </div>
+              <table className="t" style={{ marginTop: 6 }}>
+                <thead><tr><th>#</th><th>ลูกค้า</th><th>สถานะ</th><th></th></tr></thead>
+                <tbody>
+                  {claims.length === 0 && <tr><td colSpan={4} className="muted">ยังไม่มีคนกดรับสิทธิ์</td></tr>}
+                  {claims.map((c) => {
+                    const st = c.status === "released" ? "คืนสิทธิ์แล้ว" : c.status === "confirmed" ? "ยืนยันแล้ว" : c.booked ? "จองนัดแล้ว ✓" : c.live ? `รอจองนัด · เหลือ ${Math.max(0, Math.round((new Date(c.expires_at).getTime() - now.getTime()) / 3600000))} ชม.` : "หมดเวลา (สิทธิ์คืนแล้ว)";
+                    return (
+                      <tr key={c.id} style={c.live ? undefined : { opacity: .55 }}>
+                        <td>{c.seat}</td>
+                        <td>{c.client_id ? <a href={`/staff/clients/${c.client_id}`}><b>{c.name || c.display_name || `#${c.client_id}`}</b></a> : <b>{c.note || "นอกระบบ"}</b>}{c.phone ? <><br /><small className="muted">{c.phone}</small></> : null}{c.client_id && c.note ? <><br /><small className="muted">{c.note}</small></> : null}</td>
+                        <td><span className={`tag ${c.booked || c.status === "confirmed" ? "ok" : c.live ? "warn" : ""}`}>{st}</span></td>
+                        <td className="row">
+                          {c.line_user_id && <a className="btn ghost small" href={chatUrl(bot?.userId, c.line_user_id)} target="_blank">เปิดแชท</a>}
+                          {c.live && c.status === "held" && <form action={promoClaimSet}><input type="hidden" name="id" value={c.id} /><input type="hidden" name="to" value="confirmed" /><button className="btn ghost small">ยืนยันสิทธิ์</button></form>}
+                          {c.live && <form action={promoClaimSet}><input type="hidden" name="id" value={c.id} /><input type="hidden" name="to" value="released" /><button className="btn ghost small">คืนสิทธิ์</button></form>}
+                        </td>
+                      </tr>);
+                  })}
+                </tbody>
+              </table>
+              {refEventActive() && liveClaims.some((c) => c.line_user_id) && liveClaims.length < promo.limit && (
+                <form action={promoShareToClaimers} className="row" style={{ marginTop: 6 }}>
+                  <input type="hidden" name="key" value={promo.key} />
+                  <button className="btn small">🎁 ส่งการ์ดชวนเพื่อนให้ผู้ได้สิทธิ์ {liveClaims.filter((c) => c.line_user_id).length} คน</button>
+                  <small className="muted">ให้ช่วยชวนเพื่อนมารับ {promo.limit - liveClaims.length} สิทธิ์สุดท้าย · นับโควตาคนละ 1 ข้อความ · ส่งซ้ำคนเดิมไม่ได้</small>
+                </form>)}
+              {liveClaims.length < promo.limit && (
+                <form action={promoClaimAdd} className="row" style={{ marginTop: 6 }}>
+                  <input type="hidden" name="key" value={promo.key} />
+                  <input name="note" placeholder="ชื่อ / เบอร์ลูกค้า (จองทางแชท โทร หรือหน้าร้าน)" style={{ flex: 1, minWidth: 220, border: "1px solid var(--line)", borderRadius: 10, padding: "6px 8px" }} />
+                  <button className="btn ghost small">+ บันทึก 1 สิทธิ์ที่ขายนอกปุ่ม</button>
+                </form>)}
+            </div>
+          ) : null}
+          {oaLink && <p className="muted" style={{ margin: "8px 0 0" }}>ลิงก์ให้ลูกค้ากดแล้วทักเข้ามาเอง (ใส่โพสต์ FB/IG/สตอรี่/เว็บ — บอทตอบโปรให้ฟรี): <code style={{ userSelect: "all" }}>{oaLink}</code></p>}
+          <div className="row" style={{ alignItems: "flex-start", gap: 14, marginTop: 10 }}>
             <img src={promo.preview} alt="" style={{ width: 150, borderRadius: 10 }} />
             <form id="promo-msg" style={{ flex: 1, minWidth: 260 }}><textarea rows={11} defaultValue={promo.text} style={{ width: "100%" }} /></form>
           </div>
@@ -107,6 +160,57 @@ export default async function Leads({ searchParams }: { searchParams: Promise<{ 
                         </div>}</td>
                   </tr>);
               })}
+            </tbody>
+          </table>
+        </section>
+      )}
+      {cb.length > 0 && (
+        <section className="card" id="comeback">
+          <div className="row" style={{ justifyContent: "space-between" }}>
+            <div className="eyebrow">แคมเปญ คิดถึงนะ · ลูกค้าเก่า 30 วันล่าสุด</div>
+            <small className="muted">ส่งแล้ว {cb.length} · จองแล้ว {cb.filter((r) => r.booked).length} · จ่ายแล้ว {cb.filter((r) => r.paid > 0).length} · ของขวัญรอให้ {cb.filter((r) => r.gift === "pending").length}</small>
+          </div>
+          <p className="muted" style={{ margin: "6px 0" }}>ของขวัญ: {COMEBACK.gift} เมื่อจ่ายครบ {COMEBACK.minPayment.toLocaleString()} บาท ภายใน {COMEBACK.windowDays} วันหลังได้ข้อความ · ระบบขึ้น “รอให้” เองตอนออกใบเสร็จ · ฉีดให้แล้วกด “ให้แล้ว”</p>
+          <table className="t">
+            <thead><tr><th>ลูกค้า</th><th>กลุ่ม</th><th>จอง</th><th>จ่ายหลังได้ข้อความ</th><th>ของขวัญ</th></tr></thead>
+            <tbody>{cb.filter((r) => r.booked || r.paid > 0 || r.gift).slice(0, 40).map((r) => (
+              <tr key={r.client_id}>
+                <td><a href={`/staff/clients/${r.client_id}`}><b>{r.n || `#${r.client_id}`}</b></a>{r.phone ? <><br /><small className="muted">{r.phone}</small></> : null}</td>
+                <td><small>{String(r.campaign).replace(/ \(.*\)$/, "")}</small></td>
+                <td>{r.booked ? <span className="tag ok">จองแล้ว</span> : "-"}</td>
+                <td>{r.paid > 0 ? `${Number(r.paid).toLocaleString()} บาท` : "-"}</td>
+                <td>{r.gift === "pending" ? <form action={comebackGiftGiven} className="row"><input type="hidden" name="id" value={r.gift_id} /><span className="tag warn">รอให้</span><button className="btn ghost small">ให้แล้ว ✓</button></form>
+                  : r.gift === "given" ? <span className="tag ok">ให้แล้ว</span> : <small className="muted">-</small>}</td>
+              </tr>))}
+              {!cb.some((r) => r.booked || r.paid > 0 || r.gift) && <tr><td colSpan={5} className="muted">ยังไม่มีใครจองหรือจ่ายจากแคมเปญนี้</td></tr>}
+            </tbody>
+          </table>
+        </section>
+      )}
+      {showRef && (
+        <section className="card" id="friends">
+          <div className="row" style={{ justifyContent: "space-between" }}>
+            <div className="eyebrow">อีเวนต์ · {REF_EVENT.label} (3 พ.ย. – 15 ธ.ค.)</div>
+            <small className="muted">เพื่อนใหม่ได้ {REF_EVENT.friendCredit.toLocaleString()} · คนชวนได้ {REF_EVENT.referrerCredit.toLocaleString()} ต่อเพื่อนที่จ่ายครั้งแรก {REF_EVENT.minPayment.toLocaleString()}+ · ครบ {REF_EVENT.milestone} คน รับ {REF_EVENT.milestoneReward}</small>
+          </div>
+          {rs && <div className="kpis" style={{ marginTop: 8 }}>
+            <div className="kpi"><b>{rs.asked}</b><small>ขอลิงก์ชวนเพื่อน (วันนี้ {rs.askedToday})</small></div>
+            <div className="kpi"><b>{rs.friends}</b><small>เพื่อนกดลิงก์เข้ามาแล้ว (วันนี้ {rs.friendsToday})</small></div>
+            <div className="kpi"><b>{rs.paid}</b><small>เพื่อนมาทำแล้ว · เครดิตออกแล้ว</small></div>
+          </div>}
+          <p className="muted" style={{ margin: "6px 0" }}>ลูกค้าพิมพ์ “ชวนเพื่อน” (หรือกดปุ่มในการ์ดโปร) จะได้ลิงก์ส่วนตัว เครดิตเข้าระบบเองเมื่อออกใบเสร็จ · รางวัลครบ {REF_EVENT.milestone} คน ทีมนัดลูกค้าแล้วกด “ให้รางวัลแล้ว”</p>
+          <table className="t">
+            <thead><tr><th>คนชวน</th><th>เพื่อนที่ชวนมา</th><th>จ่ายแล้ว</th><th>รางวัล</th></tr></thead>
+            <tbody>
+              {refBoard.length === 0 && <tr><td colSpan={4} className="muted">ยังไม่มีคนชวนเพื่อนในช่วงอีเวนต์</td></tr>}
+              {refBoard.map((r) => (
+                <tr key={r.id}>
+                  <td><a href={`/staff/clients/${r.id}`}><b>{r.n || `#${r.id}`}</b></a>{r.phone ? <><br /><small className="muted">{r.phone}</small></> : null}</td>
+                  <td>{r.invited}</td>
+                  <td>{r.paid}/{REF_EVENT.milestone}</td>
+                  <td>{r.reward === "pending" ? <form action={referralRewardGiven} className="row"><input type="hidden" name="id" value={r.reward_id} /><span className="tag warn">รอให้ {REF_EVENT.milestoneReward}</span><button className="btn ghost small">ให้รางวัลแล้ว ✓</button></form>
+                    : r.reward === "given" ? <span className="tag ok">ให้แล้ว</span> : <small className="muted">-</small>}</td>
+                </tr>))}
             </tbody>
           </table>
         </section>

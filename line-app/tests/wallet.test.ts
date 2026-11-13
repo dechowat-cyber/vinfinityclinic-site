@@ -39,11 +39,12 @@ test("V Circle: both get 1,000 when the friend first pays 5,000+, only once", as
   const a = await upsertClientByLine("UREF_A", {}), b = await upsertClientByLine("UREF_B", {});
   await q("update clients set referred_by = $2 where id = $1", [b.id, a.id]);
   const small = await recordPayment({ clientId: b.id, amount: 1_000, method: "cash", staffId: 1 });
-  assert.equal((await creditsFor(small.id)).referral, false);
+  assert.equal((await creditsFor(small.id, new Date("2026-11-01T05:00:00Z"))).referral, false);
   const p = await recordPayment({ clientId: b.id, amount: 6_000, method: "cash", staffId: 1 });
-  assert.equal((await creditsFor(p.id)).referral, true);
+  const outside = new Date("2026-11-01T05:00:00Z"); // before the friends event (lib/referral.ts)
+  assert.equal((await creditsFor(p.id, outside)).referral, true);
   const p2 = await recordPayment({ clientId: b.id, amount: 6_000, method: "cash", staffId: 1 });
-  assert.equal((await creditsFor(p2.id)).referral, false);
+  assert.equal((await creditsFor(p2.id, outside)).referral, false);
   assert.equal(await balance(a.id), 1_000); assert.equal(await balance(b.id), 1_000);
 });
 

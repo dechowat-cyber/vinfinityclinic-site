@@ -253,7 +253,7 @@ EN_PAGES = {
         "crumbs": [_FILLER],
     },
     "/filler/tear-trough/": {
-        "title": "Tear Trough Filler Udon Thani: Price & Who It Suits" + _SUFFIX,
+        "title": "Tear Trough Filler Udon Thani: Who It Suits" + _SUFFIX,
         "desc": "Tear trough filler in Udon Thani at Vinfinity Clinic. The doctor assesses the cause before every injection. From THB 9,990/cc, Thai FDA-registered, box opened.",
         "keywords": "tear trough filler Udon Thani, under-eye filler Udon Thani, tear trough filler Thailand, under-eye hollows, under-eye bags filler, tear trough filler price, filler near Vientiane",
         "crumbs": [_FILLER, ("Tear Trough Filler", "/en/filler/tear-trough/")],
@@ -289,13 +289,13 @@ EN_PAGES = {
         "crumbs": [("Skin Boosters", "/en/skin-booster/")],
     },
     "/sculptra/": {
-        "title": "Sculptra Udon Thani: Price & Collagen Stimulation" + _SUFFIX,
+        "title": "Sculptra Udon Thani: Price & How It Works" + _SUFFIX,
         "desc": "Sculptra in Udon Thani stimulates collagen for firmer skin, with gradual results lasting up to 2 years. THB 24,995/vial; vials and sessions planned by a doctor.",
         "keywords": "Sculptra Udon Thani, Sculptra Thailand, collagen stimulator Udon Thani, PLLA injection, Sculptra price Thailand, sagging skin treatment, Sculptra near Vientiane",
         "crumbs": [("Sculptra", "/en/sculptra/")],
     },
     "/toxin/": {
-        "title": "Anti-Wrinkle & Jaw Slimming Injections Udon Thani" + _SUFFIX,
+        "title": "Anti-Wrinkle & Jaw Slimming Udon Thani" + _SUFFIX,
         "desc": "Anti-wrinkle injections (botulinum toxin) in Udon Thani for forehead, frown and crow's feet lines, and jaw slimming. Units set per muscle. From THB 1,500/area.",
         "keywords": "anti-wrinkle injections Udon Thani, botulinum toxin Udon Thani, jaw slimming injection Udon Thani, masseter reduction Thailand, wrinkle treatment Udon Thani, anti-wrinkle injection price",
         "crumbs": [("Anti-Wrinkle Injections", "/en/toxin/")],

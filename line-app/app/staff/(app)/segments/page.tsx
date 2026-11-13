@@ -6,11 +6,13 @@ import { reachInfo, narrowProgress } from "@/lib/line";
 import { SOURCE_LABEL } from "@/lib/reports";
 import { baht } from "@/lib/payments";
 import { thaiDate } from "@/lib/time";
-import { MEDIA, mediaSet } from "@/lib/campaignMedia";
+import { liveMedia, mediaSet } from "@/lib/campaignMedia";
+import { promoByKey, seatsUsed, activePromos, promoClaims } from "@/lib/promos";
 
 export const dynamic = "force-dynamic";
+export const maxDuration = 60; // a broadcast that leaves out promo seat holders waits for LINE to build that audience
 
-const ERR: Record<string, string> = { confirm: "ติ๊กยืนยันก่อนส่ง", paused: "ระบบหยุดส่งข้อความอัตโนมัติอยู่ (ตั้งค่า)", empty_message: "พิมพ์ข้อความก่อน", no_recipients: "ไม่มีลูกค้าในกลุ่มนี้ที่ส่ง LINE ได้" };
+const ERR: Record<string, string> = { confirm: "ติ๊กยืนยันก่อนส่ง", paused: "ระบบหยุดส่งข้อความอัตโนมัติอยู่ (ตั้งค่า)", empty_message: "พิมพ์ข้อความก่อน", no_recipients: "ไม่มีลูกค้าในกลุ่มนี้ที่ส่ง LINE ได้", promo_full: "สิทธิ์โปรนี้ครบแล้ว ไม่ต้องยิงรอบนี้", promo_closed: "โปรนี้ปิดแล้วหรือยังไม่เริ่ม", audience_pending: "LINE กำลังเตรียมรายชื่อที่จะไม่ส่ง กดส่งอีกครั้งในอีก 1 นาที (ยังไม่มีอะไรถูกส่ง)", audience_failed: "สร้างรายชื่อที่จะไม่ส่งไม่สำเร็จ ลองอีกครั้ง หรือเอาติ๊ก “ไม่ส่งให้ผู้ได้สิทธิ์” ออก" };
 const PRESETS: [string, string][] = [
   ["เคยทำผิว / สนใจงานผิว", "skin=1&reachable=1"],
   ["หายไป 6 เดือน (ยังไม่มีนัด)", "lapsed=180&no_upcoming=1"],
@@ -57,12 +59,25 @@ export default async function Segments({ searchParams }: { searchParams: Promise
     return [Number(r.id), p ? `${PHASE[p.phase ?? ""] ?? p.phase}${p.successCount != null ? ` ${p.successCount} คน` : ""}${p.failedDescription ? ` · ${p.failedDescription}` : ""}` : "LINE กลุ่มเป้าหมาย"] as [number, string];
   })));
   const catMap = new Map(cat.map((c) => [Number(c.id), c.name as string]));
+  // win-back groups (lib/comeback.ts): past clients, no visit for a while, nothing booked, not messaged in 14 days
+  const codes = await q("select id, code from catalog where code = any($1)", [["TOX", "FIL-HA", "FIL-TT", "DOUBLO", "HIFU", "SCULPTRA"]]);
+  const ids = (cs: string[]) => codes.filter((c) => cs.includes(c.code)).map((c) => `treated=${c.id}`).join("&");
+  const base = "no_upcoming=1&reachable=1&quiet=14";
+  const COMEBACK_PRESETS: [string, string][] = [
+    ["คิดถึงนะ A · ถึงรอบโบทูลินัม", `${ids(["TOX"])}&lapsed=120&${base}&media=comeback-a`],
+    ["คิดถึงนะ B · ฟิลเลอร์/ยกกระชับ", `${ids(["FIL-HA", "FIL-TT", "DOUBLO", "HIFU", "SCULPTRA"])}&lapsed=270&${base}&media=comeback-b`],
+    ["คิดถึงนะ C · สกินบูสเตอร์", `skin=1&lapsed=60&${base}&media=comeback-c`],
+  ];
   const canSend = SEND_ROLES.includes(me.role);
   const reach = canSend ? await reachInfo(now) : null;
   const left = reach?.limit != null && reach.used != null ? reach.limit - reach.used : null;
   const err = typeof sp.err === "string" ? sp.err : null;
   const media = mediaSet(typeof sp.media === "string" ? sp.media : null);
   const fq = filtersQuery(f);
+  const mp = media?.promo ? promoByKey(media.promo) : null;
+  const seatsLeft = mp?.limit ? mp.limit - (await seatsUsed(mp, now)) : null;
+  let holders = 0;
+  for (const p of activePromos(now).filter((x) => x.limit)) holders += (await promoClaims(p, now)).filter((c) => c.live && c.line_user_id).length;
   const hidden = (prefix = "") => <>{[...new URLSearchParams(filtersQuery(f))].map(([k, v], i) => <input key={prefix + k + i} type="hidden" name={k} value={v} />)}</>;
 
   return (
@@ -72,6 +87,7 @@ export default async function Segments({ searchParams }: { searchParams: Promise
       {sp.bsent && <div className="card" style={{ borderColor: "var(--ok)" }}>ส่งแคมเปญ #{String(sp.bsent)} ให้ LINE แล้ว · ดูสถานะและจำนวนผู้รับในตารางแคมเปญด้านล่าง · คนที่กด “จองคิว / สอบถาม” จะเข้ามาในแชท / Leads</div>}
       {sp.sent && <div className="card" style={{ borderColor: "var(--ok)" }}>เริ่มส่งแคมเปญ #{String(sp.sent)} แล้ว · ส่วนที่เหลือระบบจะทยอยส่งทุก 5 นาที</div>}
 
+      <div className="row" style={{ marginBottom: 6 }}>{COMEBACK_PRESETS.map(([l, qs]) => <a key={l} className="btn small" href={`?${qs}#send`}>{l}</a>)}</div>
       <div className="row">{PRESETS.map(([l, qs]) => <a key={l} className="btn ghost small" href={`?${qs}`}>{l}</a>)}
         {saved.map((s) => <a key={s.id} className="btn ghost small" href={`?${filtersQuery(s.filters as Filters)}`}>★ {s.name}</a>)}</div>
 
@@ -117,13 +133,14 @@ export default async function Segments({ searchParams }: { searchParams: Promise
           <form className="card" id="send" action={sendCampaignAction}>
             <div className="eyebrow">ส่ง LINE ถึงกลุ่มนี้ · {counts.reachable} คน</div>{hidden("c")}
             <div className="field" style={{ marginTop: 10 }}><label>ชุดรูป (ส่งก่อนข้อความ)</label>
-              <div className="row">{[null, ...MEDIA].map((m) => <a key={m?.key ?? "none"} className={`btn small ${media?.key === (m?.key ?? undefined) || (!media && !m) ? "" : "ghost"}`}
+              <div className="row">{[null, ...liveMedia()].map((m) => <a key={m?.key ?? "none"} className={`btn small ${media?.key === (m?.key ?? undefined) || (!media && !m) ? "" : "ghost"}`}
                 href={`?${fq}${m ? `${fq ? "&" : ""}media=${m.key}` : ""}#send`}>{m ? m.label : "ไม่มีรูป"}</a>)}</div>
               {media && <><input type="hidden" name="media" value={media.key} />
                 <div className="row" style={{ marginTop: 8 }}>{media.previews.map((u) => <img key={u} src={u} alt="" style={{ width: 96, borderRadius: 8, border: "1px solid var(--line, #ddd)" }} />)}</div>
                 {media.segment && media.segment !== fq && <p className="muted" style={{ margin: "6px 0 0" }}>กลุ่มที่แนะนำสำหรับชุดนี้: <a href={`?${media.segment}&media=${media.key}#send`}>เคยทำผิว / สนใจงานผิว</a></p>}</>}
             </div>
             <div className="field"><label>ชื่อแคมเปญ (ภายใน)</label><input name="campaign_name" placeholder="เช่น ชวนกลับ ต.ค." defaultValue={media ? media.label : ""} /></div>
+            {media?.comeback && <p className="muted" style={{ margin: 0 }}>{"{ชื่อ}"} และ {"{ห่าง}"} ระบบใส่ชื่อลูกค้าและระยะเวลาที่ห่างหายให้รายคน · การ์ดมีกล่องของขวัญ ({"โบทูลินัม Standard 1 จุด เมื่อทำ 5,000+ ภายใน 30 วัน"}) ปุ่มเลือกวันนัดส่วนตัว และปุ่มชวนเพื่อน · ส่งกลุ่ม A ก่อน แล้ว B และ C (คนที่ได้ข้อความแล้วจะถูกตัดออกจากกลุ่มถัดไปเอง)</p>}
             <div className="field"><label>ข้อความ</label><textarea key={media?.key ?? "none"} name="message" rows={media ? 9 : 4} maxLength={1000} required placeholder="สวัสดีค่ะ …" defaultValue={media?.message ?? ""} /></div>
             <label className="check"><input type="checkbox" name="with_booking" defaultChecked /> ใส่ปุ่ม “จองคิว”</label>
             <label className="check"><input type="checkbox" name="confirm" /> ยืนยันส่งถึง {counts.reachable} คน (นับโควตาข้อความ LINE OA · ข้อความโฆษณาต้องผ่าน ฆสพ.)</label>
@@ -141,7 +158,7 @@ export default async function Segments({ searchParams }: { searchParams: Promise
           {reach?.reach != null && left != null && reach.reach > left && <div className="card err" style={{ marginTop: 8 }}>โควตาไม่พอสำหรับเพื่อนทั้งหมด · ถ้าไม่จำกัดจำนวน LINE จะไม่ส่งเลย · ใส่ “จำนวนสูงสุด” ไม่เกิน {left} คนด้านล่าง</div>}
           <input type="hidden" name="reach" value={reach?.reach ?? ""} />
           <div className="field" style={{ marginTop: 10 }}><label>ชุดรูป</label>
-            <div className="row">{[null, ...MEDIA].map((m) => <a key={m?.key ?? "none"} className={`btn small ${(media?.key ?? null) === (m?.key ?? null) ? "" : "ghost"}`}
+            <div className="row">{[null, ...liveMedia().filter((m) => !m.comeback)].map((m) => <a key={m?.key ?? "none"} className={`btn small ${(media?.key ?? null) === (m?.key ?? null) ? "" : "ghost"}`}
               href={`?${fq}${m ? `${fq ? "&" : ""}media=${m.key}` : ""}#broadcast`}>{m ? m.label : "ไม่มีรูป"}</a>)}</div>
             {media && <><input type="hidden" name="media" value={media.key} />
               <div className="row" style={{ marginTop: 8 }}>{media.previews.map((u) => <img key={u} src={u} alt="" style={{ width: 96, borderRadius: 8, border: "1px solid var(--line, #ddd)" }} />)}</div></>}
@@ -156,8 +173,10 @@ export default async function Segments({ searchParams }: { searchParams: Promise
             <small className="muted">ตั้งจำนวนสูงสุดแล้ว LINE จะสุ่มผู้รับในกลุ่มให้ไม่เกินจำนวนนี้ และไม่เกินโควตาที่เหลือ</small>
           </div>
           <div className="field"><label>ชื่อแคมเปญ (ภายใน)</label><input name="campaign_name" defaultValue={media ? `${media.label} · ทุกคน` : ""} placeholder="เช่น โปร Vitaran ทุกคน" /></div>
+          {media?.liveLeft && <p className="muted" style={{ margin: 0 }}>“{"{เหลือ}"}” ในข้อความและบนการ์ด ระบบใส่จำนวนสิทธิ์ที่เหลือจริงตอนกดส่ง{seatsLeft != null ? ` (ตอนนี้เหลือ ${seatsLeft})` : ""} · ถ้าสิทธิ์ครบแล้วระบบจะไม่ส่ง</p>}
           <div className="field"><label>ข้อความ</label><textarea key={"b" + (media?.key ?? "none")} name="message" rows={media ? 9 : 4} maxLength={1000} required defaultValue={media?.message ?? ""} /></div>
           <label className="check"><input type="checkbox" name="with_booking" defaultChecked /> ใส่ปุ่ม “จองคิว / สอบถาม” (กดแล้วส่งข้อความเข้าแชทคลินิก)</label>
+          {holders > 0 && <label className="check"><input type="checkbox" name="exclude_holders" defaultChecked /> ไม่ส่งให้ {holders} คนที่จองสิทธิ์โปรอยู่แล้ว (ส่งแบบ narrowcast · LINE เตรียมรายชื่อราว 10–20 วินาที)</label>}
           <label className="check"><input type="checkbox" name="confirm_all" /> ยืนยันส่งตามกลุ่มเป้าหมายด้านบน (ถ้าเว้นว่างคือเพื่อนทั้งหมด{reach?.reach != null ? ` ~${reach.reach.toLocaleString("th-TH")} คน` : ""}) · ส่งแล้วยกเลิกไม่ได้ · นับโควตาตามจำนวนผู้รับ</label>
           <button className="btn">ส่งบรอดแคสต์</button>
         </form>
@@ -178,10 +197,10 @@ export default async function Segments({ searchParams }: { searchParams: Promise
       <section className="card" id="campaigns">
         <div className="eyebrow">แคมเปญที่ส่งแล้ว</div>
         {results.length === 0 ? <p className="muted">ยังไม่มี</p> :
-          <table className="t" style={{ marginTop: 10 }}><thead><tr><th>แคมเปญ</th><th>ส่งแล้ว</th><th>กดสนใจ</th><th>จองใน 14 วัน</th><th>รายรับใน 30 วัน</th></tr></thead>
+          <table className="t" style={{ marginTop: 10 }}><thead><tr><th>แคมเปญ</th><th>ส่งแล้ว</th><th>กดปุ่ม</th><th>ทักมาใน 48 ชม.</th><th>จองใน 14 วัน</th><th>รายรับใน 30 วัน</th></tr></thead>
             <tbody>{results.map((r) => (
               <tr key={r.id}><td><b>{r.name}</b>{r.kind === "broadcast" && <span className="tag" style={{ marginLeft: 6 }}>ทุกคน</span>}{r.kind === "narrowcast" && <span className="tag" style={{ marginLeft: 6 }}>{progress.get(Number(r.id)) ?? "LINE กลุ่มเป้าหมาย"}</span>}<br /><small className="muted">{day(r.created_at)} · {String(r.message).slice(0, 60)}</small></td>
-                <td>{r.sent}/{r.recipients}</td><td>{r.kind === "segment" ? "-" : r.replied}</td><td>{r.booked} <small className="muted">{r.sent ? `${Math.round((r.booked / r.sent) * 100)}%` : ""}</small></td><td>{baht(r.revenue)}</td></tr>))}</tbody></table>}
+                <td>{r.sent}/{r.recipients}</td><td>{r.kind === "segment" ? "-" : r.replied}</td><td>{r.kind === "segment" ? "-" : r.engaged}</td><td>{r.booked} <small className="muted">{r.sent ? `${Math.round((r.booked / r.sent) * 100)}%` : ""}</small></td><td>{baht(r.revenue)}</td></tr>))}</tbody></table>}
       </section>
     </>
   );

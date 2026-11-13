@@ -4,7 +4,9 @@ import { DEFAULTS } from "../lib/settings";
 import { handleEvent } from "../lib/webhook";
 import { getClientByLine, logTouch } from "../lib/crm";
 import { q } from "../lib/db";
-import { PROMOS, activePromos, promoKb, promoProspects, promoStats } from "../lib/promos";
+import { PROMOS, activePromos, promoKb, promoProspects, promoStats, seatsUsed, promoClaims } from "../lib/promos";
+import { campaignMessages } from "../lib/segments";
+import { mediaImages, mediaSet } from "../lib/campaignMedia";
 import { systemPrompt } from "../lib/webchat";
 
 process.env.LINE_CHANNEL_ACCESS_TOKEN = "";
@@ -17,9 +19,9 @@ const P = PROMOS.find((p) => p.key === "haca-2610")!;
 test("promo runs until 31 Oct 23:59 Bangkok, then switches itself off", () => {
   assert.equal(activePromos(fri).length, 1);
   assert.equal(activePromos(new Date("2026-10-31T16:59:00Z")).length, 1);
-  assert.equal(activePromos(nov).length, 0);
+  assert.ok(!activePromos(nov).some((p) => p.key === "haca-2610"));
   assert.match(promoKb(fri), /36,900/);
-  assert.equal(promoKb(nov), "");
+  assert.doesNotMatch(promoKb(nov), /36,900/);
   assert.match(systemPrompt("kb", DEFAULTS, fri), /36,900/);
   assert.doesNotMatch(systemPrompt("kb", DEFAULTS, nov), /36,900/);
 });
@@ -63,4 +65,91 @@ test("manual list: people who asked first, declined marketing left out; sent and
   await q(`insert into appointments(client_id, doctor, start_at, end_at) values ($1,'D', now() + interval '2 day', now() + interval '2 day 30 min')`, [a.id]);
   const s = await promoStats(P);
   assert.ok(s.sent >= 2 && s.auto >= 1 && s.booked >= 1);
+});
+
+// ---- Sculptra: limited seats, rich-menu tile, welcome, broadcast card ----
+const nov2 = new Date("2026-11-02T05:00:00Z"); // Mon 12:00 Bangkok
+const S = PROMOS.find((p) => p.key === "sculptra-2611")!;
+const J = (x: unknown) => JSON.stringify(x ?? null);
+
+test("Sculptra runs 1–15 Nov only; HArmonyCa gone by then", () => {
+  assert.deepEqual(activePromos(fri).map((p) => p.key), ["haca-2610"]);
+  assert.deepEqual(activePromos(nov2).map((p) => p.key), ["sculptra-2611"]);
+  assert.equal(activePromos(new Date("2026-11-15T17:00:01Z")).length, 0);
+});
+
+test("rich-menu tile 'โปรเดือนนี้' always shows the running promo card; nothing running → a polite line", async () => {
+  const r1 = await handleEvent(msg("USC1", "โปรเดือนนี้"), nov2, DEFAULTS);
+  assert.match(J(r1?.messages), /กดรับสิทธิ์/);
+  assert.match(J(r1?.messages), /sculptra-2611\/1-1x1\.jpg/);
+  const r2 = await handleEvent(msg("USC1", "โปรเดือนนี้"), nov2, DEFAULTS); // again → still shown (they asked)
+  assert.match(J(r2?.messages), /กดรับสิทธิ์/);
+  const none = await handleEvent(msg("USC1", "โปรเดือนนี้"), new Date("2026-11-20T05:00:00Z"), DEFAULTS);
+  assert.match(J(none?.messages), /ยังไม่มีโปรใหม่/);
+});
+
+test("claim: seat numbers count up, same person keeps their seat, held seats expire after 48 h, full at 10", async () => {
+  const a = await handleEvent(msg("USC10", "ขอรับสิทธิ์ Sculptra 15,990 ค่ะ"), nov2, DEFAULTS);
+  assert.match(J(a?.messages), /สิทธิ์ที่ 1 จาก 10/);
+  const again = await handleEvent(msg("USC10", "รับสิทธิ์"), nov2, DEFAULTS);
+  assert.match(J(again?.messages), /สิทธิ์ที่ 1 เป็นของคุณอยู่แล้ว/);
+  const b = await handleEvent(msg("USC11", "รับสิทธิ์"), nov2, DEFAULTS);
+  assert.match(J(b?.messages), /สิทธิ์ที่ 2 จาก 10/);
+  // USC11 books within 48 h → stays; USC10 does not → released after 48 h
+  const cb = (await getClientByLine("USC11"))!;
+  await q(`insert into appointments(client_id, doctor, start_at, end_at, created_at) values ($1,'D',$2,$3,$4)`,
+    [cb.id, "2026-11-05T05:00:00Z", "2026-11-05T05:30:00Z", "2026-11-02T08:00:00Z"]);
+  const later = new Date("2026-11-04T06:00:00Z");
+  assert.equal(await seatsUsed(S, later), 1);
+  for (let i = 0; i < 9; i++) await handleEvent(msg(`USC2${i}`, "รับสิทธิ์"), later, DEFAULTS);
+  assert.equal(await seatsUsed(S, later), 10);
+  const full = await handleEvent(msg("USC99", "รับสิทธิ์"), later, DEFAULTS);
+  assert.match(J(full?.messages), /สิทธิ์ครบแล้ว/);
+  const list = await promoClaims(S, later);
+  assert.ok(list.find((c) => c.client_id == cb.id)?.booked);
+});
+
+test("new friend gets the welcome plus the running promo (≤5 messages)", async () => {
+  const r = await handleEvent({ type: "follow", replyToken: "t", source: { type: "user", userId: "USC50" } }, nov2, DEFAULTS);
+  assert.ok(r!.messages.length <= 5);
+  assert.match(J(r!.messages), /กดรับสิทธิ์/);
+});
+
+test("promo broadcast/campaign sends text + claim card", () => {
+  const m = campaignMessages("U1", { message: "สวัสดีค่ะ", with_booking: true, campaign_id: 1, images: ["promo:sculptra-2611"] });
+  assert.equal(m[0].type, "text");
+  assert.match(J(m[1]), /ขอรับสิทธิ์ Sculptra/);
+  assert.deepEqual(mediaImages(mediaSet("sculptra-2611-card", nov2)), ["promo:sculptra-2611"]);
+  assert.equal(mediaSet("sculptra-2611-card", fri), null);
+});
+
+test("round two: live seats left filled in at send time; refuses when full or closed", async () => {
+  const { resolvePromoMarker, parsePromoMarker } = await import("../lib/promos");
+  const r2 = mediaSet("sculptra-2611-r2", nov2)!;
+  assert.deepEqual(mediaImages(r2), ["promo:sculptra-2611@left"]);
+  const t1 = new Date("2026-11-10T05:00:00Z");
+  const used = await seatsUsed(S, t1);
+  assert.ok(used < 10);
+  const out = await resolvePromoMarker(mediaImages(r2), r2.message, t1);
+  assert.equal(out.images[0], `promo:sculptra-2611@${10 - used}`);
+  assert.match(out.message, new RegExp(`เหลืออีก ${10 - used} สิทธิ์`));
+  const pm = parsePromoMarker(out.images)!;
+  assert.match(J(campaignMessages("U1", { message: out.message, with_booking: true, campaign_id: 2, images: out.images })), new RegExp(`🔥 เหลืออีก ${pm.left} สิทธิ์`));
+  for (let i = used; i < 10; i++) {
+    const c = (await getClientByLine("USC50"))!;
+    await q("insert into promo_claims(promo_key, client_id, seat, status, expires_at) values ($1,$2,$3,'confirmed',$4)", [S.key, c.id, i + 1, "2026-11-30T00:00:00Z"]);
+  }
+  await assert.rejects(resolvePromoMarker(mediaImages(r2), r2.message, t1), /promo_full/);
+  await assert.rejects(resolvePromoMarker(["promo:sculptra-2611@left"], "x", new Date("2026-11-20T00:00:00Z")), /promo_closed/);
+});
+
+test("staff can record a seat sold by chat/phone; it counts toward the 10", async () => {
+  const { addManualClaim } = await import("../lib/promos");
+  const t2 = new Date("2026-11-12T05:00:00Z");
+  await q("update promo_claims set status = 'released' where promo_key = $1", [S.key]);
+  assert.equal(await seatsUsed(S, t2), 0);
+  assert.equal(await addManualClaim(S, { note: "คุณเอ 081" }, t2), 1);
+  assert.equal(await seatsUsed(S, t2), 1);
+  const list = await promoClaims(S, t2);
+  assert.ok(list.some((c) => c.note === "คุณเอ 081" && c.client_id === null));
 });

@@ -1,3 +1,6 @@
+import { promoMessages, resolvePromoMarker, parsePromoMarker } from "./promos";
+import { inviteBroadcastCard } from "./referral";
+import { comebackCard, personalize } from "./comeback";
 import { q, one } from "./db";
 import { push, broadcast, narrowcast, type Narrow } from "./line";
 import * as M from "./messages";
@@ -26,6 +29,8 @@ export type Filters = {
   skin?: boolean;
   /** only those who can receive a LINE campaign */
   reachableOnly?: boolean;
+  /** not in any campaign created, nor sent a recall, in the last N days (no double messages) */
+  quietDays?: number;
 };
 
 /** Words that mean a lead asked about skin work. */
@@ -50,6 +55,11 @@ function where(f: Filters, now: Date, params: unknown[]) {
   if (f.skin) w.push(`(exists (select 1 from treatments t join catalog k on k.id = t.catalog_id where t.client_id = x.id and (k.category in ('สกินบูสเตอร์','ผิว') or k.aftercare_key in ('skinbooster','microneedle')))
     or exists (select 1 from leads l where l.client_id = x.id and l.interest ~* ${p(SKIN_RE)}))`);
   if (f.reachableOnly) w.push("x.reachable");
+  if (f.quietDays) {
+    const since = p(new Date(now.getTime() - f.quietDays * 864e5).toISOString());
+    w.push(`not exists (select 1 from campaign_recipients r join campaigns k on k.id = r.campaign_id where r.client_id = x.id and k.created_at > ${since})
+      and not exists (select 1 from touchpoints t where t.client_id = x.id and t.kind = 'recall' and t.created_at > ${since})`);
+  }
   return w.length ? `where ${w.join(" and ")}` : "";
 }
 
@@ -81,7 +91,7 @@ export function filtersFrom(get: (k: string) => string | null, getAll: (k: strin
   const ids = (k: string) => getAll(k).map(Number).filter((x) => x > 0);
   const f: Filters = {
     sources: getAll("source").filter(Boolean), treated: ids("treated"), notTreated: ids("not_treated"),
-    lapsedDays: n("lapsed"), recentDays: n("recent"), minSpend: n("min_spend"), minVisits: n("min_visits"), newDays: n("new"),
+    lapsedDays: n("lapsed"), recentDays: n("recent"), minSpend: n("min_spend"), minVisits: n("min_visits"), newDays: n("new"), quietDays: n("quiet"),
     noUpcoming: get("no_upcoming") === "on" || get("no_upcoming") === "1", skin: get("skin") === "on" || get("skin") === "1", reachableOnly: get("reachable") === "on" || get("reachable") === "1",
   };
   for (const k of Object.keys(f) as (keyof Filters)[]) { const v = f[k]; if (v === undefined || v === false || (Array.isArray(v) && !v.length)) delete f[k]; }
@@ -93,7 +103,7 @@ export function filtersQuery(f: Filters) {
   f.sources?.forEach((s) => p.append("source", s));
   f.treated?.forEach((s) => p.append("treated", String(s)));
   f.notTreated?.forEach((s) => p.append("not_treated", String(s)));
-  const map: [keyof Filters, string][] = [["lapsedDays", "lapsed"], ["recentDays", "recent"], ["minSpend", "min_spend"], ["minVisits", "min_visits"], ["newDays", "new"]];
+  const map: [keyof Filters, string][] = [["lapsedDays", "lapsed"], ["recentDays", "recent"], ["minSpend", "min_spend"], ["minVisits", "min_visits"], ["newDays", "new"], ["quietDays", "quiet"]];
   for (const [k, qk] of map) if (f[k]) p.set(qk, String(f[k]));
   if (f.noUpcoming) p.set("no_upcoming", "1");
   if (f.skin) p.set("skin", "1");
@@ -103,13 +113,14 @@ export function filtersQuery(f: Filters) {
 
 /** Creates a campaign for the reachable members and sends the first batch. The scheduler sends the rest. */
 export async function createCampaign(o: { name: string; filters: Filters; message: string; withBooking: boolean; staffId: number | null; segmentId?: number | null; now?: Date; images?: string[] }) {
+  ({ images: o.images, message: o.message } = await resolvePromoMarker(o.images ?? [], o.message, o.now));
   const message = o.message.trim().slice(0, 1000);
   if (!message) throw new Error("empty_message");
   const members = (await segmentMembers(o.filters, o.now)).filter((m) => m.reachable);
   if (!members.length) throw new Error("no_recipients");
   const c = await one(`insert into campaigns(segment_id, name, filters, message, with_booking, recipients, created_by, images) values ($1,$2,$3,$4,$5,$6,$7,$8) returning id`,
     [o.segmentId ?? null, o.name.trim().slice(0, 120) || "แคมเปญ", JSON.stringify(o.filters), message, o.withBooking, members.length, o.staffId,
-      JSON.stringify((o.images ?? []).filter((u) => /^https:\/\//.test(u)).slice(0, 4))]);
+      JSON.stringify((o.images ?? []).filter((u) => /^https:\/\//.test(u) || u.startsWith("promo:") || u.startsWith("comeback:") || u === "invite:friends").slice(0, 4))]);
   const id = Number(c!.id);
   await q("insert into campaign_recipients(campaign_id, client_id) select $1, unnest($2::bigint[]) on conflict do nothing", [id, members.map((m) => m.id)]);
   await sendCampaignBatch(50, id);
@@ -118,15 +129,19 @@ export async function createCampaign(o: { name: string; filters: Filters; messag
 
 /** Every friend of the OA (LINE broadcast). One request; LINE de-duplicates a retry with the same key. */
 export async function createBroadcast(o: { name: string; message: string; withBooking: boolean; staffId: number | null; images?: string[]; reach?: number | null; narrow?: Narrow | null }) {
+  ({ images: o.images, message: o.message } = await resolvePromoMarker(o.images ?? [], o.message));
   const message = o.message.trim().slice(0, 1000);
   if (!message) throw new Error("empty_message");
-  const imgs = (o.images ?? []).filter((u) => /^https:\/\//.test(u)).slice(0, 4);
-  const narrow = o.narrow && (o.narrow.max || o.narrow.gender || o.narrow.ageFrom || o.narrow.ageTo) ? o.narrow : null;
+  const pm = parsePromoMarker(o.images);
+  const invite = (o.images ?? []).includes("invite:friends");
+  const imgs = invite ? ["invite:friends"] : pm ? (o.images ?? []).filter((u) => u.startsWith("promo:")).slice(0, 1) : (o.images ?? []).filter((u) => /^https:\/\//.test(u)).slice(0, 4);
+  const narrow = o.narrow && (o.narrow.max || o.narrow.gender || o.narrow.ageFrom || o.narrow.ageTo || o.narrow.excludeAudience) ? o.narrow : null;
   const est = narrow?.max ? Math.min(narrow.max, Number(o.reach) || narrow.max) : Math.max(0, Number(o.reach) || 0);
   const c = await one(`insert into campaigns(name, filters, message, with_booking, recipients, created_by, images, kind) values ($1,$2,$3,$4,$5,$6,$7,$8) returning id`,
     [o.name.trim().slice(0, 120) || "บรอดแคสต์", JSON.stringify(narrow ? { narrow } : {}), message, o.withBooking, est, o.staffId, JSON.stringify(imgs), narrow ? "narrowcast" : "broadcast"]);
   const id = Number(c!.id);
-  const msgs = [...imgs.map((u) => M.image(u, u.replace(/\.jpg$/, "-p.jpg"))), M.broadcastText(message, o.withBooking)];
+  const msgs = invite ? [{ type: "text", text: message }, inviteBroadcastCard()] : pm ? [{ type: "text", text: message }, ...promoMessages(pm.promo, pm.left)]
+    : [...imgs.map((u) => M.image(u, u.replace(/\.jpg$/, "-p.jpg"))), M.broadcastText(message, o.withBooking)];
   if (narrow) {
     const rid = await narrowcast(msgs, narrow, `ncast:${id}`);
     await q("update campaigns set line_request_id = $2 where id = $1", [id, rid]);
@@ -138,7 +153,14 @@ export async function createBroadcast(o: { name: string; message: string; withBo
 }
 
 /** Pictures first, then the text (with the booking button). One push = one message off the OA quota. */
-export function campaignMessages(userId: string, r: { message: string; with_booking: boolean; campaign_id: unknown; images?: unknown }) {
+export function campaignMessages(userId: string, r: { message: string; with_booking: boolean; campaign_id: unknown; images?: unknown; name?: string | null; last_visit?: string | Date | null }) {
+  // win-back: personal text ({ชื่อ}, {ห่าง}) in a card with the gift, own booking link and the invite button (lib/comeback.ts)
+  if (Array.isArray(r.images) && r.images.some((u) => typeof u === "string" && u.startsWith("comeback:")))
+    return [comebackCard(userId, personalize(r.message, r.name, r.last_visit), Number(r.campaign_id))];
+  // a promo campaign: the text, then the promo card with its "กดรับสิทธิ์" button (lib/promos.ts)
+  if (Array.isArray(r.images) && r.images.includes("invite:friends")) return [{ type: "text", text: r.message }, inviteBroadcastCard()];
+  const pm = parsePromoMarker(r.images);
+  if (pm) return [{ type: "text", text: r.message }, ...promoMessages(pm.promo, pm.left)];
   const imgs = (Array.isArray(r.images) ? r.images : []).filter((u): u is string => typeof u === "string" && /^https:\/\//.test(u)).slice(0, 4);
   return [...imgs.map((u) => M.image(u, u.replace(/\.jpg$/, "-p.jpg"))), M.campaign(userId, r.message, r.with_booking, Number(r.campaign_id))];
 }
@@ -147,6 +169,7 @@ export function campaignMessages(userId: string, r: { message: string; with_book
 export async function sendCampaignBatch(limit = 200, campaignId?: number) {
   const rows = await q(`
     select r.campaign_id, r.client_id, c.line_user_id, c.followed, k.message, k.with_booking, k.images,
+      coalesce(c.name, c.display_name) as name, (select max(t.done_at) from treatments t where t.client_id = c.id) as last_visit,
       (select g.granted from consents g where g.client_id = c.id and g.type = 'marketing' order by g.created_at desc, g.id desc limit 1) as mk
     from campaign_recipients r join campaigns k on k.id = r.campaign_id join clients c on c.id = r.client_id
     where r.sent_at is null ${campaignId ? "and r.campaign_id = $2" : ""} order by r.campaign_id limit $1`, campaignId ? [limit, campaignId] : [limit]);
@@ -171,13 +194,18 @@ export const BROADCAST_ASK = "สนใจโปรนี้ ขอจองค�
 
 export async function campaignResults(limit = 20) {
   return q(`
-    with resp as (
+    with pressed as (
       select k.id as campaign_id, t.client_id, min(t.created_at) as at from campaigns k
-      join touchpoints t on t.direction = 'in' and t.kind = 'message' and t.body like $2
+      join touchpoints t on t.direction = 'in' and t.kind = 'message' and (t.body like $2 or t.body ~ '(รับสิทธิ์|^ชวนเพื่อน$|^โปรเดือนนี้$)')
         and t.created_at between k.created_at and k.created_at + interval '14 days'
+      where k.kind in ('broadcast','narrowcast') group by 1, 2),
+    resp as ( -- everyone who wrote to the clinic within 48 h of the broadcast (pressed a button or typed a question)
+      select k.id as campaign_id, t.client_id, min(t.created_at) as at from campaigns k
+      join touchpoints t on t.direction = 'in' and t.kind = 'message' and t.created_at between k.created_at and k.created_at + interval '48 hours'
       where k.kind in ('broadcast','narrowcast') group by 1, 2)
     select k.id, k.name, k.created_at, k.recipients, k.sent, k.message, k.kind, k.line_request_id, k.filters,
-      (select count(*)::int from resp where resp.campaign_id = k.id) as replied,
+      (select count(*)::int from pressed where pressed.campaign_id = k.id) as replied,
+      (select count(*)::int from resp where resp.campaign_id = k.id) as engaged,
       case when k.kind in ('broadcast','narrowcast') then
         (select count(distinct resp.client_id)::int from resp join appointments a on a.client_id = resp.client_id
           where resp.campaign_id = k.id and a.created_at between resp.at and resp.at + interval '14 days' and a.status <> 'cancelled')

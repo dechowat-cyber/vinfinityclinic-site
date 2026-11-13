@@ -142,7 +142,14 @@ export async function aftercare(now: Date, s: ClinicSettings & { aftercareApprov
     for (const d of due) {
       const b = body(t.aftercare_key, d);
       if (!b || !(await once(`ac:${t.client_id}:${t.aftercare_key}:${doneDate}:${d}`))) continue;
-      if (await safePush(t.line_user_id, [M.aftercare(b, d, t.id, s)], `ac:${t.id}:${d}`)) { await logTouch(t.client_id, "out", `aftercare_d${d}`, String(t.id), "system"); sent++; }
+      // day 7: recovery is past, results are starting: add the invite card in the same push (no extra quota)
+      const R = d === 7 ? await import("./referral") : null;
+      const ask = R && (await R.nudgeEligible(t.client_id, t.done_at, now).catch(() => false));
+      const msgs = [M.aftercare(b, d, t.id, s), ...(ask && R ? [R.referralNudge(now)] : [])];
+      if (await safePush(t.line_user_id, msgs, `ac:${t.id}:${d}`)) {
+        await logTouch(t.client_id, "out", `aftercare_d${d}`, String(t.id), "system"); sent++;
+        if (ask) await logTouch(t.client_id, "out", "ref_nudge", String(t.id), "system");
+      }
     }
   }
   return sent;
