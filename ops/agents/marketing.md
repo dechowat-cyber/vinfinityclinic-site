@@ -12,9 +12,9 @@ Referral event "ชวนเพื่อนมาสวยด้วยกัน"
 
 ## Backlog (top = next)
 1. Get LINE OA follower count + segment sizes (past skin-booster / filler patients) from LINE OA Manager — broadcast sizes are "not verified" until then. (Ask doctor/team.)
-2. Roll the calendar to 30 Nov – 13 Dec (by ~22 Nov; all slots to 29 Nov are DRAFT READY; referral event ends 15 Dec) — check promos.ts for any promo after 15 Nov first; if a December promo appears, add the โปรเดือนนี้ CTA to Draft 16.
+2. Draft the 5 TO DRAFT slots 4–13 Dec (calendar rolled 2026-11-13; Draft 17 for Wed 2 Dec ready). Check promos.ts for a December promo first; if one appears, add the โปรเดือนนี้ CTA to Draft 16/17-era posts.
 2b. Doctor to confirm: may a public feed post name the referral credits and the "3 friends → Vitaran 1 cc" reward under the clinic's advertising approval (ฆสพ.)? Draft 10 has a version without the reward line — not verified.
-3. Sculptra promo reminder post ~Mon 9 / Thu 12 Nov only if places remain (team checks the LINE seat counter) — never claim "almost gone" unless verified.
+3. Sculptra promo ends Sun 15 Nov 23:59 — last reminder Sat 14 / Sun 15 only if the team sees places left on the LINE counter; from 16 Nov never quote 15,990.
 4. Loy Krathong 2026 = Tue 24 Nov (verified 2026-11-02, PPTV: "วันอังคารที่ 24 พฤศจิกายน"; clinic closed that day). Draft "เตรียมผิวก่อนลอยกระทง" for Sun 15 Nov + a reminder slot Sun 22 / Mon 23 Nov in the next calendar.
 4b. Sculptra waitlist post only if the doctor opens a waitlist (no 15,990 price after 15 Nov or after 10 places). Calendar now runs to 29 Nov; roll again ~22 Nov.
 5. Map menu images (assets/img/menu/th-01…16, en-, lo-) to treatments so calendar can point to exact files.
@@ -22,7 +22,7 @@ Referral event "ชวนเพื่อนมาสวยด้วยกัน"
 7. Lao-language caption variant for Vientiane audience (site has lo menu images).
 8. Market watch: Udon Thani-local competitor promos (FB pages) — web search surfaced none on 2026-10-30 and 2026-10-31; needs a human to check FB pages or a different source.
 
-## 2-week content calendar (1 – 29 Nov 2026)
+## 2-week content calendar (1 Nov – 13 Dec 2026)
 Weekdays corrected 2026-11-01 (1 Nov 2026 = Sunday; earlier labels were one day off — dates unchanged). Clinic closed Tuesdays.
 | Date | Channel | Topic | Hook | CTA | Asset |
 |---|---|---|---|---|---|
@@ -42,6 +42,12 @@ Weekdays corrected 2026-11-01 (1 Nov 2026 = Sunday; earlier labels were one day 
 | Wed 25 Nov | FB + IG carousel | Skincare before/after injections (what to pause, what to keep) — DRAFT READY (Draft 14) | "ฉีดฟิลเลอร์แล้ว ทาเรตินอลได้เมื่อไหร่" | /articles/skincare-routine-filler-botox | articles/skincare-before-after-injection.jpg |
 | Fri 27 Nov | IG + FB | Choosing a filler clinic in Udon Thani — checklist (license check ว.48943 on the Medical Council site) — DRAFT READY (Draft 15) | "ก่อนเลือกคลินิก เช็ก 5 ข้อนี้" | /articles/choosing-filler-clinic-udon | articles/filler-clinic-udon-checklist.jpg |
 | Sun 29 Nov | FB + IG | Vitaran PN cool-season skin (prices from /price/: 9,990 · 4+ boxes 8,990/box) — DRAFT READY (Draft 16) | "ลมหนาวมา ผิวแห้งง่าย" | LINE ประเมินผิว | treatment.jpg |
+| Wed 2 Dec | FB + IG carousel | Authority: "The Filler Architect" plans by layer — face has 5 layers (from /articles/layered-injection-anatomy/) — DRAFT READY (Draft 17) | "หน้าเรามี 5 ชั้น หมอวางแผนทีละชั้น" | /articles/layered-injection-anatomy + LINE | articles/facial-anatomy-5-layers.jpg |
+| Fri 4 Dec | TikTok / Reels | TO DRAFT — idea: "หน้านิ่งสวย แต่ยิ้มแล้วแปลก" (gel firmness vs layer, same article) 20 s | — | LINE | doctor talking-head (team films) |
+| Sun 6 Dec | FB + IG | TO DRAFT — check promos.ts for a December promo first; else Sculptra vs HA evergreen (no promo price) | — | LINE | treatment.jpg |
+| Wed 9 Dec | FB + IG | TO DRAFT — foreign patients / EN-first (Expo runs to 14 Mar 2027) | — | Messenger + LINE | reception.jpg |
+| Fri 11 Dec | FB + IG | TO DRAFT — tear-trough or skincare evergreen | — | LINE | per article |
+| Sun 13 Dec | FB + IG Story | TO DRAFT — referral event last call (ends Tue 15 Dec = clinic closed day; wording per backlog 2b) | "ชวนเพื่อน ถึง 15 ธ.ค." | ทักไลน์ พิมพ์ “ชวนเพื่อน” | clinic-lounge.jpg |
 
 Notes: before/after only from assets/img/ba (consented, already on site), labelled PRE / POST, organic only, never in ads. File naming on site: caseNN-b = PRE (before), caseNN-a = POST (after) — see pages/_results_eye.html. Do not use galderma-* doctor photos (not a current affiliation).
 
@@ -585,3 +591,32 @@ Hashtags: #VinfinityClinic #Vitaran #PN #สกินบูสเตอร์ #�
 Alt text: ห้องทรีตเมนต์ของ Vinfinity Clinic อุดรธานี พร้อมข้อความ "ลมหนาวมา ผิวแห้งง่าย" และราคา Vitaran / Treatment room at Vinfinity Clinic, Udon Thani, with the text "Cool season, dry skin" and Vitaran prices.
 Graphic brief: 1080×1350. Real photo assets/img/treatment.jpg, dark navy gradient (#0B142E → #1A326B) over the lower 55%. Silver #EEF2F8 headline "ลมหนาวมา ผิวแห้งง่าย"; sub "Vitaran PN 2 cc · 9,990.- | 4 กล่องขึ้นไป 8,990.-/กล่อง". Small text footer credit: "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943 · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล". No white logo band, no product boxes, no before/after.
 
+### 2026-11-13
+- Friday: Marketing light + Branding deep. Today's slot Fri 13 Nov = "Meet the doctor" (Draft 8, EN-first) — full TH caption in today's report. Next slot Sun 15 Nov = pre-Loy Krathong (Draft 9, ready). Foreign plan: Lao #4 due Sat 14 Nov, EN #5 Mon 16 Nov (doctor's doc, not re-drafted).
+- promos.ts unchanged (last change 7cabcba, 11.11): sculptra-2611 ends Sun 15 Nov 23:59; no promo after that. No LINE broadcast planned for tomorrow (Sat 14 Nov).
+- Done: calendar rolled to 13 Dec (6 new slots; Sun 13 Dec = referral last call, event ends 15 Dec). Draft 17 for Wed 2 Dec (authority carousel, branding backlog 8 brief) below — facts only from /articles/layered-injection-anatomy/.
+- No market watch (Mondays only).
+
+#### Draft 17 — Wed 2 Dec · FB + IG carousel (5 slides, 1080×1350) · Authority: planning by layer
+TH caption:
+หน้าเรามี 5 ชั้น ทำไมหมอวางแผนทีละชั้น? 🏛️
+จากผิวลงไปถึงกระดูก ใบหน้าเรียงเป็นชั้น: ผิวหนัง · ไขมันชั้นตื้น · SMAS (พังผืดกับกล้ามเนื้อ) · ไขมันชั้นลึกกับเอ็นยึด · กระดูก
+เมื่ออายุมากขึ้น ทุกชั้นเปลี่ยนไปพร้อมกัน กระดูกบางลง ไขมันชั้นลึกยุบ เอ็นยึดหย่อน ผิวด้านบนจึงตกตาม
+
+• ไขมันชั้นลึกทำหน้าที่ค้ำโครง ไขมันชั้นตื้นขยับตามสีหน้า
+• เจลแต่ละชนิดแข็งและยืดหยุ่นต่างกัน เจลที่แข็งเหมาะกับชั้นลึก ถ้าวางในชั้นตื้น หน้าอาจดูเต็มเกินไปเวลายิ้ม
+• ชั้นผิวต้องดูแลด้วยวิธีของมันเอง เช่น สกินบูสเตอร์ในชั้นผิว
+
+นี่คือเหตุผลที่บางคนฉีดแล้วหน้านิ่งดูดี แต่พอยิ้มกลับดูแปลก ปัญหาไม่ได้อยู่ที่ปริมาณอย่างเดียว แต่อยู่ที่ชนิดเจลกับชั้นที่วาง
+แนวทางของ The Filler Architect: ประเมินทีละชั้น เลือกเจลให้ตรงชั้น ใช้เท่าที่จำเป็น และนัดดูผลก่อนเติมเพิ่ม
+📖 อ่านพร้อมเอกสารอ้างอิง: vinfinityclinic.com/articles/layered-injection-anatomy/
+💬 ทัก LINE @vinfinityclinic ส่งรูปหน้าตรงและด้านข้างให้ นพ.เดโชวัต พรมดา (ว.48943) ประเมินเบื้องต้น · 📞 082-462-2963
+ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · การทำหัตถการทุกชนิดอาจมีผลข้างเคียง
+
+EN caption:
+Your face has 5 layers — that's why we plan layer by layer. Skin, superficial fat, SMAS, deep fat with ligaments, and bone all change with age. Deep fat supports the structure; superficial fat moves with expression. A firm gel suits deep layers; placed too superficially, the face can look overfilled when you smile. Skin quality is treated in the skin itself, e.g. skin boosters. Our approach: assess each layer, match the gel to the layer, use only what's needed, review before adding more. Read more (Thai, with references): vinfinityclinic.com/articles/layered-injection-anatomy/ · Dr. Dechowat Promda (license 48943). Consultations in English: LINE @vinfinityclinic or Messenger m.me/Vinfinity.Clinic. Results vary from person to person.
+
+Hashtags: #TheFillerArchitect #VinfinityClinic #ฟิลเลอร์อุดร #คลินิกอุดร #อุดรธานี #FacialAnatomy #DermalFiller #UdonThani
+Slides: 1 "หน้าเรามี 5 ชั้น" (cover, illustration) · 2 the 5 layers listed top→bottom · 3 "ลึกค้ำโครง ตื้นขยับตามสีหน้า" · 4 "เจลต้องเข้ากับชั้น — ยิ้มแล้วแปลก เพราะอะไร" · 5 "ประเมินทีละชั้น ใช้เท่าที่จำเป็น" + CTA LINE.
+Alt text: ภาพประกอบโครงสร้างใบหน้า 5 ชั้น ผิวหนัง ไขมันชั้นตื้น SMAS ไขมันชั้นลึกและเอ็นยึด กระดูก / Illustration of the 5 facial layers: skin, superficial fat, SMAS, deep fat and ligaments, bone.
+Graphic brief: 1080×1350, 5 slides. Image assets/img/articles/facial-anatomy-5-layers.jpg on slide 1 (faded on 2–5) with a small "ภาพประกอบ / Illustration" label (it is a drawing, not a photo). Dark navy gradient (#0B142E → #1A326B), silver #EEF2F8 headlines. No patient faces, no product brands, no before/after, no price. Small text footer credit on every slide: "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943". No white logo band.

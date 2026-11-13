@@ -1,15 +1,16 @@
 # branding agent
 
 ## Backlog (top = next)
-1. Doctor approves `agent/branding-20261031` (6 descriptive "ที่สุด" softened on /filler/, /filler/lips/, /filler/tear-trough/, /filler/dissolve/ + lips FAQ in build.py). Re-check after merge.
+1. Doctor approves `agent/branding-20261031` (6 descriptive "ที่สุด" softened on /filler/, /filler/lips/, /filler/tear-trough/, /filler/dissolve/ + home via _results_eye + lips FAQ in build.py). Main merged in on 2026-11-13 (f734519) so it merges cleanly. Re-check after merge.
 2. Doctor approves `agent/branding-20261106` (29780d5): footer on every TH/EN page now links Facebook page + Instagram (before: only /doctor). Re-check after merge.
 2b. Public social profiles — NEEDS A HUMAN (web search finds none of our profiles; FB/IG pages cannot be fetched by the agent). Team checklist, 10 min: FB/IG/TikTok/GBP/LINE OA name = "Vinfinity Clinic", bio carries "นพ.เดโชวัต พรมดา ว.48943" + "The Filler Architect", link = vinfinityclinic.com, phone 082-462-2963, hours match the site, no Galderma as current role, no banned words (README). Ask: does the clinic have a TikTok account? If yes, add it to footer + Organization sameAs.
 3. Proposal (needs doctor's call): /doctor page shows 5 Galderma event/award photos vs 1 IMCAS photo — consider leading the gallery with IMCAS / Vivacy Paris 2025 and keeping Galderma photos lower as history.
-4. Menu pages, part 2: check TH↔EN parity of section order/claims on /toxin/, /skin-booster/, /lifting/, /sculptra/; results-section caption "ผลลัพธ์ไม่ดูเหมือนทำมา" (CASE 13) reads as an outcome promise — ask doctor whether to soften (consent-gated area, do not edit without approval).
+4. Results-section caption "ผลลัพธ์ไม่ดูเหมือนทำมา" (CASE 13) reads as an outcome promise — ask doctor whether to soften (consent-gated area, do not edit without approval). (Menu pages part 2 parity done 2026-11-13: clean.)
 5. JSON-LD Physician `award` (build.py:88) lists Galderma awards first on every page — consider ordering ODESS 2024 first (needs approval, credential presentation).
 6. Lao (LO) pages: none exist on the site yet — brand book has no LO voice sample; ask doctor whether LO is planned (Vientiane patients).
 7. Wording check: pages/article-tear-trough-candidates.html:60 "ได้ผลดีที่สุด" (cited study subgroup) — soften to "ได้ผลดีกว่า" if ฆสพ. reviewer prefers zero "ที่สุด". home.html:29 doctor quote "ไม่ได้มาจากยาที่แพงที่สุด" is a negation — leave unless reviewer objects.
-8. Authority piece (weekly, next due week of 2026-11-09): "The Filler Architect case-planning" explainer (how a face is mapped before injecting: ligaments, layers, order of support), using only content already in our articles.
+8. Authority piece (weekly, next due week of 2026-11-16): ligament-support explainer from /articles/ligament-lift-injection/ (week of 11-09 brief became marketing Draft 17, Wed 2 Dec).
+9. Next rotation (Fri 20 Nov): website CI — re-check styles.css tokens, off-palette colours and logo use on article pages (last full website audit 2026-10-30).
 
 ## Brand book (keep short)
 **Names.** Vinfinity Clinic (Udon Thani; Vientiane) · นพ.เดโชวัต พรมดา / Dechowat Promda, M.D. · "The Filler Architect" · ว.48943 always next to the doctor's name on profile pages. Tagline in use: "Data-driven precision, Art-driven result".
@@ -26,6 +27,12 @@
 "IMCAS Asia 2023 Live Demonstration — what a live demo teaches about planning": 1 carousel (5 slides) + 1 short article section. Facts allowed: faculty + live demo at IMCAS Asia 2023 (photo /assets/img/doctor/imcas-asia-2023-live-demo.jpg), the doctor's layered/ligament approach as already written in /articles/layered-injection-anatomy/ and /articles/facial-ligaments-aging/. No patient faces, no product brands, no outcome claims; end with "ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล" + LINE CTA. Draft only, doctor approves.
 
 ## Log
+### 2026-11-13
+- Audit area (rotation): menu pages part 2 — /toxin/, /skin-booster/, /lifting/, /sculptra/ TH + EN (8 pages). TH↔EN parity OK: same section order and headings (9/8/9/10 h1–h2 each side), same FAQ count (5/5/5/6), same prices on both sides and all match /price/.
+- Compliance scan of those 8 pages: 0 banned words, 0 toxin brand names, 0 Galderma, disclaimer "ผลลัพธ์ของการรักษาขึ้นอยู่กับแต่ละบุคคล" / "Results vary" + ฆสพ. on every page, only inline colour #0B142E (CI). One img with alt="" = decorative logo mark (correct).
+- Site-wide re-scan: no new present-tense Galderma (home 1 = JSON-LD award history, /doctor 20 TH / 20 EN = history). Remaining "ที่สุด" = the ones already fixed in agent/branding-20261031 + science-context lines in articles (backlog 7).
+- agent/branding-20261031 was 37 commits behind main with a sitemap.xml conflict → merged main into it and rebuilt (f734519, pushed); merges cleanly now. agent/branding-20261106 merges cleanly (no change).
+- Authority brief (week of 11-09) handed to marketing as Draft 17 (Wed 2 Dec, "5 layers" carousel).
 ### 2026-11-06
 - Audit area (rotation): public profiles. Web search (3 queries TH/EN) returned 0 results for our own FB/IG/TikTok/GBP pages, and the agent cannot open facebook.com / instagram.com → profile wording NOT verified; turned into a team checklist (backlog 2b).
 - On-site check of profile links instead: Organization JSON-LD sameAs = Facebook, Instagram, Google Maps (OK, consistent handles Vinfinity.Clinic / vinfinityclinic). Physician sameAs = TED + YouTube (OK). But the FB page + IG profile were linked only on /doctor (TH/EN); every other page linked Messenger only.
