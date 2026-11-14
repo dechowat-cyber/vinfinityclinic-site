@@ -12,9 +12,9 @@ Referral event "ชวนเพื่อนมาสวยด้วยกัน"
 
 ## Backlog (top = next)
 1. Get LINE OA follower count + segment sizes (past skin-booster / filler patients) from LINE OA Manager — broadcast sizes are "not verified" until then. (Ask doctor/team.)
-2. Draft the 5 TO DRAFT slots 4–13 Dec (calendar rolled 2026-11-13; Draft 17 for Wed 2 Dec ready). Check promos.ts for a December promo first; if one appears, add the โปรเดือนนี้ CTA to Draft 16/17-era posts.
+2. Draft the 4 TO DRAFT slots 6–13 Dec (Draft 17 Wed 2 Dec + Draft 18 Fri 4 Dec ready; next = Sun 6 Dec). Check promos.ts for a December promo first; if one appears, add the โปรเดือนนี้ CTA to Draft 16/17-era posts.
 2b. Doctor to confirm: may a public feed post name the referral credits and the "3 friends → Vitaran 1 cc" reward under the clinic's advertising approval (ฆสพ.)? Draft 10 has a version without the reward line — not verified.
-3. Sculptra promo ends Sun 15 Nov 23:59 — last reminder Sat 14 / Sun 15 only if the team sees places left on the LINE counter; from 16 Nov never quote 15,990.
+3. Sculptra promo ends Sun 15 Nov 23:59 (reminded in the 14 Nov report) — last reminder Sun 15 only if the team sees places left on the LINE counter; from 16 Nov never quote 15,990, and the "โปรเดือนนี้" CTA has nothing to show until a new promo is added to promos.ts.
 4. Loy Krathong 2026 = Tue 24 Nov (verified 2026-11-02, PPTV: "วันอังคารที่ 24 พฤศจิกายน"; clinic closed that day). Draft "เตรียมผิวก่อนลอยกระทง" for Sun 15 Nov + a reminder slot Sun 22 / Mon 23 Nov in the next calendar.
 4b. Sculptra waitlist post only if the doctor opens a waitlist (no 15,990 price after 15 Nov or after 10 places). Calendar now runs to 29 Nov; roll again ~22 Nov.
 5. Map menu images (assets/img/menu/th-01…16, en-, lo-) to treatments so calendar can point to exact files.
@@ -43,7 +43,7 @@ Weekdays corrected 2026-11-01 (1 Nov 2026 = Sunday; earlier labels were one day 
 | Fri 27 Nov | IG + FB | Choosing a filler clinic in Udon Thani — checklist (license check ว.48943 on the Medical Council site) — DRAFT READY (Draft 15) | "ก่อนเลือกคลินิก เช็ก 5 ข้อนี้" | /articles/choosing-filler-clinic-udon | articles/filler-clinic-udon-checklist.jpg |
 | Sun 29 Nov | FB + IG | Vitaran PN cool-season skin (prices from /price/: 9,990 · 4+ boxes 8,990/box) — DRAFT READY (Draft 16) | "ลมหนาวมา ผิวแห้งง่าย" | LINE ประเมินผิว | treatment.jpg |
 | Wed 2 Dec | FB + IG carousel | Authority: "The Filler Architect" plans by layer — face has 5 layers (from /articles/layered-injection-anatomy/) — DRAFT READY (Draft 17) | "หน้าเรามี 5 ชั้น หมอวางแผนทีละชั้น" | /articles/layered-injection-anatomy + LINE | articles/facial-anatomy-5-layers.jpg |
-| Fri 4 Dec | TikTok / Reels | TO DRAFT — idea: "หน้านิ่งสวย แต่ยิ้มแล้วแปลก" (gel firmness vs layer, same article) 20 s | — | LINE | doctor talking-head (team films) |
+| Fri 4 Dec | TikTok / Reels + FB | "หน้านิ่งสวย แต่ยิ้มแล้วแปลก" — gel firmness vs layer (from /articles/layered-injection-anatomy/), 20 s — DRAFT READY (Draft 18) | "หน้านิ่งสวย แต่ยิ้มแล้วแปลก เพราะอะไร" | /articles/layered-injection-anatomy + LINE | doctor talking-head (team films) + articles/facial-anatomy-5-layers.jpg |
 | Sun 6 Dec | FB + IG | TO DRAFT — check promos.ts for a December promo first; else Sculptra vs HA evergreen (no promo price) | — | LINE | treatment.jpg |
 | Wed 9 Dec | FB + IG | TO DRAFT — foreign patients / EN-first (Expo runs to 14 Mar 2027) | — | Messenger + LINE | reception.jpg |
 | Fri 11 Dec | FB + IG | TO DRAFT — tear-trough or skincare evergreen | — | LINE | per article |
@@ -620,3 +620,32 @@ Hashtags: #TheFillerArchitect #VinfinityClinic #ฟิลเลอร์อุ�
 Slides: 1 "หน้าเรามี 5 ชั้น" (cover, illustration) · 2 the 5 layers listed top→bottom · 3 "ลึกค้ำโครง ตื้นขยับตามสีหน้า" · 4 "เจลต้องเข้ากับชั้น — ยิ้มแล้วแปลก เพราะอะไร" · 5 "ประเมินทีละชั้น ใช้เท่าที่จำเป็น" + CTA LINE.
 Alt text: ภาพประกอบโครงสร้างใบหน้า 5 ชั้น ผิวหนัง ไขมันชั้นตื้น SMAS ไขมันชั้นลึกและเอ็นยึด กระดูก / Illustration of the 5 facial layers: skin, superficial fat, SMAS, deep fat and ligaments, bone.
 Graphic brief: 1080×1350, 5 slides. Image assets/img/articles/facial-anatomy-5-layers.jpg on slide 1 (faded on 2–5) with a small "ภาพประกอบ / Illustration" label (it is a drawing, not a photo). Dark navy gradient (#0B142E → #1A326B), silver #EEF2F8 headlines. No patient faces, no product brands, no before/after, no price. Small text footer credit on every slide: "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943". No white logo band.
+
+### 2026-11-14
+- Saturday: Marketing light + live-site check. Production deployment dpl_2tbjtx6yo5N6ZBPvVrZFff2khfsL (commit ad23ae9) READY; / (TH) and /en/price/ return 200 via Vercel fetch and render fully (title, canonical/hreflang, JSON-LD, footer, EN "Not on LINE?" strip). /price/ source + live /en/price/: Vitaran 9,990/box · 4+ boxes 8,990/box (matches drafts). Direct curl to vinfinityclinic.com blocked by this sandbox's proxy (403 at proxy, not a site fault).
+- Next ready feed post: Sun 15 Nov pre-Loy Krathong (Draft 9) — full TH caption in today's report. Foreign plan: Lao #4 due today (Sat 14 Nov), EN #5 Mon 16 Nov (doctor's doc, not re-drafted).
+- promos.ts unchanged (last change 7cabcba): sculptra-2611 ends Sun 15 Nov 23:59; no promo defined after that. No LINE broadcast planned for tomorrow (Sun 15 Nov).
+- Done: Draft 18 for Fri 4 Dec (20 s reel "หน้านิ่งสวย แต่ยิ้มแล้วแปลก") below — facts only from /articles/layered-injection-anatomy/ (Rohrich et al., PRS Global Open 2026: firm gel suits deep layer; in the superficial layer the face can look overfilled when moving). No promo, no price, no product brand, no before/after.
+- No market watch (Mondays only).
+
+#### Draft 18 — Fri 4 Dec · TikTok / Reels + FB · "หน้านิ่งสวย แต่ยิ้มแล้วแปลก" (20 s)
+Script (9:16, doctor to camera in clinic, silver subtitles on navy lower third):
+0–3 s HOOK — text "หน้านิ่งสวย แต่ยิ้มแล้วแปลก?" · หมอ: "เคยเห็นไหมคะ ฉีดฟิลเลอร์แล้วหน้านิ่งดูดี แต่พอยิ้มกลับดูแปลก"
+3–8 s — B-roll facial-anatomy-5-layers.jpg (label "ภาพประกอบ") · "ใบหน้ามีไขมันสองชั้น ชั้นลึกค้ำโครง ชั้นตื้นขยับตามสีหน้า"
+8–14 s — หมอถือเจลสองแบบ (ไม่เห็นยี่ห้อ) หรือกราฟิกง่าย ๆ "แข็ง / ยืดหยุ่น" · "เจลแต่ละชนิดแข็งไม่เท่ากัน เจลที่แข็งเหมาะกับชั้นลึก ถ้าไปอยู่ชั้นตื้น หน้าอาจดูเต็มเกินไปเวลายิ้ม"
+14–18 s — "ปัญหาไม่ได้อยู่ที่ปริมาณอย่างเดียว แต่อยู่ที่ชนิดเจลกับชั้นที่วาง"
+18–20 s — end card "ประเมินทีละชั้น ใช้เท่าที่จำเป็น" · LINE @vinfinityclinic · ว.48943
+TH caption:
+หน้านิ่งสวย แต่ยิ้มแล้วแปลก เพราะอะไร? 😊
+กลางใบหน้ามีไขมันสองชั้น ชั้นลึกทำหน้าที่ค้ำโครง ส่วนชั้นตื้นขยับตามสีหน้า
+เจลแต่ละชนิดแข็งและยืดหยุ่นต่างกัน เจลที่แข็งเหมาะกับชั้นลึก ถ้านำไปวางในชั้นตื้น หน้าอาจดูเต็มเกินไปเวลายิ้มหรือขยับ
+ปัญหาจึงไม่ได้อยู่ที่ปริมาณอย่างเดียว แต่อยู่ที่ชนิดเจลกับชั้นที่วาง
+แนวทางของ The Filler Architect: ประเมินทีละชั้น เลือกเจลให้ตรงชั้น ใช้เท่าที่จำเป็น และนัดดูผลก่อนเติมเพิ่ม
+📖 อ่านพร้อมเอกสารอ้างอิง: vinfinityclinic.com/articles/layered-injection-anatomy/
+💬 ทัก LINE @vinfinityclinic ส่งรูปหน้าตรง ด้านข้าง และตอนยิ้ม ให้ นพ.เดโชวัต พรมดา (ว.48943) ประเมินเบื้องต้น · 📞 082-462-2963
+ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · การทำหัตถการทุกชนิดอาจมีผลข้างเคียง
+EN caption:
+Looks good at rest, odd when smiling — why? The midface has two fat layers: the deep one supports the structure, the superficial one moves with expression. Fillers differ in firmness and stretch. A firm gel suits the deep layer; placed in the superficial layer, the face can look overfilled when you smile. So it's not only about how much — it's which gel, in which layer. Our approach: assess layer by layer, match the gel to the layer, use only what's needed, review before adding more. Read more (Thai, with references): vinfinityclinic.com/articles/layered-injection-anatomy/ · Dr. Dechowat Promda (license 48943). Consultations in English: LINE @vinfinityclinic or Messenger m.me/Vinfinity.Clinic. Results vary from person to person. All procedures carry possible side effects.
+Hashtags: #TheFillerArchitect #VinfinityClinic #ฟิลเลอร์อุดร #ฉีดฟิลเลอร์ #คลินิกอุดร #อุดรธานี #FacialAnatomy #DermalFiller #UdonThani
+Alt text (cover): แพทย์อธิบายว่าทำไมบางคนฉีดฟิลเลอร์แล้วหน้านิ่งดูดีแต่ยิ้มแล้วดูแปลก พร้อมภาพประกอบชั้นใบหน้า / Doctor explaining why filler can look fine at rest but odd when smiling, with an illustration of the facial layers.
+Graphic brief (cover 1080×1920): real frame of the doctor from the clip (or assets/img/dr-bas.jpg), dark navy gradient (#0B142E → #1A326B) over the lower 50%; silver #EEF2F8 headline "หน้านิ่งสวย แต่ยิ้มแล้วแปลก?"; sub "เจลต้องเข้ากับชั้น"; small text footer credit "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943 · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล". No white logo band, no patient faces, no before/after, no product brands or syringes with labels, no Galderma photos.
