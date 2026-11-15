@@ -12,9 +12,9 @@ Referral event "ชวนเพื่อนมาสวยด้วยกัน"
 
 ## Backlog (top = next)
 1. Get LINE OA follower count + segment sizes (past skin-booster / filler patients) from LINE OA Manager — broadcast sizes are "not verified" until then. (Ask doctor/team.)
-2. Draft the 4 TO DRAFT slots 6–13 Dec (Draft 17 Wed 2 Dec + Draft 18 Fri 4 Dec ready; next = Sun 6 Dec). Check promos.ts for a December promo first; if one appears, add the โปรเดือนนี้ CTA to Draft 16/17-era posts.
+2. Draft the 3 TO DRAFT slots 9–13 Dec (Drafts 17–19 ready to Sun 6 Dec; next = Wed 9 Dec EN-first). Check promos.ts for a December promo first; if one appears, add the โปรเดือนนี้ CTA to Draft 16/17-era posts.
 2b. Doctor to confirm: may a public feed post name the referral credits and the "3 friends → Vitaran 1 cc" reward under the clinic's advertising approval (ฆสพ.)? Draft 10 has a version without the reward line — not verified.
-3. Sculptra promo ends Sun 15 Nov 23:59 (reminded in the 14 Nov report) — last reminder Sun 15 only if the team sees places left on the LINE counter; from 16 Nov never quote 15,990, and the "โปรเดือนนี้" CTA has nothing to show until a new promo is added to promos.ts.
+3. Sculptra promo ended Sun 15 Nov 23:59 — from 16 Nov never quote 15,990, and the "โปรเดือนนี้" CTA has nothing to show until a new promo is added to promos.ts.
 4. Loy Krathong 2026 = Tue 24 Nov (verified 2026-11-02, PPTV: "วันอังคารที่ 24 พฤศจิกายน"; clinic closed that day). Draft "เตรียมผิวก่อนลอยกระทง" for Sun 15 Nov + a reminder slot Sun 22 / Mon 23 Nov in the next calendar.
 4b. Sculptra waitlist post only if the doctor opens a waitlist (no 15,990 price after 15 Nov or after 10 places). Calendar now runs to 29 Nov; roll again ~22 Nov.
 5. Map menu images (assets/img/menu/th-01…16, en-, lo-) to treatments so calendar can point to exact files.
@@ -44,7 +44,7 @@ Weekdays corrected 2026-11-01 (1 Nov 2026 = Sunday; earlier labels were one day 
 | Sun 29 Nov | FB + IG | Vitaran PN cool-season skin (prices from /price/: 9,990 · 4+ boxes 8,990/box) — DRAFT READY (Draft 16) | "ลมหนาวมา ผิวแห้งง่าย" | LINE ประเมินผิว | treatment.jpg |
 | Wed 2 Dec | FB + IG carousel | Authority: "The Filler Architect" plans by layer — face has 5 layers (from /articles/layered-injection-anatomy/) — DRAFT READY (Draft 17) | "หน้าเรามี 5 ชั้น หมอวางแผนทีละชั้น" | /articles/layered-injection-anatomy + LINE | articles/facial-anatomy-5-layers.jpg |
 | Fri 4 Dec | TikTok / Reels + FB | "หน้านิ่งสวย แต่ยิ้มแล้วแปลก" — gel firmness vs layer (from /articles/layered-injection-anatomy/), 20 s — DRAFT READY (Draft 18) | "หน้านิ่งสวย แต่ยิ้มแล้วแปลก เพราะอะไร" | /articles/layered-injection-anatomy + LINE | doctor talking-head (team films) + articles/facial-anatomy-5-layers.jpg |
-| Sun 6 Dec | FB + IG | TO DRAFT — check promos.ts for a December promo first; else Sculptra vs HA evergreen (no promo price) | — | LINE | treatment.jpg |
+| Sun 6 Dec | FB + IG carousel | Filler safety by evidence — 5 questions to ask before filler (from /articles/filler-safety-evidence/; no December promo in promos.ts on 15 Nov) — DRAFT READY (Draft 19) | "ก่อนฉีดฟิลเลอร์ ถามหมอ 5 ข้อนี้" | /articles/filler-safety-evidence + LINE | articles/filler-safety-vascular-midface.jpg |
 | Wed 9 Dec | FB + IG | TO DRAFT — foreign patients / EN-first (Expo runs to 14 Mar 2027) | — | Messenger + LINE | reception.jpg |
 | Fri 11 Dec | FB + IG | TO DRAFT — tear-trough or skincare evergreen | — | LINE | per article |
 | Sun 13 Dec | FB + IG Story | TO DRAFT — referral event last call (ends Tue 15 Dec = clinic closed day; wording per backlog 2b) | "ชวนเพื่อน ถึง 15 ธ.ค." | ทักไลน์ พิมพ์ “ชวนเพื่อน” | clinic-lounge.jpg |
@@ -649,3 +649,40 @@ Looks good at rest, odd when smiling — why? The midface has two fat layers: th
 Hashtags: #TheFillerArchitect #VinfinityClinic #ฟิลเลอร์อุดร #ฉีดฟิลเลอร์ #คลินิกอุดร #อุดรธานี #FacialAnatomy #DermalFiller #UdonThani
 Alt text (cover): แพทย์อธิบายว่าทำไมบางคนฉีดฟิลเลอร์แล้วหน้านิ่งดูดีแต่ยิ้มแล้วดูแปลก พร้อมภาพประกอบชั้นใบหน้า / Doctor explaining why filler can look fine at rest but odd when smiling, with an illustration of the facial layers.
 Graphic brief (cover 1080×1920): real frame of the doctor from the clip (or assets/img/dr-bas.jpg), dark navy gradient (#0B142E → #1A326B) over the lower 50%; silver #EEF2F8 headline "หน้านิ่งสวย แต่ยิ้มแล้วแปลก?"; sub "เจลต้องเข้ากับชั้น"; small text footer credit "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943 · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล". No white logo band, no patient faces, no before/after, no product brands or syringes with labels, no Galderma photos.
+
+### 2026-11-15
+- Sunday: Marketing light + live-site check. Production deployment dpl_6xpViiyXLCQioiaK37feFyeR3UXJ (commit b4a79d6) READY; / and /articles/filler-safety-evidence/ return 200 via Vercel fetch and render fully (title, meta description, canonical, hreflang th/en/x-default, 3 JSON-LD blocks, footer with ว./ฆสพ. line). Direct curl to vinfinityclinic.com still refused by this sandbox's proxy (not a site fault).
+- Today's slot Sun 15 Nov = pre-Loy Krathong (Draft 9) — full TH caption in today's report. Next: EN #5 Mon 16 Nov (doctor's doc, not re-drafted), Wed 18 Nov referral reminder (Draft 10, version without Sculptra).
+- promos.ts unchanged (last change 7cabcba): sculptra-2611 ends tonight 23:59; no promo defined after it, so from 16 Nov the "โปรเดือนนี้" CTA has nothing to show — drafts use LINE ประเมิน / ชวนเพื่อน CTAs. No LINE broadcast planned for tomorrow (Mon 16 Nov).
+- Done: Draft 19 for Sun 6 Dec (filler-safety carousel) below — facts only from /articles/filler-safety-evidence/ (JAMA Dermatol 2021 needle 1/6,410 vs cannula 1/40,882; CMAC: negative aspiration ≠ safe; ultrasound useful but not proven to lower complications). Chosen instead of "Sculptra vs HA" because that topic already ran as the 6 Nov reel. No promo, no price, no brand, no before/after.
+- No market watch (Mondays only).
+
+#### Draft 19 — Sun 6 Dec · FB + IG carousel (6 slides, 1080×1350) · 5 questions before filler
+TH caption:
+ก่อนฉีดฟิลเลอร์ ถามหมอ 5 ข้อนี้ 🩺
+ฟิลเลอร์เป็นหัตถการทางการแพทย์ ภาวะแทรกซ้อนที่ร้ายแรงคือเจลเข้าไปอุดหลอดเลือด พบน้อย แต่ส่วนใหญ่เกิดบริเวณกลางใบหน้า เช่น ร่องแก้ม ข้างจมูก และรอบปาก
+
+งานวิจัยบอกอะไรเรา
+• ข้อมูลราว 1.7 ล้านหลอด (JAMA Dermatology 2021): เข็มพบการอุดหลอดเลือด 1 ใน 6,410 หลอด แคนนูลา 1 ใน 40,882 หลอด ต่ำกว่า แต่ไม่ใช่ศูนย์
+• การดูดทดสอบก่อนฉีดช่วยได้ไม่มาก ผลลบไม่ได้แปลว่าปลอดภัย
+• อัลตราซาวด์ช่วยเห็นหลอดเลือดในจุดเสี่ยง แต่ยังไม่มีงานวิจัยเปรียบเทียบยืนยันว่าลดภาวะแทรกซ้อนได้
+• สิ่งที่ชี้ขาดคือแพทย์รู้กายวิภาคแต่ละชั้น และคลินิกพร้อมรับมือได้เร็วถ้าเกิดเหตุ
+
+5 คำถามที่ควรถามก่อนฉีด
+1️⃣ ใครเป็นคนฉีด และฉีดตำแหน่งนี้มาบ่อยแค่ไหน
+2️⃣ จะวางเจลชั้นไหน ใช้เข็มหรือแคนนูลา เพราะอะไร
+3️⃣ ผลิตภัณฑ์ขึ้นทะเบียน อย. หรือไม่ ขอดูกล่องและเลขล็อตได้ไหม
+4️⃣ คลินิกมีเอนไซม์สลายฟิลเลอร์และแผนรับมือภาวะแทรกซ้อนพร้อมหรือไม่
+5️⃣ ถ้ามีอาการผิดปกติหลังกลับบ้าน ติดต่อใครได้
+
+📖 อ่านพร้อมเอกสารอ้างอิง: vinfinityclinic.com/articles/filler-safety-evidence/
+💬 ทัก LINE @vinfinityclinic ถามคำถามเหล่านี้กับ นพ.เดโชวัต พรมดา (ว.48943) ได้ก่อนตัดสินใจ · 📞 082-462-2963
+ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · การทำหัตถการทุกชนิดอาจมีผลข้างเคียง
+
+EN caption:
+5 questions to ask before filler. A serious filler complication is gel blocking a blood vessel — rare, but most cases happen in the midface (nasolabial folds, beside the nose, around the mouth). What the research says: in data on about 1.7 million syringes (JAMA Dermatology 2021), needles caused vascular occlusion in 1 in 6,410 syringes and cannulas in 1 in 40,882 — lower, but not zero. A negative aspiration test does not mean an injection is safe. Ultrasound helps see vessels in high-risk areas, but comparative studies have not yet shown it lowers complications. What matters most: an injector who knows each facial layer, and a clinic ready to act quickly. Ask: 1) Who injects, and how often in this area? 2) Which layer, needle or cannula, and why? 3) Is the product registered with the Thai FDA — can I see the box and lot number? 4) Is hyaluronidase and a complication plan on hand? 5) Who do I contact if something feels wrong after I go home? Read more (Thai, with references): vinfinityclinic.com/articles/filler-safety-evidence/ · Dr. Dechowat Promda (license 48943). Consultations in English: LINE @vinfinityclinic or Messenger m.me/Vinfinity.Clinic. Results vary from person to person. All procedures carry possible side effects.
+
+Hashtags: #TheFillerArchitect #VinfinityClinic #ฟิลเลอร์อุดร #ฉีดฟิลเลอร์ #คลินิกอุดร #อุดรธานี #FillerSafety #DermalFiller #UdonThani
+Slides: 1 "ก่อนฉีดฟิลเลอร์ ถามหมอ 5 ข้อนี้" (cover, article illustration) · 2 "ความเสี่ยงหลักอยู่ที่หลอดเลือด กลางใบหน้า" · 3 "เข็ม 1/6,410 · แคนนูลา 1/40,882 — ต่ำกว่า ไม่ใช่ศูนย์" (JAMA Dermatol 2021) · 4 "ดูดทดสอบผลลบ ≠ ปลอดภัย · อัลตราซาวด์ช่วยเห็น แต่ยังรอหลักฐาน" · 5 the 5 questions · 6 CTA LINE + article link.
+Alt text: ภาพประกอบหลักการฉีดฟิลเลอร์ให้ปลอดภัยบริเวณกลางใบหน้า พร้อมข้อความ "ก่อนฉีดฟิลเลอร์ ถามหมอ 5 ข้อนี้" / Illustration of filler-safety principles in the midface with the text "5 questions to ask before filler".
+Graphic brief: 1080×1350, 6 slides. Image assets/img/articles/filler-safety-vascular-midface.jpg on slide 1 (faded on 2–6) with a small "ภาพประกอบ / Illustration" label. Dark navy gradient (#0B142E → #1A326B), silver #EEF2F8 headlines, numbers in silver #D5DDEE. Cite "JAMA Dermatology 2021" in small text on slide 3. No patient faces, no syringes with labels, no product brands, no before/after, no price, no fear imagery (no necrosis photos). Small text footer credit on every slide: "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943". No white logo band.
