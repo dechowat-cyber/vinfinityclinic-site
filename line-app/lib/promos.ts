@@ -72,6 +72,29 @@ export const PROMOS: Promo[] = [{
   categories: ["ยกกระชับ", "สกินบูสเตอร์", "ผิว", "ฟิลเลอร์"],
   interest: "doublo|hifu|ไฮฟู|ยกกระชับ|กระชับ|หย่อน|vitaran|ไวทาแรน|สกินบูสเตอร์|booster|รูขุมขน|ผิว|ฟิลเลอร์|filler|ร่องแก้ม|ใต้ตา|คาง",
 }, {
+  // EM Lift launch (doctor's brief 2026-11-15): early bird 4,500 per area, regular 5,990 after; end date 30 Nov is an assumption to confirm
+  key: "emlift-2611",
+  label: "EM Lift Early Bird จุดละ 4,500 (ถึง 30 พ.ย. 69)",
+  from: "2026-11-15T00:00:00+07:00",
+  until: "2026-11-30T23:59:59+07:00",
+  trigger: /em\s*-?\s*lift|อีเอ็ม\s*ลิ[ฟฟ]ท์?|early\s*bird|เออร์ลี่|electromagnetic|แม่เหล็ก/i,
+  image: "/campaign/emlift-2611/1-1x1.jpg",
+  preview: "/campaign/emlift-2611/1-1x1-p.jpg",
+  text: `✨ ใหม่ที่ Vinfinity · EM Lift
+เทคโนโลยีคลื่นแม่เหล็กไฟฟ้า ไม่ใช้เข็ม ทำได้ทั้งผู้หญิงและผู้ชาย
+
+💙 Early Bird จุดละ 4,500.- (ปกติ 5,990.-) ถึง 30 พ.ย. นี้
+เลือกจุดได้: หน้าผาก · ใต้ตา · แก้ม · ใต้คาง · คอ · บ่า
+(ใต้ตาและแก้มนับข้างละ 1 จุด)
+โปรแกรมแนะนำ 4 ครั้ง ห่างกันครั้งละ 1 สัปดาห์
+
+แพทย์ประเมินก่อนทุกครั้ง · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล
+กดปุ่มด้านล่าง หรือพิมพ์วัน-เวลาที่สะดวกได้เลยค่ะ`,
+  ask: "สนใจ EM Lift Early Bird ขอจองคิวค่ะ",
+  kb: "EM Lift (new, non-needle electromagnetic treatment; pads are placed on the chosen areas; for women and men). Early Bird until 30 November 2026: 4,500 THB per area (regular 5,990 THB per area afterwards). Areas: forehead, under-eye (each side counts as 1 area), cheek (each side counts as 1 area), under the chin, neck, shoulders. Recommended programme: 4 sessions, one week apart. For the total cost of a full programme, hand over to staff. Do not state specific results, duration of effect or downtime; the doctor assesses first; results vary.",
+  categories: ["ยกกระชับ"],
+  interest: "em lift|emlift|ยกกระชับ|กระชับ|หย่อน|ไม่ใช้เข็ม|กลัวเข็ม|hifu|ไฮฟู|doublo|กรอบหน้า|เหนียง|ใต้คาง",
+}, {
   key: "haca-2610",
   label: "HArmonyCa Early Bird (จองภายใน 31 ต.ค. 69)",
   until: "2026-10-31T23:59:59+07:00",
