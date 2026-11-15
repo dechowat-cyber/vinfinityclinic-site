@@ -16,7 +16,7 @@ test("EM Lift early bird runs 15–30 Nov and answers the keyword with image + p
   assert.ok(activePromos(day).includes(p));
   assert.ok(!activePromos(dec).includes(p));
   assert.ok(mediaSet("emlift-2611", day));
-  assert.match(promoKb(day), /4,500 THB per area/);
+  assert.match(promoKb(day), /4,500 THB per area per session/);
   for (const [u, t] of [["UEM_1", "EM Lift"], ["UEM_2", "สนใจ em lift ค่ะ"], ["UEM_3", "early bird"]] as const) {
     const s = J((await handleEvent(msg(u, t), day, DEFAULTS))?.messages);
     assert.match(s, /emlift-2611/, t);
