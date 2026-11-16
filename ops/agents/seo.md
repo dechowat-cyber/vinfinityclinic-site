@@ -1,7 +1,6 @@
 # seo agent
 
 ## Backlog (top = next)
-0. URGENT, doctor to approve: merge agent/security-20261109 (commit 13532aa, redirects in vercel.json) so the public site stops serving source code (/line-app/*, /tools/*, /pages/*, build.py). See 2026-11-09 log. STILL OPEN 2026-11-16: production dpl_5JEgAoWAXXntYX7aS7KnCQbihBxY (9efd109) serves /line-app/lib/promos.ts with 200 (SQL, promo logic, the new EM Lift promo).
 0b. EM Lift (new, promo to 30 Nov) is not on the site (/lifting/, /price/, kb.txt, llms.txt). Propose a branch (lifting section + price rows TH/EN) once the doctor gives the device name + Thai FDA wording; no result/duration/downtime claims.
 1. Content: TH+EN "ฟิลเลอร์ขมับ อุดร" page (/filler/temple/). 2026-11-02: NOT drafted — the site has only 3 sentences on temples (pages/filler.html table row + h3 "ฟิลเลอร์ขมับ และแก้มตอบ"), too thin to write a page from site facts without inventing. Need from the doctor (5 lines is enough): who suits it / not, usual amount range, which layer/technique in plain words, downtime, any consented temple PRE/POST case. Then build as branch agent/seo-<date> modelled on pages/filler-chin.html (CHIN_FAQ + crumb_ld + MedicalWebPage in build.py, EN twin in i18n_en.py).
 2. Ask doctor (strategy, do not change): titles/URLs use "โบท็อก" (brand-derived word) while the mission says toxin without brand names. Thai search volume is on "โบท็อก"; keep or switch to "ฉีดลดริ้วรอย/โบทูลินัมท็อกซิน"?
@@ -11,7 +10,7 @@
 6. Off-site: Thai SERPs for "ฟิลเลอร์ใต้ตา อุดรธานี" / "ฟิลเลอร์ขมับ อุดรธานี" dominated by HDmall; EN by WhatClinic/Thaiger. Hand to marketing agent: claim/verify listings (no paid ads).
 7. EN "botox Udon Thani"/"anti-wrinkle Udon Thani" — check SERPs, consider after temple page.
 8. Lao (LO) pages do not exist yet — build only has TH/EN. If Vientiane patients matter, plan /lo/ with hreflang lo.
-9. Banned-word sweep: branch agent/seo-20261109 waiting. Left as is (not claims): citations "Expert…", "เสียหายถาวร" (ischemia, safety article), award names, "ดีที่สุด" in study context. To check with doctor: "ยกกระชับทันที" (HArmonyCa, /price/).
+9. Banned-word sweep: agent/seo-20261109 merged 2026-11-16. Left as is (not claims): citations "Expert…", "เสียหายถาวร" (ischemia, safety article), award names, "ดีที่สุด" in study context. To check with doctor: "ยกกระชับทันที" (HArmonyCa, /price/).
 10. Physician JSON-LD `award` lists Galderma awards (historical, OK as past awards) — leave.
 
 ## Log
@@ -67,3 +66,6 @@
 - Audit after rebuild: 52 HTML pages, 327 images (0 missing alt), 0 duplicate titles/descriptions, all JSON-LD parses, canonical + hreflang on every indexable page, 1 H1 per page, 0 broken internal links/assets, every sitemap URL exists, robots.txt OK (AI bots allowed). Largest images: vivacy-paris.jpg 310 KB, doctor/gain-2021-trophy.jpg 280 KB (JPG fallbacks).
 - Live: production dpl_5JEgAoWAXXntYX7aS7KnCQbihBxY (commit 9efd109) READY; /lifting/ 200 with title, canonical, hreflang, 4 JSON-LD blocks. Security: /line-app/lib/promos.ts still 200 — agent/security-20261109 still unmerged (backlog 0).
 - Weekly page proposal: none drafted — temple page still waits for the doctor's 5 lines (backlog 1); EM Lift page waits for device/FDA wording (backlog 0b). LO pages: still none (backlog 8).
+### 2026-11-16 (doctor approved, same day)
+- Merged agent/security-20261109 to main (52089f0): vercel.json redirects /line-app/*, /tools/*, /pages/*, /build.py, /i18n_en.py, /README.md to /. Production dpl_4aPsNYsK9drWixxVMKeCt73VJVkL READY; /line-app/lib/promos.ts and /build.py now return the home page, robots.txt 200. vinfinity-line production dpl_9vHrxBr1W6XJsdNRef3Yz6q1a4Xw READY on the same commit. Older immutable deployment URLs still hold the files.
+- Merged agent/seo-20261109 (0d1b68f): chin FAQ "ผลถาวรกว่า" → "ผลอยู่จนกว่าจะผ่าตัดเอาออก"; EN articles index "Instant volume" → "Volume after injection". Sitemap regenerated; audit clean (52 pages, 0 issues).
