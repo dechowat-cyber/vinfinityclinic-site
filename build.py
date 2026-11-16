@@ -780,15 +780,27 @@ def write_sitemap():
     today = datetime.date.today().isoformat()
     old = (ROOT / "sitemap.xml").read_text(encoding="utf-8") if (ROOT / "sitemap.xml").exists() else ""
     prio = dict(re.findall(r"<loc>([^<]+)</loc>(?:<lastmod>[^<]*</lastmod>)?<priority>([^<]+)</priority>", old))
+    old_mod = dict(re.findall(r"<loc>([^<]+)</loc><lastmod>([^<]+)</lastmod>", old))
+    # A shallow clone (CI, scheduled agents) reports the clone boundary as every file's last commit,
+    # which would rewrite lastmod to a wrong date. In that case keep the previous lastmod for clean files.
+    try:
+        shallow = subprocess.run(["git", "rev-parse", "--is-shallow-repository"], cwd=ROOT,
+                                 capture_output=True, text=True).stdout.strip() == "true"
+    except OSError:
+        shallow = False
 
-    def lastmod(src):
+    def lastmod(src, loc=None):
         rel = str(src.relative_to(ROOT))
         try:
             dirty = subprocess.run(["git", "status", "--porcelain", "--", rel], cwd=ROOT, capture_output=True, text=True).stdout.strip()
             d = subprocess.run(["git", "log", "-1", "--format=%cs", "--", rel], cwd=ROOT, capture_output=True, text=True).stdout.strip()
         except OSError:
             return today
-        return today if dirty or not d else d
+        if dirty:
+            return today
+        if shallow and loc in old_mod:
+            return old_mod[loc]
+        return d or today
 
     rows = []
     for lang in ("th", "en"):
@@ -798,7 +810,7 @@ def write_sitemap():
             if not src.exists() or not (ROOT / (out if lang == "th" else "en/" + out)).exists():
                 continue
             loc = SITE + url_path
-            row = "<url><loc>%s</loc><lastmod>%s</lastmod><priority>%s</priority>" % (loc, lastmod(src), prio.get(loc, "0.8"))
+            row = "<url><loc>%s</loc><lastmod>%s</lastmod><priority>%s</priority>" % (loc, lastmod(src, loc), prio.get(loc, "0.8"))
             if (ROOT / "en" / out).exists() and (ROOT / "pages" / "en" / body_file).exists():
                 # hreflang pairs, same as the <link rel="alternate"> tags in each page head
                 for hl, href in (("th", path), ("en", en_path(path)), ("x-default", path)):

@@ -1,7 +1,8 @@
 # seo agent
 
 ## Backlog (top = next)
-0. URGENT, doctor to approve: merge agent/security-20261109 (commit 13532aa, redirects in vercel.json) so the public site stops serving source code (/line-app/*, /tools/*, /pages/*, build.py). See 2026-11-09 log.
+0. URGENT, doctor to approve: merge agent/security-20261109 (commit 13532aa, redirects in vercel.json) so the public site stops serving source code (/line-app/*, /tools/*, /pages/*, build.py). See 2026-11-09 log. STILL OPEN 2026-11-16: production dpl_5JEgAoWAXXntYX7aS7KnCQbihBxY (9efd109) serves /line-app/lib/promos.ts with 200 (SQL, promo logic, the new EM Lift promo).
+0b. EM Lift (new, promo to 30 Nov) is not on the site (/lifting/, /price/, kb.txt, llms.txt). Propose a branch (lifting section + price rows TH/EN) once the doctor gives the device name + Thai FDA wording; no result/duration/downtime claims.
 1. Content: TH+EN "ฟิลเลอร์ขมับ อุดร" page (/filler/temple/). 2026-11-02: NOT drafted — the site has only 3 sentences on temples (pages/filler.html table row + h3 "ฟิลเลอร์ขมับ และแก้มตอบ"), too thin to write a page from site facts without inventing. Need from the doctor (5 lines is enough): who suits it / not, usual amount range, which layer/technique in plain words, downtime, any consented temple PRE/POST case. Then build as branch agent/seo-<date> modelled on pages/filler-chin.html (CHIN_FAQ + crumb_ld + MedicalWebPage in build.py, EN twin in i18n_en.py).
 2. Ask doctor (strategy, do not change): titles/URLs use "โบท็อก" (brand-derived word) while the mission says toxin without brand names. Thai search volume is on "โบท็อก"; keep or switch to "ฉีดลดริ้วรอย/โบทูลินัมท็อกซิน"?
 3. Set up Google Search Console access so this agent can read real queries/impressions (Adspirer connector has a google_search_console tool — check if the account is linked). Meta/TikTok pixel IDs still empty in `window.VF`.
@@ -59,3 +60,10 @@
 - Branch agent/security-20261109 (13532aa): vercel.json redirects /line-app/*, /tools/*, /pages/*, /build.py, /i18n_en.py, /README.md to /. Not merged: deployment config is outside the agent's main-branch list. Do NOT use .vercelignore for this: first attempt (e7280c2) made the vinfinity-line preview fail (ERROR), since that project builds from the same repo. Preview checks of 13532aa: both projects READY, source paths return the home page, robots.txt 200. Older immutable deployment URLs still hold the files.
 - Branch agent/seo-20261109: banned words — chin FAQ "ผลถาวรกว่า" → "ผลอยู่จนกว่าจะผ่าตัดเอาออก", EN articles index "Instant volume…" → "Volume after injection…".
 - Weekly page proposal: temple page still blocked on the doctor's 5 lines (backlog 1). LO: still none (backlog 8).
+
+### 2026-11-16
+- Found: this sandbox clone was shallow, so build.py's sitemap lastmod (last git commit of each page body) took the clone boundary as the date. The committed sitemap carried such boundary dates (2026-10-28/29/30) from earlier shallow runs. With full history the real dates are earlier (e.g. home 2026-10-25, tear-trough/toxin/lips 2026-10-07, lifting 2026-10-03).
+- Main (technical): write_sitemap() in build.py now detects a shallow clone and keeps the previous lastmod for unchanged pages instead of writing the boundary date; sitemap.xml rebuilt from full history (39 lastmod values corrected, 50 URLs, xmllint OK).
+- Audit after rebuild: 52 HTML pages, 327 images (0 missing alt), 0 duplicate titles/descriptions, all JSON-LD parses, canonical + hreflang on every indexable page, 1 H1 per page, 0 broken internal links/assets, every sitemap URL exists, robots.txt OK (AI bots allowed). Largest images: vivacy-paris.jpg 310 KB, doctor/gain-2021-trophy.jpg 280 KB (JPG fallbacks).
+- Live: production dpl_5JEgAoWAXXntYX7aS7KnCQbihBxY (commit 9efd109) READY; /lifting/ 200 with title, canonical, hreflang, 4 JSON-LD blocks. Security: /line-app/lib/promos.ts still 200 — agent/security-20261109 still unmerged (backlog 0).
+- Weekly page proposal: none drafted — temple page still waits for the doctor's 5 lines (backlog 1); EM Lift page waits for device/FDA wording (backlog 0b). LO pages: still none (backlog 8).
