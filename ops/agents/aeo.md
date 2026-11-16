@@ -1,11 +1,11 @@
 # aeo agent
 
 ## Backlog (top = next)
-1. Doctor approval pending: agent/aeo-20261031 (EN filler + tear-trough FAQ, 40–60 words), agent/aeo-20261104 (home FAQ "consult in English?" TH+EN) and agent/aeo-20261111 (skin-booster summary box TH+EN). After approval: same answer-first rewrite for EN lips, chin, dissolve, skin-booster, Sculptra, toxin, lifting, price FAQs, then TH.
+1. Next content (approved pattern, 2026-11-16): same answer-first 40–60-word rewrite for EN lips, chin, dissolve, skin-booster, Sculptra, toxin, lifting, price FAQs, then TH — one page group per run, as a branch.
 2. Doctor task (biggest blocker): verify vinfinityclinic.com in Bing Webmaster Tools + Google Search Console and submit sitemap.xml — 0 of 25 searches over 5 runs show the site (2026-11-16: even the doctor's Thai name returns nothing), even brand/domain searches. Bing feeds ChatGPT/Copilot.
 3. Doctor task list (external citations): claim/complete listings on WhatClinic (Udon Thani pages exist; 4 Udon clinics now answer the "English-speaking doctor" query), Gowabi (lists Udon Thani clinics incl. De Charm, V-Sage), HDmall, Wongnai, Bookimed (fix "Vincent Clinic" confusion), Thaiger Deals; check Google Business Profile NAP matches site exactly.
 4. Content branch: English FAQ for foreign patients — how to book from Laos, how long to stay after treatment — only once the doctor confirms the facts (English consult + Messenger now done in 20261104 branch).
-5. "สรุปสั้น" box: all TH/EN service pages have one except skin-booster (now on branch agent/aeo-20261111), home and doctor (not needed). After approval: none left.
+5. "สรุปสั้น" box: done on all TH/EN service pages (skin-booster merged 2026-11-16).
 6. /toxin/ titles/H1 use "โบท็อก" (a brand name) — flag to doctor vs README rule (content, do not change on main).
 7. Keep llms.txt in sync with sitemap.xml each run (script: compare <loc> list with llms.txt).
 8b. EM Lift (promo 15–30 Nov) is not in llms.txt/kb.txt; AI assistants can't answer about it. Add only after the doctor gives device name + Thai FDA wording (content → branch), no result claims.
@@ -70,3 +70,5 @@
 - Checked (main): all 50 sitemap URLs in llms.txt; 205 JSON-LD blocks parse; FAQPage on 24 pages; no expired promo prices (Sculptra 15,990, 11.11) in llms.txt/kb.txt.
 - Main (technical): sitemap lastmod for /en/articles/ corrected 2026-11-16 → 2026-11-09 (the real commit of the merged banned-word fix; earlier build ran before the merge was committed).
 - No new content branch: 3 AEO branches (20261031, 20261104, 20261111) still wait for the doctor; adding more would only grow the queue.
+### 2026-11-16 (doctor approved, same day)
+- Merged to main: agent/aeo-20261031 (EN filler + tear-trough FAQ answers 47–55 words), agent/aeo-20261104 (home FAQ "consult in English?" TH+EN), agent/aeo-20261111 (skin-booster "สรุปสั้น / In short" box TH+EN). Built files rebuilt with build.py after merge conflicts in generated HTML/sitemap only (no source conflicts). Audit clean; banned-word check on added lines clean.
