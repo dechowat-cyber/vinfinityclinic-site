@@ -15,7 +15,7 @@ Referral event "ชวนเพื่อนมาสวยด้วยกัน"
 1. Get LINE OA follower count + segment sizes (past skin-booster / filler patients) from LINE OA Manager — broadcast sizes are "not verified" until then. (Ask doctor/team.)
 2. Draft the 3 TO DRAFT slots 9–13 Dec (Drafts 17–19 ready to Sun 6 Dec; next = Wed 9 Dec EN-first). Check promos.ts for a December promo first; if one appears, add the โปรเดือนนี้ CTA to Draft 16/17-era posts.
 2b. Doctor to confirm: may a public feed post name the referral credits and the "3 friends → Vitaran 1 cc" reward under the clinic's advertising approval (ฆสพ.)? Draft 10 has a version without the reward line — not verified.
-3. Sculptra promo ended Sun 15 Nov 23:59 — never quote 15,990 again. "โปรเดือนนี้" now shows EM Lift (to 30 Nov). Draft the EM Lift last-call Story for Sat 28 Nov (TO DRAFT) and check promos.ts for a December promo before 1 Dec.
+3. Sculptra promo ended Sun 15 Nov 23:59 — never quote 15,990 again. "โปรเดือนนี้" shows EM Lift to 30 Nov (last-call Story = Draft 21). Check promos.ts for a December promo before 1 Dec; from 1 Dec never quote 4,500 / 18,000 as Early Bird.
 3b. EM Lift: ask the doctor for the device name + Thai FDA registration wording so captions/site can say more; until then only the facts in the brief. No /lifting/ or /price/ mention of EM Lift yet — SEO agent to propose a branch once the wording is on file.
 4. Loy Krathong 2026 = Tue 24 Nov (verified 2026-11-02, PPTV: "วันอังคารที่ 24 พฤศจิกายน"; clinic closed that day). Draft "เตรียมผิวก่อนลอยกระทง" for Sun 15 Nov + a reminder slot Sun 22 / Mon 23 Nov in the next calendar.
 4b. Sculptra waitlist post only if the doctor opens a waitlist (no 15,990 price after 15 Nov or after 10 places). Calendar now runs to 29 Nov; roll again ~22 Nov.
@@ -44,7 +44,7 @@ Weekdays corrected 2026-11-01 (1 Nov 2026 = Sunday; earlier labels were one day 
 | Sun 22 Nov | FB + IG Story | Loy Krathong reminder: clinic closed Tue 24 Nov; book Mon 23 / Wed 25 — DRAFT READY (Draft 13, no discount invented) | "ลอยกระทงอังคารนี้ คลินิกปิด 1 วัน" | LINE จองคิว | facade.jpg |
 | Wed 25 Nov | FB + IG carousel | Skincare before/after injections (what to pause, what to keep) — DRAFT READY (Draft 14) | "ฉีดฟิลเลอร์แล้ว ทาเรตินอลได้เมื่อไหร่" | /articles/skincare-routine-filler-botox | articles/skincare-before-after-injection.jpg |
 | Fri 27 Nov | IG + FB | Choosing a filler clinic in Udon Thani — checklist (license check ว.48943 on the Medical Council site) — DRAFT READY (Draft 15) | "ก่อนเลือกคลินิก เช็ก 5 ข้อนี้" | /articles/choosing-filler-clinic-udon | articles/filler-clinic-udon-checklist.jpg |
-| Sat 28 Nov | FB + IG Story | TO DRAFT — EM Lift Early Bird last call (ends Mon 30 Nov; no "last chance" pressure wording, no result claims) | "Early Bird ถึง 30 พ.ย." | ทักไลน์ พิมพ์ “โปรเดือนนี้” | emlift-2611 card image |
+| Sat 28 Nov | FB + IG Story | EM Lift Early Bird last call (ends Mon 30 Nov; no "last chance" pressure wording, no result claims) — DRAFT READY (Draft 21) | "Early Bird ถึง 30 พ.ย." | ทักไลน์ พิมพ์ “โปรเดือนนี้” | emlift-2611 card image |
 | Sun 29 Nov | FB + IG | Vitaran PN cool-season skin (prices from /price/: 9,990 · 4+ boxes 8,990/box) — DRAFT READY (Draft 16) | "ลมหนาวมา ผิวแห้งง่าย" | LINE ประเมินผิว | treatment.jpg |
 | Wed 2 Dec | FB + IG carousel | Authority: "The Filler Architect" plans by layer — face has 5 layers (from /articles/layered-injection-anatomy/) — DRAFT READY (Draft 17) | "หน้าเรามี 5 ชั้น หมอวางแผนทีละชั้น" | /articles/layered-injection-anatomy + LINE | articles/facial-anatomy-5-layers.jpg |
 | Fri 4 Dec | TikTok / Reels + FB | "หน้านิ่งสวย แต่ยิ้มแล้วแปลก" — gel firmness vs layer (from /articles/layered-injection-anatomy/), 20 s — DRAFT READY (Draft 18) | "หน้านิ่งสวย แต่ยิ้มแล้วแปลก เพราะอะไร" | /articles/layered-injection-anatomy + LINE | doctor talking-head (team films) + articles/facial-anatomy-5-layers.jpg |
@@ -729,3 +729,30 @@ New at Vinfinity: EM Lift ✨ A needle-free electromagnetic treatment — pads a
 Hashtags: #EMLift #VinfinityClinic #ไม่ใช้เข็ม #ยกกระชับอุดร #คลินิกอุดร #อุดรธานี #NeedleFree #UdonThani
 Alt text: ผู้รับบริการหญิงและชายนอนพักขณะทำ EM Lift โดยมีแผ่นแปะบริเวณหน้าผากและแก้ม พร้อมข้อความ "EM Lift ใหม่ที่ Vinfinity" / A woman and a man lying back during EM Lift with pads on the forehead and cheeks, with the text "EM Lift, new at Vinfinity".
 Graphic brief: 1080×1350 feed. Real client photos side by side (woman left, man right — the same frames as the LINE card; crop out the vendor technician). Dark navy gradient (#0B142E → #1A326B) over the lower 55%. Silver #EEF2F8 headline "EM Lift"; sub "คลื่นแม่เหล็กไฟฟ้า · ไม่ใช้เข็ม"; area chips in silver outline (หน้าผาก · ใต้ตา · แก้ม · ใต้คาง · คอ · บ่า); price line in silver #D5DDEE "Early Bird 4,500.- / จุด / ครั้ง · คอร์ส 4 ครั้ง 18,000.- / จุด · ถึง 30 พ.ย."; small label "ภาพผู้รับบริการจริง · ได้รับความยินยอม". Small text footer credit: "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943 · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล". No white logo band, no white price box, no device brand, no before/after, no result or "lift" claims beyond the product name. Story: the LINE card line-app/public/campaign/emlift-2611/1-1x1.jpg may be used as is.
+
+### 2026-11-17
+- Tuesday (clinic closed): Marketing light + live-site check only. Production dpl_7jdXVsRvevDNTcRvYZemcgFMHFxQ (commit 4f1412d) READY; / (TH) and /en/price/ return 200 via Vercel fetch and render fully (title, canonical, hreflang th/en/x-default, JSON-LD, footer with ฆสพ. + "closed Tuesdays"). Nothing broken.
+- promos.ts unchanged since 9efd109: emlift-2611 runs to 30 Nov 23:59 (4,500 ฿/area/session, course 18,000 ฿/area); no December promo defined yet.
+- Next slot Wed 18 Nov = referral reminder (Draft 10) — full TH caption (Version A) in today's report; doctor still to pick A or B (backlog 2b). Then Thu 19 Nov EM Lift launch (Draft 20).
+- Done: Draft 21 for Sat 28 Nov (EM Lift Early Bird last-call Story, 2 frames) below — facts only from promos.ts emlift-2611 and the doctor's 15 Nov brief; no results/duration/downtime claims, no "last chance"/urgency wording beyond the end date.
+- No LINE broadcast tomorrow (Wed 18 Nov) unless the doctor decides to send set emlift-2611 (not Tuesday). No market watch (Mondays only).
+
+#### Draft 21 — Sat 28 Nov · FB + IG Story (9:16, 2 frames) · EM Lift Early Bird ends Mon 30 Nov
+Frame 1 text: "EM Lift · Early Bird ถึงจันทร์ 30 พ.ย." / "4,500.- ต่อจุด ต่อครั้ง (ปกติ 5,990.-)" / "คอร์ส 4 ครั้ง 18,000.- ต่อจุด (ปกติ 23,960.-)"
+Frame 2 text: "ไม่ใช้เข็ม · ทำได้ทั้งผู้หญิงและผู้ชาย" / "หน้าผาก · ใต้ตา · แก้ม · ใต้คาง · คอ · บ่า" / "แพทย์ประเมินก่อนทุกครั้ง" / link sticker → LINE @vinfinityclinic
+TH caption (FB Story / IG caption field):
+EM Lift ราคา Early Bird ถึงวันจันทร์ที่ 30 พ.ย. นี้ 💙
+• 4,500.- ต่อจุด ต่อครั้ง (ปกติ 5,990.-)
+• คอร์ส 4 ครั้ง สัปดาห์ละครั้ง 18,000.- ต่อจุด (ปกติ 23,960.-)
+เทคโนโลยีคลื่นแม่เหล็กไฟฟ้า ไม่ใช้เข็ม · เลือกจุดได้: หน้าผาก · ใต้ตา · แก้ม · ใต้คาง · คอ · บ่า (ใต้ตาและแก้มนับข้างละ 1 จุด)
+แพทย์ประเมินก่อนทุกครั้งว่าจุดไหนเหมาะ · โดย นพ.เดโชวัต พรมดา (ว.48943) · คลินิกเปิดวันจันทร์ 30 พ.ย. 10:00–19:00
+ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · การทำหัตถการทุกชนิดอาจมีผลข้างเคียง
+
+ทักไลน์ @vinfinityclinic พิมพ์ “โปรเดือนนี้” หรือกดเมนู 🎁 โปรเดือนนี้
+
+EN caption:
+EM Lift Early Bird pricing runs until Monday 30 Nov 💙 4,500 THB per area per session (regular 5,990), or the 4-session course (one week apart) at 18,000 THB per area (regular 23,960). Needle-free electromagnetic treatment; areas: forehead, under-eye, cheeks, under the chin, neck, shoulders (under-eye and cheek count as one area per side). The doctor assesses first. Dr. Dechowat Promda (license 48943) · consultations in English · open Mon 30 Nov 10:00–19:00. Results vary from person to person. All procedures carry possible side effects. LINE @vinfinityclinic — type "โปรเดือนนี้" · Messenger m.me/Vinfinity.Clinic
+
+Hashtags: #EMLift #VinfinityClinic #ไม่ใช้เข็ม #คลินิกอุดร #อุดรธานี #UdonThani
+Alt text: ภาพผู้รับบริการขณะทำ EM Lift โดยมีแผ่นแปะบนใบหน้า พร้อมข้อความ "EM Lift Early Bird ถึง 30 พ.ย." / A client during EM Lift with pads on the face, with the text "EM Lift Early Bird until 30 Nov".
+Graphic brief: 1080×1920, 2 frames. Frame 1: real client photo (woman, consented; vendor technician cropped) top 50%, dark navy gradient (#0B142E → #1A326B) below; silver #EEF2F8 headline "Early Bird ถึง 30 พ.ย."; price lines in silver #D5DDEE. Frame 2: real client photo (man, consented), same gradient; area chips in silver outline; LINE link sticker + keyword chip "พิมพ์ “โปรเดือนนี้”". Small label "ภาพผู้รับบริการจริง · ได้รับความยินยอม". Small text footer credit on both frames: "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943 · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล". No white logo band, no countdown timer, no "โอกาสสุดท้าย"/"last chance", no device brand, no before/after, no result claims.
