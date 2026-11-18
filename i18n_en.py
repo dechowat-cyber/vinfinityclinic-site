@@ -133,15 +133,15 @@ EN_TOXIN_FAQ = [
 
 EN_LIPS_FAQ = [
     ("How much does lip filler cost in Udon Thani?",
-     "European HA filler starts at THB 9,990 per cc. The amount depends on your natural lip shape and the shape you want. The doctor confirms the full cost before starting."),
+     "Lip filler at Vinfinity Clinic in Udon Thani starts at THB 9,990 per cc of European HA filler. The amount depends on your natural lip shape and the shape you want. Most people start with a small amount and review the result before adding more. The doctor confirms the full cost before treatment begins."),
     ("Does lip filler hurt?",
-     "Numbing cream is applied first, and most products contain a local anesthetic. Lips are slightly more sensitive than other areas, but most people find it tolerable."),
+     "Most people find lip filler tolerable. Numbing cream is applied first, and most filler products contain a local anesthetic. Lips are slightly more sensitive than other areas such as the cheeks or chin. Treatment takes about 15 minutes, and you can ask the doctor for a pause at any time."),
     ("How long does lip swelling last?",
-     "Swelling is greatest in the first 1–2 days, then gradually settles over 3–7 days. Your final lip shape is clear at around 2 weeks."),
+     "Lip swelling is greatest in the first 1–2 days, then gradually settles over 3–7 days. Your true lip shape shows clearly at around 2 weeks, which is when the follow-up visit is booked. Cold compresses are fine; avoid hard sucking through a straw, very hot food and alcohol for 24 hours."),
     ("How long does lip filler last?",
-     "About 6–12 months. Lips move a lot, so filler there often breaks down faster than in some other areas."),
+     "Lip filler usually lasts about 6–12 months. Lips move a lot when you talk and eat, so filler there often breaks down faster than in areas such as the chin. The doctor reviews your lips at follow-up before you decide on any top-up. Results vary from person to person."),
     ("What if I don't like my lip shape afterwards?",
-     "Hyaluronic acid filler can be dissolved with an enzyme by a doctor. Wait for the swelling to settle first, then have the doctor assess you."),
+     "Hyaluronic acid lip filler can be dissolved with an enzyme by a doctor, and the clinic keeps this enzyme on hand. Wait about 2 weeks for the swelling to settle before judging the shape, then have the doctor assess you. This applies to HA filler only, so tell the doctor if your filler was done elsewhere."),
 ]
 
 EN_CHIN_FAQ = [
