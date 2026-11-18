@@ -13,7 +13,7 @@ Referral event "ชวนเพื่อนมาสวยด้วยกัน"
 
 ## Backlog (top = next)
 1. Get LINE OA follower count + segment sizes (past skin-booster / filler patients) from LINE OA Manager — broadcast sizes are "not verified" until then. (Ask doctor/team.)
-2. Draft the 3 TO DRAFT slots 9–13 Dec (Drafts 17–19 ready to Sun 6 Dec; next = Wed 9 Dec EN-first). Check promos.ts for a December promo first; if one appears, add the โปรเดือนนี้ CTA to Draft 16/17-era posts.
+2. Draft the 2 TO DRAFT slots 11–13 Dec (Drafts 17–19, 22 ready to Wed 9 Dec; next = Fri 11 Dec evergreen). Roll the calendar to 27 Dec ~1 Dec. Check promos.ts for a December promo first; if one appears, add the โปรเดือนนี้ CTA to Draft 16/17-era posts.
 2b. Doctor to confirm: may a public feed post name the referral credits and the "3 friends → Vitaran 1 cc" reward under the clinic's advertising approval (ฆสพ.)? Draft 10 has a version without the reward line — not verified.
 3. Sculptra promo ended Sun 15 Nov 23:59 — never quote 15,990 again. "โปรเดือนนี้" shows EM Lift to 30 Nov (last-call Story = Draft 21). Check promos.ts for a December promo before 1 Dec; from 1 Dec never quote 4,500 / 18,000 as Early Bird.
 3b. EM Lift: ask the doctor for the device name + Thai FDA registration wording so captions/site can say more; until then only the facts in the brief. No /lifting/ or /price/ mention of EM Lift yet — SEO agent to propose a branch once the wording is on file.
@@ -49,7 +49,7 @@ Weekdays corrected 2026-11-01 (1 Nov 2026 = Sunday; earlier labels were one day 
 | Wed 2 Dec | FB + IG carousel | Authority: "The Filler Architect" plans by layer — face has 5 layers (from /articles/layered-injection-anatomy/) — DRAFT READY (Draft 17) | "หน้าเรามี 5 ชั้น หมอวางแผนทีละชั้น" | /articles/layered-injection-anatomy + LINE | articles/facial-anatomy-5-layers.jpg |
 | Fri 4 Dec | TikTok / Reels + FB | "หน้านิ่งสวย แต่ยิ้มแล้วแปลก" — gel firmness vs layer (from /articles/layered-injection-anatomy/), 20 s — DRAFT READY (Draft 18) | "หน้านิ่งสวย แต่ยิ้มแล้วแปลก เพราะอะไร" | /articles/layered-injection-anatomy + LINE | doctor talking-head (team films) + articles/facial-anatomy-5-layers.jpg |
 | Sun 6 Dec | FB + IG carousel | Filler safety by evidence — 5 questions to ask before filler (from /articles/filler-safety-evidence/; no December promo in promos.ts on 15 Nov) — DRAFT READY (Draft 19) | "ก่อนฉีดฟิลเลอร์ ถามหมอ 5 ข้อนี้" | /articles/filler-safety-evidence + LINE | articles/filler-safety-vascular-midface.jpg |
-| Wed 9 Dec | FB + IG | TO DRAFT — foreign patients / EN-first (Expo runs to 14 Mar 2027) | — | Messenger + LINE | reception.jpg |
+| Wed 9 Dec | FB + IG (EN-first) | Foreign patients: "Visiting the Expo? See the doctor in English" — 4 steps to book from photos (Expo runs to 14 Mar 2027) — DRAFT READY (Draft 22) | "In Udon Thani for the Expo? See an aesthetic doctor in English." | Messenger + LINE | reception.jpg |
 | Fri 11 Dec | FB + IG | TO DRAFT — tear-trough or skincare evergreen | — | LINE | per article |
 | Sun 13 Dec | FB + IG Story | TO DRAFT — referral event last call (ends Tue 15 Dec = clinic closed day; wording per backlog 2b) | "ชวนเพื่อน ถึง 15 ธ.ค." | ทักไลน์ พิมพ์ “ชวนเพื่อน” | clinic-lounge.jpg |
 
@@ -756,3 +756,35 @@ EM Lift Early Bird pricing runs until Monday 30 Nov 💙 4,500 THB per area per 
 Hashtags: #EMLift #VinfinityClinic #ไม่ใช้เข็ม #คลินิกอุดร #อุดรธานี #UdonThani
 Alt text: ภาพผู้รับบริการขณะทำ EM Lift โดยมีแผ่นแปะบนใบหน้า พร้อมข้อความ "EM Lift Early Bird ถึง 30 พ.ย." / A client during EM Lift with pads on the face, with the text "EM Lift Early Bird until 30 Nov".
 Graphic brief: 1080×1920, 2 frames. Frame 1: real client photo (woman, consented; vendor technician cropped) top 50%, dark navy gradient (#0B142E → #1A326B) below; silver #EEF2F8 headline "Early Bird ถึง 30 พ.ย."; price lines in silver #D5DDEE. Frame 2: real client photo (man, consented), same gradient; area chips in silver outline; LINE link sticker + keyword chip "พิมพ์ “โปรเดือนนี้”". Small label "ภาพผู้รับบริการจริง · ได้รับความยินยอม". Small text footer credit on both frames: "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943 · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล". No white logo band, no countdown timer, no "โอกาสสุดท้าย"/"last chance", no device brand, no before/after, no result claims.
+
+### 2026-11-18
+- Wednesday: Marketing light + AEO deep. promos.ts unchanged since 9efd109: emlift-2611 runs to 30 Nov (4,500 ฿/area/session, course 18,000 ฿/area); no December promo defined yet.
+- Today's slot Wed 18 Nov = referral reminder (Draft 10, A/B — doctor's pick, backlog 2b). Next slot Thu 19 Nov = EM Lift launch (Draft 20) — full TH caption in today's report.
+- Done: Draft 22 for Wed 9 Dec (EN-first foreign-patient post) below — facts only from the site and README (English consultations doctor-confirmed 30 Oct, Messenger, closed Tuesdays, price confirmed before treatment, box opened, doctor injects). Not one of the 12 Expo-plan posts (those ended 22 Nov).
+- No LINE broadcast tomorrow (Thu 19 Nov) unless the doctor sends set emlift-2611 alongside the launch post. No market watch (Mondays only).
+
+#### Draft 22 — Wed 9 Dec · FB + IG feed (EN-first) · See the doctor in English
+EN caption:
+In Udon Thani for the Horticultural Expo? You can see an aesthetic doctor in English 🌿
+How it works at Vinfinity Clinic:
+1) Message us on Messenger (m.me/Vinfinity.Clinic) or LINE @vinfinityclinic with front and side photos in natural light.
+2) The doctor tells you what may suit you — or if nothing is needed.
+3) At the clinic: assessment first, the full cost is confirmed before treatment, and the product box is opened in front of you.
+4) Every injection is done by Dr. Dechowat Promda (license 48943).
+Open daily except Tuesdays · Udon Thani city · tel 082-462-2963
+Results vary from person to person. All procedures carry possible side effects.
+
+TH caption:
+มาเที่ยวงานพืชสวนโลกที่อุดรฯ แล้วอยากปรึกษาเรื่องผิวหรือรูปหน้า? ปรึกษาคุณหมอเป็นภาษาอังกฤษได้ 🌿
+ขั้นตอนที่ Vinfinity Clinic
+1️⃣ ส่งรูปหน้าตรงและด้านข้าง (แสงธรรมชาติ) ทาง LINE @vinfinityclinic หรือ Messenger
+2️⃣ คุณหมอแนะนำว่าอะไรอาจเหมาะ หรือยังไม่จำเป็นต้องทำ
+3️⃣ ที่คลินิก: ประเมินก่อน แจ้งราคารวมก่อนเริ่มทุกครั้ง และเปิดกล่องผลิตภัณฑ์ให้ดูต่อหน้า
+4️⃣ ฉีดโดย นพ.เดโชวัต พรมดา (ว.48943) ทุกเคส
+เปิดทุกวัน ยกเว้นวันอังคาร · 📞 082-462-2963
+ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · การทำหัตถการทุกชนิดอาจมีผลข้างเคียง
+
+Hashtags: #UdonThani #VinfinityClinic #EnglishSpeakingDoctor #UdonThaniExpo #คลินิกอุดร #อุดรธานี #AestheticClinicThailand
+Alt text: Reception area of Vinfinity Clinic in Udon Thani with the text "See an aesthetic doctor in English" / ห้องรับรองของ Vinfinity Clinic อุดรธานี พร้อมข้อความ "ปรึกษาคุณหมอเป็นภาษาอังกฤษได้".
+Graphic brief: 1080×1350. Real photo assets/img/reception.jpg top 55%; dark navy gradient (#0B142E → #1A326B) below; silver #EEF2F8 headline "See the doctor in English"; 4 numbered steps in silver #D5DDEE; small chips "Messenger · LINE". No Expo logo (not our brand), no price, no before/after. Small text footer credit: "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943". No white logo band.
+

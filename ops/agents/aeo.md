@@ -1,8 +1,8 @@
 # aeo agent
 
 ## Backlog (top = next)
-1. Next content (approved pattern, 2026-11-16): same answer-first 40–60-word rewrite for EN lips, chin, dissolve, skin-booster, Sculptra, toxin, lifting, price FAQs, then TH — one page group per run, as a branch.
-2. Doctor task (biggest blocker): verify vinfinityclinic.com in Bing Webmaster Tools + Google Search Console and submit sitemap.xml — 0 of 25 searches over 5 runs show the site (2026-11-16: even the doctor's Thai name returns nothing), even brand/domain searches. Bing feeds ChatGPT/Copilot.
+1. Next content (approved pattern, 2026-11-16): same answer-first 40–60-word rewrite — EN lips done 2026-11-18 (branch agent/aeo-20261118, waiting); next EN chin, dissolve, skin-booster, Sculptra, toxin, lifting, price FAQs, then TH — one page group per run, as a branch.
+2. Doctor task (biggest blocker): verify vinfinityclinic.com in Bing Webmaster Tools + Google Search Console and submit sitemap.xml — 0 of 29 searches over 6 runs show the site (2026-11-18: the brand and the 'Filler Architect' title return nothing), even brand/domain searches. Bing feeds ChatGPT/Copilot.
 3. Doctor task list (external citations): claim/complete listings on WhatClinic (Udon Thani pages exist; 4 Udon clinics now answer the "English-speaking doctor" query), Gowabi (lists Udon Thani clinics incl. De Charm, V-Sage), HDmall, Wongnai, Bookimed (fix "Vincent Clinic" confusion), Thaiger Deals; check Google Business Profile NAP matches site exactly.
 4. Content branch: English FAQ for foreign patients — how to book from Laos, how long to stay after treatment — only once the doctor confirms the facts (English consult + Messenger now done in 20261104 branch).
 5. "สรุปสั้น" box: done on all TH/EN service pages (skin-booster merged 2026-11-16).
@@ -39,6 +39,10 @@
 | 2026-11-16 | นพ.เดโชวัต พรมดา ฟิลเลอร์ (doctor name, TH) | No | phukethospital, medconsultasia, IMCAS video of another doctor, vejthani |
 | 2026-11-16 | filler in Udon Thani as a foreigner, English-speaking clinic | No | whatclinic Udon Thani listings, bookimed, gowabi (De Charm UD) |
 | 2026-11-16 | ยกกระชับ ไม่ใช้เข็ม คลื่นแม่เหล็กไฟฟ้า อุดรธานี (EM Lift topic) | No | ktc, thestandard, hdmall (HIFU/EndoliftX, Bangkok) |
+| 2026-11-18 | Vinfinity Clinic Udon Thani (brand) | No | gowabi (The V-Sage Udon, De Charm UD), whatclinic Udon Thani listings (Glamour, Surasak, Klinique Central, Physio, Dr Ann, Absolute Klinik), Bangkok Hospital Udon |
+| 2026-11-18 | ฉีดฟิลเลอร์ปาก อุดรธานี คลินิก | No | wongnai (filler list 2024, Teerak Clinic Khon Kaen reviews), hdmall (Bangkok lip filler reviews), th.my-best |
+| 2026-11-18 | lip filler Udon Thani English speaking doctor price | No | bookimed (Thailand filler doctor lists), whatclinic (The Physio Clinic Udon; Bangkok/Chiang Mai), deals.thethaiger |
+| 2026-11-18 | "The Filler Architect" doctor Thailand (doctor title) | No | bookimed filler-doctor lists only (other doctors) |
 
 ## Log
 ### 2026-10-30 (doctor, via main session)
@@ -72,3 +76,8 @@
 - No new content branch: 3 AEO branches (20261031, 20261104, 20261111) still wait for the doctor; adding more would only grow the queue.
 ### 2026-11-16 (doctor approved, same day)
 - Merged to main: agent/aeo-20261031 (EN filler + tear-trough FAQ answers 47–55 words), agent/aeo-20261104 (home FAQ "consult in English?" TH+EN), agent/aeo-20261111 (skin-booster "สรุปสั้น / In short" box TH+EN). Built files rebuilt with build.py after merge conflicts in generated HTML/sitemap only (no source conflicts). Audit clean; banned-word check on added lines clean.
+### 2026-11-18
+- Visibility: 0 of 4 searches show Vinfinity (29/29 misses over 6 runs). New: the doctor's title "The Filler Architect" returns only bookimed doctor lists; Thai lip-filler search in Udon returns Khon Kaen/Bangkok clinics → bookimed + WhatClinic doctor/clinic profiles remain the fastest external citations after Bing/GSC indexing.
+- Checked (main, no change needed): all 50 sitemap URLs in llms.txt; 205 JSON-LD blocks parse; FAQPage on 24 pages; `python3 build.py` gives no diff; no expired promo prices (Sculptra 15,990, 11.11) or EM Lift text in llms.txt/kb.txt (EM Lift waits for device/FDA wording, backlog 8b).
+- Content branch agent/aeo-20261118 (c999118, preview vinfinityclinic-site-3p9we7m1u-dechowat-9677s-projects.vercel.app/en/filler/lips/): 5 EN lip-filler FAQ answers rewritten answer-first, 49–56 words (were 19–30), only facts already on /en/filler/lips/ or the general filler FAQ; FAQPage schema follows; banned-word check clean. Waiting for doctor approval.
+
