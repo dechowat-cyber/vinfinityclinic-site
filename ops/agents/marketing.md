@@ -13,7 +13,7 @@ Referral event "ชวนเพื่อนมาสวยด้วยกัน"
 
 ## Backlog (top = next)
 1. Get LINE OA follower count + segment sizes (past skin-booster / filler patients) from LINE OA Manager — broadcast sizes are "not verified" until then. (Ask doctor/team.)
-2. Draft the 2 TO DRAFT slots 11–13 Dec (Drafts 17–19, 22 ready to Wed 9 Dec; next = Fri 11 Dec evergreen). Roll the calendar to 27 Dec ~1 Dec. Check promos.ts for a December promo first; if one appears, add the โปรเดือนนี้ CTA to Draft 16/17-era posts.
+2. Draft the last TO DRAFT slot Sun 13 Dec (referral last call; needs backlog 2b answer — draft both versions). Drafts ready to Fri 11 Dec (Draft 23). Roll the calendar to 27 Dec ~1 Dec. Check promos.ts for a December promo first; if one appears, add the โปรเดือนนี้ CTA to Draft 16/17-era posts.
 2b. Doctor to confirm: may a public feed post name the referral credits and the "3 friends → Vitaran 1 cc" reward under the clinic's advertising approval (ฆสพ.)? Draft 10 has a version without the reward line — not verified.
 3. Sculptra promo ended Sun 15 Nov 23:59 — never quote 15,990 again. "โปรเดือนนี้" shows EM Lift to 30 Nov (last-call Story = Draft 21). Check promos.ts for a December promo before 1 Dec; from 1 Dec never quote 4,500 / 18,000 as Early Bird.
 3b. EM Lift: ask the doctor for the device name + Thai FDA registration wording so captions/site can say more; until then only the facts in the brief. No /lifting/ or /price/ mention of EM Lift yet — SEO agent to propose a branch once the wording is on file.
@@ -50,7 +50,7 @@ Weekdays corrected 2026-11-01 (1 Nov 2026 = Sunday; earlier labels were one day 
 | Fri 4 Dec | TikTok / Reels + FB | "หน้านิ่งสวย แต่ยิ้มแล้วแปลก" — gel firmness vs layer (from /articles/layered-injection-anatomy/), 20 s — DRAFT READY (Draft 18) | "หน้านิ่งสวย แต่ยิ้มแล้วแปลก เพราะอะไร" | /articles/layered-injection-anatomy + LINE | doctor talking-head (team films) + articles/facial-anatomy-5-layers.jpg |
 | Sun 6 Dec | FB + IG carousel | Filler safety by evidence — 5 questions to ask before filler (from /articles/filler-safety-evidence/; no December promo in promos.ts on 15 Nov) — DRAFT READY (Draft 19) | "ก่อนฉีดฟิลเลอร์ ถามหมอ 5 ข้อนี้" | /articles/filler-safety-evidence + LINE | articles/filler-safety-vascular-midface.jpg |
 | Wed 9 Dec | FB + IG (EN-first) | Foreign patients: "Visiting the Expo? See the doctor in English" — 4 steps to book from photos (Expo runs to 14 Mar 2027) — DRAFT READY (Draft 22) | "In Udon Thani for the Expo? See an aesthetic doctor in English." | Messenger + LINE | reception.jpg |
-| Fri 11 Dec | FB + IG | TO DRAFT — tear-trough or skincare evergreen | — | LINE | per article |
+| Fri 11 Dec | FB + IG carousel | Evergreen: same filler, different results — gel, tissue, area, layer (from /articles/same-filler-different-results/) — DRAFT READY (Draft 23) | "ฟิลเลอร์ยี่ห้อเดียวกับเพื่อน ทำไมผลไม่เหมือนกัน" | /articles/same-filler-different-results + LINE | articles/filler-volume-retention-lips-vs-cheek.jpg |
 | Sun 13 Dec | FB + IG Story | TO DRAFT — referral event last call (ends Tue 15 Dec = clinic closed day; wording per backlog 2b) | "ชวนเพื่อน ถึง 15 ธ.ค." | ทักไลน์ พิมพ์ “ชวนเพื่อน” | clinic-lounge.jpg |
 
 Notes: before/after only from assets/img/ba (consented, already on site), labelled PRE / POST, organic only, never in ads. File naming on site: caseNN-b = PRE (before), caseNN-a = POST (after) — see pages/_results_eye.html. Do not use galderma-* doctor photos (not a current affiliation).
@@ -787,4 +787,36 @@ TH caption:
 Hashtags: #UdonThani #VinfinityClinic #EnglishSpeakingDoctor #UdonThaniExpo #คลินิกอุดร #อุดรธานี #AestheticClinicThailand
 Alt text: Reception area of Vinfinity Clinic in Udon Thani with the text "See an aesthetic doctor in English" / ห้องรับรองของ Vinfinity Clinic อุดรธานี พร้อมข้อความ "ปรึกษาคุณหมอเป็นภาษาอังกฤษได้".
 Graphic brief: 1080×1350. Real photo assets/img/reception.jpg top 55%; dark navy gradient (#0B142E → #1A326B) below; silver #EEF2F8 headline "See the doctor in English"; 4 numbered steps in silver #D5DDEE; small chips "Messenger · LINE". No Expo logo (not our brand), no price, no before/after. Small text footer credit: "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943". No white logo band.
+
+### 2026-11-19
+- Thursday: Marketing light + live-site check only. Production dpl_6z2ZbTw8bVwnQt1oTDm5ijWjEGwn (commit 99bd60b) READY; / (TH) and /en/price/ return 200 via Vercel fetch and render fully (title, canonical, hreflang, JSON-LD, footer with ฆสพ. + "closed Tuesdays"). Nothing broken. (Direct curl to vinfinityclinic.com is blocked by the sandbox proxy — use Vercel fetch.)
+- promos.ts unchanged since 9efd109: emlift-2611 runs to 30 Nov 23:59; no December promo defined yet.
+- Today's slot Thu 19 Nov = EM Lift launch (Draft 20). Next slot Fri 20 Nov = ligaments reel (Draft 11, ready) — its TH caption is in today's report. Then Sun 22 Nov Loy Krathong closed-day Story (Draft 13).
+- Done: Draft 23 for Fri 11 Dec (evergreen carousel "same filler, different results") below — facts only from /articles/same-filler-different-results/ (Khan 2026 numbers as the article states them). No filler brand names, no promo price.
+- No LINE broadcast tomorrow (Fri 20 Nov) unless the doctor decides to send set emlift-2611. No market watch (Mondays only).
+
+#### Draft 23 — Fri 11 Dec · FB + IG carousel (5 slides, 1080×1350) · Same filler, different results
+Slides: 1) "ฟิลเลอร์ยี่ห้อเดียวกับเพื่อน ทำไมผลไม่เหมือนกัน" · 2) "เจลแต่ละตัวมีนิสัยต่างกัน: ความแข็ง · ความเกาะตัว · การดูดน้ำ" · 3) "เนื้อเยื่อแต่ละคนต่างกัน: ผิวหนา-บาง กล้ามเนื้อ การขยับ" · 4) "ตำแหน่งเปลี่ยนผล: งานวิจัยปี 2026 ที่ 12 สัปดาห์ ปริมาตรที่วัดได้ ปากเหลือราว 10% แก้มราว 60%" · 5) "ที่ Vinfinity: เริ่มจากปัญหาและชั้น ไม่ใช่ยี่ห้อ · ใช้น้อย นัดดูผลราว 2 สัปดาห์"
+TH caption:
+ฟิลเลอร์ยี่ห้อเดียวกับเพื่อน ทำไมผลไม่เหมือนกัน? 🤔
+เพื่อนฉีดแล้วอยู่นาน แต่เราฉีดยี่ห้อเดียวกันกลับยุบเร็ว หรือดูไม่เข้ากับหน้า คำตอบอยู่ที่ 4 เรื่อง
+
+1️⃣ เจลแต่ละตัวมี “นิสัย” ต่างกัน — ความแข็ง ความเกาะตัว และการดูดน้ำ กำหนดว่าเจลจะยก กระจาย หรืออิ่มแค่ไหน
+2️⃣ เนื้อเยื่อแต่ละคนต่างกัน — ผิวหนาหรือบาง กล้ามเนื้อแข็งแรง และการขยับของแต่ละบริเวณ กดและเปลี่ยนรูปเจลต่างกัน
+3️⃣ ตำแหน่งเปลี่ยนผล — งานวิจัยปี 2026 พบว่าที่ 12 สัปดาห์ ปริมาตรที่วัดได้ที่ปากเหลือราว 10% ขณะที่แก้มเหลือราว 60% เพราะปากขยับตลอดทั้งพูด กิน ยิ้ม
+4️⃣ ชั้นที่วางและวิธีฉีด — เจลเดียวกันวางคนละชั้น ให้รูปทรงและความเป็นธรรมชาติต่างกัน
+
+ที่ Vinfinity คุณหมอเริ่มจากปัญหาและชั้นของหน้า ไม่ใช่เริ่มจากยี่ห้อ ใช้น้อย แล้วนัดดูผลหลังบวมยุบราว 2 สัปดาห์ก่อนตัดสินใจเติม
+อ่านฉบับเต็มพร้อมเอกสารอ้างอิง: vinfinityclinic.com/articles/same-filler-different-results/
+
+โดย นพ.เดโชวัต พรมดา (ว.48943) · 📍 Vinfinity Clinic อุดรธานี · คลินิกปิดทุกวันอังคาร
+💬 ส่งรูปหน้าตรงและด้านข้างทาง LINE @vinfinityclinic ให้คุณหมอประเมินเบื้องต้น
+ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · การทำหัตถการทุกชนิดอาจมีผลข้างเคียง
+
+EN caption:
+Same filler as your friend — so why a different result? Four reasons: 1) each gel behaves differently (firmness, cohesivity, how much water it draws); 2) everyone's tissue is different (skin thickness, muscle strength, how much the area moves); 3) the area matters — a 2026 study found that at 12 weeks the measured volume was about 10% in the lips versus about 60% in the cheeks; 4) the layer and technique change shape and how natural it looks. At Vinfinity the doctor starts from the problem and the layer, not the brand, uses a small amount and reviews after about 2 weeks. Full article with references: vinfinityclinic.com/en/articles/ · Dr. Dechowat Promda (license 48943) · consultations in English · closed Tuesdays. Results vary from person to person. All procedures carry possible side effects. LINE @vinfinityclinic · Messenger m.me/Vinfinity.Clinic
+
+Hashtags: #ฟิลเลอร์ #ฟิลเลอร์อุดร #VinfinityClinic #TheFillerArchitect #คลินิกอุดร #อุดรธานี #DermalFiller #UdonThani
+Alt text: กราฟิกเปรียบเทียบปริมาตรฟิลเลอร์ที่วัดได้ที่ปากและแก้มหลัง 12 สัปดาห์ พร้อมข้อความ "ฟิลเลอร์ยี่ห้อเดียวกัน ทำไมผลไม่เหมือนกัน" / Graphic comparing measured filler volume in the lips and cheeks at 12 weeks, with the text "Same filler, different results — why?".
+Graphic brief: 5 slides 1080×1350. Slide 1: real clinic photo (assets/img/treatment.jpg) with dark navy gradient (#0B142E → #1A326B), silver #EEF2F8 headline. Slides 2–3: navy background, silver icon-free text lists. Slide 4: the article graphic assets/img/articles/filler-volume-retention-lips-vs-cheek.jpg on navy, caption "Khan et al. 2026 · ปริมาตรที่วัดจากภายนอก". Slide 5: doctor photo assets/img/dr-bas.jpg (not a galderma-* photo) + 2 lines. Small text footer credit on every slide: "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943 · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล". No white logo band, no filler brand names or product boxes, no before/after, no price.
 
