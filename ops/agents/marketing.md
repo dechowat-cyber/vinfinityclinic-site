@@ -13,7 +13,7 @@ Referral event "ชวนเพื่อนมาสวยด้วยกัน"
 
 ## Backlog (top = next)
 1. Get LINE OA follower count + segment sizes (past skin-booster / filler patients) from LINE OA Manager — broadcast sizes are "not verified" until then. (Ask doctor/team.)
-2. Draft the last TO DRAFT slot Sun 13 Dec (referral last call; needs backlog 2b answer — draft both versions). Drafts ready to Fri 11 Dec (Draft 23). Roll the calendar to 27 Dec ~1 Dec. Check promos.ts for a December promo first; if one appears, add the โปรเดือนนี้ CTA to Draft 16/17-era posts.
+2. All slots to Sun 13 Dec are DRAFT READY (Draft 24 = referral last call, A/B). Roll the calendar to 27 Dec ~1 Dec (next run: add Wed 16 Dec + Fri 18 Dec slots). Check promos.ts for a December promo first; if one appears, add the โปรเดือนนี้ CTA to Draft 16/17-era posts.
 2b. Doctor to confirm: may a public feed post name the referral credits and the "3 friends → Vitaran 1 cc" reward under the clinic's advertising approval (ฆสพ.)? Draft 10 has a version without the reward line — not verified.
 3. Sculptra promo ended Sun 15 Nov 23:59 — never quote 15,990 again. "โปรเดือนนี้" shows EM Lift to 30 Nov (last-call Story = Draft 21). Check promos.ts for a December promo before 1 Dec; from 1 Dec never quote 4,500 / 18,000 as Early Bird.
 3b. EM Lift: ask the doctor for the device name + Thai FDA registration wording so captions/site can say more; until then only the facts in the brief. No /lifting/ or /price/ mention of EM Lift yet — SEO agent to propose a branch once the wording is on file.
@@ -51,7 +51,7 @@ Weekdays corrected 2026-11-01 (1 Nov 2026 = Sunday; earlier labels were one day 
 | Sun 6 Dec | FB + IG carousel | Filler safety by evidence — 5 questions to ask before filler (from /articles/filler-safety-evidence/; no December promo in promos.ts on 15 Nov) — DRAFT READY (Draft 19) | "ก่อนฉีดฟิลเลอร์ ถามหมอ 5 ข้อนี้" | /articles/filler-safety-evidence + LINE | articles/filler-safety-vascular-midface.jpg |
 | Wed 9 Dec | FB + IG (EN-first) | Foreign patients: "Visiting the Expo? See the doctor in English" — 4 steps to book from photos (Expo runs to 14 Mar 2027) — DRAFT READY (Draft 22) | "In Udon Thani for the Expo? See an aesthetic doctor in English." | Messenger + LINE | reception.jpg |
 | Fri 11 Dec | FB + IG carousel | Evergreen: same filler, different results — gel, tissue, area, layer (from /articles/same-filler-different-results/) — DRAFT READY (Draft 23) | "ฟิลเลอร์ยี่ห้อเดียวกับเพื่อน ทำไมผลไม่เหมือนกัน" | /articles/same-filler-different-results + LINE | articles/filler-volume-retention-lips-vs-cheek.jpg |
-| Sun 13 Dec | FB + IG Story | TO DRAFT — referral event last call (ends Tue 15 Dec = clinic closed day; wording per backlog 2b) | "ชวนเพื่อน ถึง 15 ธ.ค." | ทักไลน์ พิมพ์ “ชวนเพื่อน” | clinic-lounge.jpg |
+| Sun 13 Dec | FB + IG Story | Referral event last call (ends Tue 15 Dec = clinic closed; last open day Mon 14 Dec) — DRAFT READY (Draft 24, A/B per backlog 2b) | "ชวนเพื่อน ถึง 15 ธ.ค." | ทักไลน์ พิมพ์ “ชวนเพื่อน” | clinic-lounge.jpg |
 
 Notes: before/after only from assets/img/ba (consented, already on site), labelled PRE / POST, organic only, never in ads. File naming on site: caseNN-b = PRE (before), caseNN-a = POST (after) — see pages/_results_eye.html. Do not use galderma-* doctor photos (not a current affiliation).
 
@@ -820,3 +820,34 @@ Hashtags: #ฟิลเลอร์ #ฟิลเลอร์อุดร #Vinfi
 Alt text: กราฟิกเปรียบเทียบปริมาตรฟิลเลอร์ที่วัดได้ที่ปากและแก้มหลัง 12 สัปดาห์ พร้อมข้อความ "ฟิลเลอร์ยี่ห้อเดียวกัน ทำไมผลไม่เหมือนกัน" / Graphic comparing measured filler volume in the lips and cheeks at 12 weeks, with the text "Same filler, different results — why?".
 Graphic brief: 5 slides 1080×1350. Slide 1: real clinic photo (assets/img/treatment.jpg) with dark navy gradient (#0B142E → #1A326B), silver #EEF2F8 headline. Slides 2–3: navy background, silver icon-free text lists. Slide 4: the article graphic assets/img/articles/filler-volume-retention-lips-vs-cheek.jpg on navy, caption "Khan et al. 2026 · ปริมาตรที่วัดจากภายนอก". Slide 5: doctor photo assets/img/dr-bas.jpg (not a galderma-* photo) + 2 lines. Small text footer credit on every slide: "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943 · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล". No white logo band, no filler brand names or product boxes, no before/after, no price.
 
+
+### 2026-11-20
+- Friday: Marketing light + Branding deep. promos.ts unchanged since 9efd109: emlift-2611 runs to 30 Nov 23:59; no December promo defined yet. referral.ts: event 3 Nov – 15 Dec 23:59 (friend's first paid treatment must fall in the window).
+- Today's slot Fri 20 Nov = ligaments reel (Draft 11). Next slot Sun 22 Nov = Loy Krathong closed-day Story (Draft 13) — full TH caption in today's report. Then Wed 25 Nov skincare carousel (Draft 14).
+- Done: Draft 24 for Sun 13 Dec (referral last-call Story, A/B) below — facts only from referral.ts and Draft 10; 15 Dec is a Tuesday (clinic closed), so the post names Mon 14 Dec as the last open day. No "last chance"/countdown wording (brand book).
+- No LINE broadcast tomorrow (Sat 21 Nov) unless the doctor decides to send set emlift-2611. No market watch (Mondays only).
+
+#### Draft 24 — Sun 13 Dec · FB + IG Story (9:16, 2 frames) · Referral event "ชวนเพื่อนมาสวยด้วยกัน" ends Tue 15 Dec
+Frame 1 text: "ชวนเพื่อนมาสวยด้วยกัน · ถึง 15 ธ.ค." / "เพื่อนใหม่: ปรึกษาฟรี + เครดิต 1,000.-" / "คนชวน: เครดิต 1,500.- ต่อเพื่อน"
+Frame 2 text: "คลินิกเปิดวันสุดท้ายของกิจกรรม จันทร์ 14 ธ.ค. 10:00–19:00" / "อังคาร 15 ธ.ค. ปิดตามปกติ" / keyword chip "พิมพ์ “ชวนเพื่อน”" / link sticker → LINE @vinfinityclinic
+TH caption (Version A — full terms):
+กิจกรรม “ชวนเพื่อนมาสวยด้วยกัน” ถึงวันอังคารที่ 15 ธ.ค. นี้ 💙
+คลินิกปิดทุกวันอังคาร วันสุดท้ายที่เปิดในช่วงกิจกรรมคือ วันจันทร์ที่ 14 ธ.ค. 10:00–19:00 น.
+
+👭 เพื่อนใหม่: ปรึกษาและวิเคราะห์ผิวกับคุณหมอฟรี + เครดิต 1,000 บาท เมื่อทำหัตถการครั้งแรก 5,000 บาทขึ้นไป
+🙋 คนชวน: เครดิต 1,500 บาท ต่อเพื่อน 1 คนที่มาทำครั้งแรกตามเงื่อนไข · ชวนสำเร็จครบ 3 คน รับ Vitaran 1 cc
+
+แพทย์ประเมินก่อนทุกครั้ง ไม่จำเป็นต้องทำในวันที่มาปรึกษา
+โดย นพ.เดโชวัต พรมดา (ว.48943) · 📍 Vinfinity Clinic อุดรธานี · 📞 082-462-2963
+ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · การทำหัตถการทุกชนิดอาจมีผลข้างเคียง
+
+ทักไลน์ @vinfinityclinic พิมพ์ “ชวนเพื่อน” รับลิงก์ของคุณ
+
+TH caption (Version B — no free-reward line in public posts): same as A, delete " · ชวนสำเร็จครบ 3 คน รับ Vitaran 1 cc".
+
+EN caption:
+Our "Bring a friend" event runs until Tuesday 15 Dec 💙 We're closed on Tuesdays, so the last open day in the event is Monday 14 Dec, 10:00–19:00. Your friend: free consultation and skin analysis with the doctor, plus a 1,000 THB credit on a first treatment of 5,000 THB or more. You: 1,500 THB credit for each friend who has a first treatment on these terms (Version A only: 3 friends → Vitaran 1 cc). The doctor assesses first; no treatment is needed on the consultation day. Dr. Dechowat Promda (license 48943) · consultations in English. Results vary from person to person. All procedures carry possible side effects. Message LINE @vinfinityclinic and type "ชวนเพื่อน" to get your personal link · Messenger m.me/Vinfinity.Clinic
+
+Hashtags: #VinfinityClinic #ชวนเพื่อนมาสวยด้วยกัน #คลินิกอุดร #อุดรธานี #UdonThani
+Alt text: ห้องรับรองโทนสีกรมท่าของ Vinfinity Clinic พร้อมข้อความ "ชวนเพื่อนมาสวยด้วยกัน ถึง 15 ธ.ค." / Vinfinity Clinic lounge in navy tones with the text "Bring a friend, until 15 Dec".
+Graphic brief: 1080×1920, 2 frames. Frame 1: real photo assets/img/clinic-lounge.jpg top 50%, dark navy gradient (#0B142E → #1A326B) below; silver #EEF2F8 headline "ชวนเพื่อนมาสวยด้วยกัน · ถึง 15 ธ.ค."; two silver-outline chips for friend / inviter credits. Frame 2: real photo assets/img/reception.jpg, same gradient; opening-day line in silver #D5DDEE; LINE link sticker + keyword chip. Small text footer credit on both frames: "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943 · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล". No white logo band, no countdown timer, no "โอกาสสุดท้าย"/"last chance", no stock models, no before/after, no lucky draw.

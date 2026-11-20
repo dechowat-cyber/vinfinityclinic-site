@@ -10,7 +10,8 @@
 6. Lao (LO) pages: none exist on the site yet — brand book has no LO voice sample; ask doctor whether LO is planned (Vientiane patients).
 7. Wording check: pages/article-tear-trough-candidates.html:60 "ได้ผลดีที่สุด" (cited study subgroup) — soften to "ได้ผลดีกว่า" if ฆสพ. reviewer prefers zero "ที่สุด". home.html:29 doctor quote "ไม่ได้มาจากยาที่แพงที่สุด" is a negation — leave unless reviewer objects.
 8. Authority piece (weekly, next due week of 2026-11-16): ligament-support explainer from /articles/ligament-lift-injection/ (week of 11-09 brief became marketing Draft 17, Wed 2 Dec).
-9. Next rotation (Fri 20 Nov): website CI — re-check styles.css tokens, off-palette colours and logo use on article pages (last full website audit 2026-10-30).
+9. Next rotation (Fri 27 Nov): public profiles again — only if the team has done the 2b checklist; otherwise menu pages part 1 re-check (/price/, /filler/ family) incl. EM Lift wording once on site.
+10. Proposal (branch, needs doctor): 10 descriptive "ที่สุด" in TH article bodies (science context, e.g. "ไวที่สุด", "รุนแรงที่สุด", "ได้ผลดีที่สุด", "มากที่สุด") → soften per brand book; extends backlog 7. Wait until branches 1–2 are approved to avoid a pile-up.
 
 ## Brand book (keep short)
 **Names.** Vinfinity Clinic (Udon Thani; Vientiane) · นพ.เดโชวัต พรมดา / Dechowat Promda, M.D. · "The Filler Architect" · ว.48943 always next to the doctor's name on profile pages. Tagline in use: "Data-driven precision, Art-driven result".
@@ -27,6 +28,12 @@
 "IMCAS Asia 2023 Live Demonstration — what a live demo teaches about planning": 1 carousel (5 slides) + 1 short article section. Facts allowed: faculty + live demo at IMCAS Asia 2023 (photo /assets/img/doctor/imcas-asia-2023-live-demo.jpg), the doctor's layered/ligament approach as already written in /articles/layered-injection-anatomy/ and /articles/facial-ligaments-aging/. No patient faces, no product brands, no outcome claims; end with "ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล" + LINE CTA. Draft only, doctor approves.
 
 ## Log
+### 2026-11-20
+- Audit area (rotation): website CI — assets/styles.css tokens + 26 article pages (13 TH + 13 EN incl. both index pages).
+- Found + fixed on main: 2 leftovers of the old navy #041738 (sticky header background rgba(4,23,56,.94) and favicon.svg fill) → CI navy #0B142E; 2 pure-black shadows rgba(0,0,0,.35) (portrait card, doctor badge) → navy-tinted rgba(11,20,46,.35) ("no pure black"). Visually near-identical; `python3 build.py` rebuilt 50 pages (only the styles.css ?v= hash changed).
+- Article pages clean: 0 off-palette inline colours, logo use consistent (header mark + footer stacked, white on navy), 0 images without alt (empty alt only on the decorative mark and listing thumbnails next to their titles), 0 toxin brands, 0 EN banned words. Galderma only in JSON-LD award history (backlog 5).
+- Remaining off-token but in-family tints in styles.css (#25324D body text, #8D97AA legal, #C9D0DB lead, #F4F6F9, #E6ECF6…) — navy/silver shades, left as is.
+- Wording: 10 descriptive "ที่สุด" in TH article bodies (science context) → backlog 10 (proposal only). Branches 20261031 and 20261106 still waiting for the doctor.
 ### 2026-11-13
 - Audit area (rotation): menu pages part 2 — /toxin/, /skin-booster/, /lifting/, /sculptra/ TH + EN (8 pages). TH↔EN parity OK: same section order and headings (9/8/9/10 h1–h2 each side), same FAQ count (5/5/5/6), same prices on both sides and all match /price/.
 - Compliance scan of those 8 pages: 0 banned words, 0 toxin brand names, 0 Galderma, disclaimer "ผลลัพธ์ของการรักษาขึ้นอยู่กับแต่ละบุคคล" / "Results vary" + ฆสพ. on every page, only inline colour #0B142E (CI). One img with alt="" = decorative logo mark (correct).
