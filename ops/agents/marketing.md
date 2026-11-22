@@ -13,7 +13,7 @@ Referral event "ชวนเพื่อนมาสวยด้วยกัน"
 
 ## Backlog (top = next)
 1. Get LINE OA follower count + segment sizes (past skin-booster / filler patients) from LINE OA Manager — broadcast sizes are "not verified" until then. (Ask doctor/team.)
-2. All slots to Sun 13 Dec are DRAFT READY (Draft 24 = referral last call, A/B). Roll the calendar to 27 Dec ~1 Dec (next run: add Wed 16 Dec + Fri 18 Dec slots). Check promos.ts for a December promo first; if one appears, add the โปรเดือนนี้ CTA to Draft 16/17-era posts.
+2. All slots to Wed 16 Dec are DRAFT READY (Draft 25 = dissolving carousel). Next run: add Fri 18 Dec + Sun 20 Dec slots (candidates: /articles/ligament-lift-injection/ and /articles/filler-long-term/ — the last two unused articles; then New Year closing-hours Story once the doctor gives holiday hours — not verified). Check promos.ts for a December promo first; if one appears, add the โปรเดือนนี้ CTA to Draft 16/17-era posts.
 2b. Doctor to confirm: may a public feed post name the referral credits and the "3 friends → Vitaran 1 cc" reward under the clinic's advertising approval (ฆสพ.)? Draft 10 has a version without the reward line — not verified.
 3. Sculptra promo ended Sun 15 Nov 23:59 — never quote 15,990 again. "โปรเดือนนี้" shows EM Lift to 30 Nov (last-call Story = Draft 21). Check promos.ts for a December promo before 1 Dec; from 1 Dec never quote 4,500 / 18,000 as Early Bird.
 3b. EM Lift: ask the doctor for the device name + Thai FDA registration wording so captions/site can say more; until then only the facts in the brief. No /lifting/ or /price/ mention of EM Lift yet — SEO agent to propose a branch once the wording is on file.
@@ -24,7 +24,7 @@ Referral event "ชวนเพื่อนมาสวยด้วยกัน"
 7. Lao-language caption variant for Vientiane audience (site has lo menu images).
 8. Market watch: Udon Thani-local competitor promos (FB pages) — web search surfaced none on 2026-10-30 and 2026-10-31; needs a human to check FB pages or a different source.
 
-## 2-week content calendar (1 Nov – 13 Dec 2026)
+## 2-week content calendar (1 Nov – 16 Dec 2026)
 Weekdays corrected 2026-11-01 (1 Nov 2026 = Sunday; earlier labels were one day off — dates unchanged). Clinic closed Tuesdays.
 | Date | Channel | Topic | Hook | CTA | Asset |
 |---|---|---|---|---|---|
@@ -52,6 +52,7 @@ Weekdays corrected 2026-11-01 (1 Nov 2026 = Sunday; earlier labels were one day 
 | Wed 9 Dec | FB + IG (EN-first) | Foreign patients: "Visiting the Expo? See the doctor in English" — 4 steps to book from photos (Expo runs to 14 Mar 2027) — DRAFT READY (Draft 22) | "In Udon Thani for the Expo? See an aesthetic doctor in English." | Messenger + LINE | reception.jpg |
 | Fri 11 Dec | FB + IG carousel | Evergreen: same filler, different results — gel, tissue, area, layer (from /articles/same-filler-different-results/) — DRAFT READY (Draft 23) | "ฟิลเลอร์ยี่ห้อเดียวกับเพื่อน ทำไมผลไม่เหมือนกัน" | /articles/same-filler-different-results + LINE | articles/filler-volume-retention-lips-vs-cheek.jpg |
 | Sun 13 Dec | FB + IG Story | Referral event last call (ends Tue 15 Dec = clinic closed; last open day Mon 14 Dec) — DRAFT READY (Draft 24, A/B per backlog 2b) | "ชวนเพื่อน ถึง 15 ธ.ค." | ทักไลน์ พิมพ์ “ชวนเพื่อน” | clinic-lounge.jpg |
+| Wed 16 Dec | FB + IG carousel | Evergreen: filler dissolving — does hyaluronidase damage your own skin? (from /articles/dissolve-filler-native-tissue/) — DRAFT READY (Draft 25) | "สลายฟิลเลอร์แล้ว ผิวเดิมจะเสียไหม" | /articles/dissolve-filler-native-tissue + LINE ส่งรูป + ประวัติการฉีด | articles/hyaluronidase-native-ha-recovery.jpg |
 
 Notes: before/after only from assets/img/ba (consented, already on site), labelled PRE / POST, organic only, never in ads. File naming on site: caseNN-b = PRE (before), caseNN-a = POST (after) — see pages/_results_eye.html. Do not use galderma-* doctor photos (not a current affiliation).
 
@@ -851,3 +852,37 @@ Our "Bring a friend" event runs until Tuesday 15 Dec 💙 We're closed on Tuesda
 Hashtags: #VinfinityClinic #ชวนเพื่อนมาสวยด้วยกัน #คลินิกอุดร #อุดรธานี #UdonThani
 Alt text: ห้องรับรองโทนสีกรมท่าของ Vinfinity Clinic พร้อมข้อความ "ชวนเพื่อนมาสวยด้วยกัน ถึง 15 ธ.ค." / Vinfinity Clinic lounge in navy tones with the text "Bring a friend, until 15 Dec".
 Graphic brief: 1080×1920, 2 frames. Frame 1: real photo assets/img/clinic-lounge.jpg top 50%, dark navy gradient (#0B142E → #1A326B) below; silver #EEF2F8 headline "ชวนเพื่อนมาสวยด้วยกัน · ถึง 15 ธ.ค."; two silver-outline chips for friend / inviter credits. Frame 2: real photo assets/img/reception.jpg, same gradient; opening-day line in silver #D5DDEE; LINE link sticker + keyword chip. Small text footer credit on both frames: "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943 · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล". No white logo band, no countdown timer, no "โอกาสสุดท้าย"/"last chance", no stock models, no before/after, no lucky draw.
+
+### 2026-11-22
+- Sunday: Marketing light + live-site check only. Production dpl_EectUqcevsQDyRuBZoxHs6quouMm (commit 716eeed) READY; / (TH) and /en/price/ return 200 via Vercel fetch and render fully (title, canonical, hreflang, 4 JSON-LD blocks, footer with ฆสพ.อด.100/2568 + "closed Tuesdays"). Nothing broken. (No run is logged for Sat 21 Nov.)
+- promos.ts unchanged since 9efd109: emlift-2611 runs to 30 Nov 23:59; no December promo defined yet (8 days left to add one).
+- Today's slot Sun 22 Nov = Loy Krathong closed-day Story (Draft 13; clinic closed Tue 24 Nov). Next slot Wed 25 Nov = skincare carousel (Draft 14) — full TH caption in today's report. Then Fri 27 Nov clinic checklist (Draft 15), Sat 28 Nov EM Lift last call (Draft 21).
+- Done: Draft 25 for Wed 16 Dec (evergreen carousel on filler dissolving) below — facts only from /articles/dissolve-filler-native-tissue/ (ACE guideline numbers as the article states them). No brand names, no enzyme units, no price, no before/after.
+- No LINE broadcast tomorrow (Mon 23 Nov) unless the doctor decides to send set emlift-2611 before the Early Bird ends. Market watch is due tomorrow (Monday run).
+
+#### Draft 25 — Wed 16 Dec · FB + IG carousel (5 slides, 1080×1350) · Filler dissolving and your own skin
+Slides: 1) "สลายฟิลเลอร์แล้ว ผิวเดิมจะเสียไหม" · 2) "เอนไซม์ย่อยไฮยาลูรอนิกของผิวได้ชั่วคราว แต่ผิวสร้างใหม่ตลอด (ครึ่งชีวิตราว 24 ชม.)" · 3) "ทำไมบางคนดูโทรมลง: เห็นหน้าจริงที่ถูกบังไว้ · ผิวถูกยืดมานาน · สลายมากเกินจำเป็น" · 4) "บางเคสสลายยากกว่า บางเคสต้องทำมากกว่า 1 ครั้ง — บอกประวัติการฉีดให้หมอ" · 5) "ที่ Vinfinity: สลายเฉพาะจุด ทีละน้อย แล้วประเมินใหม่หลังราว 2 สัปดาห์"
+TH caption:
+สลายฟิลเลอร์แล้ว ผิวเดิมจะเสียไหม? 🤔
+หลายคนอยากเอาฟิลเลอร์ออก แต่กลัวว่าเอนไซม์จะ “กินเนื้อตัวเอง” จนหน้าตอบ งานวิจัยบอกว่าอย่างนี้ค่ะ
+
+1️⃣ เอนไซม์สลายฟิลเลอร์ (hyaluronidase) ย่อยไฮยาลูรอนิกที่ผิวสร้างเองได้ด้วย แต่เป็นแค่ชั่วคราว เพราะผิวสร้างใหม่ตลอดเวลา ครึ่งชีวิตราว 24 ชั่วโมง
+2️⃣ ที่บางคนดูโทรมลงหลังสลาย ส่วนใหญ่ไม่ใช่เพราะเนื้อเยื่อถูกทำลาย แต่เพราะเห็นใบหน้าจริงที่ถูกฟิลเลอร์บังไว้ ผิวที่ถูกยืดมานาน หรือสลายมากเกินจุดที่มีปัญหา
+3️⃣ ฟิลเลอร์แต่ละชนิดสลายง่ายยากต่างกัน บางเคสต้องทำมากกว่าหนึ่งครั้ง การบอกประวัติการฉีดให้แพทย์ช่วยให้วางแผนได้แม่นขึ้น
+4️⃣ แพ้เอนไซม์ได้แต่พบน้อย ควรแจ้งประวัติแพ้ยา แพ้ผึ้งหรือแตนต่อยให้แพทย์ทราบ
+
+ที่ Vinfinity คุณหมอซักประวัติการฉีดทั้งหมด อธิบายผลที่คาดได้ก่อนทำ สลายเฉพาะจุดทีละน้อย แล้วรอราว 2 สัปดาห์ก่อนประเมินใหม่ บางคนพบว่าไม่ต้องเติมอีกเลย
+อ่านฉบับเต็มพร้อมเอกสารอ้างอิง: vinfinityclinic.com/articles/dissolve-filler-native-tissue/
+
+โดย นพ.เดโชวัต พรมดา (ว.48943) · 📍 Vinfinity Clinic อุดรธานี · คลินิกปิดทุกวันอังคาร
+💬 ส่งรูปหน้าตรง ด้านข้าง และประวัติการฉีดเท่าที่จำได้ ทาง LINE @vinfinityclinic ให้คุณหมอดูก่อนว่าควรสลายตรงไหน หรือยังไม่จำเป็น
+หลังฉีดฟิลเลอร์ ถ้าปวดมาก ผิวซีดหรือคล้ำเป็นแถบ ต้องพบแพทย์ทันที
+ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · การทำหัตถการทุกชนิดอาจมีผลข้างเคียง
+
+EN caption:
+Dissolving filler — will it damage your own skin? The enzyme (hyaluronidase) can break down the skin's own hyaluronic acid too, but only for a while: the skin keeps making it, with a half-life of about 24 hours. When people look more tired after dissolving, it is usually because they now see the face the filler was hiding, skin that was stretched for a long time, or more dissolving than needed — not destroyed tissue. Some fillers break down more slowly and may need more than one session, so tell the doctor what you had injected. Allergy is possible but uncommon. At Vinfinity the doctor dissolves only where needed, a little at a time, and reassesses after about 2 weeks. Full article (Thai, with references): vinfinityclinic.com/articles/dissolve-filler-native-tissue/ · Dr. Dechowat Promda (license 48943) · consultations in English · closed Tuesdays. Results vary from person to person. All procedures carry possible side effects. LINE @vinfinityclinic · Messenger m.me/Vinfinity.Clinic
+
+Hashtags: #สลายฟิลเลอร์ #แก้ฟิลเลอร์ #ฟิลเลอร์อุดร #VinfinityClinic #TheFillerArchitect #คลินิกอุดร #อุดรธานี #FillerDissolving #UdonThani
+Alt text: แผนภาพแสดงฟิลเลอร์ถูกเอนไซม์สลาย ขณะที่ไฮยาลูรอนิกของผิวสร้างกลับมาใหม่ พร้อมข้อความ "สลายฟิลเลอร์แล้ว ผิวเดิมจะเสียไหม" / Diagram of filler being broken down by the enzyme while the skin's own hyaluronic acid is rebuilt, with the text "Dissolving filler — will it damage your own skin?".
+Graphic brief: 5 slides 1080×1350. Slide 1: real clinic photo (assets/img/treatment.jpg) with dark navy gradient (#0B142E → #1A326B), silver #EEF2F8 headline. Slide 2: the article graphic assets/img/articles/hyaluronidase-native-ha-recovery.jpg on navy. Slides 3–4: navy background, silver #D5DDEE text lists. Slide 5: doctor photo assets/img/dr-bas.jpg (not a galderma-* photo) + 2 lines + LINE chip. Small text footer credit on every slide: "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943 · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล". No white logo band, no filler or enzyme brand names, no unit numbers, no before/after, no price.
+
