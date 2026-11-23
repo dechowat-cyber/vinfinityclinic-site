@@ -69,3 +69,10 @@
 ### 2026-11-16 (doctor approved, same day)
 - Merged agent/security-20261109 to main (52089f0): vercel.json redirects /line-app/*, /tools/*, /pages/*, /build.py, /i18n_en.py, /README.md to /. Production dpl_4aPsNYsK9drWixxVMKeCt73VJVkL READY; /line-app/lib/promos.ts and /build.py now return the home page, robots.txt 200. vinfinity-line production dpl_9vHrxBr1W6XJsdNRef3Yz6q1a4Xw READY on the same commit. Older immutable deployment URLs still hold the files.
 - Merged agent/seo-20261109 (0d1b68f): chin FAQ "ผลถาวรกว่า" → "ผลอยู่จนกว่าจะผ่าตัดเอาออก"; EN articles index "Instant volume" → "Volume after injection". Sitemap regenerated; audit clean (52 pages, 0 issues).
+
+### 2026-11-23
+- Rebuild on main (cf4db45, shallow clone): `python3 build.py` produced 0 file changes — the shallow-clone sitemap guard from 11-16 works (50 URLs, lastmod kept).
+- Audit of built pages: 52 HTML pages, 327 images (0 missing alt), 0 duplicate titles/descriptions, all JSON-LD parses, canonical + hreflang on every indexable page, 1 H1 per page, 0 broken internal links/assets, every sitemap URL exists, robots.txt OK (AI bots allowed). Largest assets: vivacy-paris.jpg 302 KB, doctor/gain-2021-trophy.jpg 273 KB (JPG fallbacks; WebP served). No source fix needed.
+- Expired promo check: no "15,990" (Sculptra) anywhere on built pages / kb.txt / llms.txt. EM Lift still absent from site (backlog 0b, waits for device + FDA wording).
+- Live: production dpl_46S9uUPwMghdGZcnMReXUUCypJWY (commit cf4db45) READY; /articles/ligament-lift-injection/ 200 with title, canonical, hreflang th/en/x-default, 4 JSON-LD blocks.
+- Weekly page proposal: none — temple page still waits for the doctor's 5 lines (backlog 1), EM Lift for device/FDA wording (backlog 0b). LO pages still none (backlog 8).

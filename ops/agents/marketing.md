@@ -13,7 +13,7 @@ Referral event "ชวนเพื่อนมาสวยด้วยกัน"
 
 ## Backlog (top = next)
 1. Get LINE OA follower count + segment sizes (past skin-booster / filler patients) from LINE OA Manager — broadcast sizes are "not verified" until then. (Ask doctor/team.)
-2. All slots to Wed 16 Dec are DRAFT READY (Draft 25 = dissolving carousel). Next run: add Fri 18 Dec + Sun 20 Dec slots (candidates: /articles/ligament-lift-injection/ and /articles/filler-long-term/ — the last two unused articles; then New Year closing-hours Story once the doctor gives holiday hours — not verified). Check promos.ts for a December promo first; if one appears, add the โปรเดือนนี้ CTA to Draft 16/17-era posts.
+2. All slots to Fri 18 Dec are DRAFT READY (Draft 26 = ligament-lift myth carousel). Next run: add Sun 20 Dec slot (candidate: /articles/filler-long-term/ — the last unused article; then New Year closing-hours Story once the doctor gives holiday hours — not verified). Check promos.ts for a December promo first; if one appears, add the โปรเดือนนี้ CTA to Draft 16/17-era posts.
 2b. Doctor to confirm: may a public feed post name the referral credits and the "3 friends → Vitaran 1 cc" reward under the clinic's advertising approval (ฆสพ.)? Draft 10 has a version without the reward line — not verified.
 3. Sculptra promo ended Sun 15 Nov 23:59 — never quote 15,990 again. "โปรเดือนนี้" shows EM Lift to 30 Nov (last-call Story = Draft 21). Check promos.ts for a December promo before 1 Dec; from 1 Dec never quote 4,500 / 18,000 as Early Bird.
 3b. EM Lift: ask the doctor for the device name + Thai FDA registration wording so captions/site can say more; until then only the facts in the brief. No /lifting/ or /price/ mention of EM Lift yet — SEO agent to propose a branch once the wording is on file.
@@ -24,7 +24,7 @@ Referral event "ชวนเพื่อนมาสวยด้วยกัน"
 7. Lao-language caption variant for Vientiane audience (site has lo menu images).
 8. Market watch: Udon Thani-local competitor promos (FB pages) — web search surfaced none on 2026-10-30 and 2026-10-31; needs a human to check FB pages or a different source.
 
-## 2-week content calendar (1 Nov – 16 Dec 2026)
+## 2-week content calendar (1 Nov – 18 Dec 2026)
 Weekdays corrected 2026-11-01 (1 Nov 2026 = Sunday; earlier labels were one day off — dates unchanged). Clinic closed Tuesdays.
 | Date | Channel | Topic | Hook | CTA | Asset |
 |---|---|---|---|---|---|
@@ -53,6 +53,7 @@ Weekdays corrected 2026-11-01 (1 Nov 2026 = Sunday; earlier labels were one day 
 | Fri 11 Dec | FB + IG carousel | Evergreen: same filler, different results — gel, tissue, area, layer (from /articles/same-filler-different-results/) — DRAFT READY (Draft 23) | "ฟิลเลอร์ยี่ห้อเดียวกับเพื่อน ทำไมผลไม่เหมือนกัน" | /articles/same-filler-different-results + LINE | articles/filler-volume-retention-lips-vs-cheek.jpg |
 | Sun 13 Dec | FB + IG Story | Referral event last call (ends Tue 15 Dec = clinic closed; last open day Mon 14 Dec) — DRAFT READY (Draft 24, A/B per backlog 2b) | "ชวนเพื่อน ถึง 15 ธ.ค." | ทักไลน์ พิมพ์ “ชวนเพื่อน” | clinic-lounge.jpg |
 | Wed 16 Dec | FB + IG carousel | Evergreen: filler dissolving — does hyaluronidase damage your own skin? (from /articles/dissolve-filler-native-tissue/) — DRAFT READY (Draft 25) | "สลายฟิลเลอร์แล้ว ผิวเดิมจะเสียไหม" | /articles/dissolve-filler-native-tissue + LINE ส่งรูป + ประวัติการฉีด | articles/hyaluronidase-native-ha-recovery.jpg |
+| Fri 18 Dec | FB + IG carousel | Myth vs evidence: "ฉีดยกเอ็น" — ligaments stiffen with age, they don't loosen; support the deep base instead (from /articles/ligament-lift-injection/) — DRAFT READY (Draft 26) | "ฉีดยกเอ็น ได้ผลจริงไหม" | /articles/ligament-lift-injection + LINE ส่งรูป | articles/ligament-lift-injection-support.jpg |
 
 Notes: before/after only from assets/img/ba (consented, already on site), labelled PRE / POST, organic only, never in ads. File naming on site: caseNN-b = PRE (before), caseNN-a = POST (after) — see pages/_results_eye.html. Do not use galderma-* doctor photos (not a current affiliation).
 
@@ -886,3 +887,35 @@ Hashtags: #สลายฟิลเลอร์ #แก้ฟิลเลอร�
 Alt text: แผนภาพแสดงฟิลเลอร์ถูกเอนไซม์สลาย ขณะที่ไฮยาลูรอนิกของผิวสร้างกลับมาใหม่ พร้อมข้อความ "สลายฟิลเลอร์แล้ว ผิวเดิมจะเสียไหม" / Diagram of filler being broken down by the enzyme while the skin's own hyaluronic acid is rebuilt, with the text "Dissolving filler — will it damage your own skin?".
 Graphic brief: 5 slides 1080×1350. Slide 1: real clinic photo (assets/img/treatment.jpg) with dark navy gradient (#0B142E → #1A326B), silver #EEF2F8 headline. Slide 2: the article graphic assets/img/articles/hyaluronidase-native-ha-recovery.jpg on navy. Slides 3–4: navy background, silver #D5DDEE text lists. Slide 5: doctor photo assets/img/dr-bas.jpg (not a galderma-* photo) + 2 lines + LINE chip. Small text footer credit on every slide: "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943 · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล". No white logo band, no filler or enzyme brand names, no unit numbers, no before/after, no price.
 
+
+### 2026-11-23
+- Monday: Marketing light + SEO deep + market watch. promos.ts unchanged since 9efd109: emlift-2611 runs to 30 Nov 23:59; still no December promo defined (7 days left — doctor to decide). referral.ts event to 15 Dec.
+- No calendar slot today. Next slot Wed 25 Nov = skincare carousel (Draft 14, ready) — full TH caption in today's report. Then Fri 27 Nov clinic checklist (Draft 15), Sat 28 Nov EM Lift last call (Draft 21), Sun 29 Nov Vitaran (Draft 16).
+- Done: Draft 26 for Fri 18 Dec (myth-vs-evidence carousel "ฉีดยกเอ็น ได้ผลจริงไหม") below — facts only from /articles/ligament-lift-injection/ (2023 ASJ animal study, 1 human case report). No brand names, no price, no before/after, no result claims.
+- Market watch (web search, 1 query "คลินิกความงาม อุดรธานี โปรโมชั่น ธันวาคม"): only aggregators (HDmall, Gowabi listings for B.Mee Clinic Udon and The V-Sage Clinic Udon) and LINE pages of an unrelated filler brand; no Udon clinic December promo visible — not verified. Gowabi = booking marketplace where local competitors list; consider a listing (backlog 8, human decision).
+- No LINE broadcast tomorrow (Tue 24 Nov = Loy Krathong, clinic closed).
+
+#### Draft 26 — Fri 18 Dec · FB + IG carousel (5 slides, 1080×1350) · "ฉีดยกเอ็น" — myth vs evidence
+Slides: 1) "ฉีดยกเอ็น ได้ผลจริงไหม" · 2) "เอ็นยึดใบหน้าเหมือนตะขอแขวนผ้าม่าน — สิ่งที่หย่อนคือผ้าระหว่างตะขอ" · 3) "งานวิจัยปี 2023: เอ็นไม่ได้หลวมตามอายุ แต่แข็งขึ้น (ศึกษาในสัตว์ทดลอง)" · 4) "ฉีดเพื่อกระชับเอ็น: หลักฐานในคนยังมีแค่รายงาน 1 ราย · สิ่งที่สมเหตุสมผลกว่า = เติมฐานรองรับชั้นลึก" · 5) "3 คำถามก่อนฉีด" + LINE chip
+TH caption:
+“ฉีดยกเอ็น” ได้ผลจริงไหม? 🤔
+หลายคนเคยได้ยินว่าหน้าย้อยเพราะเอ็นหย่อน ต้องฉีดเข้าไปให้เอ็นกระชับ งานวิจัยใหม่ทำให้ต้องคิดเรื่องนี้ใหม่ค่ะ
+
+1️⃣ เอ็นยึดใบหน้าเหมือนตะขอที่แขวนผ้าม่านไว้กับกระดูก สิ่งที่หย่อนตามวัยคือ “ผ้า” ระหว่างตะขอ ได้แก่ไขมันและผิว
+2️⃣ งานวิจัยปี 2023 (Aesthetic Surgery Journal) พบว่าเอ็นไม่ได้หลวมขึ้นตามอายุ แต่กลับแข็งขึ้น — งานนี้ทำในสัตว์ทดลอง และศึกษาเอ็นโหนกแก้มเป็นหลัก
+3️⃣ หลักฐานในคนเรื่องฉีดให้เอ็นหนาขึ้น ตอนนี้ยังเป็นแค่รายงานผู้ป่วย 1 ราย และยังไม่มีงานที่วัดชัดว่าหน้ายกขึ้นในระยะยาว
+4️⃣ สิ่งที่ยังสมเหตุสมผลคือ เติมฐานรองรับในชั้นลึกตามจุดที่ยุบ โดยใช้แนวเอ็นเป็นจุดอ้างอิง — ไม่ต้องดึงตะขอ แต่เติมฐานให้ผ้ามีที่วาง
+
+ก่อนฉีด ลองถามแพทย์ 3 ข้อ: หน้าย้อยของเราเกิดจากชั้นไหน · จะฉีดชั้นไหน เพื่ออะไร · ตรงนั้นมีหลอดเลือดสำคัญใกล้ไหม ป้องกันอย่างไร
+อ่านฉบับเต็มพร้อมเอกสารอ้างอิง: vinfinityclinic.com/articles/ligament-lift-injection/
+
+เรียบเรียงโดย นพ.เดโชวัต พรมดา (ว.48943) · 📍 Vinfinity Clinic อุดรธานี · คลินิกปิดทุกวันอังคาร
+💬 ส่งรูปหน้าตรงและด้านข้างทาง LINE @vinfinityclinic ให้คุณหมอช่วยดูว่าชั้นไหนเปลี่ยนไป ก่อนวางแผน
+ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · การทำหัตถการทุกชนิดอาจมีผลข้างเคียง
+
+EN caption:
+"Ligament lift" injections — do they work? Think of facial ligaments as hooks holding a curtain to the bone: what sags with age is the curtain between the hooks (fat and skin). A 2023 study in Aesthetic Surgery Journal found that ligaments don't loosen with age — they stiffen (an animal study, mainly the cheekbone ligament). Human evidence for injecting to "tighten" ligaments is so far a single case report. What still makes sense is rebuilding deep support where tissue has thinned, using the ligament lines as landmarks. Ask your doctor: which layer has changed, which layer will be injected and why, and how major blood vessels nearby are protected. Full article with references (Thai/English): vinfinityclinic.com/en/articles/ligament-lift-injection/ · Dr. Dechowat Promda (license 48943) · consultations in English via LINE @vinfinityclinic or Messenger m.me/Vinfinity.Clinic. Results vary from person to person. All procedures carry possible side effects.
+
+Hashtags: #ฉีดยกเอ็น #หน้าย้อย #ฟิลเลอร์อุดร #VinfinityClinic #TheFillerArchitect #คลินิกอุดร #อุดรธานี #FacialAnatomy #UdonThani
+Alt text: ภาพเปรียบเทียบการฉีดเพื่อกระชับเอ็นยึดใบหน้า กับการเติมฐานรองรับชั้นลึกระหว่างเอ็น พร้อมข้อความ "ฉีดยกเอ็น ได้ผลจริงไหม" / Diagram comparing injecting to tighten facial ligaments with rebuilding deep support between them, with the text "Ligament lift injections — do they work?".
+Graphic brief: 5 slides 1080×1350. Slide 1: real clinic photo (assets/img/treatment.jpg) with dark navy gradient (#0B142E → #1A326B), silver #EEF2F8 headline. Slide 2: article graphic assets/img/articles/ligament-lift-injection-support.jpg on navy (hook-and-curtain idea). Slides 3–4: navy background, silver #D5DDEE text, small "ศึกษาในสัตว์ทดลอง" / "รายงาน 1 ราย" labels so the evidence level is clear. Slide 5: doctor photo assets/img/dr-bas.jpg (not a galderma-* photo) + 3 questions + LINE chip. Small text footer credit on every slide: "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943 · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล". No white logo band, no product brand names, no before/after.
