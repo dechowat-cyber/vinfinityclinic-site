@@ -80,8 +80,8 @@ export const PROMOS: Promo[] = [{
   trigger: /em\s*-?\s*lift|อีเอ็ม\s*ลิ[ฟฟ]ท์?|early\s*bird|เออร์ลี่|electromagnetic|แม่เหล็ก/i,
   image: "/campaign/emlift-2611/1-1x1.jpg",
   preview: "/campaign/emlift-2611/1-1x1-p.jpg",
-  text: `✨ ใหม่ที่ Vinfinity · EM Lift
-เทคโนโลยีคลื่นแม่เหล็กไฟฟ้า ไม่ใช้เข็ม ทำได้ทั้งผู้หญิงและผู้ชาย
+  text: `✨ โปรแกรมใหม่ที่ Vinfinity · โปรแกรม EM Lift
+โปรแกรมคลื่นแม่เหล็กไฟฟ้า ไม่ใช้เข็ม ทำได้ทั้งผู้หญิงและผู้ชาย
 
 💙 Early Bird 4,500.- ต่อจุด ต่อครั้ง (ปกติ 5,990.-) ถึง 30 พ.ย. นี้
 เลือกจุดได้: หน้าผาก · ใต้ตา · แก้ม · ใต้คาง · คอ · บ่า

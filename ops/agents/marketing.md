@@ -953,3 +953,7 @@ Planning a filler top-up before the New Year? Read this first. The usual "6–12
 Hashtags: #ฟิลเลอร์ #ฟิลเลอร์อุดร #เติมฟิลเลอร์ #VinfinityClinic #TheFillerArchitect #คลินิกอุดร #อุดรธานี #DermalFiller #UdonThani
 Alt text: ไทม์ไลน์แสดงว่า MRI ยังพบฟิลเลอร์กลางหน้าอย่างน้อย 2 ปีและบางรายถึง 15 ปี พร้อมข้อความ "ฟิลเลอร์ที่ฉีดไว้ ยังอยู่ไหม" / Timeline showing MRI still finding mid-face filler for at least 2 years and in some people up to 15 years, with the text "Is your filler still there?".
 Graphic brief: 5 slides 1080×1350. Slide 1: real clinic photo (assets/img/treatment.jpg) with dark navy gradient (#0B142E → #1A326B), silver #EEF2F8 headline. Slide 2: article graphic assets/img/articles/filler-mri-longevity-timeline.jpg on navy, small caption "Master et al. 2024 · MRI 33 ราย". Slides 3–4: navy background, silver #D5DDEE text lists. Slide 5: doctor photo assets/img/dr-bas.jpg (not a galderma-* photo) + 3 lines + LINE chip. Small text footer credit on every slide: "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943 · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล". No white logo band, no filler brand names, no before/after, no price, no "ถาวร"/permanent wording.
+
+### 2026-11-24 (doctor) — ad wording rule
+- Thai MOPH (สบส.) guideline: services using drugs/devices must be written as "โปรแกรม…" (e.g. โปรแกรมฉีดฟิลเลอร์, โปรแกรม EM Lift) in every ad, broadcast, image and signage. Apply to all new drafts. The parking-side vinyl went up without it; a "โปรแกรม" patch strip was made (pending สสจ. check).
+- EM Lift card image + LINE text updated to say โปรแกรม.
