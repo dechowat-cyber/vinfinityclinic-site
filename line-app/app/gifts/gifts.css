@@ -80,3 +80,5 @@ body:has(.gf){background:#070D1F}
 .gf-gift.off .gf-burst{opacity:1;transform:translateY(-26px) scale(1)}
 .gf-reveal{animation:gf-up .35s ease-out}
 .gf-toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:60;background:#fff;color:#0B142E;border-radius:99px;padding:10px 18px;font:500 14px Kanit,sans-serif;box-shadow:0 10px 30px rgba(0,0,0,.35);max-width:90vw;text-align:center}
+.gf-mon{position:absolute;right:4px;top:4px;z-index:2;font:500 8.5px Kanit,sans-serif;opacity:.85}
+.gf-legend{gap:8px}

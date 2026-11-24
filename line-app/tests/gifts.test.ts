@@ -13,17 +13,19 @@ const J = (x: unknown) => JSON.stringify(x ?? null);
 const d12 = new Date("2026-12-12T03:00:00Z"); // 10:00 Bangkok
 const BANNED = /ดีที่สุด|ที่สุด|100%|หายขาด|การันตี|เห็นผลทันที|เชี่ยวชาญ|ไม่เจ็บ|ถาวร|ชำนาญ|sculptra|vitaran|botox|best|guarantee/i;
 
-test("31 boxes, exactly one live per Bangkok day, none outside December; filler-check promo is retired", () => {
-  assert.equal(GIFTS.length, 31);
+test("37 boxes 25 Nov – 31 Dec: first opens at launch, exactly one live per Bangkok day, none after", () => {
+  assert.equal(GIFTS.length, 37);
+  assert.equal(GIFTS[0].key, "gift-2611-25");
+  assert.equal(GIFTS[0].type, "laser");
+  assert.ok(activePromos(new Date("2026-11-24T23:10:00+07:00")).some((p) => p.key === "gift-2611-25"));
+  assert.ok(!activePromos(new Date("2026-11-24T22:50:00+07:00")).some((p) => p.key.startsWith("gift-")));
   for (const g of GIFTS) {
-    const noon = new Date(`2026-12-${String(g.day).padStart(2, "0")}T12:00:00+07:00`);
-    assert.equal(giftDay(noon), g.day);
+    const noon = new Date(`2026-${g.md}T12:00:00+07:00`);
+    assert.equal(giftDay(noon), g.n);
     assert.deepEqual(activePromos(noon).filter((p) => p.key.startsWith("gift-")).map((p) => p.key), [g.key]);
   }
-  assert.ok(activePromos(new Date("2026-12-01T00:00:01+07:00")).some((p) => p.key === "gift-2612-01"));
-  assert.ok(!activePromos(new Date("2026-11-30T23:59:00+07:00")).some((p) => p.key.startsWith("gift-")));
   assert.ok(!activePromos(new Date("2027-01-01T00:00:01+07:00")).some((p) => p.key.startsWith("gift-")));
-  assert.ok(!activePromos(new Date("2026-11-25T10:00:00+07:00")).some((p) => p.key === "fillercheck-2612"));
+  assert.ok(GIFTS.some((g) => g.type === "redlight") && GIFTS.filter((g) => g.type === "laser").length >= 2);
 });
 
 test("every box's copy has conditions, โปรแกรม wording and no banned words or brand names", () => {
@@ -52,15 +54,18 @@ test("on 12 Dec: 'ปฏิทิน' → today's card; claim takes a seat of 5;
   assert.equal(await seatsUsed(promoByKey("gift-2612-05")!, d12), 0);
 });
 
-test("before 1 Dec the calendar question gets the teaser with the page link", async () => {
-  const s = J((await handleEvent(msg("UGF_3", "ปฏิทินของขวัญคืออะไรคะ"), new Date("2026-11-28T05:00:00Z"), DEFAULTS))?.messages);
-  assert.match(s, /เปิดกล่องแรก 1 ธ\.ค\./);
-  assert.match(s, /\/gifts\?s=line/);
+test("25 Nov: laser box card; a claim for 26 Nov is 'not open yet' and takes nothing", async () => {
+  const at = new Date("2026-11-25T03:00:00Z");
+  const s = J((await handleEvent(msg("UGF_3", "ปฏิทินของขวัญคืออะไรคะ"), at, DEFAULTS))?.messages);
+  assert.match(s, /ของขวัญวันที่ 25 พ\.ย\./);
+  assert.match(s, /โปรแกรมเลเซอร์กำจัดขน/);
+  const early = J((await handleEvent(msg("UGF_4", "ขอรับสิทธิ์ของขวัญวันที่ 26 พ.ย. ค่ะ"), at, DEFAULTS))?.messages);
+  assert.match(early, /ยังไม่เปิด/);
+  assert.equal(await seatsUsed(promoByKey("gift-2611-26")!, at), 0);
 });
 
-test("broadcast sets: teaser until 30 Nov, live-seat cards on 1 · 12 · 21 · 25 · 31", () => {
-  assert.ok(mediaSet("gift-2612-teaser", new Date("2026-11-30T05:00:00Z")));
-  assert.ok(!mediaSet("gift-2612-teaser", new Date("2026-12-01T05:00:00Z")));
+test("broadcast sets: live-seat cards on 25 Nov and 1 · 12 · 21 · 25 · 31 Dec", () => {
+  assert.ok(mediaSet("gift-2611-25-card", new Date("2026-11-25T05:00:00Z")));
   for (const d of ["01", "12", "21", "25", "31"]) assert.ok(mediaSet(`gift-2612-${d}-card`, new Date(`2026-12-${d}T10:00:00+07:00`)), d);
   assert.ok(!mediaSet("fillercheck-2612-card", new Date("2026-11-25T05:00:00Z")));
 });

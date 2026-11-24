@@ -1,12 +1,13 @@
-// "ปฏิทินของขวัญ สวยก่อนปีใหม่" (doctor's decision 2026-11-24): one box per day, 1–31 Dec 2026.
+// "ปฏิทินของขวัญ สวยก่อนปีใหม่" (doctor's decision 2026-11-24): one box per day. Launched the same night (24 Nov 23:00):
+// first box (25 พ.ย.) opens at launch, then one box per Bangkok day to 31 Dec 2026 — 37 boxes.
 // Not a lucky draw: every person who opens a given day's box gets the same offer (no random prizes, no computer draw),
 // so it stays outside the Gambling Act's lucky-draw licence. Every gift is tied to a programme and has written conditions
 // (MOPH ad rules: "ฟรี/ส่วนลด" always with conditions, services written as "โปรแกรม…", no drug or device brand names here).
 // Seat numbers and which gift falls on which day are the doctor's to change: edit GIFT_TYPES / SCHEDULE only.
 
-export const GIFT_MONTH = "2026-12";
 export const GIFT_YEAR_END = "2026-12-31T23:59:59+07:00";
-export const GIFT_START = "2026-12-01T00:00:00+07:00";
+export const GIFT_START = "2026-11-24T23:00:00+07:00";
+export const GIFT_RANGE = "25 พ.ย. – 31 ธ.ค.";
 export const GIFT_USE_BY = "31 ม.ค. 70";
 export const GIFT_PAGE = "/gifts";
 
@@ -40,41 +41,50 @@ export const GIFT_TYPES = {
     kb: "PN skin booster programme 8,990 THB per box (2 cc) without the usual 4-box minimum (regular 9,990)", categories: ["สกินบูสเตอร์", "ผิว"] },
   lift: { title: "โปรแกรม New Doublo 2.0 แถมดริปผิว", price: "แถมดริปผิว 1 ครั้ง", cond: "เมื่อทำโปรแกรม New Doublo 2.0 ราคาปกติ · จำนวนช็อตตามการประเมินของแพทย์", limit: 10, icon: "🌟",
     kb: "with a New Doublo 2.0 lifting programme at the regular price, one skin drip session is included", categories: ["ยกกระชับ", "ผิว"] },
+  laser: { title: "โปรแกรมเลเซอร์กำจัดขน", price: "ทดลองฟรี 1 ครั้ง", cond: "เฉพาะบริเวณใต้วงแขน · สำหรับผู้ที่ยังไม่เคยทำโปรแกรมนี้ที่คลินิก · แพทย์ประเมินสภาพผิวก่อน", limit: 20, icon: "✨",
+    kb: "one free laser hair removal trial session, underarms only, for people who have not had this programme at the clinic; the doctor checks the skin first", categories: ["เลเซอร์กำจัดขน"] },
+  redlight: { title: "โปรแกรมฉายแสง Red Light", price: "ฟรี 1 ครั้ง", cond: "เมื่อทำโปรแกรมใดก็ได้ในวันเดียวกัน (ไม่มีขั้นต่ำ) · แพทย์ประเมินความเหมาะสมก่อน", limit: 30, icon: "🔴",
+    kb: "one free red light (LED) session added on the same day as any programme, no minimum spend", categories: ["ผิว"] },
   consult: { title: "ประเมินโครงหน้า + ถ่ายภาพมาตรฐาน", price: "ฟรี", cond: "เฉพาะการปรึกษาและถ่ายภาพ ไม่รวมค่าหัตถการ · ไม่มีขั้นต่ำ", limit: 30, icon: "📸",
     kb: "free face assessment with the doctor plus standard photos (consultation only, no treatment included)", categories: ["ฟิลเลอร์", "ยกกระชับ", "ผิว"] },
 } satisfies Record<string, GiftType>;
 
 export type GiftKey = keyof typeof GIFT_TYPES;
 
-// Big days: 1 (opening), 12 (12.12), 25 (Christmas), 31 (year end). Weekends carry the bigger offers.
-const SCHEDULE: GiftKey[] = [
-  "off5000", "consult", "off1000", "drip", "filler", "booster", "emlift",       // 1–7
-  "off2000", "consult", "lift", "off1000", "collagen", "drip", "filler",        // 8–14
-  "off2000", "booster", "consult", "emlift", "off1000", "drip", "off5000",      // 15–21
-  "filler", "off2000", "lift", "drip", "booster", "off1000", "emlift",          // 22–28
-  "off2000", "filler", "off5000",                                               // 29–31
+// Big boxes: 25 พ.ย. (launch), 1 ธ.ค., 12.12, 25 ธ.ค. (Christmas), 31 ธ.ค. (year end). Weekends carry the bigger offers.
+const SCHEDULE: [string, GiftKey][] = [
+  ["11-25", "laser"], ["11-26", "redlight"], ["11-27", "off1000"], ["11-28", "filler"], ["11-29", "consult"], ["11-30", "off2000"],
+  ["12-01", "off5000"], ["12-02", "redlight"], ["12-03", "off1000"], ["12-04", "drip"], ["12-05", "filler"], ["12-06", "booster"], ["12-07", "emlift"],
+  ["12-08", "off2000"], ["12-09", "laser"], ["12-10", "lift"], ["12-11", "off1000"], ["12-12", "collagen"], ["12-13", "drip"], ["12-14", "filler"],
+  ["12-15", "off2000"], ["12-16", "booster"], ["12-17", "redlight"], ["12-18", "emlift"], ["12-19", "off1000"], ["12-20", "drip"], ["12-21", "off5000"],
+  ["12-22", "filler"], ["12-23", "off2000"], ["12-24", "lift"], ["12-25", "drip"], ["12-26", "booster"], ["12-27", "laser"], ["12-28", "emlift"],
+  ["12-29", "off2000"], ["12-30", "filler"], ["12-31", "off5000"],
 ];
-const BIG = new Set([1, 12, 25, 31]);
-const LIMIT_OVERRIDE: Record<number, number> = { 25: 25 };
+const BIG = new Set(["11-25", "12-01", "12-12", "12-25", "12-31"]);
+const LIMIT_OVERRIDE: Record<string, number> = { "12-25": 25 };
+const MON: Record<string, string> = { "11": "พ.ย.", "12": "ธ.ค." };
 
-export type Gift = GiftType & { day: number; type: GiftKey; key: string; from: string; until: string; big: boolean; claimText: string; image: string; preview: string };
+export type Gift = GiftType & { n: number; md: string; day: number; mon: string; label: string; type: GiftKey; key: string; from: string; until: string; big: boolean; claimText: string; image: string; preview: string };
 
-const pad = (n: number) => String(n).padStart(2, "0");
-export const GIFTS: Gift[] = SCHEDULE.map((type, i) => {
-  const day = i + 1, d = pad(day);
-  return { ...GIFT_TYPES[type], ...(LIMIT_OVERRIDE[day] ? { limit: LIMIT_OVERRIDE[day] } : {}), day, type, key: `gift-2612-${d}`,
-    from: `${GIFT_MONTH}-${d}T00:00:00+07:00`, until: `${GIFT_MONTH}-${d}T23:59:59+07:00`, big: BIG.has(day),
-    claimText: `ขอรับสิทธิ์ของขวัญวันที่ ${day} ธ.ค. ค่ะ`,
-    image: `/campaign/gift-2612-${d}/1-1x1.jpg`, preview: `/campaign/gift-2612-${d}/1-1x1-p.jpg` };
+export const GIFTS: Gift[] = SCHEDULE.map(([md, type], i) => {
+  const [m, d] = md.split("-"), day = Number(d), mon = MON[m], label = `${day} ${mon}`, folder = `gift-26${m}-${d}`;
+  return { ...GIFT_TYPES[type], ...(LIMIT_OVERRIDE[md] ? { limit: LIMIT_OVERRIDE[md] } : {}), n: i + 1, md, day, mon, label, type, key: folder,
+    from: i === 0 ? GIFT_START : `2026-${md}T00:00:00+07:00`, until: `2026-${md}T23:59:59+07:00`, big: BIG.has(md),
+    claimText: `ขอรับสิทธิ์ของขวัญวันที่ ${label} ค่ะ`,
+    image: `/campaign/${folder}/1-1x1.jpg`, preview: `/campaign/${folder}/1-1x1-p.jpg` };
 });
 
-/** Bangkok calendar day (1–31) of December 2026, or null outside it. */
-export function giftDay(now = new Date()): number | null {
-  const bkk = new Date(now.getTime() + 7 * 3600e3);
-  if (bkk.getUTCFullYear() !== 2026 || bkk.getUTCMonth() !== 11) return null;
-  return bkk.getUTCDate();
+/** The box that is open right now, or null. */
+export const todayGift = (now = new Date()) => GIFTS.find((g) => Date.parse(g.from) <= now.getTime() && now.getTime() <= Date.parse(g.until)) ?? null;
+/** Position (1-based) of the open box, or null. */
+export const giftDay = (now = new Date()) => todayGift(now)?.n ?? null;
+/** The box a claim text names ("…ของขวัญวันที่ 5 ธ.ค."), or null. */
+export function giftNamed(text: string): Gift | null {
+  const c = GIFT_CLAIM.exec(text);
+  if (!c) return null;
+  const mon = /พ/.test(c[2]) ? "พ.ย." : "ธ.ค.";
+  return GIFTS.find((g) => g.day === Number(c[1]) && g.mon === mon) ?? null;
 }
-export const todayGift = (now = new Date()) => { const d = giftDay(now); return d ? GIFTS[d - 1] : null; };
 
 export const GIFT_RULES = [
   "เปิดได้วันละ 1 กล่อง กดรับสิทธิ์ใน LINE ภายในวันนั้น (ถึง 23:59 น.)",
@@ -84,6 +94,6 @@ export const GIFT_RULES = [
   "ใช้ร่วมกับโปรโมชั่นหรือแพ็กเกจอื่นไม่ได้ · ไม่สามารถแลกเป็นเงินสด",
 ];
 
-/** "ขอรับสิทธิ์ของขวัญวันที่ 5 ธ.ค." → 5 */
-export const GIFT_CLAIM = /ของขวัญ\s*(?:วันที่)?\s*(\d{1,2})\s*ธ\.?\s*ค/;
+/** "ขอรับสิทธิ์ของขวัญวันที่ 5 ธ.ค." → ["5", "ธ.ค"] */
+export const GIFT_CLAIM = /ของขวัญ\s*(?:วันที่)?\s*(\d{1,2})\s*(พ\.?\s*ย|ธ\.?\s*ค)/;
 export const GIFT_ASK = /ปฏิทิน|ของขวัญ|เปิดกล่อง|สวยก่อนปีใหม่|gift/i;

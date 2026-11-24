@@ -1,3 +1,4 @@
+import { GIFTS } from "./gifts";
 // Ready-made image sets for LINE campaigns. Files live in /public/campaign/<key>/ so LINE can fetch them over https.
 // Add a set here when marketing hands over a new broadcast; staff pick it on the segments page.
 
@@ -67,26 +68,16 @@ const FC_MSG = `✨ เช็กฟิลเลอร์ก่อนปีให
 จำนวน cc และตำแหน่งตามการประเมินของแพทย์ · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · ใช้ร่วมกับโปรอื่นไม่ได้
 👉 กดปุ่ม “กดรับสิทธิ์” ในการ์ดด้านล่างได้เลยค่ะ`;
 
-const GIFT_TEASER_MSG = `🎁 ปฏิทินของขวัญ สวยก่อนปีใหม่
-พรุ่งนี้ (1 ธ.ค.) เปิดกล่องแรก!
-
-31 วัน 31 กล่อง เปิดได้วันละ 1 กล่อง
-ทุกคนได้ของขวัญเดียวกันในวันนั้น แต่สิทธิ์มีจำกัดต่อวัน ใครกดก่อนได้ก่อน
-มีทั้งส่วนลด โปรแกรมฟิลเลอร์ โปรแกรมดริปผิว และกล่องใหญ่วันที่ 12 · 25 · 31
-
-👉 ดูปฏิทินและชวนเพื่อนมาเปิดด้วยกัน https://vinfinity-line.vercel.app/gifts?s=bc
-ใช้สิทธิ์ได้ถึง 31 ม.ค. 70 · แพทย์ประเมินก่อนทุกครั้ง · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล`;
-
-const giftMsg = (day: number, head: string) => `🎁 ${head} · กล่องวันที่ ${day} ธ.ค. เปิดแล้ว!
+const giftMsg = (label: string, head: string) => `🎁 ${head} · กล่องวันที่ ${label} เปิดแล้ว!
 เหลือ {เหลือ} สิทธิ์ กดรับได้วันนี้วันเดียว (ถึง 23:59 น.)
 
 👉 กดปุ่ม “กดรับสิทธิ์” ในการ์ดด้านล่าง
-ดูปฏิทินทั้งเดือน https://vinfinity-line.vercel.app/gifts?s=bc
+ดูปฏิทินทั้งหมด https://vinfinity-line.vercel.app/gifts?s=bc
 ใช้สิทธิ์ได้ถึง 31 ม.ค. 70 · แพทย์ประเมินก่อนทุกครั้ง · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · ใช้ร่วมกับโปรอื่นไม่ได้`;
-const giftSet = (day: number, head: string) => {
-  const d = String(day).padStart(2, "0");
-  return { ...set(`gift-2612-${d}-card`, `ปฏิทินของขวัญ · กล่องวันที่ ${day} ธ.ค. · การ์ดกดรับสิทธิ์ (เหลือ X สิทธิ์จริงตอนส่ง)`, `gift-2612-${d}`, 1, "1x1", giftMsg(day, head), "reachable=1"),
-    promo: `gift-2612-${d}`, liveLeft: true, from: `2026-12-${d}T00:00:00+07:00`, until: `2026-12-${d}T23:59:59+07:00` };
+const giftSet = (md: string, head: string) => {
+  const g = GIFTS.find((x) => x.md === md)!;
+  return { ...set(`${g.key}-card`, `ปฏิทินของขวัญ · กล่องวันที่ ${g.label} · การ์ดกดรับสิทธิ์ (เหลือ X สิทธิ์จริงตอนส่ง)`, g.key, 1, "1x1", giftMsg(g.label, head), "reachable=1"),
+    promo: g.key, liveLeft: true, from: g.from, until: g.until };
 };
 
 const EMLIFT_MSG = `✨ โปรแกรมใหม่ที่ Vinfinity · โปรแกรม EM Lift
@@ -106,9 +97,8 @@ export const MEDIA: MediaSet[] = [
   { ...set("1111-2611-card", "11.11 สวยครบ 2 จุด 11,111 · ข้อความ + การ์ดกดรับสิทธิ์ (เหลือ X สิทธิ์จริงตอนส่ง)", "1111-2611", 1, "1x1", E11_MSG, "reachable=1"), promo: "1111-2611", liveLeft: true, from: "2026-11-11T00:00:00+07:00", until: "2026-11-11T23:59:59+07:00" },
   { ...set("emlift-2611", "EM Lift เปิดตัว · Early Bird จุดละ 4,500 (ภาพ + ข้อความ + ปุ่มจองคิว)", "emlift-2611", 1, "1x1", EMLIFT_MSG, "reachable=1"), from: "2026-11-15T00:00:00+07:00", until: "2026-11-30T23:59:59+07:00" },
   { ...set("fillercheck-2612-card", "เช็กฟิลเลอร์ก่อนปีใหม่ 8,990/cc · ข้อความ + การ์ดกดรับสิทธิ์ (เหลือ X สิทธิ์จริงตอนส่ง)", "fillercheck-2612", 1, "1x1", FC_MSG, "reachable=1"), promo: "fillercheck-2612", liveLeft: true, from: "2026-11-24T00:00:00+07:00", until: "2026-11-24T17:00:00+07:00" },
-  { ...set("gift-2612-teaser", "ปฏิทินของขวัญ · ทีเซอร์ก่อนเปิด (ส่ง จ. 30 พ.ย.)", "gift-2612", 1, "1x1", GIFT_TEASER_MSG, "reachable=1"), from: "2026-11-24T00:00:00+07:00", until: "2026-11-30T23:59:59+07:00" },
-  giftSet(1, "ปฏิทินของขวัญ สวยก่อนปีใหม่"), giftSet(12, "12.12 กล่องใหญ่"), giftSet(21, "กล่องใหญ่กลางเดือน"),
-  giftSet(25, "Merry Christmas"), giftSet(31, "กล่องสุดท้ายของปี"),
+  giftSet("11-25", "เปิดแล้ว! ปฏิทินของขวัญ สวยก่อนปีใหม่ (25 พ.ย. – 31 ธ.ค.) เปิดได้วันละ 1 กล่อง"), giftSet("12-01", "กล่องใหญ่ต้อนรับเดือนธันวา"),
+  giftSet("12-12", "12.12 กล่องใหญ่"), giftSet("12-21", "กล่องใหญ่กลางเดือน"), giftSet("12-25", "Merry Christmas"), giftSet("12-31", "กล่องสุดท้ายของปี"),
   { ...set("friends-2611", "ชวนเพื่อนมาสวยด้วยกัน · ข้อความ + การ์ด (3 พ.ย. – 15 ธ.ค.)", "friends-2611", 1, "1x1", FRIENDS_MSG, "reachable=1"), invite: true, from: "2026-11-03T00:00:00+07:00", until: "2026-12-15T23:59:59+07:00" },
   { ...set("sculptra-2611-card", "Sculptra 15,990 · ข้อความ + การ์ดกดรับสิทธิ์ (10 สิทธิ์)", "sculptra-2611", 1, "1x1", SCULPTRA_MSG, "reachable=1"), promo: "sculptra-2611", from: "2026-11-01T00:00:00+07:00", until: "2026-11-15T23:59:59+07:00" },
   { ...set("sculptra-2611-r2", "Sculptra รอบ 2 · เหลือ X สิทธิ์ (ใส่ตัวเลขจริงตอนส่ง)", "sculptra-2611", 1, "1x1", SCULPTRA_R2, "reachable=1"), promo: "sculptra-2611", liveLeft: true, from: "2026-11-01T00:00:00+07:00", until: "2026-11-15T23:59:59+07:00" },
