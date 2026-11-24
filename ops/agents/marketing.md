@@ -13,18 +13,17 @@ Referral event "ชวนเพื่อนมาสวยด้วยกัน"
 
 ## Backlog (top = next)
 1. Get LINE OA follower count + segment sizes (past skin-booster / filler patients) from LINE OA Manager — broadcast sizes are "not verified" until then. (Ask doctor/team.)
-2. All slots to Fri 18 Dec are DRAFT READY (Draft 26 = ligament-lift myth carousel). Next run: add Sun 20 Dec slot (candidate: /articles/filler-long-term/ — the last unused article; then New Year closing-hours Story once the doctor gives holiday hours — not verified). Check promos.ts for a December promo first; if one appears, add the โปรเดือนนี้ CTA to Draft 16/17-era posts.
+2. All slots to Sun 20 Dec are DRAFT READY (Draft 27 = filler-long-term MRI carousel; all site articles now used). Next run: add Wed 23 Dec slot — candidates: New Year closing-hours Story once the doctor gives holiday hours (not verified), or a re-cut of an early article as a short reel (backlog 6). Check promos.ts for a December promo first (none on 24 Nov; EM Lift Early Bird ends 30 Nov); if one appears, add the โปรเดือนนี้ CTA to the Dec slots.
 2b. Doctor to confirm: may a public feed post name the referral credits and the "3 friends → Vitaran 1 cc" reward under the clinic's advertising approval (ฆสพ.)? Draft 10 has a version without the reward line — not verified.
 3. Sculptra promo ended Sun 15 Nov 23:59 — never quote 15,990 again. "โปรเดือนนี้" shows EM Lift to 30 Nov (last-call Story = Draft 21). Check promos.ts for a December promo before 1 Dec; from 1 Dec never quote 4,500 / 18,000 as Early Bird.
 3b. EM Lift: ask the doctor for the device name + Thai FDA registration wording so captions/site can say more; until then only the facts in the brief. No /lifting/ or /price/ mention of EM Lift yet — SEO agent to propose a branch once the wording is on file.
-4. Loy Krathong 2026 = Tue 24 Nov (verified 2026-11-02, PPTV: "วันอังคารที่ 24 พฤศจิกายน"; clinic closed that day). Draft "เตรียมผิวก่อนลอยกระทง" for Sun 15 Nov + a reminder slot Sun 22 / Mon 23 Nov in the next calendar.
 4b. Sculptra waitlist post only if the doctor opens a waitlist (no 15,990 price after 15 Nov or after 10 places). Calendar now runs to 29 Nov; roll again ~22 Nov.
 5. Map menu images (assets/img/menu/th-01…16, en-, lo-) to treatments so calendar can point to exact files.
 6. Short-form video scripts (TikTok/Reels 20–30 s) from existing articles: PN HMW vs LMW (ligaments done, Draft 11).
 7. Lao-language caption variant for Vientiane audience (site has lo menu images).
 8. Market watch: Udon Thani-local competitor promos (FB pages) — web search surfaced none on 2026-10-30 and 2026-10-31; needs a human to check FB pages or a different source.
 
-## 2-week content calendar (1 Nov – 18 Dec 2026)
+## 2-week content calendar (1 Nov – 20 Dec 2026)
 Weekdays corrected 2026-11-01 (1 Nov 2026 = Sunday; earlier labels were one day off — dates unchanged). Clinic closed Tuesdays.
 | Date | Channel | Topic | Hook | CTA | Asset |
 |---|---|---|---|---|---|
@@ -54,6 +53,7 @@ Weekdays corrected 2026-11-01 (1 Nov 2026 = Sunday; earlier labels were one day 
 | Sun 13 Dec | FB + IG Story | Referral event last call (ends Tue 15 Dec = clinic closed; last open day Mon 14 Dec) — DRAFT READY (Draft 24, A/B per backlog 2b) | "ชวนเพื่อน ถึง 15 ธ.ค." | ทักไลน์ พิมพ์ “ชวนเพื่อน” | clinic-lounge.jpg |
 | Wed 16 Dec | FB + IG carousel | Evergreen: filler dissolving — does hyaluronidase damage your own skin? (from /articles/dissolve-filler-native-tissue/) — DRAFT READY (Draft 25) | "สลายฟิลเลอร์แล้ว ผิวเดิมจะเสียไหม" | /articles/dissolve-filler-native-tissue + LINE ส่งรูป + ประวัติการฉีด | articles/hyaluronidase-native-ha-recovery.jpg |
 | Fri 18 Dec | FB + IG carousel | Myth vs evidence: "ฉีดยกเอ็น" — ligaments stiffen with age, they don't loosen; support the deep base instead (from /articles/ligament-lift-injection/) — DRAFT READY (Draft 26) | "ฉีดยกเอ็น ได้ผลจริงไหม" | /articles/ligament-lift-injection + LINE ส่งรูป | articles/ligament-lift-injection-support.jpg |
+| Sun 20 Dec | FB + IG carousel | Evergreen year-end: filler stays longer than you think — MRI found it ≥2 years in all 33 people; check before a "top-up" (from /articles/filler-long-term/; no December promo in promos.ts on 24 Nov) — DRAFT READY (Draft 27) | "ฟิลเลอร์ที่ฉีดไว้ ยังอยู่ไหม ก่อนเติมรอบใหม่" | /articles/filler-long-term + LINE ส่งรูป + ประวัติการฉีด | articles/filler-mri-longevity-timeline.jpg |
 
 Notes: before/after only from assets/img/ba (consented, already on site), labelled PRE / POST, organic only, never in ads. File naming on site: caseNN-b = PRE (before), caseNN-a = POST (after) — see pages/_results_eye.html. Do not use galderma-* doctor photos (not a current affiliation).
 
@@ -919,3 +919,37 @@ EN caption:
 Hashtags: #ฉีดยกเอ็น #หน้าย้อย #ฟิลเลอร์อุดร #VinfinityClinic #TheFillerArchitect #คลินิกอุดร #อุดรธานี #FacialAnatomy #UdonThani
 Alt text: ภาพเปรียบเทียบการฉีดเพื่อกระชับเอ็นยึดใบหน้า กับการเติมฐานรองรับชั้นลึกระหว่างเอ็น พร้อมข้อความ "ฉีดยกเอ็น ได้ผลจริงไหม" / Diagram comparing injecting to tighten facial ligaments with rebuilding deep support between them, with the text "Ligament lift injections — do they work?".
 Graphic brief: 5 slides 1080×1350. Slide 1: real clinic photo (assets/img/treatment.jpg) with dark navy gradient (#0B142E → #1A326B), silver #EEF2F8 headline. Slide 2: article graphic assets/img/articles/ligament-lift-injection-support.jpg on navy (hook-and-curtain idea). Slides 3–4: navy background, silver #D5DDEE text, small "ศึกษาในสัตว์ทดลอง" / "รายงาน 1 ราย" labels so the evidence level is clear. Slide 5: doctor photo assets/img/dr-bas.jpg (not a galderma-* photo) + 3 questions + LINE chip. Small text footer credit on every slide: "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943 · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล". No white logo band, no product brand names, no before/after.
+
+
+### 2026-11-24
+- Tuesday (Loy Krathong, clinic closed): Marketing light + live-site check only. Production dpl_xoTJe3kQh42XpMQHHqk8gdpFa8iH (commit a3501bb) READY; / (TH) and /en/price/ return 200 via Vercel fetch and render fully (title, canonical, hreflang, JSON-LD 3 on home = same as source, 4 on /en/price/, footer with ฆสพ.อด.100/2568 + "closed Tuesdays"). Direct curl from the run container is blocked (000) — not a site fault. Nothing broken.
+- promos.ts unchanged since 9efd109: emlift-2611 runs to 30 Nov 23:59; still no December promo (6 days left — doctor to decide). referral.ts event to 15 Dec.
+- No calendar slot today. Next slot Wed 25 Nov = skincare carousel (Draft 14, ready) — full TH caption in today's report. Then Fri 27 Nov clinic checklist (Draft 15), Sat 28 Nov EM Lift last call (Draft 21), Sun 29 Nov Vitaran (Draft 16).
+- Done: Draft 27 for Sun 20 Dec (evergreen year-end carousel "ฟิลเลอร์อยู่นานกว่าที่คิด") below — facts only from /articles/filler-long-term/ (Master et al. 2024 MRI, 33 people; ~11% tear-trough swelling figure as the article states it). No brand names, no price, no before/after. Removed the finished Loy Krathong backlog item.
+- No LINE broadcast tomorrow (Wed 25 Nov) unless the doctor decides to send set emlift-2611 before the Early Bird ends.
+
+#### Draft 27 — Sun 20 Dec · FB + IG carousel (5 slides, 1080×1350) · Filler stays longer than you think (year-end top-up check)
+Slides: 1) "ฟิลเลอร์ที่ฉีดไว้ ยังอยู่ไหม? ก่อนเติมรอบใหม่ อ่านก่อน" · 2) "MRI 33 คน: พบฟิลเลอร์ทุกคนอย่างน้อย 2 ปี บางคนยังเห็นถึง 15 ปี (Master et al. 2024)" · 3) "ที่รู้สึกว่ายุบ อาจไม่ใช่เจลหาย: น้ำในเจลลดลง · เจลกระจายเข้าเนื้อเยื่อ · หน้าเปลี่ยนตามวัย" · 4) "เติมตามรอบโดยไม่ประเมิน = สะสมทีละนิด → หน้าเต็มเกิน · ใต้ตาบวมได้แม้ผ่านไปเป็นปี" · 5) "ที่ Vinfinity: ถามประวัติทุกเข็ม · ประเมินก่อนเติมทุกครั้ง · บางครั้งคำตอบคือยังไม่ต้องเติม" + LINE chip
+TH caption:
+ฟิลเลอร์ที่ฉีดไว้ ยังอยู่ไหม? ก่อนเติมรอบปีใหม่ อ่านก่อนค่ะ 🤔
+หลายคนได้ยินว่าฟิลเลอร์อยู่ได้ 6–12 เดือน พอหน้าเริ่มแบนก็นัดเติมตามรอบ แต่ตัวเลขนั้นมาจากการดูด้วยตา เมื่อดูด้วย MRI ภาพที่ได้ต่างออกไป
+
+1️⃣ งานวิจัยปี 2024 ทำ MRI ผู้ที่ฉีดฟิลเลอร์กลางหน้า 33 คน พบฟิลเลอร์ในทุกคนอย่างน้อย 2 ปี และบางคนยังเห็นอยู่ถึง 15 ปี — “มองไม่เห็นแล้ว” จึงไม่ได้แปลว่า “ไม่มีแล้ว”
+2️⃣ ที่รู้สึกว่ายุบ ส่วนหนึ่งเพราะน้ำที่เจลดูดไว้ช่วงแรกลดลง เจลกระจายเข้ากับเนื้อเยื่อ และหน้ายังเปลี่ยนตามวัย
+3️⃣ ถ้าเติมตามรอบโดยไม่ประเมินใหม่ ฟิลเลอร์จะสะสมทีละนิด หน้าเต็มเกิน (overfilled) มักมาจากแบบนี้ มากกว่าการฉีดมากในครั้งเดียว
+4️⃣ ฟิลเลอร์ดูดน้ำ ใต้ตาจึงบวมเป็นถุงได้แม้ผ่านไปเป็นปี มีรายงานได้ราว 11% ของการฉีดร่องใต้ตา
+
+ที่ Vinfinity คุณหมอถามประวัติการฉีดทั้งหมด รวมถึงที่ฉีดจากที่อื่น ประเมินก่อนเติมทุกครั้งด้วยภาพถ่ายมาตรฐาน ไม่เติมตามรอบเวลา บางครั้งคำแนะนำที่ถูกต้องคือยังไม่ต้องเติม และถ้าสะสมมามาก อาจสลายบางส่วนก่อนแล้วค่อยวางแผนใหม่
+อ่านฉบับเต็มพร้อมเอกสารอ้างอิง: vinfinityclinic.com/articles/filler-long-term/
+
+เรียบเรียงโดย นพ.เดโชวัต พรมดา (ว.48943) · 📍 Vinfinity Clinic อุดรธานี · คลินิกปิดทุกวันอังคาร
+💬 ส่งรูปหน้าตรง ด้านข้าง และประวัติการฉีดเท่าที่จำได้ (ตำแหน่ง · ประมาณกี่ cc · ฉีดเมื่อไหร่) ทาง LINE @vinfinityclinic ให้คุณหมอดูก่อนว่าควรเติมจริงไหม
+ถ้าบริเวณที่เคยฉีดบวม ปวด หรือผิวเปลี่ยนสี ควรพบแพทย์
+ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · การทำหัตถการทุกชนิดอาจมีผลข้างเคียง
+
+EN caption:
+Planning a filler top-up before the New Year? Read this first. The usual "6–12 months" comes from how the face looks, not from seeing the gel. A 2024 MRI study of 33 people with mid-face filler found it in every one of them for at least 2 years, and in some for up to 15 years. Feeling "flat" again is often water leaving the gel, the gel blending into tissue and normal ageing — not the filler being gone. Topping up on a schedule without reassessment slowly adds up, which is how many overfilled faces happen, and filler draws water, so under-eyes can swell even years later. At Vinfinity the doctor takes your full injection history (including other clinics), reassesses with standard photos before every top-up, and sometimes the right advice is "not yet". Full article with references: vinfinityclinic.com/en/articles/filler-long-term/ · Dr. Dechowat Promda (license 48943) · consultations in English · closed Tuesdays. Results vary from person to person. All procedures carry possible side effects. LINE @vinfinityclinic · Messenger m.me/Vinfinity.Clinic
+
+Hashtags: #ฟิลเลอร์ #ฟิลเลอร์อุดร #เติมฟิลเลอร์ #VinfinityClinic #TheFillerArchitect #คลินิกอุดร #อุดรธานี #DermalFiller #UdonThani
+Alt text: ไทม์ไลน์แสดงว่า MRI ยังพบฟิลเลอร์กลางหน้าอย่างน้อย 2 ปีและบางรายถึง 15 ปี พร้อมข้อความ "ฟิลเลอร์ที่ฉีดไว้ ยังอยู่ไหม" / Timeline showing MRI still finding mid-face filler for at least 2 years and in some people up to 15 years, with the text "Is your filler still there?".
+Graphic brief: 5 slides 1080×1350. Slide 1: real clinic photo (assets/img/treatment.jpg) with dark navy gradient (#0B142E → #1A326B), silver #EEF2F8 headline. Slide 2: article graphic assets/img/articles/filler-mri-longevity-timeline.jpg on navy, small caption "Master et al. 2024 · MRI 33 ราย". Slides 3–4: navy background, silver #D5DDEE text lists. Slide 5: doctor photo assets/img/dr-bas.jpg (not a galderma-* photo) + 3 lines + LINE chip. Small text footer credit on every slide: "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943 · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล". No white logo band, no filler brand names, no before/after, no price, no "ถาวร"/permanent wording.
