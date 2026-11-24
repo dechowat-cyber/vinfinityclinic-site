@@ -76,7 +76,7 @@ test("Sculptra runs 1–15 Nov only; HArmonyCa gone by then", () => {
   assert.deepEqual(activePromos(fri).map((p) => p.key), ["haca-2610"]);
   assert.deepEqual(activePromos(nov2).map((p) => p.key), ["sculptra-2611"]);
   assert.deepEqual(activePromos(new Date("2026-11-15T17:00:01Z")).map((p) => p.key), ["emlift-2611"]);
-  assert.deepEqual(activePromos(new Date("2026-11-30T17:00:01Z")).map((p) => p.key), ["fillercheck-2612"]);
+  assert.deepEqual(activePromos(new Date("2026-11-30T17:00:01Z")).map((p) => p.key), ["gift-2612-01"]);
   assert.equal(activePromos(new Date("2026-12-31T17:00:01Z")).length, 0);
 });
 

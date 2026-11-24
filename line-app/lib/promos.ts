@@ -7,6 +7,7 @@ import { thaiDate, thaiTime } from "./time";
 import { notifyStaff } from "./notify";
 import type { Msg } from "./line";
 import { refEventKb } from "./referral";
+import { GIFTS, GIFT_ASK, GIFT_CLAIM, GIFT_PAGE, GIFT_USE_BY, GIFT_START, GIFT_YEAR_END, todayGift } from "./gifts";
 
 // Time-boxed promotions that work without the LINE message quota (every message here is a reply, which is free):
 //  1) a customer who asks about the product, taps "โปรเดือนนี้" in the rich menu, or adds the OA gets the promo;
@@ -39,12 +40,61 @@ const BARE = /^(สนใจ|ขอรายละเอียด|ขอข้�
 /** Wants the seat: the card's button posts "ขอรับสิทธิ์ …". */
 const CLAIM = /รับสิทธิ์/;
 
-export const PROMOS: Promo[] = [{
-  // December filler check (doctor's decision 2026-11-24): 8,990/cc, 20 seats, from today to end of December (end date assumed 31 Dec)
+const SITE = "https://vinfinity-line.vercel.app";
+/** One promo per December day from the gift calendar; only that day's box is live, so a bare "รับสิทธิ์" means today's gift. */
+const GIFT_PROMOS: Promo[] = GIFTS.map((g) => ({
+  key: g.key,
+  label: `ของขวัญวันที่ ${g.day} ธ.ค. · ${g.title} · ${g.limit} สิทธิ์`,
+  from: g.from, until: g.until,
+  trigger: GIFT_ASK,
+  image: g.image, preview: g.preview,
+  limit: g.limit, holdHours: 48, maxPer: `คนละ 1 สิทธิ์ · ใช้ได้ถึง ${GIFT_USE_BY}`,
+  card: {
+    hero: g.image,
+    title: `🎁 ของขวัญวันที่ ${g.day} ธ.ค. · ${g.title}`,
+    price: g.price, ...(g.was ? { was: `ปกติ ${g.was}` } : {}),
+    lines: [g.cond, `เพียง ${g.limit} สิทธิ์ · กดรับได้วันนี้วันเดียว · คนละ 1 สิทธิ์ · ใช้ได้ถึง ${GIFT_USE_BY}`, "แพทย์ประเมินก่อนทุกครั้ง · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · ใช้ร่วมกับโปร/แพ็กเกจอื่นไม่ได้"],
+    claimText: g.claimText,
+    detailUrl: `${SITE}${GIFT_PAGE}?s=line`,
+  },
+  text: `🎁 ปฏิทินของขวัญ สวยก่อนปีใหม่ · กล่องวันที่ ${g.day} ธ.ค.
+${g.title} ${g.price}${g.was ? ` (ปกติ ${g.was})` : ""}
+${g.cond}
+
+เพียง ${g.limit} สิทธิ์ กดรับได้วันนี้วันเดียว · ใช้ได้ถึง ${GIFT_USE_BY}
+แพทย์ประเมินก่อนทุกครั้ง · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · ใช้ร่วมกับโปรอื่นไม่ได้`,
+  ask: g.claimText,
+  kb: `December gift calendar 'ปฏิทินของขวัญ สวยก่อนปีใหม่' (one box per day, 1–31 Dec 2026, same offer for everyone that day, not a lucky draw). Today's box (${g.day} December): ${g.kb}. Only ${g.limit} places today, 1 per person, claim today in LINE by tapping 'กดรับสิทธิ์' (or typing '${g.claimText}'), choose an appointment within 48 hours, use by 31 January 2027. Not combined with other promotions. Calendar page: ${SITE}${GIFT_PAGE}. Do not reveal future days' gifts. Results vary.`,
+  categories: g.categories,
+  interest: "ปฏิทิน|ของขวัญ|ปีใหม่|ฟิลเลอร์|filler|ยกกระชับ|ผิว|ดริป|คอลลาเจน|em lift|สกินบูสเตอร์",
+}));
+
+/** Replies about the calendar that are not today's box: a claim for another day, or a question before 1 Dec / after 31 Dec. */
+export function giftNotice(text: string, now = new Date()): Msg[] | null {
+  const today = todayGift(now);
+  const link = `${SITE}${GIFT_PAGE}?s=line`;
+  const c = GIFT_CLAIM.exec(text);
+  if (c && (!today || today.day !== Number(c[1]))) {
+    const head = now.getTime() < new Date(GIFT_START).getTime() ? `กล่องวันที่ ${c[1]} ธ.ค. ยังไม่เปิดค่ะ 🎁` : `กล่องวันที่ ${c[1]} ธ.ค. หมดเวลากดรับแล้วค่ะ 🙏`;
+    return [{ type: "text", text: today ? `${head}
+วันนี้เปิดกล่องวันที่ ${today.day} ธ.ค. แล้ว: ${today.title} ${today.price}
+พิมพ์ “รับสิทธิ์” เพื่อรับของขวัญวันนี้ หรือดูปฏิทินที่ ${link}` : `${head}
+เปิดดูปฏิทินของขวัญได้ที่ ${link}` }];
+  }
+  if (today || !/ปฏิทิน|เปิดกล่อง|สวยก่อนปีใหม่|ของขวัญ\s*ปีใหม่/.test(text)) return null;
+  if (now.getTime() < new Date(GIFT_START).getTime() && now.getTime() > new Date("2026-11-20T00:00:00+07:00").getTime())
+    return [{ type: "text", text: `🎁 ปฏิทินของขวัญ สวยก่อนปีใหม่ เปิดกล่องแรก 1 ธ.ค. นี้ค่ะ\nเปิดได้วันละ 1 กล่อง ทุกคนได้ของขวัญเดียวกันในวันนั้น สิทธิ์มีจำนวนจำกัดต่อวัน\nกดดูปฏิทินและชวนเพื่อนได้ที่ ${link}` }];
+  if (now.getTime() > new Date(GIFT_YEAR_END).getTime() && now.getTime() < new Date("2027-01-31T23:59:59+07:00").getTime())
+    return [{ type: "text", text: `ปฏิทินของขวัญปิดแล้วค่ะ ขอบคุณที่ร่วมสนุกนะคะ 💙 ใครรับสิทธิ์ไว้แล้ว ใช้ได้ถึง ${GIFT_USE_BY} ค่ะ` }];
+  return null;
+}
+
+export const PROMOS: Promo[] = [...GIFT_PROMOS, {
+  // December filler check (doctor's decision 2026-11-24), replaced the same afternoon by the December gift calendar (lib/gifts.ts)
   key: "fillercheck-2612",
   label: "เช็กฟิลเลอร์ก่อนปีใหม่ 8,990/cc · 20 สิทธิ์ (24 พ.ย.–31 ธ.ค. 69)",
   from: "2026-11-24T00:00:00+07:00",
-  until: "2026-12-31T23:59:59+07:00",
+  until: "2026-11-24T17:00:00+07:00",
   trigger: /เช็[กค]\s*ฟิลเลอร์|ฟิลเลอร์\s*ก่อนปีใหม่|ฟิลเลอร์ปีใหม่|8,?990|ฟิลเลอร์|filler/i,
   image: "/campaign/fillercheck-2612/1-1x1.jpg",
   preview: "/campaign/fillercheck-2612/1-1x1-p.jpg",
@@ -270,6 +320,8 @@ export async function claimPromo(clientId: number, userId: string, p: Promo, now
 export async function promoReply(clientId: number, text: string, now = new Date(), userId = ""): Promise<Msg[] | null> {
   const x = (text || "").trim();
   if (!x || x.length > 300 || NOT_SALES.test(x)) return null;
+  const gn = giftNotice(x, now);
+  if (gn) return gn;
   const act = activePromos(now);
   const generic = GENERIC.test(x);
   if (!act.length) return generic ? [{ type: "text", text: "ตอนนี้ยังไม่มีโปรใหม่ค่ะ ติดตามได้ที่เมนูนี้เร็วๆ นี้นะคะ 😊 ระหว่างนี้ปรึกษาคุณหมอหรือดูราคาได้จากเมนูด้านล่างเลยค่ะ" }] : null;
