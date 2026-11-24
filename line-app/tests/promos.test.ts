@@ -76,7 +76,8 @@ test("Sculptra runs 1–15 Nov only; HArmonyCa gone by then", () => {
   assert.deepEqual(activePromos(fri).map((p) => p.key), ["haca-2610"]);
   assert.deepEqual(activePromos(nov2).map((p) => p.key), ["sculptra-2611"]);
   assert.deepEqual(activePromos(new Date("2026-11-15T17:00:01Z")).map((p) => p.key), ["emlift-2611"]);
-  assert.equal(activePromos(new Date("2026-11-30T17:00:01Z")).length, 0);
+  assert.deepEqual(activePromos(new Date("2026-11-30T17:00:01Z")).map((p) => p.key), ["fillercheck-2612"]);
+  assert.equal(activePromos(new Date("2026-12-31T17:00:01Z")).length, 0);
 });
 
 test("rich-menu tile 'โปรเดือนนี้' always shows the running promo card; nothing running → a polite line", async () => {
@@ -85,7 +86,7 @@ test("rich-menu tile 'โปรเดือนนี้' always shows the runnin
   assert.match(J(r1?.messages), /sculptra-2611\/1-1x1\.jpg/);
   const r2 = await handleEvent(msg("USC1", "โปรเดือนนี้"), nov2, DEFAULTS); // again → still shown (they asked)
   assert.match(J(r2?.messages), /กดรับสิทธิ์/);
-  const none = await handleEvent(msg("USC1", "โปรเดือนนี้"), new Date("2026-12-05T05:00:00Z"), DEFAULTS);
+  const none = await handleEvent(msg("USC1", "โปรเดือนนี้"), new Date("2027-01-05T05:00:00Z"), DEFAULTS);
   assert.match(J(none?.messages), /ยังไม่มีโปรใหม่/);
 });
 

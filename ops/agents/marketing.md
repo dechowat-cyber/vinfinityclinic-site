@@ -957,3 +957,5 @@ Graphic brief: 5 slides 1080×1350. Slide 1: real clinic photo (assets/img/treat
 ### 2026-11-24 (doctor) — ad wording rule
 - Thai MOPH (สบส.) guideline: services using drugs/devices must be written as "โปรแกรม…" (e.g. โปรแกรมฉีดฟิลเลอร์, โปรแกรม EM Lift) in every ad, broadcast, image and signage. Apply to all new drafts. The parking-side vinyl went up without it; a "โปรแกรม" patch strip was made (pending สสจ. check).
 - EM Lift card image + LINE text updated to say โปรแกรม.
+
+- 2026-11-24 · เช็กฟิลเลอร์ก่อนปีใหม่ (fillercheck-2612): โปรแกรมฉีดฟิลเลอร์ HA 8,990/cc (ปกติ 9,990), 20 สิทธิ์, คนละ 1, 24 พ.ย.–31 ธ.ค. 69 (วันจบ 31 ธ.ค. = สมมติฐาน รอคุณหมอยืนยัน). Broadcast set fillercheck-2612-card (liveLeft). อย่ายิงซ้อนกับ EM Lift last call 25 พ.ย.

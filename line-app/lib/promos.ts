@@ -40,6 +40,39 @@ const BARE = /^(สนใจ|ขอรายละเอียด|ขอข้�
 const CLAIM = /รับสิทธิ์/;
 
 export const PROMOS: Promo[] = [{
+  // December filler check (doctor's decision 2026-11-24): 8,990/cc, 20 seats, from today to end of December (end date assumed 31 Dec)
+  key: "fillercheck-2612",
+  label: "เช็กฟิลเลอร์ก่อนปีใหม่ 8,990/cc · 20 สิทธิ์ (24 พ.ย.–31 ธ.ค. 69)",
+  from: "2026-11-24T00:00:00+07:00",
+  until: "2026-12-31T23:59:59+07:00",
+  trigger: /เช็[กค]\s*ฟิลเลอร์|ฟิลเลอร์\s*ก่อนปีใหม่|ฟิลเลอร์ปีใหม่|8,?990|ฟิลเลอร์|filler/i,
+  image: "/campaign/fillercheck-2612/1-1x1.jpg",
+  preview: "/campaign/fillercheck-2612/1-1x1-p.jpg",
+  limit: 20, holdHours: 48, maxPer: "คนละ 1 สิทธิ์ · จำนวน cc ตามที่แพทย์ประเมิน",
+  card: {
+    hero: "/campaign/fillercheck-2612/1-1x1.jpg",
+    title: "เช็กฟิลเลอร์ก่อนปีใหม่",
+    price: "8,990 บาท / cc",
+    was: "ปกติ 9,990 บาท / cc",
+    lines: ["โปรแกรมฉีดฟิลเลอร์ HA · คุณหมอประเมินฟิลเลอร์เดิมก่อนเติมทุกครั้ง", "เพียง 20 สิทธิ์ · คนละ 1 สิทธิ์ · ถึง 31 ธ.ค. · เลือกวันนัดภายใน 48 ชม.", "จำนวน cc และตำแหน่งตามการประเมินของแพทย์ · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · ใช้ร่วมกับโปร/แพ็กเกจอื่นไม่ได้"],
+    claimText: "ขอรับสิทธิ์เช็กฟิลเลอร์ 8,990 ค่ะ",
+  },
+  text: `✨ เช็กฟิลเลอร์ก่อนปีใหม่ · โปรแกรมฉีดฟิลเลอร์ HA
+
+ฟิลเลอร์เดิมอาจยังอยู่มากกว่าที่คิด
+คุณหมอประเมินก่อนเติมทุกครั้ง บางคนคำตอบคือยังไม่ต้องเติม
+1) เล่าประวัติ เคยฉีดที่ไหน กี่ cc เมื่อไหร่
+2) ถ่ายภาพมาตรฐาน ประเมินทีละจุด
+3) เติมเท่าที่จำเป็นตามแผนของคุณหมอ
+
+💙 8,990.- / cc (ปกติ 9,990.-) เพียง 20 สิทธิ์ ถึง 31 ธ.ค. นี้
+คนละ 1 สิทธิ์ · จำนวน cc และตำแหน่งตามการประเมินของแพทย์ · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · ใช้ร่วมกับโปรอื่นไม่ได้
+👉 กดปุ่ม “กดรับสิทธิ์” ในการ์ดด้านล่าง หรือพิมพ์ “รับสิทธิ์เช็กฟิลเลอร์” ได้เลยค่ะ`,
+  ask: "ขอรับสิทธิ์เช็กฟิลเลอร์ 8,990 ค่ะ",
+  kb: "December filler check 'เช็กฟิลเลอร์ก่อนปีใหม่' (24 November – 31 December 2026): HA filler programme 8,990 THB per cc (regular 9,990 THB per cc). The doctor first reviews the patient's previous filler (where, how many cc, when) with standard photos and only adds what is needed; for some patients the answer is no filler needed yet. Number of cc and areas are decided by the doctor. Only 20 places, 1 per person, not combined with other promotions. Claim in the clinic's LINE by typing 'เช็กฟิลเลอร์' and tapping 'กดรับสิทธิ์', then choose an appointment within 48 hours. Results vary; do not promise specific results or duration.",
+  categories: ["ฟิลเลอร์"],
+  interest: "ฟิลเลอร์|filler|ร่องแก้ม|ใต้ตา|คาง|จมูก|ขมับ|ปาก|กรอบหน้า|แก้มตอบ|harmony|haca|sculptra",
+}, {
   // 11.11 one-day offer (doctor's decision 2026-11-11): first in the list so a bare "รับสิทธิ์" today means this one
   key: "1111-2611",
   label: "11.11 สวยครบ 2 จุด 11,111 · 11 สิทธิ์",
