@@ -14,6 +14,11 @@
   ],
   "redirects": [
     {
+      "source": "/gifts",
+      "destination": "https://vinfinity-line.vercel.app/gifts?s=web-short",
+      "permanent": false
+    },
+    {
       "source": "/line-app/:path*",
       "destination": "/",
       "permanent": false

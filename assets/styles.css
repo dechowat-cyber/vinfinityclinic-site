@@ -538,3 +538,12 @@ html[lang=en] .hero h1 .ln{white-space:normal}
 .chat-strip span{color:var(--silver);font-size:.9rem}
 .chat-strip .chat-btns{display:flex;gap:8px;flex-wrap:wrap}
 .btn-ghost-light{background:transparent;color:#fff;border:1px solid rgba(213,221,238,.5)}.btn-ghost-light:hover{color:#fff;border-color:#fff}
+
+/* year-end gift calendar (25 Nov – 31 Dec 2026); hides itself after 31 Dec */
+.gift-bar{display:block;background:linear-gradient(90deg,#1E3470,#3A5496,#1E3470);color:#fff;text-align:center;font-size:14px;line-height:1.4;padding:9px 16px;text-decoration:none}
+.gift-bar b{color:#D5DDEE;font-weight:600;white-space:nowrap}.gift-bar:hover{color:#fff}.gift-bar:hover b{color:#fff}
+.gift-band{padding:56px 0 0}
+.gift-card{display:grid;grid-template-columns:1.1fr 1fr;gap:32px;align-items:center;background:var(--mist);border-radius:24px;padding:20px;text-decoration:none;color:var(--navy)}
+.gift-card img{width:100%;height:auto;border-radius:16px;display:block}
+.gift-copy p{margin:10px 0 18px;color:#4A5571}.gift-copy small{display:block;margin-top:14px;font-size:12px;color:#7A849C;line-height:1.5}
+@media (max-width:820px){.gift-card{grid-template-columns:1fr;gap:18px}.gift-bar{font-size:13px}}

@@ -291,7 +291,10 @@ def header_html(lang, path):
     home = "/en/" if en else "/"
     label = "Vinfinity Clinic home" if en else "Vinfinity Clinic หน้าแรก"
     cta = "Book a consult" if en else "นัดปรึกษาแพทย์"
-    return f"""<header class="site-header">
+    gift = "" if en else f"""<a class="gift-bar" href="{LINE_APP}/gifts?s=web" data-until="2026-12-31T23:59:59+07:00">🎁 ปฏิทินของขวัญ สวยก่อนปีใหม่ · เปิดได้วันละ 1 กล่อง 25 พ.ย. – 31 ธ.ค. <b>เปิดกล่องวันนี้ →</b></a>
+<script>(function(){{var b=document.querySelector('.gift-bar');if(b&&Date.now()>Date.parse(b.dataset.until))b.remove();}})();</script>
+"""
+    return gift + f"""<header class="site-header">
 <div class="wrap">
 <a class="brand lockup" href="{home}" aria-label="{label}"><img class="lk-mark" src="/assets/vinfinity-mark.svg" alt="" width="44" height="46"><span class="lk-text"><img class="lk-word" src="/assets/vinfinity-wordmark.svg" alt="Vinfinity" width="150" height="18"><span class="lk-tag">INFINITE BEAUTY, PRECISELY</span></span></a>
 <nav class="nav" aria-label="{"Main menu" if en else "เมนูหลัก"}">
@@ -446,7 +449,7 @@ def build(out, title, desc, path, keywords, body_file, faqs, extra_ld=(), lang="
     body = (body.replace("{{REVIEWS}}", reviews_html(lang)).replace("{{CLINIC_INFO}}", clinic_info_html(lang))
             .replace("{{MAP}}", map_html(lang)))
     body = body.replace("{{ADDR}}", ADDR_EN if en else ADDR_LINE)
-    body = body.replace("{{LINE}}", LINE_EN if en else LINE).replace("{{MSG}}", MSG).replace("{{FAQ}}", faq_html(faqs))
+    body = body.replace("{{LINE_APP}}", LINE_APP).replace("{{LINE}}", LINE_EN if en else LINE).replace("{{MSG}}", MSG).replace("{{FAQ}}", faq_html(faqs))
     lds = ([faq_ld(faqs)] if faqs else []) + list(extra_ld)
     html = head(title, desc, path, keywords, lds, lang) + body + footer(lang)
     html = bust(html)
