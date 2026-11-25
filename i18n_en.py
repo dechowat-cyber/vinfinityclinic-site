@@ -146,15 +146,15 @@ EN_LIPS_FAQ = [
 
 EN_CHIN_FAQ = [
     ("How much does chin filler cost in Udon Thani?",
-     "European HA filler starts at THB 9,990 per cc. The amount depends on the length and shape that need adjusting. The doctor confirms the full cost before starting."),
+     "Chin filler at Vinfinity Clinic in Udon Thani starts at THB 9,990 per cc of European HA filler. How much you need depends on the length and shape your chin needs to balance your face. The doctor assesses your front and side profile first and confirms the full cost before treatment begins."),
     ("How long does chin filler last?",
-     "About 6–12 months, or longer for some people, because it is placed deep near the bone in an area that moves little."),
+     "Chin filler usually lasts about 6–12 months, and longer for some people. It is a firm HA gel placed deep near the bone, in an area that moves little, so it often keeps its shape longer than filler in the lips. Ask the doctor to review your chin before any top-up. Results vary from person to person."),
     ("Will chin filler make my chin pointy?",
-     "Not necessarily. The doctor designs the shape around your facial structure. Some faces suit a rounded chin, while others suit a slightly longer one."),
+     "Not necessarily. The doctor designs the chin around your own face, looking at the three facial thirds and your side profile together with your nose, lips and jawline. Some faces suit a rounded chin, others a slightly longer one. A chin that is too long or pointed for the face tends to look done, so the goal is balance."),
     ("How is chin filler different from a silicone chin implant?",
-     "Filler needs no surgery, shows results immediately and can be adjusted. A silicone implant is a surgical procedure with longer-lasting results, but it is harder to correct."),
+     "Chin filler needs no surgery: treatment takes about 15 minutes, you see the change after the injection, and it can be topped up or dissolved with an enzyme. It lasts about 6–12 months, or longer for some people. A silicone implant needs surgery with a wound and recovery time, stays until it is removed, and needs surgery to correct."),
     ("I've had chin augmentation before. Can I have filler?",
-     "Please tell the doctor what you have had done before. The doctor will assess whether filler can be injected safely."),
+     "It depends on what is already there. Tell the doctor exactly what you have had, such as silicone, filler or another substance, where and when. The doctor then assesses whether filler can be placed safely. Chin filler is also postponed if there is an infection or inflamed acne on the chin, or during pregnancy or breastfeeding."),
 ]
 
 EN_BOOSTER_FAQ = [
