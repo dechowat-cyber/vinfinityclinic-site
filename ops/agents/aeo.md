@@ -1,14 +1,16 @@
 # aeo agent
 
 ## Backlog (top = next)
-1. Next content (approved pattern, 2026-11-16): same answer-first 40–60-word rewrite — EN lips done 2026-11-18 (branch agent/aeo-20261118, waiting); next EN chin, dissolve, skin-booster, Sculptra, toxin, lifting, price FAQs, then TH — one page group per run, as a branch.
-2. Doctor task (biggest blocker): verify vinfinityclinic.com in Bing Webmaster Tools + Google Search Console and submit sitemap.xml — 0 of 29 searches over 6 runs show the site (2026-11-18: the brand and the 'Filler Architect' title return nothing), even brand/domain searches. Bing feeds ChatGPT/Copilot.
-3. Doctor task list (external citations): claim/complete listings on WhatClinic (Udon Thani pages exist; 4 Udon clinics now answer the "English-speaking doctor" query), Gowabi (lists Udon Thani clinics incl. De Charm, V-Sage), HDmall, Wongnai, Bookimed (fix "Vincent Clinic" confusion), Thaiger Deals; check Google Business Profile NAP matches site exactly.
+1. Next content (approved pattern, 2026-11-16): same answer-first 40–60-word rewrite — EN lips (agent/aeo-20261118) and EN chin (agent/aeo-20261125) waiting for the doctor; next EN dissolve, skin-booster, Sculptra, toxin, lifting, price FAQs, then TH — one page group per run, as a branch.
+2. Doctor task (biggest blocker): verify vinfinityclinic.com in Bing Webmaster Tools + Google Search Console and submit sitemap.xml — 0 of 33 searches over 7 runs show the site (2026-11-18: the brand and the 'Filler Architect' title return nothing), even brand/domain searches. Bing feeds ChatGPT/Copilot.
+3. Doctor task list (external citations): HDmall now has a list page "armpit hair removal, Mueang Udon Thani" (hdmall.co.th/blog/list/armpit-hair-removal-mueang-udon-thani/) — worth a listing while the gift calendar offers laser hair removal; claim/complete listings on WhatClinic (Udon Thani pages exist; 4 Udon clinics now answer the "English-speaking doctor" query), Gowabi (lists Udon Thani clinics incl. De Charm, V-Sage), HDmall, Wongnai, Bookimed (fix "Vincent Clinic" confusion), Thaiger Deals; check Google Business Profile NAP matches site exactly.
 4. Content branch: English FAQ for foreign patients — how to book from Laos, how long to stay after treatment — only once the doctor confirms the facts (English consult + Messenger now done in 20261104 branch).
 5. "สรุปสั้น" box: done on all TH/EN service pages (skin-booster merged 2026-11-16).
 6. /toxin/ titles/H1 use "โบท็อก" (a brand name) — flag to doctor vs README rule (content, do not change on main).
 7. Keep llms.txt in sync with sitemap.xml each run (script: compare <loc> list with llms.txt).
 8b. EM Lift (promo 15–30 Nov) is not in llms.txt/kb.txt; AI assistants can't answer about it. Add only after the doctor gives device name + Thai FDA wording (content → branch), no result claims.
+8c. After 31 Dec: the gift-calendar card text is in kb.txt (from the home page) — check the home card is removed at source and kb.txt no longer mentions it.
+8d. Laser hair removal, red light and skin drip appear only in the gift calendar — no site page, llms.txt or kb.txt entry, so AI assistants can't answer about them. Propose pages only if the doctor wants these as standing services (content → branch).
 8. `/llms-full.txt` — only if kb.txt not enough; decide after indexing confirmed.
 
 ## Results table (AI/web-search visibility)
@@ -43,6 +45,10 @@
 | 2026-11-18 | ฉีดฟิลเลอร์ปาก อุดรธานี คลินิก | No | wongnai (filler list 2024, Teerak Clinic Khon Kaen reviews), hdmall (Bangkok lip filler reviews), th.my-best |
 | 2026-11-18 | lip filler Udon Thani English speaking doctor price | No | bookimed (Thailand filler doctor lists), whatclinic (The Physio Clinic Udon; Bangkok/Chiang Mai), deals.thethaiger |
 | 2026-11-18 | "The Filler Architect" doctor Thailand (doctor title) | No | bookimed filler-doctor lists only (other doctors) |
+| 2026-11-25 | Vinfinity Clinic Udon Thani (brand) | No | gowabi (The V-Sage, Rajdhevee Udon, B.Mee Udon, De Charm UD, Class Clinic Udonthani), whatclinic Udon Thani listings |
+| 2026-11-25 | ฉีดฟิลเลอร์คาง อุดรธานี คลินิก แพทย์ | No | LINE pages of other sellers, hdmall (Uthai Thani clinic), wongnai filler list, ktc, khaosod PR |
+| 2026-11-25 | chin filler Udon Thani English speaking doctor | No | whatclinic (Klinique Central, Physio, Dr Ann, Absolute Klinik Udon), realself/bookimed (Bangkok), dloveveryclinic |
+| 2026-11-25 | เลเซอร์กำจัดขนรักแร้ อุดรธานี คลินิก (gift-calendar topic) | No | hdmall list "armpit hair removal Mueang Udon Thani", th.my-best, shopee blog, dailynews |
 
 ## Log
 ### 2026-10-30 (doctor, via main session)
@@ -81,3 +87,7 @@
 - Checked (main, no change needed): all 50 sitemap URLs in llms.txt; 205 JSON-LD blocks parse; FAQPage on 24 pages; `python3 build.py` gives no diff; no expired promo prices (Sculptra 15,990, 11.11) or EM Lift text in llms.txt/kb.txt (EM Lift waits for device/FDA wording, backlog 8b).
 - Content branch agent/aeo-20261118 (c999118, preview vinfinityclinic-site-3p9we7m1u-dechowat-9677s-projects.vercel.app/en/filler/lips/): 5 EN lip-filler FAQ answers rewritten answer-first, 49–56 words (were 19–30), only facts already on /en/filler/lips/ or the general filler FAQ; FAQPage schema follows; banned-word check clean. Waiting for doctor approval.
 
+### 2026-11-25
+- Visibility: 0 of 4 searches show Vinfinity (33/33 misses over 7 runs). Gowabi now lists 5 Udon clinics for the brand query (new: Rajdhevee, B.Mee, Class Clinic); HDmall has an Udon armpit-laser list page → added to the doctor's citation tasks.
+- Checked (main, no change needed): all 50 sitemap URLs in llms.txt; 205 JSON-LD blocks parse; FAQPage on 24 pages; `python3 build.py` gives no diff; no expired promo prices or EM Lift text in llms.txt/kb.txt. kb.txt now carries the gift-calendar home card (doctor-approved, to 31 Dec) — backlog 8c.
+- Content branch agent/aeo-20261125 (870bdf8): 5 EN chin-filler FAQ answers rewritten answer-first, 52–59 words (were 13–31), only facts already on /filler/chin/; FAQPage schema follows (5 Q); banned-word check clean. Waiting for doctor approval with agent/aeo-20261118.
