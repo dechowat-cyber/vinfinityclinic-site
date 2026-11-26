@@ -996,7 +996,7 @@ Graphic brief: Feed 1080×1350: real photo assets/img/clinic-lounge.jpg, dark na
 
 ### 2026-11-26
 - Thursday: Marketing light + live-site check. Production dpl_CHMnQ7mAPs5BTYHuohxdn7hn6U1f (commit bfee6b9) READY; / and /en/price/ 200 with title, canonical, hreflang, JSON-LD (3 / 4), gift bar + home card on /, Vitaran 9,990 · 4+ 8,990 on /en/price/.
-- Found + fixed (main): the short link vinfinityclinic.com/gifts returned 404 (trailingSlash:true sends /gifts → /gifts/, and vercel.json only redirected "/gifts"). Added a "/gifts/" redirect to the same LINE-app page. On-site gift links were fine (they point straight to the LINE app); the short link is used in Draft 28 captions. Verify after deploy.
+- Found + fixed (main): the short link vinfinityclinic.com/gifts returned 404 (trailingSlash:true sends /gifts → /gifts/, and vercel.json only redirected "/gifts"). Added a "/gifts/" redirect to the same LINE-app page. On-site gift links were fine (they point straight to the LINE app); the short link is used in Draft 28 captions. Commit 2ef6752, verified on dpl_HvPz28MZseXJTEo262VWx6QpZuHg: /gifts and /gifts/ both 307 → LINE-app gift page.
 - promos.ts / gifts.ts unchanged since df1d42a: gift calendar to 31 Dec, EM Lift Early Bird to 30 Nov. Today's box (26 Nov) per gifts.ts = Red Light programme (conditions draft). Draft 28 usable as today's Story.
 - Next slot: Fri 27 Nov clinic checklist (Draft 15, re-checked: no banned words, no price) — full TH caption in today's report. Then Sat 28 Nov EM Lift last call (Draft 21; note 24 Nov log moved the EM Lift LINE last call to Sun 29 Nov), Sun 29 Nov Vitaran (Draft 16).
 - Done: Draft 29 for Fri 25 Dec (PN reel) below — facts only from /articles/pn-molecular-weight/. Calendar now runs to 25 Dec.
