@@ -13,18 +13,18 @@ Referral event "ชวนเพื่อนมาสวยด้วยกัน"
 
 ## Backlog (top = next)
 1. Get LINE OA follower count + segment sizes (past skin-booster / filler patients) from LINE OA Manager — broadcast sizes are "not verified" until then. (Ask doctor/team.)
-2. All slots to Wed 23 Dec are DRAFT READY (Draft 28 = gift-calendar post, reusable as a Story any day). Next run: add Fri 25 Dec slot — candidates: New Year closing-hours Story once the doctor gives holiday hours (not verified), or a re-cut of an early article as a short reel (backlog 6). Dec slots may add the gift-calendar line + โปรเดือนนี้ CTA (today's box only).
+2. All slots to Fri 25 Dec are DRAFT READY (Draft 29 = PN reel). Next run: add Sun 27 Dec slot — candidates: New Year closing-hours Story once the doctor gives holiday hours (not verified), or gift-calendar "last days" Story (today's box only, no future gift). Dec slots may add the gift-calendar line + โปรเดือนนี้ CTA.
 2c. Doctor to decide: an organic FB/IG post or Story for the gift-calendar launch (today's broadcast 10:00 is LINE only). Draft 28 works as a Story from 26 Nov if wanted.
 2b. Doctor to confirm: may a public feed post name the referral credits and the "3 friends → Vitaran 1 cc" reward under the clinic's advertising approval (ฆสพ.)? Draft 10 has a version without the reward line — not verified.
 3. Sculptra promo ended Sun 15 Nov 23:59 — never quote 15,990 again. "โปรเดือนนี้" shows EM Lift to 30 Nov (last-call Story = Draft 21). Check promos.ts for a December promo before 1 Dec; from 1 Dec never quote 4,500 / 18,000 as Early Bird.
 3b. EM Lift: ask the doctor for the device name + Thai FDA registration wording so captions/site can say more; until then only the facts in the brief. No /lifting/ or /price/ mention of EM Lift yet — SEO agent to propose a branch once the wording is on file.
 4b. Sculptra waitlist post only if the doctor opens a waitlist (no 15,990 price after 15 Nov or after 10 places). Calendar now runs to 29 Nov; roll again ~22 Nov.
 5. Map menu images (assets/img/menu/th-01…16, en-, lo-) to treatments so calendar can point to exact files.
-6. Short-form video scripts (TikTok/Reels 20–30 s) from existing articles: PN HMW vs LMW (ligaments done, Draft 11).
+6. Short-form video scripts (TikTok/Reels 20–30 s) from existing articles: next = tear-trough types or skincare-after-injection (ligaments Draft 11, layers Draft 18, PN Draft 29 done).
 7. Lao-language caption variant for Vientiane audience (site has lo menu images).
 8. Market watch: Udon Thani-local competitor promos (FB pages) — web search surfaced none on 2026-10-30 and 2026-10-31; needs a human to check FB pages or a different source.
 
-## 2-week content calendar (1 Nov – 23 Dec 2026)
+## 2-week content calendar (1 Nov – 25 Dec 2026)
 Weekdays corrected 2026-11-01 (1 Nov 2026 = Sunday; earlier labels were one day off — dates unchanged). Clinic closed Tuesdays.
 | Date | Channel | Topic | Hook | CTA | Asset |
 |---|---|---|---|---|---|
@@ -56,6 +56,7 @@ Weekdays corrected 2026-11-01 (1 Nov 2026 = Sunday; earlier labels were one day 
 | Fri 18 Dec | FB + IG carousel | Myth vs evidence: "ฉีดยกเอ็น" — ligaments stiffen with age, they don't loosen; support the deep base instead (from /articles/ligament-lift-injection/) — DRAFT READY (Draft 26) | "ฉีดยกเอ็น ได้ผลจริงไหม" | /articles/ligament-lift-injection + LINE ส่งรูป | articles/ligament-lift-injection-support.jpg |
 | Sun 20 Dec | FB + IG carousel | Evergreen year-end: filler stays longer than you think — MRI found it ≥2 years in all 33 people; check before a "top-up" (from /articles/filler-long-term/; no December promo in promos.ts on 24 Nov) — DRAFT READY (Draft 27) | "ฟิลเลอร์ที่ฉีดไว้ ยังอยู่ไหม ก่อนเติมรอบใหม่" | /articles/filler-long-term + LINE ส่งรูป + ประวัติการฉีด | articles/filler-mri-longevity-timeline.jpg |
 | Wed 23 Dec | FB + IG feed (+ Story) | Gift calendar "ปฏิทินของขวัญ สวยก่อนปีใหม่" — 9 days left, today's box only, no future gifts named (gifts.ts) — DRAFT READY (Draft 28; also usable as a Story any day 26 Nov–30 Dec) | "เปิดกล่องของขวัญวันนี้หรือยัง" | ทักไลน์ พิมพ์ “โปรเดือนนี้” / เมนู 🎁 + vinfinityclinic.com/gifts | clinic-lounge.jpg (feed) · assets/img/gift-calendar.jpg (Story) |
+| Fri 25 Dec | TikTok / Reels + FB | PN gel vs liquid — "which PN works better?" 4 questions to ask before PN, 25 s (backlog 6, from /articles/pn-molecular-weight/; no price, no brand) — DRAFT READY (Draft 29) | "PN ยี่ห้อไหนได้ผลกว่า? ถามหมอ 4 ข้อนี้ก่อน" | /articles/pn-molecular-weight + LINE ประเมินผิว | doctor talking-head (team films) + articles/pn-hmw-lmw-polynucleotide.jpg |
 
 Notes: before/after only from assets/img/ba (consented, already on site), labelled PRE / POST, organic only, never in ads. File naming on site: caseNN-b = PRE (before), caseNN-a = POST (after) — see pages/_results_eye.html. Do not use galderma-* doctor photos (not a current affiliation).
 
@@ -992,3 +993,40 @@ Our year-end gift calendar is open until 31 Dec: one box a day, and everyone who
 Hashtags: #VinfinityClinic #ปฏิทินของขวัญ #สวยก่อนปีใหม่ #คลินิกอุดร #อุดรธานี #TheFillerArchitect #UdonThani
 Alt text: ห้องรับรองของ Vinfinity Clinic อุดรธานี โทนน้ำเงินกรมท่า พร้อมข้อความ "ปฏิทินของขวัญ สวยก่อนปีใหม่ เปิดได้วันละ 1 กล่อง ถึง 31 ธ.ค." / Vinfinity Clinic lounge in navy tones with the text "Year-end gift calendar — one box a day until 31 Dec".
 Graphic brief: Feed 1080×1350: real photo assets/img/clinic-lounge.jpg, dark navy gradient (#0B142E → #1A326B) over the lower half, silver #EEF2F8 headline "ปฏิทินของขวัญ สวยก่อนปีใหม่", sub-line "เปิดได้วันละ 1 กล่อง · ถึง 31 ธ.ค." in #D5DDEE. Story 1080×1920: assets/img/gift-calendar.jpg (site graphic) on the same navy gradient + LINE chip "พิมพ์ โปรเดือนนี้". Small text footer credit on both: "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943 · ใช้ร่วมกับโปรอื่นไม่ได้". No white logo band, no future gift named, no price, no brand names, no "ฟรี" without its condition, no before/after.
+
+### 2026-11-26
+- Thursday: Marketing light + live-site check. Production dpl_CHMnQ7mAPs5BTYHuohxdn7hn6U1f (commit bfee6b9) READY; / and /en/price/ 200 with title, canonical, hreflang, JSON-LD (3 / 4), gift bar + home card on /, Vitaran 9,990 · 4+ 8,990 on /en/price/.
+- Found + fixed (main): the short link vinfinityclinic.com/gifts returned 404 (trailingSlash:true sends /gifts → /gifts/, and vercel.json only redirected "/gifts"). Added a "/gifts/" redirect to the same LINE-app page. On-site gift links were fine (they point straight to the LINE app); the short link is used in Draft 28 captions. Verify after deploy.
+- promos.ts / gifts.ts unchanged since df1d42a: gift calendar to 31 Dec, EM Lift Early Bird to 30 Nov. Today's box (26 Nov) per gifts.ts = Red Light programme (conditions draft). Draft 28 usable as today's Story.
+- Next slot: Fri 27 Nov clinic checklist (Draft 15, re-checked: no banned words, no price) — full TH caption in today's report. Then Sat 28 Nov EM Lift last call (Draft 21; note 24 Nov log moved the EM Lift LINE last call to Sun 29 Nov), Sun 29 Nov Vitaran (Draft 16).
+- Done: Draft 29 for Fri 25 Dec (PN reel) below — facts only from /articles/pn-molecular-weight/. Calendar now runs to 25 Dec.
+
+#### Draft 29 — Fri 25 Dec · TikTok / Reels + FB (25 s, 9:16) · "PN ยี่ห้อไหนได้ผลกว่า?"
+Script (doctor talking-head, on-screen text in silver):
+0–3 s: "PN ยี่ห้อไหนได้ผลกว่า? ก่อนตอบ ต้องรู้ก่อนว่า PN ไม่ได้มีแบบเดียว"
+3–10 s: "สายยาว (เจล) อุ้มน้ำ ค่อย ๆ สลาย · สายสั้น (น้ำใส) กระจายตัวเร็ว เน้นซ่อมแซมระยะสั้น" (graphic pn-hmw-lmw-polynucleotide.jpg)
+10–16 s: "แต่ยังไม่มีงานวิจัยในคนที่เทียบสองแบบตัวต่อตัว — ไม่ใช่ยิ่งเล็กยิ่งดี หรือยิ่งใหญ่ยิ่งดี"
+16–23 s: "ก่อนฉีด ถาม 4 ข้อ: ชื่อผลิตภัณฑ์ + เลข อย. · เจลหรือน้ำ ทำไม · มีส่วนผสมอื่นไหม · กี่ครั้ง วัดผลยังไง"
+23–25 s: "ส่งรูปให้หมอประเมินทาง LINE @vinfinityclinic"
+TH caption:
+PN ยี่ห้อไหนได้ผลกว่า? 🧬 คำถามนี้ยังตอบตรง ๆ ไม่ได้ค่ะ
+PN สายยาว (เจล) อุ้มน้ำและค่อย ๆ สลาย ส่วนสายสั้น (น้ำใส) กระจายตัวเร็ว เน้นซ่อมแซมระยะสั้น แต่ตอนนี้ยังไม่มีงานวิจัยในคนที่เปรียบเทียบสองแบบตัวต่อตัว แพทย์จึงเลือกตามสภาพผิวและตำแหน่ง
+
+ก่อนทำโปรแกรมสกินบูสเตอร์ PN ถามแพทย์ 4 ข้อนี้
+1️⃣ ผลิตภัณฑ์ชื่ออะไร ขึ้นทะเบียน อย. ไหม ขอดูกล่องได้ไหม
+2️⃣ เป็นชนิดเจลหรือชนิดน้ำ ทำไมถึงเลือกแบบนี้ให้ผิวเรา
+3️⃣ มีส่วนผสมอื่นนอกจาก PN หรือไม่
+4️⃣ ต้องทำกี่ครั้ง ห่างกันเท่าไร และวัดผลอย่างไร
+ผิวหย่อนหรือขาดโครงสร้าง PN อย่างเดียวไม่พอ PN ดูแลคุณภาพผิว ไม่ได้ยกหรือเติมโครงหน้า · ผู้ที่แพ้ปลาควรแจ้งแพทย์ก่อน
+
+อ่านฉบับเต็มพร้อมเอกสารอ้างอิง: vinfinityclinic.com/articles/pn-molecular-weight/
+นพ.เดโชวัต พรมดา (ว.48943) · 📍 Vinfinity Clinic อุดรธานี · คลินิกปิดทุกวันอังคาร
+💬 ส่งรูปหน้าตรงในแสงธรรมชาติทาง LINE @vinfinityclinic ให้คุณหมอประเมินผิวก่อน
+ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · การทำหัตถการทุกชนิดอาจมีผลข้างเคียง
+
+EN caption:
+"Which PN works better?" There's no straight answer yet. Long-chain PN (gel) holds water and breaks down slowly; short-chain (liquid) spreads fast and is used for short-term repair — but no human study has compared the two head-to-head, so the choice depends on your skin and the area. Before a PN (polynucleotide / "salmon DNA") skin-booster programme, ask: the product name and Thai FDA registration, gel or liquid and why, any other ingredients, and how many sessions and how results are measured. PN improves skin quality; it doesn't lift or add structure. Tell the doctor if you're allergic to fish. Full article (Thai, with references): vinfinityclinic.com/articles/pn-molecular-weight/ · Dr. Dechowat Promda (license 48943) · consultations in English · LINE @vinfinityclinic · Messenger m.me/Vinfinity.Clinic · closed Tuesdays. Results vary from person to person. All procedures carry possible side effects.
+
+Hashtags: #PN #สกินบูสเตอร์ #Polynucleotide #SalmonDNA #VinfinityClinic #คลินิกอุดร #อุดรธานี #SkinBooster #UdonThani
+Alt text: คุณหมออธิบายความต่างของ PN ชนิดเจลและชนิดน้ำ พร้อมกราฟิกสาย DNA ยาวและสั้น / The doctor explains the difference between gel and liquid PN, with a graphic of long and short DNA chains.
+Graphic brief: 9:16 1080×1920. Real footage of the doctor in the treatment room (assets/img/treatment.jpg as cover frame if no video), dark navy gradient (#0B142E → #1A326B) on the lower third for silver #EEF2F8 text; insert article graphic assets/img/articles/pn-hmw-lmw-polynucleotide.jpg at 3–10 s. Small text footer credit throughout: "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943 · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล". No white logo band, no product brand names, no price, no before/after, no Christmas discount invented.
