@@ -9,7 +9,7 @@ SITE = "https://vinfinityclinic.com"
 LINE_APP = "https://vinfinity-line.vercel.app"
 # Ad pixels: fill the IDs to switch them on. They load only after the visitor accepts the cookie banner.
 GA4_ID = "G-390ZZ2GPSP"
-META_PIXEL_ID = ""  # 15-16 digits
+META_PIXEL_ID = "5707458012812156"  # Meta pixel, set 26 Nov 2026
 TIKTOK_PIXEL_ID = ""
 from urllib.parse import quote as _q
 # FR-01: every LINE button opens the chat with a pre-filled message carrying the source tag,
