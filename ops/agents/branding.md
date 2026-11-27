@@ -1,7 +1,8 @@
 # branding agent
 
 ## Backlog (top = next)
-1. Doctor approves `agent/branding-20261031` (6 descriptive "ที่สุด" softened on /filler/, /filler/lips/, /filler/tear-trough/, /filler/dissolve/ + home via _results_eye + lips FAQ in build.py). Main merged in on 2026-11-13 (f734519) so it merges cleanly. Re-check after merge.
+1. Doctor approves `agent/branding-20261031` (6 descriptive "ที่สุด" softened on /filler/, /filler/lips/, /filler/tear-trough/, /filler/dissolve/ + home via _results_eye + lips FAQ in build.py). Main merged in again on 2026-11-27 (4cbbad4, sitemap conflict) so it merges cleanly; after merge the 4 filler pages have 0 "ที่สุด". Re-check after merge.
+1b. Doctor approves `agent/branding-20261127` (c26a61e): /price/ HArmonyCa "ยกกระชับทันที" / "Immediate lift" → "เจล HA เติมปริมาตร แล้วกระตุ้นคอลลาเจนต่อ" / "HA gel adds volume, then collagen stimulation follows" (instant-result wording; no price change).
 2. Doctor approves `agent/branding-20261106` (29780d5): footer on every TH/EN page now links Facebook page + Instagram (before: only /doctor). Re-check after merge.
 2b. Public social profiles — NEEDS A HUMAN (web search finds none of our profiles; FB/IG pages cannot be fetched by the agent). Team checklist, 10 min: FB/IG/TikTok/GBP/LINE OA name = "Vinfinity Clinic", bio carries "นพ.เดโชวัต พรมดา ว.48943" + "The Filler Architect", link = vinfinityclinic.com, phone 082-462-2963, hours match the site, no Galderma as current role, no banned words (README). Ask: does the clinic have a TikTok account? If yes, add it to footer + Organization sameAs.
 3. Proposal (needs doctor's call): /doctor page shows 5 Galderma event/award photos vs 1 IMCAS photo — consider leading the gallery with IMCAS / Vivacy Paris 2025 and keeping Galderma photos lower as history.
@@ -10,7 +11,8 @@
 6. Lao (LO) pages: none exist on the site yet — brand book has no LO voice sample; ask doctor whether LO is planned (Vientiane patients).
 7. Wording check: pages/article-tear-trough-candidates.html:60 "ได้ผลดีที่สุด" (cited study subgroup) — soften to "ได้ผลดีกว่า" if ฆสพ. reviewer prefers zero "ที่สุด". home.html:29 doctor quote "ไม่ได้มาจากยาที่แพงที่สุด" is a negation — leave unless reviewer objects.
 8. Authority piece (weekly, next due week of 2026-11-16): ligament-support explainer from /articles/ligament-lift-injection/ (week of 11-09 brief became marketing Draft 17, Wed 2 Dec).
-9. Next rotation (Fri 27 Nov): public profiles again — only if the team has done the 2b checklist; otherwise menu pages part 1 re-check (/price/, /filler/ family) incl. EM Lift wording once on site.
+9. Next rotation (Fri 4 Dec): website CI part 2 — home + /doctor TH/EN (inline colours, logo use, photo captions with event + year); public profiles only if the team has done the 2b checklist.
+9b. Small proposals (bundle into one branch after 1/1b/2 are merged): before/after slider alt text says "หลังทำ เคส NN" / "After, case NN" — brand book label is POST (alt only; consent-gated area, needs approval). Article URL /articles/skincare-routine-filler-botox/ carries a toxin brand word in the slug (visible in links) — changing it needs a 301 redirect (SEO agent, doctor's call). /price/ lead still says "อัปเดตเดือนตุลาคม 2569" — doctor to confirm prices are current before it is changed.
 10. Proposal (branch, needs doctor): 10 descriptive "ที่สุด" in TH article bodies (science context, e.g. "ไวที่สุด", "รุนแรงที่สุด", "ได้ผลดีที่สุด", "มากที่สุด") → soften per brand book; extends backlog 7. Wait until branches 1–2 are approved to avoid a pile-up.
 
 ## Brand book (keep short)
@@ -28,6 +30,12 @@
 "IMCAS Asia 2023 Live Demonstration — what a live demo teaches about planning": 1 carousel (5 slides) + 1 short article section. Facts allowed: faculty + live demo at IMCAS Asia 2023 (photo /assets/img/doctor/imcas-asia-2023-live-demo.jpg), the doctor's layered/ligament approach as already written in /articles/layered-injection-anatomy/ and /articles/facial-ligaments-aging/. No patient faces, no product brands, no outcome claims; end with "ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล" + LINE CTA. Draft only, doctor approves.
 
 ## Log
+### 2026-11-27
+- Audit area (rotation): menu pages part 1 — /price/ + /filler/, /filler/chin/, /filler/lips/, /filler/tear-trough/, /filler/dissolve/ TH + EN (12 pages). Public profiles skipped: no sign the team has done the 2b checklist.
+- Clean: TH↔EN parity (same 31 prices on /price/ both sides; h1–h2 13/13, 9/9, 9/9, 9/9, 7/7; FAQ 8/8, 5/5, 5/5, 6/6, 5/5), 0 off-palette inline colours, 0 images without alt, disclaimer + ฆสพ. on all 12, PRE/POST labels on the 7 /filler/ cases, 0 EN banned words, Galderma only in JSON-LD award history (backlog 5). No EM Lift on site yet (marketing backlog 3b).
+- Found: "ที่สุด" still live on 4 TH filler pages — exactly the lines fixed in `agent/branding-20261031`; that branch had a sitemap.xml conflict again → merged main in and rebuilt (4cbbad4, pushed); verified 0 "ที่สุด" on those pages after merge.
+- Found + branch: /price/ HArmonyCa row said "ยกกระชับทันที" / "Immediate lift" (close to banned เห็นผลทันที / instant) → `agent/branding-20261127` (c26a61e), wording only, price untouched. Waiting for doctor.
+- Minor notes for later (backlog 9b): slider alt text "หลังทำ/After", "botox" in one article URL slug, /price/ "updated October 2569" line.
 ### 2026-11-20
 - Audit area (rotation): website CI — assets/styles.css tokens + 26 article pages (13 TH + 13 EN incl. both index pages).
 - Found + fixed on main: 2 leftovers of the old navy #041738 (sticky header background rgba(4,23,56,.94) and favicon.svg fill) → CI navy #0B142E; 2 pure-black shadows rgba(0,0,0,.35) (portrait card, doctor badge) → navy-tinted rgba(11,20,46,.35) ("no pure black"). Visually near-identical; `python3 build.py` rebuilt 50 pages (only the styles.css ?v= hash changed).

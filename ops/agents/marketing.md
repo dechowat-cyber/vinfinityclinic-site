@@ -13,7 +13,7 @@ Referral event "ชวนเพื่อนมาสวยด้วยกัน"
 
 ## Backlog (top = next)
 1. Get LINE OA follower count + segment sizes (past skin-booster / filler patients) from LINE OA Manager — broadcast sizes are "not verified" until then. (Ask doctor/team.)
-2. All slots to Fri 25 Dec are DRAFT READY (Draft 29 = PN reel). Next run: add Sun 27 Dec slot — candidates: New Year closing-hours Story once the doctor gives holiday hours (not verified), or gift-calendar "last days" Story (today's box only, no future gift). Dec slots may add the gift-calendar line + โปรเดือนนี้ CTA.
+2. All slots to Sun 27 Dec are DRAFT READY (Draft 30 = gift-calendar Story). Next run: add Wed 30 Dec slot — candidates: New Year holiday-hours Story once the doctor gives holiday hours (not verified), or a year-end evergreen carousel from an article not yet used (collagen stimulators /articles/collagen-stimulators/). From 1 Jan the gift calendar is over: claimed gifts stay valid to 31 Jan 70 (say so, no new boxes).
 2c. Doctor to decide: an organic FB/IG post or Story for the gift-calendar launch (today's broadcast 10:00 is LINE only). Draft 28 works as a Story from 26 Nov if wanted.
 2b. Doctor to confirm: may a public feed post name the referral credits and the "3 friends → Vitaran 1 cc" reward under the clinic's advertising approval (ฆสพ.)? Draft 10 has a version without the reward line — not verified.
 3. Sculptra promo ended Sun 15 Nov 23:59 — never quote 15,990 again. "โปรเดือนนี้" shows EM Lift to 30 Nov (last-call Story = Draft 21). Check promos.ts for a December promo before 1 Dec; from 1 Dec never quote 4,500 / 18,000 as Early Bird.
@@ -24,7 +24,7 @@ Referral event "ชวนเพื่อนมาสวยด้วยกัน"
 7. Lao-language caption variant for Vientiane audience (site has lo menu images).
 8. Market watch: Udon Thani-local competitor promos (FB pages) — web search surfaced none on 2026-10-30 and 2026-10-31; needs a human to check FB pages or a different source.
 
-## 2-week content calendar (1 Nov – 25 Dec 2026)
+## 2-week content calendar (1 Nov – 27 Dec 2026)
 Weekdays corrected 2026-11-01 (1 Nov 2026 = Sunday; earlier labels were one day off — dates unchanged). Clinic closed Tuesdays.
 | Date | Channel | Topic | Hook | CTA | Asset |
 |---|---|---|---|---|---|
@@ -57,6 +57,7 @@ Weekdays corrected 2026-11-01 (1 Nov 2026 = Sunday; earlier labels were one day 
 | Sun 20 Dec | FB + IG carousel | Evergreen year-end: filler stays longer than you think — MRI found it ≥2 years in all 33 people; check before a "top-up" (from /articles/filler-long-term/; no December promo in promos.ts on 24 Nov) — DRAFT READY (Draft 27) | "ฟิลเลอร์ที่ฉีดไว้ ยังอยู่ไหม ก่อนเติมรอบใหม่" | /articles/filler-long-term + LINE ส่งรูป + ประวัติการฉีด | articles/filler-mri-longevity-timeline.jpg |
 | Wed 23 Dec | FB + IG feed (+ Story) | Gift calendar "ปฏิทินของขวัญ สวยก่อนปีใหม่" — 9 days left, today's box only, no future gifts named (gifts.ts) — DRAFT READY (Draft 28; also usable as a Story any day 26 Nov–30 Dec) | "เปิดกล่องของขวัญวันนี้หรือยัง" | ทักไลน์ พิมพ์ “โปรเดือนนี้” / เมนู 🎁 + vinfinityclinic.com/gifts | clinic-lounge.jpg (feed) · assets/img/gift-calendar.jpg (Story) |
 | Fri 25 Dec | TikTok / Reels + FB | PN gel vs liquid — "which PN works better?" 4 questions to ask before PN, 25 s (backlog 6, from /articles/pn-molecular-weight/; no price, no brand) — DRAFT READY (Draft 29) | "PN ยี่ห้อไหนได้ผลกว่า? ถามหมอ 4 ข้อนี้ก่อน" | /articles/pn-molecular-weight + LINE ประเมินผิว | doctor talking-head (team films) + articles/pn-hmw-lmw-polynucleotide.jpg |
+| Sun 27 Dec | FB + IG Story (+ LINE VOOM) | Gift calendar — still open to 31 Dec; today's box only (team fills it in from the page that morning), no future box named, no countdown (gifts.ts) — DRAFT READY (Draft 30) | "กล่องของขวัญวันนี้ เปิดแล้ว" | ทักไลน์ พิมพ์ “โปรเดือนนี้” / เมนู 🎁 + vinfinityclinic.com/gifts | assets/img/gift-calendar.jpg + clinic-lounge.jpg |
 
 Notes: before/after only from assets/img/ba (consented, already on site), labelled PRE / POST, organic only, never in ads. File naming on site: caseNN-b = PRE (before), caseNN-a = POST (after) — see pages/_results_eye.html. Do not use galderma-* doctor photos (not a current affiliation).
 
@@ -1030,3 +1031,31 @@ EN caption:
 Hashtags: #PN #สกินบูสเตอร์ #Polynucleotide #SalmonDNA #VinfinityClinic #คลินิกอุดร #อุดรธานี #SkinBooster #UdonThani
 Alt text: คุณหมออธิบายความต่างของ PN ชนิดเจลและชนิดน้ำ พร้อมกราฟิกสาย DNA ยาวและสั้น / The doctor explains the difference between gel and liquid PN, with a graphic of long and short DNA chains.
 Graphic brief: 9:16 1080×1920. Real footage of the doctor in the treatment room (assets/img/treatment.jpg as cover frame if no video), dark navy gradient (#0B142E → #1A326B) on the lower third for silver #EEF2F8 text; insert article graphic assets/img/articles/pn-hmw-lmw-polynucleotide.jpg at 3–10 s. Small text footer credit throughout: "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943 · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล". No white logo band, no product brand names, no price, no before/after, no Christmas discount invented.
+
+### 2026-11-27
+- Friday: Marketing light + Branding deep area. Production dpl_4NicbLbTZyEFJj4TUHUUyVHrvZKN (commit 46a2787, Meta pixel) READY; /price/ renders 200 with title, canonical, hreflang, 4 JSON-LD blocks, gift bar. (vinfinityclinic.com itself is blocked by this run's network proxy, so the check used the production deployment URL.)
+- promos.ts / gifts.ts unchanged: EM Lift Early Bird to Mon 30 Nov 23:59, gift calendar to 31 Dec. No other December promo in promos.ts — from 1 Dec never quote 4,500 / 18,000 as Early Bird (except the gift-calendar box that day, if the box itself says so).
+- Today's slot Fri 27 Nov = Draft 15 (clinic checklist). Next slot Sat 28 Nov = Draft 21 (EM Lift Early Bird last call) — re-checked: prices match promos.ts emlift-2611, no banned words, no countdown; full TH caption in today's report.
+- Done: Draft 30 for Sun 27 Dec (gift-calendar Story) below. Calendar now runs to 27 Dec.
+
+#### Draft 30 — Sun 27 Dec · FB + IG Story (9:16, 2 frames) + LINE VOOM · Gift calendar still open to 31 Dec
+Frame 1 text: "🎁 ปฏิทินของขวัญ สวยก่อนปีใหม่" / "กล่องวันนี้ (27 ธ.ค.): [ชื่อของขวัญวันนี้ จากหน้า vinfinityclinic.com/gifts]" / "[เงื่อนไขของกล่องวันนี้ ตามที่เขียนในกล่อง]"
+Frame 2 text: "เปิดได้วันละ 1 กล่อง ถึง 31 ธ.ค." / "ทุกคนได้ของขวัญเดียวกัน ไม่ใช่การสุ่ม" / "คลินิกปิดวันอังคาร 29 ธ.ค." / link sticker → LINE @vinfinityclinic + chip "พิมพ์ “โปรเดือนนี้”"
+Team note: fill frame 1 on the morning of 27 Dec from the live page only (the doctor may change the schedule; never copy a box from gifts.ts in advance, never name tomorrow's box). If today's box has a "ฟรี" or discount, keep its written condition on the same frame.
+TH caption:
+🎁 ปฏิทินของขวัญ สวยก่อนปีใหม่ ยังเปิดอยู่ถึง 31 ธ.ค. นะคะ
+กล่องวันนี้คืออะไร เปิดดูได้ที่ vinfinityclinic.com/gifts หรือทักไลน์ได้เลย
+✔️ เปิดได้วันละ 1 กล่อง ทุกคนที่เปิดวันนั้นได้ของขวัญเดียวกัน ไม่ใช่การสุ่ม
+✔️ สิทธิ์มีจำนวนจำกัดต่อวัน กดรับได้เฉพาะวันนั้น คนละ 1 สิทธิ์ · เลือกวันนัดภายใน 48 ชม. · ใช้ได้ถึง 31 ม.ค. 70
+✔️ แพทย์ประเมินก่อนทุกครั้ง
+📍 Vinfinity Clinic อุดรธานี · นพ.เดโชวัต พรมดา (ว.48943) · ปิดวันอังคาร 29 ธ.ค. · วันเวลาเปิดช่วงปีใหม่ สอบถามทาง LINE
+ใช้ร่วมกับโปรโมชั่น/แพ็กเกจอื่นไม่ได้ · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · การทำหัตถการทุกชนิดอาจมีผลข้างเคียง
+ทักไลน์ @vinfinityclinic พิมพ์ “โปรเดือนนี้” หรือกดเมนู 🎁 โปรเดือนนี้
+
+EN caption:
+Our year-end gift calendar is open until 31 Dec: one box a day, the same gift for everyone who opens it that day — not a lucky draw. See today's box at vinfinityclinic.com/gifts. Places are limited each day, one per person, claimed in LINE that day; book within 48 hours and use by 31 Jan 2027. The doctor assesses you first every time. Closed Tuesday 29 Dec; ask us on LINE for New Year opening hours. Not combined with other promotions. Results vary from person to person. All procedures carry possible side effects. Consultations in English · LINE @vinfinityclinic · Messenger m.me/Vinfinity.Clinic
+
+Hashtags: #VinfinityClinic #ปฏิทินของขวัญ #สวยก่อนปีใหม่ #คลินิกอุดร #อุดรธานี #UdonThani
+Alt text: กราฟิกปฏิทินของขวัญของ Vinfinity Clinic บนพื้นน้ำเงินกรมท่า พร้อมข้อความ "เปิดได้วันละ 1 กล่อง ถึง 31 ธ.ค." / Vinfinity Clinic gift-calendar graphic on navy with the text "one box a day until 31 Dec".
+Graphic brief: 1080×1920, 2 frames. Frame 1: assets/img/gift-calendar.jpg (site graphic) top 55%, dark navy gradient (#0B142E → #1A326B) below, silver #EEF2F8 headline, today's box name + condition in #D5DDEE. Frame 2: real photo assets/img/clinic-lounge.jpg with the same gradient, three short lines + LINE link sticker. Small text footer credit on both: "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943 · ใช้ร่วมกับโปรอื่นไม่ได้". No white logo band, no countdown timer or "เหลืออีก X วัน", no "โอกาสสุดท้าย", no future box, no brand names, no before/after.
+
