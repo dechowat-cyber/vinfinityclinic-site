@@ -1,13 +1,16 @@
 # aeo agent
 
 ## Backlog (top = next)
-1. Doctor approval pending: agent/aeo-20261031 (EN filler + tear-trough FAQ, 40–60 words), agent/aeo-20261104 (home FAQ "consult in English?" TH+EN) and agent/aeo-20261111 (skin-booster summary box TH+EN). After approval: same answer-first rewrite for EN lips, chin, dissolve, skin-booster, Sculptra, toxin, lifting, price FAQs, then TH.
-2. Doctor task (biggest blocker): verify vinfinityclinic.com in Bing Webmaster Tools + Google Search Console and submit sitemap.xml — 0 of 16 searches over 3 runs show the site, even brand/domain searches. Bing feeds ChatGPT/Copilot.
-3. Doctor task list (external citations): claim/complete listings on WhatClinic (Udon Thani pages exist; 4 Udon clinics now answer the "English-speaking doctor" query), Gowabi (lists Udon Thani clinics incl. De Charm, V-Sage), HDmall, Wongnai, Bookimed (fix "Vincent Clinic" confusion), Thaiger Deals; check Google Business Profile NAP matches site exactly.
+1. Next content (approved pattern, 2026-11-16): same answer-first 40–60-word rewrite — EN lips (agent/aeo-20261118) and EN chin (agent/aeo-20261125) waiting for the doctor; next EN dissolve, skin-booster, Sculptra, toxin, lifting, price FAQs, then TH — one page group per run, as a branch.
+2. Doctor task (biggest blocker): verify vinfinityclinic.com in Bing Webmaster Tools + Google Search Console and submit sitemap.xml — 0 of 33 searches over 7 runs show the site (2026-11-18: the brand and the 'Filler Architect' title return nothing), even brand/domain searches. Bing feeds ChatGPT/Copilot.
+3. Doctor task list (external citations): HDmall now has a list page "armpit hair removal, Mueang Udon Thani" (hdmall.co.th/blog/list/armpit-hair-removal-mueang-udon-thani/) — worth a listing while the gift calendar offers laser hair removal; claim/complete listings on WhatClinic (Udon Thani pages exist; 4 Udon clinics now answer the "English-speaking doctor" query), Gowabi (lists Udon Thani clinics incl. De Charm, V-Sage), HDmall, Wongnai, Bookimed (fix "Vincent Clinic" confusion), Thaiger Deals; check Google Business Profile NAP matches site exactly.
 4. Content branch: English FAQ for foreign patients — how to book from Laos, how long to stay after treatment — only once the doctor confirms the facts (English consult + Messenger now done in 20261104 branch).
-5. "สรุปสั้น" box: all TH/EN service pages have one except skin-booster (now on branch agent/aeo-20261111), home and doctor (not needed). After approval: none left.
+5. "สรุปสั้น" box: done on all TH/EN service pages (skin-booster merged 2026-11-16).
 6. /toxin/ titles/H1 use "โบท็อก" (a brand name) — flag to doctor vs README rule (content, do not change on main).
 7. Keep llms.txt in sync with sitemap.xml each run (script: compare <loc> list with llms.txt).
+8b. EM Lift (promo 15–30 Nov) is not in llms.txt/kb.txt; AI assistants can't answer about it. Add only after the doctor gives device name + Thai FDA wording (content → branch), no result claims.
+8c. After 31 Dec: the gift-calendar card text is in kb.txt (from the home page) — check the home card is removed at source and kb.txt no longer mentions it.
+8d. Laser hair removal, red light and skin drip appear only in the gift calendar — no site page, llms.txt or kb.txt entry, so AI assistants can't answer about them. Propose pages only if the doctor wants these as standing services (content → branch).
 8. `/llms-full.txt` — only if kb.txt not enough; decide after indexing confirmed.
 
 ## Results table (AI/web-search visibility)
@@ -33,6 +36,19 @@
 | 2026-11-11 | English speaking aesthetic doctor Udon Thani skin booster | No | whatclinic Udon Thani listings (Klinique Central, Dr Ann, Absolute Klinik), Bangkok Hospital Udon skin dept, bookimed |
 | 2026-11-11 | Vinfinity Clinic (brand) | No | hdmall/bookimed "Vincent Clinic", unrelated "Infinity" clinics |
 | 2026-11-11 | filler clinic Udon Thani for Lao patients from Vientiane | No | whatclinic Udon Thani, gowabi (De Charm Clinic UD, The V-Sage Udon), bookimed |
+| 2026-11-16 | Vinfinity Clinic Udon Thani (brand) | No | gowabi (The V-Sage, De Charm UD), whatclinic Udon Thani listings (Klinique Central, Dr Ann, Absolute Klinik, Glamour), Bangkok Hospital Udon |
+| 2026-11-16 | ฟิลเลอร์ใต้ตา อุดรธานี คลินิกไหนดี | No | dailynews checklist, hdmall (Bangkok clinics), wongnai (DS Clinic Udon) |
+| 2026-11-16 | นพ.เดโชวัต พรมดา ฟิลเลอร์ (doctor name, TH) | No | phukethospital, medconsultasia, IMCAS video of another doctor, vejthani |
+| 2026-11-16 | filler in Udon Thani as a foreigner, English-speaking clinic | No | whatclinic Udon Thani listings, bookimed, gowabi (De Charm UD) |
+| 2026-11-16 | ยกกระชับ ไม่ใช้เข็ม คลื่นแม่เหล็กไฟฟ้า อุดรธานี (EM Lift topic) | No | ktc, thestandard, hdmall (HIFU/EndoliftX, Bangkok) |
+| 2026-11-18 | Vinfinity Clinic Udon Thani (brand) | No | gowabi (The V-Sage Udon, De Charm UD), whatclinic Udon Thani listings (Glamour, Surasak, Klinique Central, Physio, Dr Ann, Absolute Klinik), Bangkok Hospital Udon |
+| 2026-11-18 | ฉีดฟิลเลอร์ปาก อุดรธานี คลินิก | No | wongnai (filler list 2024, Teerak Clinic Khon Kaen reviews), hdmall (Bangkok lip filler reviews), th.my-best |
+| 2026-11-18 | lip filler Udon Thani English speaking doctor price | No | bookimed (Thailand filler doctor lists), whatclinic (The Physio Clinic Udon; Bangkok/Chiang Mai), deals.thethaiger |
+| 2026-11-18 | "The Filler Architect" doctor Thailand (doctor title) | No | bookimed filler-doctor lists only (other doctors) |
+| 2026-11-25 | Vinfinity Clinic Udon Thani (brand) | No | gowabi (The V-Sage, Rajdhevee Udon, B.Mee Udon, De Charm UD, Class Clinic Udonthani), whatclinic Udon Thani listings |
+| 2026-11-25 | ฉีดฟิลเลอร์คาง อุดรธานี คลินิก แพทย์ | No | LINE pages of other sellers, hdmall (Uthai Thani clinic), wongnai filler list, ktc, khaosod PR |
+| 2026-11-25 | chin filler Udon Thani English speaking doctor | No | whatclinic (Klinique Central, Physio, Dr Ann, Absolute Klinik Udon), realself/bookimed (Bangkok), dloveveryclinic |
+| 2026-11-25 | เลเซอร์กำจัดขนรักแร้ อุดรธานี คลินิก (gift-calendar topic) | No | hdmall list "armpit hair removal Mueang Udon Thani", th.my-best, shopee blog, dailynews |
 
 ## Log
 ### 2026-10-30 (doctor, via main session)
@@ -59,3 +75,19 @@
 - Checked (main, no change needed): all 50 sitemap URLs in llms.txt; 205 JSON-LD blocks parse; FAQPage on 24 pages; `python3 build.py` gives no diff; llms.txt/kb.txt carry no expired promo prices.
 - Content branch agent/aeo-20261111 (9b254b9): answer-first "สรุปสั้น / In short" box on /skin-booster/ and /en/skin-booster/ (the only service pages without one) — facts and prices copied from the same page, banned-word check clean. Waiting for doctor approval.
 - Noted for doctor: kb.txt (from /doctor/) lists a 2021 Galderma Thailand award — a past award, not an affiliation; left as is.
+### 2026-11-16 (Monday, on the doctor's request)
+- Visibility: 0 of 5 searches show Vinfinity (25/25 misses over 5 runs). New this run: the doctor's Thai name returns only other doctors/hospitals; the EM Lift topic in Udon returns only Bangkok HIFU/EndoliftX pages (no local competitor yet → open space once the site is indexed).
+- Checked (main): all 50 sitemap URLs in llms.txt; 205 JSON-LD blocks parse; FAQPage on 24 pages; no expired promo prices (Sculptra 15,990, 11.11) in llms.txt/kb.txt.
+- Main (technical): sitemap lastmod for /en/articles/ corrected 2026-11-16 → 2026-11-09 (the real commit of the merged banned-word fix; earlier build ran before the merge was committed).
+- No new content branch: 3 AEO branches (20261031, 20261104, 20261111) still wait for the doctor; adding more would only grow the queue.
+### 2026-11-16 (doctor approved, same day)
+- Merged to main: agent/aeo-20261031 (EN filler + tear-trough FAQ answers 47–55 words), agent/aeo-20261104 (home FAQ "consult in English?" TH+EN), agent/aeo-20261111 (skin-booster "สรุปสั้น / In short" box TH+EN). Built files rebuilt with build.py after merge conflicts in generated HTML/sitemap only (no source conflicts). Audit clean; banned-word check on added lines clean.
+### 2026-11-18
+- Visibility: 0 of 4 searches show Vinfinity (29/29 misses over 6 runs). New: the doctor's title "The Filler Architect" returns only bookimed doctor lists; Thai lip-filler search in Udon returns Khon Kaen/Bangkok clinics → bookimed + WhatClinic doctor/clinic profiles remain the fastest external citations after Bing/GSC indexing.
+- Checked (main, no change needed): all 50 sitemap URLs in llms.txt; 205 JSON-LD blocks parse; FAQPage on 24 pages; `python3 build.py` gives no diff; no expired promo prices (Sculptra 15,990, 11.11) or EM Lift text in llms.txt/kb.txt (EM Lift waits for device/FDA wording, backlog 8b).
+- Content branch agent/aeo-20261118 (c999118, preview vinfinityclinic-site-3p9we7m1u-dechowat-9677s-projects.vercel.app/en/filler/lips/): 5 EN lip-filler FAQ answers rewritten answer-first, 49–56 words (were 19–30), only facts already on /en/filler/lips/ or the general filler FAQ; FAQPage schema follows; banned-word check clean. Waiting for doctor approval.
+
+### 2026-11-25
+- Visibility: 0 of 4 searches show Vinfinity (33/33 misses over 7 runs). Gowabi now lists 5 Udon clinics for the brand query (new: Rajdhevee, B.Mee, Class Clinic); HDmall has an Udon armpit-laser list page → added to the doctor's citation tasks.
+- Checked (main, no change needed): all 50 sitemap URLs in llms.txt; 205 JSON-LD blocks parse; FAQPage on 24 pages; `python3 build.py` gives no diff; no expired promo prices or EM Lift text in llms.txt/kb.txt. kb.txt now carries the gift-calendar home card (doctor-approved, to 31 Dec) — backlog 8c.
+- Content branch agent/aeo-20261125 (870bdf8): 5 EN chin-filler FAQ answers rewritten answer-first, 52–59 words (were 13–31), only facts already on /filler/chin/; FAQPage schema follows (5 Q); banned-word check clean. Waiting for doctor approval with agent/aeo-20261118.

@@ -2,7 +2,8 @@
 
 Plans and prepares organic posts only (FB / IG / TikTok / LINE). Never posts, never sends broadcasts, never touches ads.
 Graphic style for every brief: real photo + dark navy gradient (#0B142E → #1A326B) + small text footer credit "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943". No white logo band.
-Current promotion: Vitaran (PN skin booster) — 1 box 9,990 ฿ · 4+ boxes 8,990 ฿/box · 2 cc/box (matches /price/).
+Running promotions (updated 2026-11-25): (a) Gift calendar "ปฏิทินของขวัญ สวยก่อนปีใหม่" (line-app/lib/gifts.ts, 25 Nov – 31 Dec 2026, one box per day, same offer for everyone that day, not a lucky draw; seats limited per day, claim that day, use by 31 Jan 2027; page vinfinityclinic.com/gifts). Posts may name only TODAY's box — never reveal future days' gifts (the bot doesn't either); services written as "โปรแกรม…"; always add conditions + "ใช้ร่วมกับโปรอื่นไม่ได้". "โปรเดือนนี้" now shows the running ones. (b) EM Lift Early Bird (promos.ts key emlift-2611, 15–30 Nov 2026) — 4,500 ฿ per area per session (regular 5,990), 4-session course 18,000 ฿ per area (regular 23,960); promo posts end with the โปรเดือนนี้ CTA (the bot shows EM Lift for it). See the EM Lift brief at the end of this file: no specific results, duration or downtime claims.
+Standing price (not a promo): Vitaran (PN skin booster) — 1 box 9,990 ฿ · 4+ boxes 8,990 ฿/box · 2 cc/box (matches /price/).
 Promotion 1–15 Nov 2026 (doctor approved 2026-10-31): Sculptra 15,990 ฿/vial (regular 24,995), only 10 places, max 2 vials/person, not combined with other promos/packages; place is held 48 h until the person books. Defined in line-app/lib/promos.ts (key sculptra-2611). Every post about it should end with the call to action "ทักไลน์ @vinfinityclinic พิมพ์ “โปรเดือนนี้” หรือกดเมนู 🎁 โปรเดือนนี้" — the bot answers that for free and shows the live seat counter. HArmonyCa Early Bird ended 31 Oct.
 LINE broadcast plan (doctor upgraded the LINE OA plan on 2 Nov, quota no longer the limit): Mon 2 Nov 12:00 — Sculptra text + claim card to all friends (media set "Sculptra 15,990 · ข้อความ + การ์ดกดรับสิทธิ์"). UPDATE 2 Nov 23:47 (doctor): two broadcasts sent, 8 of 10 places taken on day 1. Round 2 moved to Wed 4 Nov ~12:30 (after the 48 h holds from Monday expire, so the live number is true) — only if places are left. Once 10 are taken: no more Sculptra posts at 15,990; collect a waitlist for a later batch. (was: Fri 6 Nov ~12:00 — round 2 "เหลืออีก X สิทธิ์" (media set "Sculptra รอบ 2", the number is filled in live; the system refuses if all 10 are taken). Not on Tuesdays (clinic closed). In the daily report, remind the doctor of the next broadcast slot the day before.
 
@@ -12,17 +13,18 @@ Referral event "ชวนเพื่อนมาสวยด้วยกัน"
 
 ## Backlog (top = next)
 1. Get LINE OA follower count + segment sizes (past skin-booster / filler patients) from LINE OA Manager — broadcast sizes are "not verified" until then. (Ask doctor/team.)
-2. Roll the calendar to 30 Nov – 13 Dec (by ~22 Nov; all slots to 29 Nov are DRAFT READY; referral event ends 15 Dec) — check promos.ts for any promo after 15 Nov first; if a December promo appears, add the โปรเดือนนี้ CTA to Draft 16.
+2. All slots to Fri 25 Dec are DRAFT READY (Draft 29 = PN reel). Next run: add Sun 27 Dec slot — candidates: New Year closing-hours Story once the doctor gives holiday hours (not verified), or gift-calendar "last days" Story (today's box only, no future gift). Dec slots may add the gift-calendar line + โปรเดือนนี้ CTA.
+2c. Doctor to decide: an organic FB/IG post or Story for the gift-calendar launch (today's broadcast 10:00 is LINE only). Draft 28 works as a Story from 26 Nov if wanted.
 2b. Doctor to confirm: may a public feed post name the referral credits and the "3 friends → Vitaran 1 cc" reward under the clinic's advertising approval (ฆสพ.)? Draft 10 has a version without the reward line — not verified.
-3. Sculptra promo reminder post ~Mon 9 / Thu 12 Nov only if places remain (team checks the LINE seat counter) — never claim "almost gone" unless verified.
-4. Loy Krathong 2026 = Tue 24 Nov (verified 2026-11-02, PPTV: "วันอังคารที่ 24 พฤศจิกายน"; clinic closed that day). Draft "เตรียมผิวก่อนลอยกระทง" for Sun 15 Nov + a reminder slot Sun 22 / Mon 23 Nov in the next calendar.
+3. Sculptra promo ended Sun 15 Nov 23:59 — never quote 15,990 again. "โปรเดือนนี้" shows EM Lift to 30 Nov (last-call Story = Draft 21). Check promos.ts for a December promo before 1 Dec; from 1 Dec never quote 4,500 / 18,000 as Early Bird.
+3b. EM Lift: ask the doctor for the device name + Thai FDA registration wording so captions/site can say more; until then only the facts in the brief. No /lifting/ or /price/ mention of EM Lift yet — SEO agent to propose a branch once the wording is on file.
 4b. Sculptra waitlist post only if the doctor opens a waitlist (no 15,990 price after 15 Nov or after 10 places). Calendar now runs to 29 Nov; roll again ~22 Nov.
 5. Map menu images (assets/img/menu/th-01…16, en-, lo-) to treatments so calendar can point to exact files.
-6. Short-form video scripts (TikTok/Reels 20–30 s) from existing articles: PN HMW vs LMW (ligaments done, Draft 11).
+6. Short-form video scripts (TikTok/Reels 20–30 s) from existing articles: next = tear-trough types or skincare-after-injection (ligaments Draft 11, layers Draft 18, PN Draft 29 done).
 7. Lao-language caption variant for Vientiane audience (site has lo menu images).
 8. Market watch: Udon Thani-local competitor promos (FB pages) — web search surfaced none on 2026-10-30 and 2026-10-31; needs a human to check FB pages or a different source.
 
-## 2-week content calendar (1 – 29 Nov 2026)
+## 2-week content calendar (1 Nov – 25 Dec 2026)
 Weekdays corrected 2026-11-01 (1 Nov 2026 = Sunday; earlier labels were one day off — dates unchanged). Clinic closed Tuesdays.
 | Date | Channel | Topic | Hook | CTA | Asset |
 |---|---|---|---|---|---|
@@ -37,11 +39,24 @@ Weekdays corrected 2026-11-01 (1 Nov 2026 = Sunday; earlier labels were one day 
 | Sun 15 Nov | FB + IG | Pre-Loy Krathong skin plan (PN needs time before photos) — festival Tue 24 Nov (verified) — DRAFT READY (Draft 9) | "อีกไม่กี่สัปดาห์ลอยกระทง ผิวพร้อมถ่ายรูปหรือยัง" | LINE ประเมินผิว | treatment.jpg or clinic-lounge.jpg |
 | Mon 16 Nov | (foreign plan) | EN post #5 from the doctor's doc "ชุดคอนเทนต์ต่างชาติช่วงพืชสวนโลก" — not re-drafted here | — | Messenger + LINE | per doc |
 | Wed 18 Nov | FB + IG feed | Referral event mid-campaign reminder "ชวนเพื่อนมาสวยด้วยกัน" (Sculptra promo ended 15 Nov — no 15,990 price; waitlist line only if the doctor opens one) — DRAFT READY (Draft 10, A/B) | "มาด้วยกัน ได้ทั้งคู่" | ทักไลน์ พิมพ์ “ชวนเพื่อน” | clinic-lounge.jpg or reception.jpg |
+| Thu 19 Nov | FB + IG feed (+ Story) | EM Lift launch — Early Bird to 30 Nov (promos.ts emlift-2611) — DRAFT READY (Draft 20) | "ใหม่ที่ Vinfinity · EM Lift ไม่ใช้เข็ม" | ทักไลน์ พิมพ์ “โปรเดือนนี้” / เมนู 🎁 | client photos (woman + man, consented, vendor technician cropped) · Story: line-app/public/campaign/emlift-2611/1-1x1.jpg |
 | Fri 20 Nov | TikTok / Reels | Ligaments & aging — why the face "drops" (backlog 6, 25 s script) — DRAFT READY (Draft 11) | "หน้าย้อย เพราะเอ็นหลวมจริงไหม" | /articles/facial-ligaments-aging + LINE | articles/facial-ligaments-aging-anchor.jpg |
 | Sun 22 Nov | FB + IG Story | Loy Krathong reminder: clinic closed Tue 24 Nov; book Mon 23 / Wed 25 — DRAFT READY (Draft 13, no discount invented) | "ลอยกระทงอังคารนี้ คลินิกปิด 1 วัน" | LINE จองคิว | facade.jpg |
 | Wed 25 Nov | FB + IG carousel | Skincare before/after injections (what to pause, what to keep) — DRAFT READY (Draft 14) | "ฉีดฟิลเลอร์แล้ว ทาเรตินอลได้เมื่อไหร่" | /articles/skincare-routine-filler-botox | articles/skincare-before-after-injection.jpg |
 | Fri 27 Nov | IG + FB | Choosing a filler clinic in Udon Thani — checklist (license check ว.48943 on the Medical Council site) — DRAFT READY (Draft 15) | "ก่อนเลือกคลินิก เช็ก 5 ข้อนี้" | /articles/choosing-filler-clinic-udon | articles/filler-clinic-udon-checklist.jpg |
+| Sat 28 Nov | FB + IG Story | EM Lift Early Bird last call (ends Mon 30 Nov; no "last chance" pressure wording, no result claims) — DRAFT READY (Draft 21) | "Early Bird ถึง 30 พ.ย." | ทักไลน์ พิมพ์ “โปรเดือนนี้” | emlift-2611 card image |
 | Sun 29 Nov | FB + IG | Vitaran PN cool-season skin (prices from /price/: 9,990 · 4+ boxes 8,990/box) — DRAFT READY (Draft 16) | "ลมหนาวมา ผิวแห้งง่าย" | LINE ประเมินผิว | treatment.jpg |
+| Wed 2 Dec | FB + IG carousel | Authority: "The Filler Architect" plans by layer — face has 5 layers (from /articles/layered-injection-anatomy/) — DRAFT READY (Draft 17) | "หน้าเรามี 5 ชั้น หมอวางแผนทีละชั้น" | /articles/layered-injection-anatomy + LINE | articles/facial-anatomy-5-layers.jpg |
+| Fri 4 Dec | TikTok / Reels + FB | "หน้านิ่งสวย แต่ยิ้มแล้วแปลก" — gel firmness vs layer (from /articles/layered-injection-anatomy/), 20 s — DRAFT READY (Draft 18) | "หน้านิ่งสวย แต่ยิ้มแล้วแปลก เพราะอะไร" | /articles/layered-injection-anatomy + LINE | doctor talking-head (team films) + articles/facial-anatomy-5-layers.jpg |
+| Sun 6 Dec | FB + IG carousel | Filler safety by evidence — 5 questions to ask before filler (from /articles/filler-safety-evidence/; no December promo in promos.ts on 15 Nov) — DRAFT READY (Draft 19) | "ก่อนฉีดฟิลเลอร์ ถามหมอ 5 ข้อนี้" | /articles/filler-safety-evidence + LINE | articles/filler-safety-vascular-midface.jpg |
+| Wed 9 Dec | FB + IG (EN-first) | Foreign patients: "Visiting the Expo? See the doctor in English" — 4 steps to book from photos (Expo runs to 14 Mar 2027) — DRAFT READY (Draft 22) | "In Udon Thani for the Expo? See an aesthetic doctor in English." | Messenger + LINE | reception.jpg |
+| Fri 11 Dec | FB + IG carousel | Evergreen: same filler, different results — gel, tissue, area, layer (from /articles/same-filler-different-results/) — DRAFT READY (Draft 23) | "ฟิลเลอร์ยี่ห้อเดียวกับเพื่อน ทำไมผลไม่เหมือนกัน" | /articles/same-filler-different-results + LINE | articles/filler-volume-retention-lips-vs-cheek.jpg |
+| Sun 13 Dec | FB + IG Story | Referral event last call (ends Tue 15 Dec = clinic closed; last open day Mon 14 Dec) — DRAFT READY (Draft 24, A/B per backlog 2b) | "ชวนเพื่อน ถึง 15 ธ.ค." | ทักไลน์ พิมพ์ “ชวนเพื่อน” | clinic-lounge.jpg |
+| Wed 16 Dec | FB + IG carousel | Evergreen: filler dissolving — does hyaluronidase damage your own skin? (from /articles/dissolve-filler-native-tissue/) — DRAFT READY (Draft 25) | "สลายฟิลเลอร์แล้ว ผิวเดิมจะเสียไหม" | /articles/dissolve-filler-native-tissue + LINE ส่งรูป + ประวัติการฉีด | articles/hyaluronidase-native-ha-recovery.jpg |
+| Fri 18 Dec | FB + IG carousel | Myth vs evidence: "ฉีดยกเอ็น" — ligaments stiffen with age, they don't loosen; support the deep base instead (from /articles/ligament-lift-injection/) — DRAFT READY (Draft 26) | "ฉีดยกเอ็น ได้ผลจริงไหม" | /articles/ligament-lift-injection + LINE ส่งรูป | articles/ligament-lift-injection-support.jpg |
+| Sun 20 Dec | FB + IG carousel | Evergreen year-end: filler stays longer than you think — MRI found it ≥2 years in all 33 people; check before a "top-up" (from /articles/filler-long-term/; no December promo in promos.ts on 24 Nov) — DRAFT READY (Draft 27) | "ฟิลเลอร์ที่ฉีดไว้ ยังอยู่ไหม ก่อนเติมรอบใหม่" | /articles/filler-long-term + LINE ส่งรูป + ประวัติการฉีด | articles/filler-mri-longevity-timeline.jpg |
+| Wed 23 Dec | FB + IG feed (+ Story) | Gift calendar "ปฏิทินของขวัญ สวยก่อนปีใหม่" — 9 days left, today's box only, no future gifts named (gifts.ts) — DRAFT READY (Draft 28; also usable as a Story any day 26 Nov–30 Dec) | "เปิดกล่องของขวัญวันนี้หรือยัง" | ทักไลน์ พิมพ์ “โปรเดือนนี้” / เมนู 🎁 + vinfinityclinic.com/gifts | clinic-lounge.jpg (feed) · assets/img/gift-calendar.jpg (Story) |
+| Fri 25 Dec | TikTok / Reels + FB | PN gel vs liquid — "which PN works better?" 4 questions to ask before PN, 25 s (backlog 6, from /articles/pn-molecular-weight/; no price, no brand) — DRAFT READY (Draft 29) | "PN ยี่ห้อไหนได้ผลกว่า? ถามหมอ 4 ข้อนี้ก่อน" | /articles/pn-molecular-weight + LINE ประเมินผิว | doctor talking-head (team films) + articles/pn-hmw-lmw-polynucleotide.jpg |
 
 Notes: before/after only from assets/img/ba (consented, already on site), labelled PRE / POST, organic only, never in ads. File naming on site: caseNN-b = PRE (before), caseNN-a = POST (after) — see pages/_results_eye.html. Do not use galderma-* doctor photos (not a current affiliation).
 
@@ -480,7 +495,7 @@ Graphic brief: 1080×1920. Real photo assets/img/facade.jpg, dark navy gradient 
 
 #### Draft 14 — Wed 25 Nov · FB + IG carousel (5 slides, 1080×1350) · Skincare before/after injections
 TH caption:
-ฉีดฟิลเลอร์ โบท็อก หรือสกินบูสเตอร์แล้ว ทาเรตินอลได้เมื่อไหร่? 🧴
+ฉีดฟิลเลอร์ ท็อกซินลดริ้วรอย หรือสกินบูสเตอร์แล้ว ทาเรตินอลได้เมื่อไหร่? 🧴
 การฉีดไม่ได้ลอกผิวทั้งหน้าเหมือนการลอกผิวด้วยกรดหรือเลเซอร์ สกินแคร์ส่วนใหญ่จึงกลับมาใช้ได้เร็ว แต่มีบางตัวที่ควรพักไว้ก่อน
 
 ✅ ใช้ต่อได้: คลีนเซอร์อ่อนโยน มอยส์เจอไรเซอร์ กันแดด เซราไมด์ ไฮยาลูรอนิก
@@ -585,3 +600,433 @@ Hashtags: #VinfinityClinic #Vitaran #PN #สกินบูสเตอร์ #�
 Alt text: ห้องทรีตเมนต์ของ Vinfinity Clinic อุดรธานี พร้อมข้อความ "ลมหนาวมา ผิวแห้งง่าย" และราคา Vitaran / Treatment room at Vinfinity Clinic, Udon Thani, with the text "Cool season, dry skin" and Vitaran prices.
 Graphic brief: 1080×1350. Real photo assets/img/treatment.jpg, dark navy gradient (#0B142E → #1A326B) over the lower 55%. Silver #EEF2F8 headline "ลมหนาวมา ผิวแห้งง่าย"; sub "Vitaran PN 2 cc · 9,990.- | 4 กล่องขึ้นไป 8,990.-/กล่อง". Small text footer credit: "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943 · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล". No white logo band, no product boxes, no before/after.
 
+### 2026-11-13
+- Friday: Marketing light + Branding deep. Today's slot Fri 13 Nov = "Meet the doctor" (Draft 8, EN-first) — full TH caption in today's report. Next slot Sun 15 Nov = pre-Loy Krathong (Draft 9, ready). Foreign plan: Lao #4 due Sat 14 Nov, EN #5 Mon 16 Nov (doctor's doc, not re-drafted).
+- promos.ts unchanged (last change 7cabcba, 11.11): sculptra-2611 ends Sun 15 Nov 23:59; no promo after that. No LINE broadcast planned for tomorrow (Sat 14 Nov).
+- Done: calendar rolled to 13 Dec (6 new slots; Sun 13 Dec = referral last call, event ends 15 Dec). Draft 17 for Wed 2 Dec (authority carousel, branding backlog 8 brief) below — facts only from /articles/layered-injection-anatomy/.
+- No market watch (Mondays only).
+
+#### Draft 17 — Wed 2 Dec · FB + IG carousel (5 slides, 1080×1350) · Authority: planning by layer
+TH caption:
+หน้าเรามี 5 ชั้น ทำไมหมอวางแผนทีละชั้น? 🏛️
+จากผิวลงไปถึงกระดูก ใบหน้าเรียงเป็นชั้น: ผิวหนัง · ไขมันชั้นตื้น · SMAS (พังผืดกับกล้ามเนื้อ) · ไขมันชั้นลึกกับเอ็นยึด · กระดูก
+เมื่ออายุมากขึ้น ทุกชั้นเปลี่ยนไปพร้อมกัน กระดูกบางลง ไขมันชั้นลึกยุบ เอ็นยึดหย่อน ผิวด้านบนจึงตกตาม
+
+• ไขมันชั้นลึกทำหน้าที่ค้ำโครง ไขมันชั้นตื้นขยับตามสีหน้า
+• เจลแต่ละชนิดแข็งและยืดหยุ่นต่างกัน เจลที่แข็งเหมาะกับชั้นลึก ถ้าวางในชั้นตื้น หน้าอาจดูเต็มเกินไปเวลายิ้ม
+• ชั้นผิวต้องดูแลด้วยวิธีของมันเอง เช่น สกินบูสเตอร์ในชั้นผิว
+
+นี่คือเหตุผลที่บางคนฉีดแล้วหน้านิ่งดูดี แต่พอยิ้มกลับดูแปลก ปัญหาไม่ได้อยู่ที่ปริมาณอย่างเดียว แต่อยู่ที่ชนิดเจลกับชั้นที่วาง
+แนวทางของ The Filler Architect: ประเมินทีละชั้น เลือกเจลให้ตรงชั้น ใช้เท่าที่จำเป็น และนัดดูผลก่อนเติมเพิ่ม
+📖 อ่านพร้อมเอกสารอ้างอิง: vinfinityclinic.com/articles/layered-injection-anatomy/
+💬 ทัก LINE @vinfinityclinic ส่งรูปหน้าตรงและด้านข้างให้ นพ.เดโชวัต พรมดา (ว.48943) ประเมินเบื้องต้น · 📞 082-462-2963
+ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · การทำหัตถการทุกชนิดอาจมีผลข้างเคียง
+
+EN caption:
+Your face has 5 layers — that's why we plan layer by layer. Skin, superficial fat, SMAS, deep fat with ligaments, and bone all change with age. Deep fat supports the structure; superficial fat moves with expression. A firm gel suits deep layers; placed too superficially, the face can look overfilled when you smile. Skin quality is treated in the skin itself, e.g. skin boosters. Our approach: assess each layer, match the gel to the layer, use only what's needed, review before adding more. Read more (Thai, with references): vinfinityclinic.com/articles/layered-injection-anatomy/ · Dr. Dechowat Promda (license 48943). Consultations in English: LINE @vinfinityclinic or Messenger m.me/Vinfinity.Clinic. Results vary from person to person.
+
+Hashtags: #TheFillerArchitect #VinfinityClinic #ฟิลเลอร์อุดร #คลินิกอุดร #อุดรธานี #FacialAnatomy #DermalFiller #UdonThani
+Slides: 1 "หน้าเรามี 5 ชั้น" (cover, illustration) · 2 the 5 layers listed top→bottom · 3 "ลึกค้ำโครง ตื้นขยับตามสีหน้า" · 4 "เจลต้องเข้ากับชั้น — ยิ้มแล้วแปลก เพราะอะไร" · 5 "ประเมินทีละชั้น ใช้เท่าที่จำเป็น" + CTA LINE.
+Alt text: ภาพประกอบโครงสร้างใบหน้า 5 ชั้น ผิวหนัง ไขมันชั้นตื้น SMAS ไขมันชั้นลึกและเอ็นยึด กระดูก / Illustration of the 5 facial layers: skin, superficial fat, SMAS, deep fat and ligaments, bone.
+Graphic brief: 1080×1350, 5 slides. Image assets/img/articles/facial-anatomy-5-layers.jpg on slide 1 (faded on 2–5) with a small "ภาพประกอบ / Illustration" label (it is a drawing, not a photo). Dark navy gradient (#0B142E → #1A326B), silver #EEF2F8 headlines. No patient faces, no product brands, no before/after, no price. Small text footer credit on every slide: "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943". No white logo band.
+
+### 2026-11-14
+- Saturday: Marketing light + live-site check. Production deployment dpl_2tbjtx6yo5N6ZBPvVrZFff2khfsL (commit ad23ae9) READY; / (TH) and /en/price/ return 200 via Vercel fetch and render fully (title, canonical/hreflang, JSON-LD, footer, EN "Not on LINE?" strip). /price/ source + live /en/price/: Vitaran 9,990/box · 4+ boxes 8,990/box (matches drafts). Direct curl to vinfinityclinic.com blocked by this sandbox's proxy (403 at proxy, not a site fault).
+- Next ready feed post: Sun 15 Nov pre-Loy Krathong (Draft 9) — full TH caption in today's report. Foreign plan: Lao #4 due today (Sat 14 Nov), EN #5 Mon 16 Nov (doctor's doc, not re-drafted).
+- promos.ts unchanged (last change 7cabcba): sculptra-2611 ends Sun 15 Nov 23:59; no promo defined after that. No LINE broadcast planned for tomorrow (Sun 15 Nov).
+- Done: Draft 18 for Fri 4 Dec (20 s reel "หน้านิ่งสวย แต่ยิ้มแล้วแปลก") below — facts only from /articles/layered-injection-anatomy/ (Rohrich et al., PRS Global Open 2026: firm gel suits deep layer; in the superficial layer the face can look overfilled when moving). No promo, no price, no product brand, no before/after.
+- No market watch (Mondays only).
+
+#### Draft 18 — Fri 4 Dec · TikTok / Reels + FB · "หน้านิ่งสวย แต่ยิ้มแล้วแปลก" (20 s)
+Script (9:16, doctor to camera in clinic, silver subtitles on navy lower third):
+0–3 s HOOK — text "หน้านิ่งสวย แต่ยิ้มแล้วแปลก?" · หมอ: "เคยเห็นไหมคะ ฉีดฟิลเลอร์แล้วหน้านิ่งดูดี แต่พอยิ้มกลับดูแปลก"
+3–8 s — B-roll facial-anatomy-5-layers.jpg (label "ภาพประกอบ") · "ใบหน้ามีไขมันสองชั้น ชั้นลึกค้ำโครง ชั้นตื้นขยับตามสีหน้า"
+8–14 s — หมอถือเจลสองแบบ (ไม่เห็นยี่ห้อ) หรือกราฟิกง่าย ๆ "แข็ง / ยืดหยุ่น" · "เจลแต่ละชนิดแข็งไม่เท่ากัน เจลที่แข็งเหมาะกับชั้นลึก ถ้าไปอยู่ชั้นตื้น หน้าอาจดูเต็มเกินไปเวลายิ้ม"
+14–18 s — "ปัญหาไม่ได้อยู่ที่ปริมาณอย่างเดียว แต่อยู่ที่ชนิดเจลกับชั้นที่วาง"
+18–20 s — end card "ประเมินทีละชั้น ใช้เท่าที่จำเป็น" · LINE @vinfinityclinic · ว.48943
+TH caption:
+หน้านิ่งสวย แต่ยิ้มแล้วแปลก เพราะอะไร? 😊
+กลางใบหน้ามีไขมันสองชั้น ชั้นลึกทำหน้าที่ค้ำโครง ส่วนชั้นตื้นขยับตามสีหน้า
+เจลแต่ละชนิดแข็งและยืดหยุ่นต่างกัน เจลที่แข็งเหมาะกับชั้นลึก ถ้านำไปวางในชั้นตื้น หน้าอาจดูเต็มเกินไปเวลายิ้มหรือขยับ
+ปัญหาจึงไม่ได้อยู่ที่ปริมาณอย่างเดียว แต่อยู่ที่ชนิดเจลกับชั้นที่วาง
+แนวทางของ The Filler Architect: ประเมินทีละชั้น เลือกเจลให้ตรงชั้น ใช้เท่าที่จำเป็น และนัดดูผลก่อนเติมเพิ่ม
+📖 อ่านพร้อมเอกสารอ้างอิง: vinfinityclinic.com/articles/layered-injection-anatomy/
+💬 ทัก LINE @vinfinityclinic ส่งรูปหน้าตรง ด้านข้าง และตอนยิ้ม ให้ นพ.เดโชวัต พรมดา (ว.48943) ประเมินเบื้องต้น · 📞 082-462-2963
+ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · การทำหัตถการทุกชนิดอาจมีผลข้างเคียง
+EN caption:
+Looks good at rest, odd when smiling — why? The midface has two fat layers: the deep one supports the structure, the superficial one moves with expression. Fillers differ in firmness and stretch. A firm gel suits the deep layer; placed in the superficial layer, the face can look overfilled when you smile. So it's not only about how much — it's which gel, in which layer. Our approach: assess layer by layer, match the gel to the layer, use only what's needed, review before adding more. Read more (Thai, with references): vinfinityclinic.com/articles/layered-injection-anatomy/ · Dr. Dechowat Promda (license 48943). Consultations in English: LINE @vinfinityclinic or Messenger m.me/Vinfinity.Clinic. Results vary from person to person. All procedures carry possible side effects.
+Hashtags: #TheFillerArchitect #VinfinityClinic #ฟิลเลอร์อุดร #ฉีดฟิลเลอร์ #คลินิกอุดร #อุดรธานี #FacialAnatomy #DermalFiller #UdonThani
+Alt text (cover): แพทย์อธิบายว่าทำไมบางคนฉีดฟิลเลอร์แล้วหน้านิ่งดูดีแต่ยิ้มแล้วดูแปลก พร้อมภาพประกอบชั้นใบหน้า / Doctor explaining why filler can look fine at rest but odd when smiling, with an illustration of the facial layers.
+Graphic brief (cover 1080×1920): real frame of the doctor from the clip (or assets/img/dr-bas.jpg), dark navy gradient (#0B142E → #1A326B) over the lower 50%; silver #EEF2F8 headline "หน้านิ่งสวย แต่ยิ้มแล้วแปลก?"; sub "เจลต้องเข้ากับชั้น"; small text footer credit "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943 · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล". No white logo band, no patient faces, no before/after, no product brands or syringes with labels, no Galderma photos.
+
+### 2026-11-15
+- Sunday: Marketing light + live-site check. Production deployment dpl_6xpViiyXLCQioiaK37feFyeR3UXJ (commit b4a79d6) READY; / and /articles/filler-safety-evidence/ return 200 via Vercel fetch and render fully (title, meta description, canonical, hreflang th/en/x-default, 3 JSON-LD blocks, footer with ว./ฆสพ. line). Direct curl to vinfinityclinic.com still refused by this sandbox's proxy (not a site fault).
+- Today's slot Sun 15 Nov = pre-Loy Krathong (Draft 9) — full TH caption in today's report. Next: EN #5 Mon 16 Nov (doctor's doc, not re-drafted), Wed 18 Nov referral reminder (Draft 10, version without Sculptra).
+- promos.ts unchanged (last change 7cabcba): sculptra-2611 ends tonight 23:59; no promo defined after it, so from 16 Nov the "โปรเดือนนี้" CTA has nothing to show — drafts use LINE ประเมิน / ชวนเพื่อน CTAs. No LINE broadcast planned for tomorrow (Mon 16 Nov).
+- Done: Draft 19 for Sun 6 Dec (filler-safety carousel) below — facts only from /articles/filler-safety-evidence/ (JAMA Dermatol 2021 needle 1/6,410 vs cannula 1/40,882; CMAC: negative aspiration ≠ safe; ultrasound useful but not proven to lower complications). Chosen instead of "Sculptra vs HA" because that topic already ran as the 6 Nov reel. No promo, no price, no brand, no before/after.
+- No market watch (Mondays only).
+
+#### Draft 19 — Sun 6 Dec · FB + IG carousel (6 slides, 1080×1350) · 5 questions before filler
+TH caption:
+ก่อนฉีดฟิลเลอร์ ถามหมอ 5 ข้อนี้ 🩺
+ฟิลเลอร์เป็นหัตถการทางการแพทย์ ภาวะแทรกซ้อนที่ร้ายแรงคือเจลเข้าไปอุดหลอดเลือด พบน้อย แต่ส่วนใหญ่เกิดบริเวณกลางใบหน้า เช่น ร่องแก้ม ข้างจมูก และรอบปาก
+
+งานวิจัยบอกอะไรเรา
+• ข้อมูลราว 1.7 ล้านหลอด (JAMA Dermatology 2021): เข็มพบการอุดหลอดเลือด 1 ใน 6,410 หลอด แคนนูลา 1 ใน 40,882 หลอด ต่ำกว่า แต่ไม่ใช่ศูนย์
+• การดูดทดสอบก่อนฉีดช่วยได้ไม่มาก ผลลบไม่ได้แปลว่าปลอดภัย
+• อัลตราซาวด์ช่วยเห็นหลอดเลือดในจุดเสี่ยง แต่ยังไม่มีงานวิจัยเปรียบเทียบยืนยันว่าลดภาวะแทรกซ้อนได้
+• สิ่งที่ชี้ขาดคือแพทย์รู้กายวิภาคแต่ละชั้น และคลินิกพร้อมรับมือได้เร็วถ้าเกิดเหตุ
+
+5 คำถามที่ควรถามก่อนฉีด
+1️⃣ ใครเป็นคนฉีด และฉีดตำแหน่งนี้มาบ่อยแค่ไหน
+2️⃣ จะวางเจลชั้นไหน ใช้เข็มหรือแคนนูลา เพราะอะไร
+3️⃣ ผลิตภัณฑ์ขึ้นทะเบียน อย. หรือไม่ ขอดูกล่องและเลขล็อตได้ไหม
+4️⃣ คลินิกมีเอนไซม์สลายฟิลเลอร์และแผนรับมือภาวะแทรกซ้อนพร้อมหรือไม่
+5️⃣ ถ้ามีอาการผิดปกติหลังกลับบ้าน ติดต่อใครได้
+
+📖 อ่านพร้อมเอกสารอ้างอิง: vinfinityclinic.com/articles/filler-safety-evidence/
+💬 ทัก LINE @vinfinityclinic ถามคำถามเหล่านี้กับ นพ.เดโชวัต พรมดา (ว.48943) ได้ก่อนตัดสินใจ · 📞 082-462-2963
+ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · การทำหัตถการทุกชนิดอาจมีผลข้างเคียง
+
+EN caption:
+5 questions to ask before filler. A serious filler complication is gel blocking a blood vessel — rare, but most cases happen in the midface (nasolabial folds, beside the nose, around the mouth). What the research says: in data on about 1.7 million syringes (JAMA Dermatology 2021), needles caused vascular occlusion in 1 in 6,410 syringes and cannulas in 1 in 40,882 — lower, but not zero. A negative aspiration test does not mean an injection is safe. Ultrasound helps see vessels in high-risk areas, but comparative studies have not yet shown it lowers complications. What matters most: an injector who knows each facial layer, and a clinic ready to act quickly. Ask: 1) Who injects, and how often in this area? 2) Which layer, needle or cannula, and why? 3) Is the product registered with the Thai FDA — can I see the box and lot number? 4) Is hyaluronidase and a complication plan on hand? 5) Who do I contact if something feels wrong after I go home? Read more (Thai, with references): vinfinityclinic.com/articles/filler-safety-evidence/ · Dr. Dechowat Promda (license 48943). Consultations in English: LINE @vinfinityclinic or Messenger m.me/Vinfinity.Clinic. Results vary from person to person. All procedures carry possible side effects.
+
+Hashtags: #TheFillerArchitect #VinfinityClinic #ฟิลเลอร์อุดร #ฉีดฟิลเลอร์ #คลินิกอุดร #อุดรธานี #FillerSafety #DermalFiller #UdonThani
+Slides: 1 "ก่อนฉีดฟิลเลอร์ ถามหมอ 5 ข้อนี้" (cover, article illustration) · 2 "ความเสี่ยงหลักอยู่ที่หลอดเลือด กลางใบหน้า" · 3 "เข็ม 1/6,410 · แคนนูลา 1/40,882 — ต่ำกว่า ไม่ใช่ศูนย์" (JAMA Dermatol 2021) · 4 "ดูดทดสอบผลลบ ≠ ปลอดภัย · อัลตราซาวด์ช่วยเห็น แต่ยังรอหลักฐาน" · 5 the 5 questions · 6 CTA LINE + article link.
+Alt text: ภาพประกอบหลักการฉีดฟิลเลอร์ให้ปลอดภัยบริเวณกลางใบหน้า พร้อมข้อความ "ก่อนฉีดฟิลเลอร์ ถามหมอ 5 ข้อนี้" / Illustration of filler-safety principles in the midface with the text "5 questions to ask before filler".
+Graphic brief: 1080×1350, 6 slides. Image assets/img/articles/filler-safety-vascular-midface.jpg on slide 1 (faded on 2–6) with a small "ภาพประกอบ / Illustration" label. Dark navy gradient (#0B142E → #1A326B), silver #EEF2F8 headlines, numbers in silver #D5DDEE. Cite "JAMA Dermatology 2021" in small text on slide 3. No patient faces, no syringes with labels, no product brands, no before/after, no price, no fear imagery (no necrosis photos). Small text footer credit on every slide: "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943". No white logo band.
+
+## EM Lift launch (doctor's brief 2026-11-15)
+- New non-needle electromagnetic treatment, name "EM Lift". Early Bird 4,500 THB per area (regular 5,990 after). Areas: forehead, under-eye x2, cheek x2, under-chin, neck, shoulders. Protocol: 4 sessions, 1 week apart. Confirmed by the doctor 15 Nov: 4,500 is per area per session; sell the 4-session course at 18,000 per area (regular 23,960). Early Bird runs to 30 Nov.
+- Do not claim specific results, duration or downtime until the device name and Thai FDA registration wording are on file. Client photos/videos (1 woman, 1 man) are cleared by the clients for all channels; crop out the vendor technician.
+- LINE: promo key emlift-2611 (keyword "EM Lift"), broadcast set emlift-2611.
+
+### 2026-11-16
+- Monday: Marketing light + SEO deep + market watch. promos.ts: sculptra-2611 ended 15 Nov; emlift-2611 runs 15–30 Nov (4,500 ฿/area/session, course 4 sessions 18,000 ฿/area) — now the running promotion at the top of this file; "โปรเดือนนี้" CTA works again.
+- Today's slot Mon 16 Nov = EN post #5 from the doctor's foreign-plan doc (not re-drafted). Next Thai feed post: Wed 18 Nov referral reminder (Draft 10, A/B — doctor still to pick, backlog 2b).
+- Done: added Thu 19 Nov EM Lift launch post (Draft 20 below) and a Sat 28 Nov last-call Story slot (TO DRAFT) to the calendar. Facts only from the doctor's 15 Nov brief and promos.ts; no results/duration/downtime claims (device name and Thai FDA wording not on file).
+- Market watch (web search): electromagnetic face treatments are sold by Bangkok chains (e.g. Emface® listings for The Klinique on WhatClinic https://www.whatclinic.com/beauty-clinics/thailand/emface; Samitivej "Rena Face" package https://www.samitivejhospitals.com/package/detail/Rena-Face). Prices not verified; EM Lift's device is not named, so no public comparison. No Udon Thani-local promo found for November (results were HDmall listings only).
+- No LINE broadcast planned for tomorrow (Tue 17 Nov, clinic closed). Broadcast set emlift-2611 exists; send day is the doctor's call (not Tuesday).
+
+#### Draft 20 — Thu 19 Nov · FB + IG feed (+ Story) · EM Lift launch (Early Bird to 30 Nov)
+TH caption:
+✨ ใหม่ที่ Vinfinity · EM Lift
+เทคโนโลยีคลื่นแม่เหล็กไฟฟ้า ไม่ใช้เข็ม แปะแผ่นบนจุดที่ต้องการ ทำได้ทั้งผู้หญิงและผู้ชาย
+
+📍 เลือกจุดได้: หน้าผาก · ใต้ตา · แก้ม · ใต้คาง · คอ · บ่า
+(ใต้ตาและแก้มนับข้างละ 1 จุด)
+🗓 โปรแกรม 4 ครั้ง สัปดาห์ละครั้ง
+
+💙 Early Bird ถึง 30 พ.ย. นี้
+• 4,500.- ต่อจุด ต่อครั้ง (ปกติ 5,990.-)
+• คอร์ส 4 ครั้ง 18,000.- ต่อจุด (ปกติ 23,960.-)
+
+แพทย์ประเมินก่อนทุกครั้งว่าจุดไหนเหมาะ หรือควรใช้วิธีอื่นร่วมด้วย
+โดย นพ.เดโชวัต พรมดา (ว.48943) · 📍 Vinfinity Clinic อุดรธานี · 📞 082-462-2963 · คลินิกปิดทุกวันอังคาร
+ภาพผู้รับบริการจริง เผยแพร่โดยได้รับความยินยอม
+ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · การทำหัตถการทุกชนิดอาจมีผลข้างเคียง
+
+ทักไลน์ @vinfinityclinic พิมพ์ “โปรเดือนนี้” หรือกดเมนู 🎁 โปรเดือนนี้
+
+EN caption:
+New at Vinfinity: EM Lift ✨ A needle-free electromagnetic treatment — pads are placed on the areas you choose; for women and men. Areas: forehead, under-eye, cheeks, under the chin, neck, shoulders (under-eye and cheek count as one area per side). Programme: 4 sessions, one week apart. Early Bird until 30 Nov: 4,500 THB per area per session (regular 5,990), or the 4-session course at 18,000 THB per area (regular 23,960). The doctor assesses first which areas suit you, or whether another approach fits better. Dr. Dechowat Promda (license 48943) · consultations in English · closed Tuesdays. Real clients, shown with their consent. Results vary from person to person. All procedures carry possible side effects. Message LINE @vinfinityclinic and type "โปรเดือนนี้" (or tap 🎁 โปรเดือนนี้ in the menu) · Messenger m.me/Vinfinity.Clinic
+
+Hashtags: #EMLift #VinfinityClinic #ไม่ใช้เข็ม #ยกกระชับอุดร #คลินิกอุดร #อุดรธานี #NeedleFree #UdonThani
+Alt text: ผู้รับบริการหญิงและชายนอนพักขณะทำ EM Lift โดยมีแผ่นแปะบริเวณหน้าผากและแก้ม พร้อมข้อความ "EM Lift ใหม่ที่ Vinfinity" / A woman and a man lying back during EM Lift with pads on the forehead and cheeks, with the text "EM Lift, new at Vinfinity".
+Graphic brief: 1080×1350 feed. Real client photos side by side (woman left, man right — the same frames as the LINE card; crop out the vendor technician). Dark navy gradient (#0B142E → #1A326B) over the lower 55%. Silver #EEF2F8 headline "EM Lift"; sub "คลื่นแม่เหล็กไฟฟ้า · ไม่ใช้เข็ม"; area chips in silver outline (หน้าผาก · ใต้ตา · แก้ม · ใต้คาง · คอ · บ่า); price line in silver #D5DDEE "Early Bird 4,500.- / จุด / ครั้ง · คอร์ส 4 ครั้ง 18,000.- / จุด · ถึง 30 พ.ย."; small label "ภาพผู้รับบริการจริง · ได้รับความยินยอม". Small text footer credit: "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943 · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล". No white logo band, no white price box, no device brand, no before/after, no result or "lift" claims beyond the product name. Story: the LINE card line-app/public/campaign/emlift-2611/1-1x1.jpg may be used as is.
+
+### 2026-11-17
+- Tuesday (clinic closed): Marketing light + live-site check only. Production dpl_7jdXVsRvevDNTcRvYZemcgFMHFxQ (commit 4f1412d) READY; / (TH) and /en/price/ return 200 via Vercel fetch and render fully (title, canonical, hreflang th/en/x-default, JSON-LD, footer with ฆสพ. + "closed Tuesdays"). Nothing broken.
+- promos.ts unchanged since 9efd109: emlift-2611 runs to 30 Nov 23:59 (4,500 ฿/area/session, course 18,000 ฿/area); no December promo defined yet.
+- Next slot Wed 18 Nov = referral reminder (Draft 10) — full TH caption (Version A) in today's report; doctor still to pick A or B (backlog 2b). Then Thu 19 Nov EM Lift launch (Draft 20).
+- Done: Draft 21 for Sat 28 Nov (EM Lift Early Bird last-call Story, 2 frames) below — facts only from promos.ts emlift-2611 and the doctor's 15 Nov brief; no results/duration/downtime claims, no "last chance"/urgency wording beyond the end date.
+- No LINE broadcast tomorrow (Wed 18 Nov) unless the doctor decides to send set emlift-2611 (not Tuesday). No market watch (Mondays only).
+
+#### Draft 21 — Sat 28 Nov · FB + IG Story (9:16, 2 frames) · EM Lift Early Bird ends Mon 30 Nov
+Frame 1 text: "EM Lift · Early Bird ถึงจันทร์ 30 พ.ย." / "4,500.- ต่อจุด ต่อครั้ง (ปกติ 5,990.-)" / "คอร์ส 4 ครั้ง 18,000.- ต่อจุด (ปกติ 23,960.-)"
+Frame 2 text: "ไม่ใช้เข็ม · ทำได้ทั้งผู้หญิงและผู้ชาย" / "หน้าผาก · ใต้ตา · แก้ม · ใต้คาง · คอ · บ่า" / "แพทย์ประเมินก่อนทุกครั้ง" / link sticker → LINE @vinfinityclinic
+TH caption (FB Story / IG caption field):
+EM Lift ราคา Early Bird ถึงวันจันทร์ที่ 30 พ.ย. นี้ 💙
+• 4,500.- ต่อจุด ต่อครั้ง (ปกติ 5,990.-)
+• คอร์ส 4 ครั้ง สัปดาห์ละครั้ง 18,000.- ต่อจุด (ปกติ 23,960.-)
+เทคโนโลยีคลื่นแม่เหล็กไฟฟ้า ไม่ใช้เข็ม · เลือกจุดได้: หน้าผาก · ใต้ตา · แก้ม · ใต้คาง · คอ · บ่า (ใต้ตาและแก้มนับข้างละ 1 จุด)
+แพทย์ประเมินก่อนทุกครั้งว่าจุดไหนเหมาะ · โดย นพ.เดโชวัต พรมดา (ว.48943) · คลินิกเปิดวันจันทร์ 30 พ.ย. 10:00–19:00
+ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · การทำหัตถการทุกชนิดอาจมีผลข้างเคียง
+
+ทักไลน์ @vinfinityclinic พิมพ์ “โปรเดือนนี้” หรือกดเมนู 🎁 โปรเดือนนี้
+
+EN caption:
+EM Lift Early Bird pricing runs until Monday 30 Nov 💙 4,500 THB per area per session (regular 5,990), or the 4-session course (one week apart) at 18,000 THB per area (regular 23,960). Needle-free electromagnetic treatment; areas: forehead, under-eye, cheeks, under the chin, neck, shoulders (under-eye and cheek count as one area per side). The doctor assesses first. Dr. Dechowat Promda (license 48943) · consultations in English · open Mon 30 Nov 10:00–19:00. Results vary from person to person. All procedures carry possible side effects. LINE @vinfinityclinic — type "โปรเดือนนี้" · Messenger m.me/Vinfinity.Clinic
+
+Hashtags: #EMLift #VinfinityClinic #ไม่ใช้เข็ม #คลินิกอุดร #อุดรธานี #UdonThani
+Alt text: ภาพผู้รับบริการขณะทำ EM Lift โดยมีแผ่นแปะบนใบหน้า พร้อมข้อความ "EM Lift Early Bird ถึง 30 พ.ย." / A client during EM Lift with pads on the face, with the text "EM Lift Early Bird until 30 Nov".
+Graphic brief: 1080×1920, 2 frames. Frame 1: real client photo (woman, consented; vendor technician cropped) top 50%, dark navy gradient (#0B142E → #1A326B) below; silver #EEF2F8 headline "Early Bird ถึง 30 พ.ย."; price lines in silver #D5DDEE. Frame 2: real client photo (man, consented), same gradient; area chips in silver outline; LINE link sticker + keyword chip "พิมพ์ “โปรเดือนนี้”". Small label "ภาพผู้รับบริการจริง · ได้รับความยินยอม". Small text footer credit on both frames: "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943 · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล". No white logo band, no countdown timer, no "โอกาสสุดท้าย"/"last chance", no device brand, no before/after, no result claims.
+
+### 2026-11-18
+- Wednesday: Marketing light + AEO deep. promos.ts unchanged since 9efd109: emlift-2611 runs to 30 Nov (4,500 ฿/area/session, course 18,000 ฿/area); no December promo defined yet.
+- Today's slot Wed 18 Nov = referral reminder (Draft 10, A/B — doctor's pick, backlog 2b). Next slot Thu 19 Nov = EM Lift launch (Draft 20) — full TH caption in today's report.
+- Done: Draft 22 for Wed 9 Dec (EN-first foreign-patient post) below — facts only from the site and README (English consultations doctor-confirmed 30 Oct, Messenger, closed Tuesdays, price confirmed before treatment, box opened, doctor injects). Not one of the 12 Expo-plan posts (those ended 22 Nov).
+- No LINE broadcast tomorrow (Thu 19 Nov) unless the doctor sends set emlift-2611 alongside the launch post. No market watch (Mondays only).
+
+#### Draft 22 — Wed 9 Dec · FB + IG feed (EN-first) · See the doctor in English
+EN caption:
+In Udon Thani for the Horticultural Expo? You can see an aesthetic doctor in English 🌿
+How it works at Vinfinity Clinic:
+1) Message us on Messenger (m.me/Vinfinity.Clinic) or LINE @vinfinityclinic with front and side photos in natural light.
+2) The doctor tells you what may suit you — or if nothing is needed.
+3) At the clinic: assessment first, the full cost is confirmed before treatment, and the product box is opened in front of you.
+4) Every injection is done by Dr. Dechowat Promda (license 48943).
+Open daily except Tuesdays · Udon Thani city · tel 082-462-2963
+Results vary from person to person. All procedures carry possible side effects.
+
+TH caption:
+มาเที่ยวงานพืชสวนโลกที่อุดรฯ แล้วอยากปรึกษาเรื่องผิวหรือรูปหน้า? ปรึกษาคุณหมอเป็นภาษาอังกฤษได้ 🌿
+ขั้นตอนที่ Vinfinity Clinic
+1️⃣ ส่งรูปหน้าตรงและด้านข้าง (แสงธรรมชาติ) ทาง LINE @vinfinityclinic หรือ Messenger
+2️⃣ คุณหมอแนะนำว่าอะไรอาจเหมาะ หรือยังไม่จำเป็นต้องทำ
+3️⃣ ที่คลินิก: ประเมินก่อน แจ้งราคารวมก่อนเริ่มทุกครั้ง และเปิดกล่องผลิตภัณฑ์ให้ดูต่อหน้า
+4️⃣ ฉีดโดย นพ.เดโชวัต พรมดา (ว.48943) ทุกเคส
+เปิดทุกวัน ยกเว้นวันอังคาร · 📞 082-462-2963
+ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · การทำหัตถการทุกชนิดอาจมีผลข้างเคียง
+
+Hashtags: #UdonThani #VinfinityClinic #EnglishSpeakingDoctor #UdonThaniExpo #คลินิกอุดร #อุดรธานี #AestheticClinicThailand
+Alt text: Reception area of Vinfinity Clinic in Udon Thani with the text "See an aesthetic doctor in English" / ห้องรับรองของ Vinfinity Clinic อุดรธานี พร้อมข้อความ "ปรึกษาคุณหมอเป็นภาษาอังกฤษได้".
+Graphic brief: 1080×1350. Real photo assets/img/reception.jpg top 55%; dark navy gradient (#0B142E → #1A326B) below; silver #EEF2F8 headline "See the doctor in English"; 4 numbered steps in silver #D5DDEE; small chips "Messenger · LINE". No Expo logo (not our brand), no price, no before/after. Small text footer credit: "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943". No white logo band.
+
+### 2026-11-19
+- Thursday: Marketing light + live-site check only. Production dpl_6z2ZbTw8bVwnQt1oTDm5ijWjEGwn (commit 99bd60b) READY; / (TH) and /en/price/ return 200 via Vercel fetch and render fully (title, canonical, hreflang, JSON-LD, footer with ฆสพ. + "closed Tuesdays"). Nothing broken. (Direct curl to vinfinityclinic.com is blocked by the sandbox proxy — use Vercel fetch.)
+- promos.ts unchanged since 9efd109: emlift-2611 runs to 30 Nov 23:59; no December promo defined yet.
+- Today's slot Thu 19 Nov = EM Lift launch (Draft 20). Next slot Fri 20 Nov = ligaments reel (Draft 11, ready) — its TH caption is in today's report. Then Sun 22 Nov Loy Krathong closed-day Story (Draft 13).
+- Done: Draft 23 for Fri 11 Dec (evergreen carousel "same filler, different results") below — facts only from /articles/same-filler-different-results/ (Khan 2026 numbers as the article states them). No filler brand names, no promo price.
+- No LINE broadcast tomorrow (Fri 20 Nov) unless the doctor decides to send set emlift-2611. No market watch (Mondays only).
+
+#### Draft 23 — Fri 11 Dec · FB + IG carousel (5 slides, 1080×1350) · Same filler, different results
+Slides: 1) "ฟิลเลอร์ยี่ห้อเดียวกับเพื่อน ทำไมผลไม่เหมือนกัน" · 2) "เจลแต่ละตัวมีนิสัยต่างกัน: ความแข็ง · ความเกาะตัว · การดูดน้ำ" · 3) "เนื้อเยื่อแต่ละคนต่างกัน: ผิวหนา-บาง กล้ามเนื้อ การขยับ" · 4) "ตำแหน่งเปลี่ยนผล: งานวิจัยปี 2026 ที่ 12 สัปดาห์ ปริมาตรที่วัดได้ ปากเหลือราว 10% แก้มราว 60%" · 5) "ที่ Vinfinity: เริ่มจากปัญหาและชั้น ไม่ใช่ยี่ห้อ · ใช้น้อย นัดดูผลราว 2 สัปดาห์"
+TH caption:
+ฟิลเลอร์ยี่ห้อเดียวกับเพื่อน ทำไมผลไม่เหมือนกัน? 🤔
+เพื่อนฉีดแล้วอยู่นาน แต่เราฉีดยี่ห้อเดียวกันกลับยุบเร็ว หรือดูไม่เข้ากับหน้า คำตอบอยู่ที่ 4 เรื่อง
+
+1️⃣ เจลแต่ละตัวมี “นิสัย” ต่างกัน — ความแข็ง ความเกาะตัว และการดูดน้ำ กำหนดว่าเจลจะยก กระจาย หรืออิ่มแค่ไหน
+2️⃣ เนื้อเยื่อแต่ละคนต่างกัน — ผิวหนาหรือบาง กล้ามเนื้อแข็งแรง และการขยับของแต่ละบริเวณ กดและเปลี่ยนรูปเจลต่างกัน
+3️⃣ ตำแหน่งเปลี่ยนผล — งานวิจัยปี 2026 พบว่าที่ 12 สัปดาห์ ปริมาตรที่วัดได้ที่ปากเหลือราว 10% ขณะที่แก้มเหลือราว 60% เพราะปากขยับตลอดทั้งพูด กิน ยิ้ม
+4️⃣ ชั้นที่วางและวิธีฉีด — เจลเดียวกันวางคนละชั้น ให้รูปทรงและความเป็นธรรมชาติต่างกัน
+
+ที่ Vinfinity คุณหมอเริ่มจากปัญหาและชั้นของหน้า ไม่ใช่เริ่มจากยี่ห้อ ใช้น้อย แล้วนัดดูผลหลังบวมยุบราว 2 สัปดาห์ก่อนตัดสินใจเติม
+อ่านฉบับเต็มพร้อมเอกสารอ้างอิง: vinfinityclinic.com/articles/same-filler-different-results/
+
+โดย นพ.เดโชวัต พรมดา (ว.48943) · 📍 Vinfinity Clinic อุดรธานี · คลินิกปิดทุกวันอังคาร
+💬 ส่งรูปหน้าตรงและด้านข้างทาง LINE @vinfinityclinic ให้คุณหมอประเมินเบื้องต้น
+ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · การทำหัตถการทุกชนิดอาจมีผลข้างเคียง
+
+EN caption:
+Same filler as your friend — so why a different result? Four reasons: 1) each gel behaves differently (firmness, cohesivity, how much water it draws); 2) everyone's tissue is different (skin thickness, muscle strength, how much the area moves); 3) the area matters — a 2026 study found that at 12 weeks the measured volume was about 10% in the lips versus about 60% in the cheeks; 4) the layer and technique change shape and how natural it looks. At Vinfinity the doctor starts from the problem and the layer, not the brand, uses a small amount and reviews after about 2 weeks. Full article with references: vinfinityclinic.com/en/articles/ · Dr. Dechowat Promda (license 48943) · consultations in English · closed Tuesdays. Results vary from person to person. All procedures carry possible side effects. LINE @vinfinityclinic · Messenger m.me/Vinfinity.Clinic
+
+Hashtags: #ฟิลเลอร์ #ฟิลเลอร์อุดร #VinfinityClinic #TheFillerArchitect #คลินิกอุดร #อุดรธานี #DermalFiller #UdonThani
+Alt text: กราฟิกเปรียบเทียบปริมาตรฟิลเลอร์ที่วัดได้ที่ปากและแก้มหลัง 12 สัปดาห์ พร้อมข้อความ "ฟิลเลอร์ยี่ห้อเดียวกัน ทำไมผลไม่เหมือนกัน" / Graphic comparing measured filler volume in the lips and cheeks at 12 weeks, with the text "Same filler, different results — why?".
+Graphic brief: 5 slides 1080×1350. Slide 1: real clinic photo (assets/img/treatment.jpg) with dark navy gradient (#0B142E → #1A326B), silver #EEF2F8 headline. Slides 2–3: navy background, silver icon-free text lists. Slide 4: the article graphic assets/img/articles/filler-volume-retention-lips-vs-cheek.jpg on navy, caption "Khan et al. 2026 · ปริมาตรที่วัดจากภายนอก". Slide 5: doctor photo assets/img/dr-bas.jpg (not a galderma-* photo) + 2 lines. Small text footer credit on every slide: "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943 · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล". No white logo band, no filler brand names or product boxes, no before/after, no price.
+
+
+### 2026-11-20
+- Friday: Marketing light + Branding deep. promos.ts unchanged since 9efd109: emlift-2611 runs to 30 Nov 23:59; no December promo defined yet. referral.ts: event 3 Nov – 15 Dec 23:59 (friend's first paid treatment must fall in the window).
+- Today's slot Fri 20 Nov = ligaments reel (Draft 11). Next slot Sun 22 Nov = Loy Krathong closed-day Story (Draft 13) — full TH caption in today's report. Then Wed 25 Nov skincare carousel (Draft 14).
+- Done: Draft 24 for Sun 13 Dec (referral last-call Story, A/B) below — facts only from referral.ts and Draft 10; 15 Dec is a Tuesday (clinic closed), so the post names Mon 14 Dec as the last open day. No "last chance"/countdown wording (brand book).
+- No LINE broadcast tomorrow (Sat 21 Nov) unless the doctor decides to send set emlift-2611. No market watch (Mondays only).
+
+#### Draft 24 — Sun 13 Dec · FB + IG Story (9:16, 2 frames) · Referral event "ชวนเพื่อนมาสวยด้วยกัน" ends Tue 15 Dec
+Frame 1 text: "ชวนเพื่อนมาสวยด้วยกัน · ถึง 15 ธ.ค." / "เพื่อนใหม่: ปรึกษาฟรี + เครดิต 1,000.-" / "คนชวน: เครดิต 1,500.- ต่อเพื่อน"
+Frame 2 text: "คลินิกเปิดวันสุดท้ายของกิจกรรม จันทร์ 14 ธ.ค. 10:00–19:00" / "อังคาร 15 ธ.ค. ปิดตามปกติ" / keyword chip "พิมพ์ “ชวนเพื่อน”" / link sticker → LINE @vinfinityclinic
+TH caption (Version A — full terms):
+กิจกรรม “ชวนเพื่อนมาสวยด้วยกัน” ถึงวันอังคารที่ 15 ธ.ค. นี้ 💙
+คลินิกปิดทุกวันอังคาร วันสุดท้ายที่เปิดในช่วงกิจกรรมคือ วันจันทร์ที่ 14 ธ.ค. 10:00–19:00 น.
+
+👭 เพื่อนใหม่: ปรึกษาและวิเคราะห์ผิวกับคุณหมอฟรี + เครดิต 1,000 บาท เมื่อทำหัตถการครั้งแรก 5,000 บาทขึ้นไป
+🙋 คนชวน: เครดิต 1,500 บาท ต่อเพื่อน 1 คนที่มาทำครั้งแรกตามเงื่อนไข · ชวนสำเร็จครบ 3 คน รับ Vitaran 1 cc
+
+แพทย์ประเมินก่อนทุกครั้ง ไม่จำเป็นต้องทำในวันที่มาปรึกษา
+โดย นพ.เดโชวัต พรมดา (ว.48943) · 📍 Vinfinity Clinic อุดรธานี · 📞 082-462-2963
+ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · การทำหัตถการทุกชนิดอาจมีผลข้างเคียง
+
+ทักไลน์ @vinfinityclinic พิมพ์ “ชวนเพื่อน” รับลิงก์ของคุณ
+
+TH caption (Version B — no free-reward line in public posts): same as A, delete " · ชวนสำเร็จครบ 3 คน รับ Vitaran 1 cc".
+
+EN caption:
+Our "Bring a friend" event runs until Tuesday 15 Dec 💙 We're closed on Tuesdays, so the last open day in the event is Monday 14 Dec, 10:00–19:00. Your friend: free consultation and skin analysis with the doctor, plus a 1,000 THB credit on a first treatment of 5,000 THB or more. You: 1,500 THB credit for each friend who has a first treatment on these terms (Version A only: 3 friends → Vitaran 1 cc). The doctor assesses first; no treatment is needed on the consultation day. Dr. Dechowat Promda (license 48943) · consultations in English. Results vary from person to person. All procedures carry possible side effects. Message LINE @vinfinityclinic and type "ชวนเพื่อน" to get your personal link · Messenger m.me/Vinfinity.Clinic
+
+Hashtags: #VinfinityClinic #ชวนเพื่อนมาสวยด้วยกัน #คลินิกอุดร #อุดรธานี #UdonThani
+Alt text: ห้องรับรองโทนสีกรมท่าของ Vinfinity Clinic พร้อมข้อความ "ชวนเพื่อนมาสวยด้วยกัน ถึง 15 ธ.ค." / Vinfinity Clinic lounge in navy tones with the text "Bring a friend, until 15 Dec".
+Graphic brief: 1080×1920, 2 frames. Frame 1: real photo assets/img/clinic-lounge.jpg top 50%, dark navy gradient (#0B142E → #1A326B) below; silver #EEF2F8 headline "ชวนเพื่อนมาสวยด้วยกัน · ถึง 15 ธ.ค."; two silver-outline chips for friend / inviter credits. Frame 2: real photo assets/img/reception.jpg, same gradient; opening-day line in silver #D5DDEE; LINE link sticker + keyword chip. Small text footer credit on both frames: "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943 · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล". No white logo band, no countdown timer, no "โอกาสสุดท้าย"/"last chance", no stock models, no before/after, no lucky draw.
+
+### 2026-11-22
+- Sunday: Marketing light + live-site check only. Production dpl_EectUqcevsQDyRuBZoxHs6quouMm (commit 716eeed) READY; / (TH) and /en/price/ return 200 via Vercel fetch and render fully (title, canonical, hreflang, 4 JSON-LD blocks, footer with ฆสพ.อด.100/2568 + "closed Tuesdays"). Nothing broken. (No run is logged for Sat 21 Nov.)
+- promos.ts unchanged since 9efd109: emlift-2611 runs to 30 Nov 23:59; no December promo defined yet (8 days left to add one).
+- Today's slot Sun 22 Nov = Loy Krathong closed-day Story (Draft 13; clinic closed Tue 24 Nov). Next slot Wed 25 Nov = skincare carousel (Draft 14) — full TH caption in today's report. Then Fri 27 Nov clinic checklist (Draft 15), Sat 28 Nov EM Lift last call (Draft 21).
+- Done: Draft 25 for Wed 16 Dec (evergreen carousel on filler dissolving) below — facts only from /articles/dissolve-filler-native-tissue/ (ACE guideline numbers as the article states them). No brand names, no enzyme units, no price, no before/after.
+- No LINE broadcast tomorrow (Mon 23 Nov) unless the doctor decides to send set emlift-2611 before the Early Bird ends. Market watch is due tomorrow (Monday run).
+
+#### Draft 25 — Wed 16 Dec · FB + IG carousel (5 slides, 1080×1350) · Filler dissolving and your own skin
+Slides: 1) "สลายฟิลเลอร์แล้ว ผิวเดิมจะเสียไหม" · 2) "เอนไซม์ย่อยไฮยาลูรอนิกของผิวได้ชั่วคราว แต่ผิวสร้างใหม่ตลอด (ครึ่งชีวิตราว 24 ชม.)" · 3) "ทำไมบางคนดูโทรมลง: เห็นหน้าจริงที่ถูกบังไว้ · ผิวถูกยืดมานาน · สลายมากเกินจำเป็น" · 4) "บางเคสสลายยากกว่า บางเคสต้องทำมากกว่า 1 ครั้ง — บอกประวัติการฉีดให้หมอ" · 5) "ที่ Vinfinity: สลายเฉพาะจุด ทีละน้อย แล้วประเมินใหม่หลังราว 2 สัปดาห์"
+TH caption:
+สลายฟิลเลอร์แล้ว ผิวเดิมจะเสียไหม? 🤔
+หลายคนอยากเอาฟิลเลอร์ออก แต่กลัวว่าเอนไซม์จะ “กินเนื้อตัวเอง” จนหน้าตอบ งานวิจัยบอกว่าอย่างนี้ค่ะ
+
+1️⃣ เอนไซม์สลายฟิลเลอร์ (hyaluronidase) ย่อยไฮยาลูรอนิกที่ผิวสร้างเองได้ด้วย แต่เป็นแค่ชั่วคราว เพราะผิวสร้างใหม่ตลอดเวลา ครึ่งชีวิตราว 24 ชั่วโมง
+2️⃣ ที่บางคนดูโทรมลงหลังสลาย ส่วนใหญ่ไม่ใช่เพราะเนื้อเยื่อถูกทำลาย แต่เพราะเห็นใบหน้าจริงที่ถูกฟิลเลอร์บังไว้ ผิวที่ถูกยืดมานาน หรือสลายมากเกินจุดที่มีปัญหา
+3️⃣ ฟิลเลอร์แต่ละชนิดสลายง่ายยากต่างกัน บางเคสต้องทำมากกว่าหนึ่งครั้ง การบอกประวัติการฉีดให้แพทย์ช่วยให้วางแผนได้แม่นขึ้น
+4️⃣ แพ้เอนไซม์ได้แต่พบน้อย ควรแจ้งประวัติแพ้ยา แพ้ผึ้งหรือแตนต่อยให้แพทย์ทราบ
+
+ที่ Vinfinity คุณหมอซักประวัติการฉีดทั้งหมด อธิบายผลที่คาดได้ก่อนทำ สลายเฉพาะจุดทีละน้อย แล้วรอราว 2 สัปดาห์ก่อนประเมินใหม่ บางคนพบว่าไม่ต้องเติมอีกเลย
+อ่านฉบับเต็มพร้อมเอกสารอ้างอิง: vinfinityclinic.com/articles/dissolve-filler-native-tissue/
+
+โดย นพ.เดโชวัต พรมดา (ว.48943) · 📍 Vinfinity Clinic อุดรธานี · คลินิกปิดทุกวันอังคาร
+💬 ส่งรูปหน้าตรง ด้านข้าง และประวัติการฉีดเท่าที่จำได้ ทาง LINE @vinfinityclinic ให้คุณหมอดูก่อนว่าควรสลายตรงไหน หรือยังไม่จำเป็น
+หลังฉีดฟิลเลอร์ ถ้าปวดมาก ผิวซีดหรือคล้ำเป็นแถบ ต้องพบแพทย์ทันที
+ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · การทำหัตถการทุกชนิดอาจมีผลข้างเคียง
+
+EN caption:
+Dissolving filler — will it damage your own skin? The enzyme (hyaluronidase) can break down the skin's own hyaluronic acid too, but only for a while: the skin keeps making it, with a half-life of about 24 hours. When people look more tired after dissolving, it is usually because they now see the face the filler was hiding, skin that was stretched for a long time, or more dissolving than needed — not destroyed tissue. Some fillers break down more slowly and may need more than one session, so tell the doctor what you had injected. Allergy is possible but uncommon. At Vinfinity the doctor dissolves only where needed, a little at a time, and reassesses after about 2 weeks. Full article (Thai, with references): vinfinityclinic.com/articles/dissolve-filler-native-tissue/ · Dr. Dechowat Promda (license 48943) · consultations in English · closed Tuesdays. Results vary from person to person. All procedures carry possible side effects. LINE @vinfinityclinic · Messenger m.me/Vinfinity.Clinic
+
+Hashtags: #สลายฟิลเลอร์ #แก้ฟิลเลอร์ #ฟิลเลอร์อุดร #VinfinityClinic #TheFillerArchitect #คลินิกอุดร #อุดรธานี #FillerDissolving #UdonThani
+Alt text: แผนภาพแสดงฟิลเลอร์ถูกเอนไซม์สลาย ขณะที่ไฮยาลูรอนิกของผิวสร้างกลับมาใหม่ พร้อมข้อความ "สลายฟิลเลอร์แล้ว ผิวเดิมจะเสียไหม" / Diagram of filler being broken down by the enzyme while the skin's own hyaluronic acid is rebuilt, with the text "Dissolving filler — will it damage your own skin?".
+Graphic brief: 5 slides 1080×1350. Slide 1: real clinic photo (assets/img/treatment.jpg) with dark navy gradient (#0B142E → #1A326B), silver #EEF2F8 headline. Slide 2: the article graphic assets/img/articles/hyaluronidase-native-ha-recovery.jpg on navy. Slides 3–4: navy background, silver #D5DDEE text lists. Slide 5: doctor photo assets/img/dr-bas.jpg (not a galderma-* photo) + 2 lines + LINE chip. Small text footer credit on every slide: "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943 · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล". No white logo band, no filler or enzyme brand names, no unit numbers, no before/after, no price.
+
+
+### 2026-11-23
+- Monday: Marketing light + SEO deep + market watch. promos.ts unchanged since 9efd109: emlift-2611 runs to 30 Nov 23:59; still no December promo defined (7 days left — doctor to decide). referral.ts event to 15 Dec.
+- No calendar slot today. Next slot Wed 25 Nov = skincare carousel (Draft 14, ready) — full TH caption in today's report. Then Fri 27 Nov clinic checklist (Draft 15), Sat 28 Nov EM Lift last call (Draft 21), Sun 29 Nov Vitaran (Draft 16).
+- Done: Draft 26 for Fri 18 Dec (myth-vs-evidence carousel "ฉีดยกเอ็น ได้ผลจริงไหม") below — facts only from /articles/ligament-lift-injection/ (2023 ASJ animal study, 1 human case report). No brand names, no price, no before/after, no result claims.
+- Market watch (web search, 1 query "คลินิกความงาม อุดรธานี โปรโมชั่น ธันวาคม"): only aggregators (HDmall, Gowabi listings for B.Mee Clinic Udon and The V-Sage Clinic Udon) and LINE pages of an unrelated filler brand; no Udon clinic December promo visible — not verified. Gowabi = booking marketplace where local competitors list; consider a listing (backlog 8, human decision).
+- No LINE broadcast tomorrow (Tue 24 Nov = Loy Krathong, clinic closed).
+
+#### Draft 26 — Fri 18 Dec · FB + IG carousel (5 slides, 1080×1350) · "ฉีดยกเอ็น" — myth vs evidence
+Slides: 1) "ฉีดยกเอ็น ได้ผลจริงไหม" · 2) "เอ็นยึดใบหน้าเหมือนตะขอแขวนผ้าม่าน — สิ่งที่หย่อนคือผ้าระหว่างตะขอ" · 3) "งานวิจัยปี 2023: เอ็นไม่ได้หลวมตามอายุ แต่แข็งขึ้น (ศึกษาในสัตว์ทดลอง)" · 4) "ฉีดเพื่อกระชับเอ็น: หลักฐานในคนยังมีแค่รายงาน 1 ราย · สิ่งที่สมเหตุสมผลกว่า = เติมฐานรองรับชั้นลึก" · 5) "3 คำถามก่อนฉีด" + LINE chip
+TH caption:
+“ฉีดยกเอ็น” ได้ผลจริงไหม? 🤔
+หลายคนเคยได้ยินว่าหน้าย้อยเพราะเอ็นหย่อน ต้องฉีดเข้าไปให้เอ็นกระชับ งานวิจัยใหม่ทำให้ต้องคิดเรื่องนี้ใหม่ค่ะ
+
+1️⃣ เอ็นยึดใบหน้าเหมือนตะขอที่แขวนผ้าม่านไว้กับกระดูก สิ่งที่หย่อนตามวัยคือ “ผ้า” ระหว่างตะขอ ได้แก่ไขมันและผิว
+2️⃣ งานวิจัยปี 2023 (Aesthetic Surgery Journal) พบว่าเอ็นไม่ได้หลวมขึ้นตามอายุ แต่กลับแข็งขึ้น — งานนี้ทำในสัตว์ทดลอง และศึกษาเอ็นโหนกแก้มเป็นหลัก
+3️⃣ หลักฐานในคนเรื่องฉีดให้เอ็นหนาขึ้น ตอนนี้ยังเป็นแค่รายงานผู้ป่วย 1 ราย และยังไม่มีงานที่วัดชัดว่าหน้ายกขึ้นในระยะยาว
+4️⃣ สิ่งที่ยังสมเหตุสมผลคือ เติมฐานรองรับในชั้นลึกตามจุดที่ยุบ โดยใช้แนวเอ็นเป็นจุดอ้างอิง — ไม่ต้องดึงตะขอ แต่เติมฐานให้ผ้ามีที่วาง
+
+ก่อนฉีด ลองถามแพทย์ 3 ข้อ: หน้าย้อยของเราเกิดจากชั้นไหน · จะฉีดชั้นไหน เพื่ออะไร · ตรงนั้นมีหลอดเลือดสำคัญใกล้ไหม ป้องกันอย่างไร
+อ่านฉบับเต็มพร้อมเอกสารอ้างอิง: vinfinityclinic.com/articles/ligament-lift-injection/
+
+เรียบเรียงโดย นพ.เดโชวัต พรมดา (ว.48943) · 📍 Vinfinity Clinic อุดรธานี · คลินิกปิดทุกวันอังคาร
+💬 ส่งรูปหน้าตรงและด้านข้างทาง LINE @vinfinityclinic ให้คุณหมอช่วยดูว่าชั้นไหนเปลี่ยนไป ก่อนวางแผน
+ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · การทำหัตถการทุกชนิดอาจมีผลข้างเคียง
+
+EN caption:
+"Ligament lift" injections — do they work? Think of facial ligaments as hooks holding a curtain to the bone: what sags with age is the curtain between the hooks (fat and skin). A 2023 study in Aesthetic Surgery Journal found that ligaments don't loosen with age — they stiffen (an animal study, mainly the cheekbone ligament). Human evidence for injecting to "tighten" ligaments is so far a single case report. What still makes sense is rebuilding deep support where tissue has thinned, using the ligament lines as landmarks. Ask your doctor: which layer has changed, which layer will be injected and why, and how major blood vessels nearby are protected. Full article with references (Thai/English): vinfinityclinic.com/en/articles/ligament-lift-injection/ · Dr. Dechowat Promda (license 48943) · consultations in English via LINE @vinfinityclinic or Messenger m.me/Vinfinity.Clinic. Results vary from person to person. All procedures carry possible side effects.
+
+Hashtags: #ฉีดยกเอ็น #หน้าย้อย #ฟิลเลอร์อุดร #VinfinityClinic #TheFillerArchitect #คลินิกอุดร #อุดรธานี #FacialAnatomy #UdonThani
+Alt text: ภาพเปรียบเทียบการฉีดเพื่อกระชับเอ็นยึดใบหน้า กับการเติมฐานรองรับชั้นลึกระหว่างเอ็น พร้อมข้อความ "ฉีดยกเอ็น ได้ผลจริงไหม" / Diagram comparing injecting to tighten facial ligaments with rebuilding deep support between them, with the text "Ligament lift injections — do they work?".
+Graphic brief: 5 slides 1080×1350. Slide 1: real clinic photo (assets/img/treatment.jpg) with dark navy gradient (#0B142E → #1A326B), silver #EEF2F8 headline. Slide 2: article graphic assets/img/articles/ligament-lift-injection-support.jpg on navy (hook-and-curtain idea). Slides 3–4: navy background, silver #D5DDEE text, small "ศึกษาในสัตว์ทดลอง" / "รายงาน 1 ราย" labels so the evidence level is clear. Slide 5: doctor photo assets/img/dr-bas.jpg (not a galderma-* photo) + 3 questions + LINE chip. Small text footer credit on every slide: "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943 · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล". No white logo band, no product brand names, no before/after.
+
+
+### 2026-11-24
+- Tuesday (Loy Krathong, clinic closed): Marketing light + live-site check only. Production dpl_xoTJe3kQh42XpMQHHqk8gdpFa8iH (commit a3501bb) READY; / (TH) and /en/price/ return 200 via Vercel fetch and render fully (title, canonical, hreflang, JSON-LD 3 on home = same as source, 4 on /en/price/, footer with ฆสพ.อด.100/2568 + "closed Tuesdays"). Direct curl from the run container is blocked (000) — not a site fault. Nothing broken.
+- promos.ts unchanged since 9efd109: emlift-2611 runs to 30 Nov 23:59; still no December promo (6 days left — doctor to decide). referral.ts event to 15 Dec.
+- No calendar slot today. Next slot Wed 25 Nov = skincare carousel (Draft 14, ready) — full TH caption in today's report. Then Fri 27 Nov clinic checklist (Draft 15), Sat 28 Nov EM Lift last call (Draft 21), Sun 29 Nov Vitaran (Draft 16).
+- Done: Draft 27 for Sun 20 Dec (evergreen year-end carousel "ฟิลเลอร์อยู่นานกว่าที่คิด") below — facts only from /articles/filler-long-term/ (Master et al. 2024 MRI, 33 people; ~11% tear-trough swelling figure as the article states it). No brand names, no price, no before/after. Removed the finished Loy Krathong backlog item.
+- No LINE broadcast tomorrow (Wed 25 Nov) unless the doctor decides to send set emlift-2611 before the Early Bird ends.
+
+#### Draft 27 — Sun 20 Dec · FB + IG carousel (5 slides, 1080×1350) · Filler stays longer than you think (year-end top-up check)
+Slides: 1) "ฟิลเลอร์ที่ฉีดไว้ ยังอยู่ไหม? ก่อนเติมรอบใหม่ อ่านก่อน" · 2) "MRI 33 คน: พบฟิลเลอร์ทุกคนอย่างน้อย 2 ปี บางคนยังเห็นถึง 15 ปี (Master et al. 2024)" · 3) "ที่รู้สึกว่ายุบ อาจไม่ใช่เจลหาย: น้ำในเจลลดลง · เจลกระจายเข้าเนื้อเยื่อ · หน้าเปลี่ยนตามวัย" · 4) "เติมตามรอบโดยไม่ประเมิน = สะสมทีละนิด → หน้าเต็มเกิน · ใต้ตาบวมได้แม้ผ่านไปเป็นปี" · 5) "ที่ Vinfinity: ถามประวัติทุกเข็ม · ประเมินก่อนเติมทุกครั้ง · บางครั้งคำตอบคือยังไม่ต้องเติม" + LINE chip
+TH caption:
+ฟิลเลอร์ที่ฉีดไว้ ยังอยู่ไหม? ก่อนเติมรอบปีใหม่ อ่านก่อนค่ะ 🤔
+หลายคนได้ยินว่าฟิลเลอร์อยู่ได้ 6–12 เดือน พอหน้าเริ่มแบนก็นัดเติมตามรอบ แต่ตัวเลขนั้นมาจากการดูด้วยตา เมื่อดูด้วย MRI ภาพที่ได้ต่างออกไป
+
+1️⃣ งานวิจัยปี 2024 ทำ MRI ผู้ที่ฉีดฟิลเลอร์กลางหน้า 33 คน พบฟิลเลอร์ในทุกคนอย่างน้อย 2 ปี และบางคนยังเห็นอยู่ถึง 15 ปี — “มองไม่เห็นแล้ว” จึงไม่ได้แปลว่า “ไม่มีแล้ว”
+2️⃣ ที่รู้สึกว่ายุบ ส่วนหนึ่งเพราะน้ำที่เจลดูดไว้ช่วงแรกลดลง เจลกระจายเข้ากับเนื้อเยื่อ และหน้ายังเปลี่ยนตามวัย
+3️⃣ ถ้าเติมตามรอบโดยไม่ประเมินใหม่ ฟิลเลอร์จะสะสมทีละนิด หน้าเต็มเกิน (overfilled) มักมาจากแบบนี้ มากกว่าการฉีดมากในครั้งเดียว
+4️⃣ ฟิลเลอร์ดูดน้ำ ใต้ตาจึงบวมเป็นถุงได้แม้ผ่านไปเป็นปี มีรายงานได้ราว 11% ของการฉีดร่องใต้ตา
+
+ที่ Vinfinity คุณหมอถามประวัติการฉีดทั้งหมด รวมถึงที่ฉีดจากที่อื่น ประเมินก่อนเติมทุกครั้งด้วยภาพถ่ายมาตรฐาน ไม่เติมตามรอบเวลา บางครั้งคำแนะนำที่ถูกต้องคือยังไม่ต้องเติม และถ้าสะสมมามาก อาจสลายบางส่วนก่อนแล้วค่อยวางแผนใหม่
+อ่านฉบับเต็มพร้อมเอกสารอ้างอิง: vinfinityclinic.com/articles/filler-long-term/
+
+เรียบเรียงโดย นพ.เดโชวัต พรมดา (ว.48943) · 📍 Vinfinity Clinic อุดรธานี · คลินิกปิดทุกวันอังคาร
+💬 ส่งรูปหน้าตรง ด้านข้าง และประวัติการฉีดเท่าที่จำได้ (ตำแหน่ง · ประมาณกี่ cc · ฉีดเมื่อไหร่) ทาง LINE @vinfinityclinic ให้คุณหมอดูก่อนว่าควรเติมจริงไหม
+ถ้าบริเวณที่เคยฉีดบวม ปวด หรือผิวเปลี่ยนสี ควรพบแพทย์
+ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · การทำหัตถการทุกชนิดอาจมีผลข้างเคียง
+
+EN caption:
+Planning a filler top-up before the New Year? Read this first. The usual "6–12 months" comes from how the face looks, not from seeing the gel. A 2024 MRI study of 33 people with mid-face filler found it in every one of them for at least 2 years, and in some for up to 15 years. Feeling "flat" again is often water leaving the gel, the gel blending into tissue and normal ageing — not the filler being gone. Topping up on a schedule without reassessment slowly adds up, which is how many overfilled faces happen, and filler draws water, so under-eyes can swell even years later. At Vinfinity the doctor takes your full injection history (including other clinics), reassesses with standard photos before every top-up, and sometimes the right advice is "not yet". Full article with references: vinfinityclinic.com/en/articles/filler-long-term/ · Dr. Dechowat Promda (license 48943) · consultations in English · closed Tuesdays. Results vary from person to person. All procedures carry possible side effects. LINE @vinfinityclinic · Messenger m.me/Vinfinity.Clinic
+
+Hashtags: #ฟิลเลอร์ #ฟิลเลอร์อุดร #เติมฟิลเลอร์ #VinfinityClinic #TheFillerArchitect #คลินิกอุดร #อุดรธานี #DermalFiller #UdonThani
+Alt text: ไทม์ไลน์แสดงว่า MRI ยังพบฟิลเลอร์กลางหน้าอย่างน้อย 2 ปีและบางรายถึง 15 ปี พร้อมข้อความ "ฟิลเลอร์ที่ฉีดไว้ ยังอยู่ไหม" / Timeline showing MRI still finding mid-face filler for at least 2 years and in some people up to 15 years, with the text "Is your filler still there?".
+Graphic brief: 5 slides 1080×1350. Slide 1: real clinic photo (assets/img/treatment.jpg) with dark navy gradient (#0B142E → #1A326B), silver #EEF2F8 headline. Slide 2: article graphic assets/img/articles/filler-mri-longevity-timeline.jpg on navy, small caption "Master et al. 2024 · MRI 33 ราย". Slides 3–4: navy background, silver #D5DDEE text lists. Slide 5: doctor photo assets/img/dr-bas.jpg (not a galderma-* photo) + 3 lines + LINE chip. Small text footer credit on every slide: "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943 · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล". No white logo band, no filler brand names, no before/after, no price, no "ถาวร"/permanent wording.
+
+### 2026-11-24 (doctor) — ad wording rule
+- Thai MOPH (สบส.) guideline: services using drugs/devices must be written as "โปรแกรม…" (e.g. โปรแกรมฉีดฟิลเลอร์, โปรแกรม EM Lift) in every ad, broadcast, image and signage. Apply to all new drafts. The parking-side vinyl went up without it; a "โปรแกรม" patch strip was made (pending สสจ. check).
+- EM Lift card image + LINE text updated to say โปรแกรม.
+
+- 2026-11-24 · เช็กฟิลเลอร์ก่อนปีใหม่ (fillercheck-2612): โปรแกรมฉีดฟิลเลอร์ HA 8,990/cc (ปกติ 9,990), 20 สิทธิ์, คนละ 1, 24 พ.ย.–31 ธ.ค. 69 (วันจบ 31 ธ.ค. = สมมติฐาน รอคุณหมอยืนยัน). Broadcast set fillercheck-2612-card (liveLeft). อย่ายิงซ้อนกับ EM Lift last call 25 พ.ย.
+- 2026-11-24 (บ่าย) · คุณหมอเปลี่ยนเป็น "ปฏิทินของขวัญ สวยก่อนปีใหม่" (lib/gifts.ts, หน้า /gifts): 1–31 ธ.ค. เปิดวันละกล่อง ทุกคนได้ข้อเสนอเดียวกันในวันนั้น (ไม่ใช่วงล้อสุ่ม — พ.ร.บ.การพนัน ม.8 ห้ามสุ่มด้วยคอมพิวเตอร์). fillercheck-2612 ปิด 24 พ.ย. 17:00 แล้วรวมฟิลเลอร์ 8,990 เป็นกล่องในปฏิทิน. Broadcast: ทีเซอร์ จ. 30 พ.ย. + การ์ดวันที่ 12/21/25/31 (1 ธ.ค. เป็นวันอังคาร ห้ามยิง). ตารางกล่องและจำนวนสิทธิ์ = ร่าง รอคุณหมอยืนยัน
+- 2026-11-24 23:00 · คุณหมอสั่งปล่อยปฏิทินทันที: 37 กล่อง 25 พ.ย.–31 ธ.ค. (กล่องแรกเปิดตั้งแต่ 24 พ.ย. 23:00) + เพิ่มโปรแกรมเลเซอร์กำจัดขน (ทดลองฟรีใต้วงแขน, 25 พ.ย./9/27 ธ.ค.) และโปรแกรมฉายแสง Red Light (ฟรีเมื่อทำโปรแกรมใดก็ได้, 26 พ.ย./2/17 ธ.ค.). เงื่อนไขทั้งสองเป็นร่าง. Broadcast เปิดตัว พ. 25 พ.ย. (ชุด gift-2611-25-card) แทน EM Lift last call → ย้าย EM Lift ไป อา. 29 พ.ย.
+- 2026-11-25 00:55 · คุณหมอสั่ง: เอาปฏิทินขึ้นเว็บ (แถบบนทุกหน้า TH + การ์ดหน้าแรก + vinfinityclinic.com/gifts, ซ่อนเองหลัง 31 ธ.ค.) และตั้ง broadcast อัตโนมัติ พ. 25 พ.ย. 10:00 (lib/scheduledBroadcasts.ts, ชุด gift-2611-25-card, ส่งครั้งเดียว หน้าต่าง 10:00–12:30). Vercel cron 0 3 * * * เพิ่มเพื่อให้ tick ทำงานช่วงเช้า
+
+### 2026-11-25
+- Wednesday: Marketing light + AEO deep. Gift calendar (gifts.ts, 25 Nov – 31 Dec) is now the running promotion; updated the header note (today's box only, never future gifts; โปรแกรม wording; conditions). EM Lift Early Bird still to 30 Nov.
+- Today's slot = Draft 14 (skincare carousel). Fixed its TH hook: "โบท็อก" (a toxin brand name, banned) → "ท็อกซินลดริ้วรอย". Full TH caption in today's report.
+- Done: Draft 28 for Wed 23 Dec (gift-calendar post, reusable as a Story) below — no future gift named, no price, no lucky-draw wording. Calendar now runs to 23 Dec.
+- Note: today's LINE launch broadcast (10:00, set gift-2611-25-card) is automatic; no organic launch post was planned — added backlog 2c for the doctor.
+
+#### Draft 28 — Wed 23 Dec · FB + IG feed (+ Story, reusable 26 Nov–30 Dec) · Gift calendar "ปฏิทินของขวัญ สวยก่อนปีใหม่"
+TH caption:
+🎁 ปฏิทินของขวัญ สวยก่อนปีใหม่ ยังเปิดอยู่นะคะ
+ทุกวันจนถึง 31 ธ.ค. Vinfinity เปิดกล่องของขวัญวันละ 1 กล่อง ทุกคนที่เปิดในวันนั้นได้ของขวัญเดียวกัน ไม่ใช่การสุ่ม ไม่ต้องลุ้น
+
+✔️ ของขวัญแต่ละวันผูกกับโปรแกรมของคลินิก มีเงื่อนไขเขียนไว้ชัดในกล่อง
+✔️ สิทธิ์มีจำนวนจำกัดต่อวัน กดรับได้เฉพาะวันนั้น คนละ 1 สิทธิ์
+✔️ รับสิทธิ์แล้วเลือกวันนัดภายใน 48 ชม. ใช้ได้ถึง 31 ม.ค. 70
+✔️ แพทย์ประเมินก่อนทุกครั้ง บางคนคำแนะนำคือยังไม่ต้องทำ
+
+วันนี้กล่องเป็นอะไร เปิดดูได้ที่ vinfinityclinic.com/gifts
+📍 Vinfinity Clinic อุดรธานี · นพ.เดโชวัต พรมดา (ว.48943) · คลินิกปิดทุกวันอังคาร
+ใช้ร่วมกับโปรโมชั่น/แพ็กเกจอื่นไม่ได้ · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · การทำหัตถการทุกชนิดอาจมีผลข้างเคียง
+ทักไลน์ @vinfinityclinic พิมพ์ “โปรเดือนนี้” หรือกดเมนู 🎁 โปรเดือนนี้
+
+EN caption:
+Our year-end gift calendar is open until 31 Dec: one box a day, and everyone who opens it that day gets the same gift — no lucky draw. Each gift is linked to a clinic programme with its conditions written in the box; places are limited each day, one per person, claimed in LINE that day, book within 48 hours, use by 31 Jan 2027. The doctor assesses you first every time. See today's box: vinfinityclinic.com/gifts · Not combined with other promotions. Results vary from person to person. All procedures carry possible side effects. Consultations in English · LINE @vinfinityclinic · Messenger m.me/Vinfinity.Clinic · closed Tuesdays.
+
+Hashtags: #VinfinityClinic #ปฏิทินของขวัญ #สวยก่อนปีใหม่ #คลินิกอุดร #อุดรธานี #TheFillerArchitect #UdonThani
+Alt text: ห้องรับรองของ Vinfinity Clinic อุดรธานี โทนน้ำเงินกรมท่า พร้อมข้อความ "ปฏิทินของขวัญ สวยก่อนปีใหม่ เปิดได้วันละ 1 กล่อง ถึง 31 ธ.ค." / Vinfinity Clinic lounge in navy tones with the text "Year-end gift calendar — one box a day until 31 Dec".
+Graphic brief: Feed 1080×1350: real photo assets/img/clinic-lounge.jpg, dark navy gradient (#0B142E → #1A326B) over the lower half, silver #EEF2F8 headline "ปฏิทินของขวัญ สวยก่อนปีใหม่", sub-line "เปิดได้วันละ 1 กล่อง · ถึง 31 ธ.ค." in #D5DDEE. Story 1080×1920: assets/img/gift-calendar.jpg (site graphic) on the same navy gradient + LINE chip "พิมพ์ โปรเดือนนี้". Small text footer credit on both: "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943 · ใช้ร่วมกับโปรอื่นไม่ได้". No white logo band, no future gift named, no price, no brand names, no "ฟรี" without its condition, no before/after.
+
+### 2026-11-26
+- Thursday: Marketing light + live-site check. Production dpl_CHMnQ7mAPs5BTYHuohxdn7hn6U1f (commit bfee6b9) READY; / and /en/price/ 200 with title, canonical, hreflang, JSON-LD (3 / 4), gift bar + home card on /, Vitaran 9,990 · 4+ 8,990 on /en/price/.
+- Found + fixed (main): the short link vinfinityclinic.com/gifts returned 404 (trailingSlash:true sends /gifts → /gifts/, and vercel.json only redirected "/gifts"). Added a "/gifts/" redirect to the same LINE-app page. On-site gift links were fine (they point straight to the LINE app); the short link is used in Draft 28 captions. Commit 2ef6752, verified on dpl_HvPz28MZseXJTEo262VWx6QpZuHg: /gifts and /gifts/ both 307 → LINE-app gift page.
+- promos.ts / gifts.ts unchanged since df1d42a: gift calendar to 31 Dec, EM Lift Early Bird to 30 Nov. Today's box (26 Nov) per gifts.ts = Red Light programme (conditions draft). Draft 28 usable as today's Story.
+- Next slot: Fri 27 Nov clinic checklist (Draft 15, re-checked: no banned words, no price) — full TH caption in today's report. Then Sat 28 Nov EM Lift last call (Draft 21; note 24 Nov log moved the EM Lift LINE last call to Sun 29 Nov), Sun 29 Nov Vitaran (Draft 16).
+- Done: Draft 29 for Fri 25 Dec (PN reel) below — facts only from /articles/pn-molecular-weight/. Calendar now runs to 25 Dec.
+
+#### Draft 29 — Fri 25 Dec · TikTok / Reels + FB (25 s, 9:16) · "PN ยี่ห้อไหนได้ผลกว่า?"
+Script (doctor talking-head, on-screen text in silver):
+0–3 s: "PN ยี่ห้อไหนได้ผลกว่า? ก่อนตอบ ต้องรู้ก่อนว่า PN ไม่ได้มีแบบเดียว"
+3–10 s: "สายยาว (เจล) อุ้มน้ำ ค่อย ๆ สลาย · สายสั้น (น้ำใส) กระจายตัวเร็ว เน้นซ่อมแซมระยะสั้น" (graphic pn-hmw-lmw-polynucleotide.jpg)
+10–16 s: "แต่ยังไม่มีงานวิจัยในคนที่เทียบสองแบบตัวต่อตัว — ไม่ใช่ยิ่งเล็กยิ่งดี หรือยิ่งใหญ่ยิ่งดี"
+16–23 s: "ก่อนฉีด ถาม 4 ข้อ: ชื่อผลิตภัณฑ์ + เลข อย. · เจลหรือน้ำ ทำไม · มีส่วนผสมอื่นไหม · กี่ครั้ง วัดผลยังไง"
+23–25 s: "ส่งรูปให้หมอประเมินทาง LINE @vinfinityclinic"
+TH caption:
+PN ยี่ห้อไหนได้ผลกว่า? 🧬 คำถามนี้ยังตอบตรง ๆ ไม่ได้ค่ะ
+PN สายยาว (เจล) อุ้มน้ำและค่อย ๆ สลาย ส่วนสายสั้น (น้ำใส) กระจายตัวเร็ว เน้นซ่อมแซมระยะสั้น แต่ตอนนี้ยังไม่มีงานวิจัยในคนที่เปรียบเทียบสองแบบตัวต่อตัว แพทย์จึงเลือกตามสภาพผิวและตำแหน่ง
+
+ก่อนทำโปรแกรมสกินบูสเตอร์ PN ถามแพทย์ 4 ข้อนี้
+1️⃣ ผลิตภัณฑ์ชื่ออะไร ขึ้นทะเบียน อย. ไหม ขอดูกล่องได้ไหม
+2️⃣ เป็นชนิดเจลหรือชนิดน้ำ ทำไมถึงเลือกแบบนี้ให้ผิวเรา
+3️⃣ มีส่วนผสมอื่นนอกจาก PN หรือไม่
+4️⃣ ต้องทำกี่ครั้ง ห่างกันเท่าไร และวัดผลอย่างไร
+ผิวหย่อนหรือขาดโครงสร้าง PN อย่างเดียวไม่พอ PN ดูแลคุณภาพผิว ไม่ได้ยกหรือเติมโครงหน้า · ผู้ที่แพ้ปลาควรแจ้งแพทย์ก่อน
+
+อ่านฉบับเต็มพร้อมเอกสารอ้างอิง: vinfinityclinic.com/articles/pn-molecular-weight/
+นพ.เดโชวัต พรมดา (ว.48943) · 📍 Vinfinity Clinic อุดรธานี · คลินิกปิดทุกวันอังคาร
+💬 ส่งรูปหน้าตรงในแสงธรรมชาติทาง LINE @vinfinityclinic ให้คุณหมอประเมินผิวก่อน
+ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · การทำหัตถการทุกชนิดอาจมีผลข้างเคียง
+
+EN caption:
+"Which PN works better?" There's no straight answer yet. Long-chain PN (gel) holds water and breaks down slowly; short-chain (liquid) spreads fast and is used for short-term repair — but no human study has compared the two head-to-head, so the choice depends on your skin and the area. Before a PN (polynucleotide / "salmon DNA") skin-booster programme, ask: the product name and Thai FDA registration, gel or liquid and why, any other ingredients, and how many sessions and how results are measured. PN improves skin quality; it doesn't lift or add structure. Tell the doctor if you're allergic to fish. Full article (Thai, with references): vinfinityclinic.com/articles/pn-molecular-weight/ · Dr. Dechowat Promda (license 48943) · consultations in English · LINE @vinfinityclinic · Messenger m.me/Vinfinity.Clinic · closed Tuesdays. Results vary from person to person. All procedures carry possible side effects.
+
+Hashtags: #PN #สกินบูสเตอร์ #Polynucleotide #SalmonDNA #VinfinityClinic #คลินิกอุดร #อุดรธานี #SkinBooster #UdonThani
+Alt text: คุณหมออธิบายความต่างของ PN ชนิดเจลและชนิดน้ำ พร้อมกราฟิกสาย DNA ยาวและสั้น / The doctor explains the difference between gel and liquid PN, with a graphic of long and short DNA chains.
+Graphic brief: 9:16 1080×1920. Real footage of the doctor in the treatment room (assets/img/treatment.jpg as cover frame if no video), dark navy gradient (#0B142E → #1A326B) on the lower third for silver #EEF2F8 text; insert article graphic assets/img/articles/pn-hmw-lmw-polynucleotide.jpg at 3–10 s. Small text footer credit throughout: "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943 · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล". No white logo band, no product brand names, no price, no before/after, no Christmas discount invented.

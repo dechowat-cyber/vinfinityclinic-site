@@ -10,6 +10,7 @@ export const SOURCES: Record<string, string> = {
   tt: "จาก TikTok",
   web: "จากเว็บไซต์",
   qr_store: "จากหน้าร้าน",
+  gifts: "จากปฏิทินของขวัญ",
 };
 
 export const oaId = () => process.env.LINE_OA_ID || "@vinfinityclinic";

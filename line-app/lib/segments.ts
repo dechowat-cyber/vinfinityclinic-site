@@ -128,8 +128,8 @@ export async function createCampaign(o: { name: string; filters: Filters; messag
 }
 
 /** Every friend of the OA (LINE broadcast). One request; LINE de-duplicates a retry with the same key. */
-export async function createBroadcast(o: { name: string; message: string; withBooking: boolean; staffId: number | null; images?: string[]; reach?: number | null; narrow?: Narrow | null }) {
-  ({ images: o.images, message: o.message } = await resolvePromoMarker(o.images ?? [], o.message));
+export async function createBroadcast(o: { name: string; message: string; withBooking: boolean; staffId: number | null; images?: string[]; reach?: number | null; narrow?: Narrow | null; now?: Date }) {
+  ({ images: o.images, message: o.message } = await resolvePromoMarker(o.images ?? [], o.message, o.now));
   const message = o.message.trim().slice(0, 1000);
   if (!message) throw new Error("empty_message");
   const pm = parsePromoMarker(o.images);

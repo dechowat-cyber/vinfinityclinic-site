@@ -9,7 +9,7 @@ SITE = "https://vinfinityclinic.com"
 LINE_APP = "https://vinfinity-line.vercel.app"
 # Ad pixels: fill the IDs to switch them on. They load only after the visitor accepts the cookie banner.
 GA4_ID = "G-390ZZ2GPSP"
-META_PIXEL_ID = ""  # 15-16 digits
+META_PIXEL_ID = "5707458012812156"  # Meta pixel, set 26 Nov 2026
 TIKTOK_PIXEL_ID = ""
 from urllib.parse import quote as _q
 # FR-01: every LINE button opens the chat with a pre-filled message carrying the source tag,
@@ -291,7 +291,10 @@ def header_html(lang, path):
     home = "/en/" if en else "/"
     label = "Vinfinity Clinic home" if en else "Vinfinity Clinic หน้าแรก"
     cta = "Book a consult" if en else "นัดปรึกษาแพทย์"
-    return f"""<header class="site-header">
+    gift = "" if en else f"""<a class="gift-bar" href="{LINE_APP}/gifts?s=web" data-until="2026-12-31T23:59:59+07:00">🎁 ปฏิทินของขวัญ สวยก่อนปีใหม่ · เปิดได้วันละ 1 กล่อง 25 พ.ย. – 31 ธ.ค. <b>เปิดกล่องวันนี้ →</b></a>
+<script>(function(){{var b=document.querySelector('.gift-bar');if(b&&Date.now()>Date.parse(b.dataset.until))b.remove();}})();</script>
+"""
+    return gift + f"""<header class="site-header">
 <div class="wrap">
 <a class="brand lockup" href="{home}" aria-label="{label}"><img class="lk-mark" src="/assets/vinfinity-mark.svg" alt="" width="44" height="46"><span class="lk-text"><img class="lk-word" src="/assets/vinfinity-wordmark.svg" alt="Vinfinity" width="150" height="18"><span class="lk-tag">INFINITE BEAUTY, PRECISELY</span></span></a>
 <nav class="nav" aria-label="{"Main menu" if en else "เมนูหลัก"}">
@@ -446,7 +449,7 @@ def build(out, title, desc, path, keywords, body_file, faqs, extra_ld=(), lang="
     body = (body.replace("{{REVIEWS}}", reviews_html(lang)).replace("{{CLINIC_INFO}}", clinic_info_html(lang))
             .replace("{{MAP}}", map_html(lang)))
     body = body.replace("{{ADDR}}", ADDR_EN if en else ADDR_LINE)
-    body = body.replace("{{LINE}}", LINE_EN if en else LINE).replace("{{MSG}}", MSG).replace("{{FAQ}}", faq_html(faqs))
+    body = body.replace("{{LINE_APP}}", LINE_APP).replace("{{LINE}}", LINE_EN if en else LINE).replace("{{MSG}}", MSG).replace("{{FAQ}}", faq_html(faqs))
     lds = ([faq_ld(faqs)] if faqs else []) + list(extra_ld)
     html = head(title, desc, path, keywords, lds, lang) + body + footer(lang)
     html = bust(html)
@@ -499,6 +502,7 @@ HOME_FAQ = [
     ("ต้องทำกี่ครั้งถึงจะเห็นผล", "ขึ้นกับหัตถการและสภาพผิวของแต่ละคน แพทย์จะแจ้งจำนวนครั้งและระยะห่างหลังการประเมิน"),
     ("ผลลัพธ์อยู่ได้นานแค่ไหน", "ขึ้นกับชนิดผลิตภัณฑ์ ตำแหน่ง และการเผาผลาญของแต่ละบุคคล แพทย์จะแนะนำช่วงเวลานัดติดตามผลให้เหมาะกับแต่ละคน"),
     ("นัดปรึกษาอย่างไร", "ทัก LINE @vinfinityclinic หรือ Facebook Messenger ส่งรูปหน้าตรงและเรื่องที่กังวล ทีมจะนัดเวลาประเมินกับแพทย์ให้"),
+    ("ปรึกษาเป็นภาษาอังกฤษได้ไหม", "ได้ คลินิกให้คำปรึกษาเป็นภาษาอังกฤษได้ (แพทย์และ/หรือทีมงาน) ชาวต่างชาติทักเป็นภาษาอังกฤษทาง LINE @vinfinityclinic หรือ Facebook Messenger ส่งรูปหน้าตรงและเรื่องที่กังวล ทีมจะนัดเวลาประเมินกับแพทย์ที่อุดรธานีให้"),
     ("Vinfinity Clinic อุดรธานี อยู่ที่ไหน เปิดกี่โมง", f"คลินิกอยู่ที่ {ADDR_LINE} {HOURS_TEXT} โทร {TEL} หรือนัดทาง LINE @vinfinityclinic"),
     ("มีสาขาที่ลาวไหม", "มีสาขาเวียงจันทน์ สปป.ลาว และสาขาอุดรธานี ลูกค้าจากลาวสามารถนัดล่วงหน้าเพื่อเดินทางมาทำที่อุดรธานีได้"),
 ]
@@ -573,7 +577,7 @@ CHIN_FAQ = [
     ("ฟิลเลอร์คาง อุดร ราคาเท่าไหร่", "ฟิลเลอร์ HA จากยุโรป ราคาเริ่มต้น 9,990 บาทต่อ cc ปริมาณขึ้นกับความยาวและรูปทรงที่ต้องปรับ แพทย์แจ้งค่าใช้จ่ายทั้งหมดก่อนเริ่ม"),
     ("ฟิลเลอร์คางอยู่ได้นานแค่ไหน", "ประมาณ 6–12 เดือน หรือนานกว่าในบางคน เพราะฉีดในชั้นลึกใกล้กระดูกและเป็นจุดที่ขยับน้อย"),
     ("ฉีดฟิลเลอร์คางแล้วคางจะแหลมไหม", "ไม่จำเป็น แพทย์ออกแบบรูปทรงตามโครงหน้า บางคนเหมาะกับคางมน บางคนเหมาะกับคางที่ยาวขึ้นเล็กน้อย"),
-    ("ฉีดฟิลเลอร์คางกับเสริมซิลิโคนต่างกันอย่างไร", "ฟิลเลอร์ไม่ต้องผ่าตัด เห็นการเปลี่ยนแปลงหลังฉีดและปรับแก้ได้ ส่วนซิลิโคนเป็นการผ่าตัดที่ผลถาวรกว่าแต่แก้ไขยากกว่า"),
+    ("ฉีดฟิลเลอร์คางกับเสริมซิลิโคนต่างกันอย่างไร", "ฟิลเลอร์ไม่ต้องผ่าตัด เห็นการเปลี่ยนแปลงหลังฉีดและปรับแก้ได้ ส่วนซิลิโคนเป็นการผ่าตัดที่ผลอยู่จนกว่าจะผ่าตัดเอาออก แต่แก้ไขยากกว่า"),
     ("เคยเสริมคางมาแล้ว ฉีดฟิลเลอร์ได้ไหม", "ต้องแจ้งแพทย์ก่อนว่าเคยทำอะไรมา แพทย์จะประเมินว่าฉีดได้อย่างปลอดภัยหรือไม่"),
 ]
 BOOSTER_FAQ = [
@@ -780,15 +784,27 @@ def write_sitemap():
     today = datetime.date.today().isoformat()
     old = (ROOT / "sitemap.xml").read_text(encoding="utf-8") if (ROOT / "sitemap.xml").exists() else ""
     prio = dict(re.findall(r"<loc>([^<]+)</loc>(?:<lastmod>[^<]*</lastmod>)?<priority>([^<]+)</priority>", old))
+    old_mod = dict(re.findall(r"<loc>([^<]+)</loc><lastmod>([^<]+)</lastmod>", old))
+    # A shallow clone (CI, scheduled agents) reports the clone boundary as every file's last commit,
+    # which would rewrite lastmod to a wrong date. In that case keep the previous lastmod for clean files.
+    try:
+        shallow = subprocess.run(["git", "rev-parse", "--is-shallow-repository"], cwd=ROOT,
+                                 capture_output=True, text=True).stdout.strip() == "true"
+    except OSError:
+        shallow = False
 
-    def lastmod(src):
+    def lastmod(src, loc=None):
         rel = str(src.relative_to(ROOT))
         try:
             dirty = subprocess.run(["git", "status", "--porcelain", "--", rel], cwd=ROOT, capture_output=True, text=True).stdout.strip()
             d = subprocess.run(["git", "log", "-1", "--format=%cs", "--", rel], cwd=ROOT, capture_output=True, text=True).stdout.strip()
         except OSError:
             return today
-        return today if dirty or not d else d
+        if dirty:
+            return today
+        if shallow and loc in old_mod:
+            return old_mod[loc]
+        return d or today
 
     rows = []
     for lang in ("th", "en"):
@@ -798,7 +814,7 @@ def write_sitemap():
             if not src.exists() or not (ROOT / (out if lang == "th" else "en/" + out)).exists():
                 continue
             loc = SITE + url_path
-            row = "<url><loc>%s</loc><lastmod>%s</lastmod><priority>%s</priority>" % (loc, lastmod(src), prio.get(loc, "0.8"))
+            row = "<url><loc>%s</loc><lastmod>%s</lastmod><priority>%s</priority>" % (loc, lastmod(src, loc), prio.get(loc, "0.8"))
             if (ROOT / "en" / out).exists() and (ROOT / "pages" / "en" / body_file).exists():
                 # hreflang pairs, same as the <link rel="alternate"> tags in each page head
                 for hl, href in (("th", path), ("en", en_path(path)), ("x-default", path)):

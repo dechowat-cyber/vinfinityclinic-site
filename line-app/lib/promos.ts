@@ -7,6 +7,7 @@ import { thaiDate, thaiTime } from "./time";
 import { notifyStaff } from "./notify";
 import type { Msg } from "./line";
 import { refEventKb } from "./referral";
+import { GIFTS, GIFT_ASK, GIFT_PAGE, GIFT_RANGE, GIFT_USE_BY, GIFT_START, GIFT_YEAR_END, giftNamed, todayGift } from "./gifts";
 
 // Time-boxed promotions that work without the LINE message quota (every message here is a reply, which is free):
 //  1) a customer who asks about the product, taps "โปรเดือนนี้" in the rich menu, or adds the OA gets the promo;
@@ -39,7 +40,86 @@ const BARE = /^(สนใจ|ขอรายละเอียด|ขอข้�
 /** Wants the seat: the card's button posts "ขอรับสิทธิ์ …". */
 const CLAIM = /รับสิทธิ์/;
 
-export const PROMOS: Promo[] = [{
+const SITE = "https://vinfinity-line.vercel.app";
+/** One promo per December day from the gift calendar; only that day's box is live, so a bare "รับสิทธิ์" means today's gift. */
+const GIFT_PROMOS: Promo[] = GIFTS.map((g) => ({
+  key: g.key,
+  label: `ของขวัญวันที่ ${g.label} · ${g.title} · ${g.limit} สิทธิ์`,
+  from: g.from, until: g.until,
+  trigger: GIFT_ASK,
+  image: g.image, preview: g.preview,
+  limit: g.limit, holdHours: 48, maxPer: `คนละ 1 สิทธิ์ · ใช้ได้ถึง ${GIFT_USE_BY}`,
+  card: {
+    hero: g.image,
+    title: `🎁 ของขวัญวันที่ ${g.label} · ${g.title}`,
+    price: g.price, ...(g.was ? { was: `ปกติ ${g.was}` } : {}),
+    lines: [g.cond, `เพียง ${g.limit} สิทธิ์ · กดรับได้วันนี้วันเดียว · คนละ 1 สิทธิ์ · ใช้ได้ถึง ${GIFT_USE_BY}`, "แพทย์ประเมินก่อนทุกครั้ง · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · ใช้ร่วมกับโปร/แพ็กเกจอื่นไม่ได้"],
+    claimText: g.claimText,
+    detailUrl: `${SITE}${GIFT_PAGE}?s=line`,
+  },
+  text: `🎁 ปฏิทินของขวัญ สวยก่อนปีใหม่ · กล่องวันที่ ${g.label}
+${g.title} ${g.price}${g.was ? ` (ปกติ ${g.was})` : ""}
+${g.cond}
+
+เพียง ${g.limit} สิทธิ์ กดรับได้วันนี้วันเดียว · ใช้ได้ถึง ${GIFT_USE_BY}
+แพทย์ประเมินก่อนทุกครั้ง · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · ใช้ร่วมกับโปรอื่นไม่ได้`,
+  ask: g.claimText,
+  kb: `Year-end gift calendar 'ปฏิทินของขวัญ สวยก่อนปีใหม่' (one box per day, 25 Nov – 31 Dec 2026, same offer for everyone that day, not a lucky draw). Today's box (${g.label}): ${g.kb}. Only ${g.limit} places today, 1 per person, claim today in LINE by tapping 'กดรับสิทธิ์' (or typing '${g.claimText}'), choose an appointment within 48 hours, use by 31 January 2027. Not combined with other promotions. Calendar page: ${SITE}${GIFT_PAGE}. Do not reveal future days' gifts. Results vary.`,
+  categories: g.categories,
+  interest: "ปฏิทิน|ของขวัญ|ปีใหม่|ฟิลเลอร์|filler|ยกกระชับ|ผิว|ดริป|คอลลาเจน|em lift|สกินบูสเตอร์",
+}));
+
+/** Replies about the calendar that are not today's box: a claim for another day, or a question before 1 Dec / after 31 Dec. */
+export function giftNotice(text: string, now = new Date()): Msg[] | null {
+  const today = todayGift(now);
+  const link = `${SITE}${GIFT_PAGE}?s=line`;
+  const named = giftNamed(text);
+  if (named && named !== today) {
+    const head = now.getTime() < Date.parse(named.from) ? `กล่องวันที่ ${named.label} ยังไม่เปิดค่ะ 🎁` : `กล่องวันที่ ${named.label} หมดเวลากดรับแล้วค่ะ 🙏`;
+    return [{ type: "text", text: today ? `${head}\nตอนนี้เปิดกล่องวันที่ ${today.label} แล้ว: ${today.title} ${today.price}\nพิมพ์ “รับสิทธิ์” เพื่อรับของขวัญวันนี้ หรือดูปฏิทินที่ ${link}` : `${head}\nเปิดดูปฏิทินของขวัญได้ที่ ${link}` }];
+  }
+  if (today || !/ปฏิทิน|เปิดกล่อง|สวยก่อนปีใหม่|ของขวัญ\s*ปีใหม่/.test(text)) return null;
+  if (now.getTime() < Date.parse(GIFT_START) && now.getTime() > Date.parse("2026-11-20T00:00:00+07:00"))
+    return [{ type: "text", text: `🎁 ปฏิทินของขวัญ สวยก่อนปีใหม่ (${GIFT_RANGE}) กำลังจะเปิดค่ะ\nเปิดได้วันละ 1 กล่อง ทุกคนได้ของขวัญเดียวกันในวันนั้น สิทธิ์มีจำนวนจำกัดต่อวัน\nกดดูปฏิทินและชวนเพื่อนได้ที่ ${link}` }];
+  if (now.getTime() > Date.parse(GIFT_YEAR_END) && now.getTime() < Date.parse("2027-01-31T23:59:59+07:00"))
+    return [{ type: "text", text: `ปฏิทินของขวัญปิดแล้วค่ะ ขอบคุณที่ร่วมสนุกนะคะ 💙 ใครรับสิทธิ์ไว้แล้ว ใช้ได้ถึง ${GIFT_USE_BY} ค่ะ` }];
+  return null;
+}
+
+export const PROMOS: Promo[] = [...GIFT_PROMOS, {
+  // December filler check (doctor's decision 2026-11-24), replaced the same afternoon by the December gift calendar (lib/gifts.ts)
+  key: "fillercheck-2612",
+  label: "เช็กฟิลเลอร์ก่อนปีใหม่ 8,990/cc · 20 สิทธิ์ (24 พ.ย.–31 ธ.ค. 69)",
+  from: "2026-11-24T00:00:00+07:00",
+  until: "2026-11-24T17:00:00+07:00",
+  trigger: /เช็[กค]\s*ฟิลเลอร์|ฟิลเลอร์\s*ก่อนปีใหม่|ฟิลเลอร์ปีใหม่|8,?990|ฟิลเลอร์|filler/i,
+  image: "/campaign/fillercheck-2612/1-1x1.jpg",
+  preview: "/campaign/fillercheck-2612/1-1x1-p.jpg",
+  limit: 20, holdHours: 48, maxPer: "คนละ 1 สิทธิ์ · จำนวน cc ตามที่แพทย์ประเมิน",
+  card: {
+    hero: "/campaign/fillercheck-2612/1-1x1.jpg",
+    title: "เช็กฟิลเลอร์ก่อนปีใหม่",
+    price: "8,990 บาท / cc",
+    was: "ปกติ 9,990 บาท / cc",
+    lines: ["โปรแกรมฉีดฟิลเลอร์ HA · คุณหมอประเมินฟิลเลอร์เดิมก่อนเติมทุกครั้ง", "เพียง 20 สิทธิ์ · คนละ 1 สิทธิ์ · ถึง 31 ธ.ค. · เลือกวันนัดภายใน 48 ชม.", "จำนวน cc และตำแหน่งตามการประเมินของแพทย์ · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · ใช้ร่วมกับโปร/แพ็กเกจอื่นไม่ได้"],
+    claimText: "ขอรับสิทธิ์เช็กฟิลเลอร์ 8,990 ค่ะ",
+  },
+  text: `✨ เช็กฟิลเลอร์ก่อนปีใหม่ · โปรแกรมฉีดฟิลเลอร์ HA
+
+ฟิลเลอร์เดิมอาจยังอยู่มากกว่าที่คิด
+คุณหมอประเมินก่อนเติมทุกครั้ง บางคนคำตอบคือยังไม่ต้องเติม
+1) เล่าประวัติ เคยฉีดที่ไหน กี่ cc เมื่อไหร่
+2) ถ่ายภาพมาตรฐาน ประเมินทีละจุด
+3) เติมเท่าที่จำเป็นตามแผนของคุณหมอ
+
+💙 8,990.- / cc (ปกติ 9,990.-) เพียง 20 สิทธิ์ ถึง 31 ธ.ค. นี้
+คนละ 1 สิทธิ์ · จำนวน cc และตำแหน่งตามการประเมินของแพทย์ · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · ใช้ร่วมกับโปรอื่นไม่ได้
+👉 กดปุ่ม “กดรับสิทธิ์” ในการ์ดด้านล่าง หรือพิมพ์ “รับสิทธิ์เช็กฟิลเลอร์” ได้เลยค่ะ`,
+  ask: "ขอรับสิทธิ์เช็กฟิลเลอร์ 8,990 ค่ะ",
+  kb: "December filler check 'เช็กฟิลเลอร์ก่อนปีใหม่' (24 November – 31 December 2026): HA filler programme 8,990 THB per cc (regular 9,990 THB per cc). The doctor first reviews the patient's previous filler (where, how many cc, when) with standard photos and only adds what is needed; for some patients the answer is no filler needed yet. Number of cc and areas are decided by the doctor. Only 20 places, 1 per person, not combined with other promotions. Claim in the clinic's LINE by typing 'เช็กฟิลเลอร์' and tapping 'กดรับสิทธิ์', then choose an appointment within 48 hours. Results vary; do not promise specific results or duration.",
+  categories: ["ฟิลเลอร์"],
+  interest: "ฟิลเลอร์|filler|ร่องแก้ม|ใต้ตา|คาง|จมูก|ขมับ|ปาก|กรอบหน้า|แก้มตอบ|harmony|haca|sculptra",
+}, {
   // 11.11 one-day offer (doctor's decision 2026-11-11): first in the list so a bare "รับสิทธิ์" today means this one
   key: "1111-2611",
   label: "11.11 สวยครบ 2 จุด 11,111 · 11 สิทธิ์",
@@ -71,6 +151,29 @@ export const PROMOS: Promo[] = [{
   kb: "11.11 one-day offer 'สวยครบ 2 จุด' (claim on 11 November 2026 only): 11,111 THB for 2 of these 3, chosen by the doctor after assessing the face: HA filler 1 cc, New Doublo 2.0 Pen handpiece with no shot limit (the doctor sets the number of shots), Vitaran 1 cc. Only 11 places, 1 per person, not combined with other promotions. Claim in the clinic's LINE by typing '11.11' and tapping 'กดรับสิทธิ์', choose an appointment within 48 hours, visit by 30 November 2026. Results vary.",
   categories: ["ยกกระชับ", "สกินบูสเตอร์", "ผิว", "ฟิลเลอร์"],
   interest: "doublo|hifu|ไฮฟู|ยกกระชับ|กระชับ|หย่อน|vitaran|ไวทาแรน|สกินบูสเตอร์|booster|รูขุมขน|ผิว|ฟิลเลอร์|filler|ร่องแก้ม|ใต้ตา|คาง",
+}, {
+  // EM Lift launch (doctor's brief 2026-11-15): early bird 4,500 per area, regular 5,990 after; end date 30 Nov is an assumption to confirm
+  key: "emlift-2611",
+  label: "EM Lift Early Bird 4,500/จุด/ครั้ง · คอร์ส 4 ครั้ง 18,000 (ถึง 30 พ.ย. 69)",
+  from: "2026-11-15T00:00:00+07:00",
+  until: "2026-11-30T23:59:59+07:00",
+  trigger: /em\s*-?\s*lift|อีเอ็ม\s*ลิ[ฟฟ]ท์?|early\s*bird|เออร์ลี่|electromagnetic|แม่เหล็ก/i,
+  image: "/campaign/emlift-2611/1-1x1.jpg",
+  preview: "/campaign/emlift-2611/1-1x1-p.jpg",
+  text: `✨ โปรแกรมใหม่ที่ Vinfinity · โปรแกรม EM Lift
+โปรแกรมคลื่นแม่เหล็กไฟฟ้า ไม่ใช้เข็ม ทำได้ทั้งผู้หญิงและผู้ชาย
+
+💙 Early Bird 4,500.- ต่อจุด ต่อครั้ง (ปกติ 5,990.-) ถึง 30 พ.ย. นี้
+เลือกจุดได้: หน้าผาก · ใต้ตา · แก้ม · ใต้คาง · คอ · บ่า
+(ใต้ตาและแก้มนับข้างละ 1 จุด)
+คอร์ส 4 ครั้งตามโปรแกรม (สัปดาห์ละครั้ง) 18,000.- ต่อจุด · ปกติ 23,960.-
+
+แพทย์ประเมินก่อนทุกครั้ง · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล
+กดปุ่มด้านล่าง หรือพิมพ์วัน-เวลาที่สะดวกได้เลยค่ะ`,
+  ask: "สนใจ EM Lift Early Bird ขอจองคิวค่ะ",
+  kb: "EM Lift (new, non-needle electromagnetic treatment; pads are placed on the chosen areas; for women and men). Early Bird until 30 November 2026: 4,500 THB per area per session (regular 5,990 THB per area per session afterwards); the full 4-session programme is 18,000 THB per area at the Early Bird price (regular 23,960 THB). Areas: forehead, under-eye (each side counts as 1 area), cheek (each side counts as 1 area), under the chin, neck, shoulders. Recommended programme: 4 sessions, one week apart. For several areas, multiply per area; hand over to staff to confirm the total. Do not state specific results, duration of effect or downtime; the doctor assesses first; results vary.",
+  categories: ["ยกกระชับ"],
+  interest: "em lift|emlift|ยกกระชับ|กระชับ|หย่อน|ไม่ใช้เข็ม|กลัวเข็ม|hifu|ไฮฟู|doublo|กรอบหน้า|เหนียง|ใต้คาง",
 }, {
   key: "haca-2610",
   label: "HArmonyCa Early Bird (จองภายใน 31 ต.ค. 69)",
@@ -214,6 +317,8 @@ export async function claimPromo(clientId: number, userId: string, p: Promo, now
 export async function promoReply(clientId: number, text: string, now = new Date(), userId = ""): Promise<Msg[] | null> {
   const x = (text || "").trim();
   if (!x || x.length > 300 || NOT_SALES.test(x)) return null;
+  const gn = giftNotice(x, now);
+  if (gn) return gn;
   const act = activePromos(now);
   const generic = GENERIC.test(x);
   if (!act.length) return generic ? [{ type: "text", text: "ตอนนี้ยังไม่มีโปรใหม่ค่ะ ติดตามได้ที่เมนูนี้เร็วๆ นี้นะคะ 😊 ระหว่างนี้ปรึกษาคุณหมอหรือดูราคาได้จากเมนูด้านล่างเลยค่ะ" }] : null;
