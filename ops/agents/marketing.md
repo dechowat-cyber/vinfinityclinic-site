@@ -13,7 +13,7 @@ Referral event "ชวนเพื่อนมาสวยด้วยกัน"
 
 ## Backlog (top = next)
 1. Get LINE OA follower count + segment sizes (past skin-booster / filler patients) from LINE OA Manager — broadcast sizes are "not verified" until then. (Ask doctor/team.)
-2. All slots to Sun 27 Dec are DRAFT READY (Draft 30 = gift-calendar Story). Next run: add Wed 30 Dec slot — candidates: New Year holiday-hours Story once the doctor gives holiday hours (not verified), or a year-end evergreen carousel from an article not yet used (collagen stimulators /articles/collagen-stimulators/). From 1 Jan the gift calendar is over: claimed gifts stay valid to 31 Jan 70 (say so, no new boxes).
+2. All slots to Wed 30 Dec are DRAFT READY (Draft 31 = HA vs Sculptra vs Ellansé timeline carousel). Next run: add Fri 1 Jan / Sun 3 Jan 2027 slots — from 1 Jan the gift calendar is over (claimed gifts stay valid to 31 Jan 70; say so, no new boxes); New Year holiday-hours Story only once the doctor gives holiday hours (not verified). Note: there is no /articles/collagen-stimulators/ page — the collagen-stimulator article is /articles/sculptra-ellanse-vs-ha-filler/.
 2c. Doctor to decide: an organic FB/IG post or Story for the gift-calendar launch (today's broadcast 10:00 is LINE only). Draft 28 works as a Story from 26 Nov if wanted.
 2b. Doctor to confirm: may a public feed post name the referral credits and the "3 friends → Vitaran 1 cc" reward under the clinic's advertising approval (ฆสพ.)? Draft 10 has a version without the reward line — not verified.
 3. Sculptra promo ended Sun 15 Nov 23:59 — never quote 15,990 again. "โปรเดือนนี้" shows EM Lift to 30 Nov (last-call Story = Draft 21). Check promos.ts for a December promo before 1 Dec; from 1 Dec never quote 4,500 / 18,000 as Early Bird.
@@ -24,7 +24,7 @@ Referral event "ชวนเพื่อนมาสวยด้วยกัน"
 7. Lao-language caption variant for Vientiane audience (site has lo menu images).
 8. Market watch: Udon Thani-local competitor promos (FB pages) — web search surfaced none on 2026-10-30 and 2026-10-31; needs a human to check FB pages or a different source.
 
-## 2-week content calendar (1 Nov – 27 Dec 2026)
+## 2-week content calendar (1 Nov – 30 Dec 2026)
 Weekdays corrected 2026-11-01 (1 Nov 2026 = Sunday; earlier labels were one day off — dates unchanged). Clinic closed Tuesdays.
 | Date | Channel | Topic | Hook | CTA | Asset |
 |---|---|---|---|---|---|
@@ -58,6 +58,7 @@ Weekdays corrected 2026-11-01 (1 Nov 2026 = Sunday; earlier labels were one day 
 | Wed 23 Dec | FB + IG feed (+ Story) | Gift calendar "ปฏิทินของขวัญ สวยก่อนปีใหม่" — 9 days left, today's box only, no future gifts named (gifts.ts) — DRAFT READY (Draft 28; also usable as a Story any day 26 Nov–30 Dec) | "เปิดกล่องของขวัญวันนี้หรือยัง" | ทักไลน์ พิมพ์ “โปรเดือนนี้” / เมนู 🎁 + vinfinityclinic.com/gifts | clinic-lounge.jpg (feed) · assets/img/gift-calendar.jpg (Story) |
 | Fri 25 Dec | TikTok / Reels + FB | PN gel vs liquid — "which PN works better?" 4 questions to ask before PN, 25 s (backlog 6, from /articles/pn-molecular-weight/; no price, no brand) — DRAFT READY (Draft 29) | "PN ยี่ห้อไหนได้ผลกว่า? ถามหมอ 4 ข้อนี้ก่อน" | /articles/pn-molecular-weight + LINE ประเมินผิว | doctor talking-head (team films) + articles/pn-hmw-lmw-polynucleotide.jpg |
 | Sun 27 Dec | FB + IG Story (+ LINE VOOM) | Gift calendar — still open to 31 Dec; today's box only (team fills it in from the page that morning), no future box named, no countdown (gifts.ts) — DRAFT READY (Draft 30) | "กล่องของขวัญวันนี้ เปิดแล้ว" | ทักไลน์ พิมพ์ “โปรเดือนนี้” / เมนู 🎁 + vinfinityclinic.com/gifts | assets/img/gift-calendar.jpg + clinic-lounge.jpg |
+| Wed 30 Dec | FB + IG carousel | Year-end evergreen: "plan your 2027 face by timeline" — HA vs Sculptra vs Ellansé: when you see it, how many sessions, can it be dissolved (from /articles/sculptra-ellanse-vs-ha-filler/; no price, no promo) — DRAFT READY (Draft 31) | "อยากสวยทันงานปีหน้า ต้องเริ่มเมื่อไหร่" | /articles/sculptra-ellanse-vs-ha-filler + LINE ส่งรูป | articles/sculptra-ellanse-ha-filler-timeline.jpg + treatment.jpg |
 
 Notes: before/after only from assets/img/ba (consented, already on site), labelled PRE / POST, organic only, never in ads. File naming on site: caseNN-b = PRE (before), caseNN-a = POST (after) — see pages/_results_eye.html. Do not use galderma-* doctor photos (not a current affiliation).
 
@@ -1058,4 +1059,37 @@ Our year-end gift calendar is open until 31 Dec: one box a day, the same gift fo
 Hashtags: #VinfinityClinic #ปฏิทินของขวัญ #สวยก่อนปีใหม่ #คลินิกอุดร #อุดรธานี #UdonThani
 Alt text: กราฟิกปฏิทินของขวัญของ Vinfinity Clinic บนพื้นน้ำเงินกรมท่า พร้อมข้อความ "เปิดได้วันละ 1 กล่อง ถึง 31 ธ.ค." / Vinfinity Clinic gift-calendar graphic on navy with the text "one box a day until 31 Dec".
 Graphic brief: 1080×1920, 2 frames. Frame 1: assets/img/gift-calendar.jpg (site graphic) top 55%, dark navy gradient (#0B142E → #1A326B) below, silver #EEF2F8 headline, today's box name + condition in #D5DDEE. Frame 2: real photo assets/img/clinic-lounge.jpg with the same gradient, three short lines + LINE link sticker. Small text footer credit on both: "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943 · ใช้ร่วมกับโปรอื่นไม่ได้". No white logo band, no countdown timer or "เหลืออีก X วัน", no "โอกาสสุดท้าย", no future box, no brand names, no before/after.
+
+### 2026-11-28
+- Saturday: Marketing light + live-site check only. vinfinityclinic.com is blocked by this run's network proxy, so the check used the production deployment (dpl_2K1WU1Hi4oTCDLBMqcz3U44QjxD8, commit 27248c3, READY): TH home and /en/ return 200 with title, canonical, hreflang, 3 JSON-LD blocks; /gifts/ redirects (307) to the LINE-app gift page as intended.
+- promos.ts / gifts.ts unchanged since 26 Nov: EM Lift Early Bird ends Mon 30 Nov 23:59; gift calendar to 31 Dec; no other December promo.
+- Today's slot Sat 28 Nov = Draft 21 (EM Lift last call). Next slot Sun 29 Nov = Draft 16 (Vitaran PN cool season) — re-checked: prices 9,990 / 4+ boxes 8,990 match /price/ and the standing price; no banned words; full TH caption in today's report.
+- Found: backlog pointed to /articles/collagen-stimulators/, which does not exist — corrected to /articles/sculptra-ellanse-vs-ha-filler/.
+- Done: Draft 31 for Wed 30 Dec (timeline carousel) below. Calendar now runs to 30 Dec.
+
+#### Draft 31 — Wed 30 Dec · FB + IG carousel (5 slides) · Plan your 2027 face by timeline
+Slide 1: "อยากสวยทันงานปีหน้า ต้องเริ่มเมื่อไหร่?" / "ฉีดเหมือนกัน แต่ใช้เวลาไม่เท่ากัน"
+Slide 2: "ฟิลเลอร์ HA" · เห็นรูปทรงหลังฉีด รอบวมยุบราว 2 สัปดาห์ · มักครั้งเดียว · สลายได้ด้วยเอนไซม์
+Slide 3: "Sculptra (PLLA)" · กระตุ้นให้ผิวสร้างคอลลาเจนเอง ค่อย ๆ ชัดในหลายสัปดาห์ถึงหลายเดือน · มัก 2–4 ครั้ง ห่างกัน 4–6 สัปดาห์ · สลายไม่ได้
+Slide 4: "Ellansé (PCL)" · ได้ปริมาตรบางส่วนจากเจล แล้วคอลลาเจนค่อย ๆ ก่อตัว · เลี่ยงปาก หว่างคิ้ว รอบตา · สลายไม่ได้
+Slide 5: "ฉีดครั้งแรก มักเริ่มจาก HA ที่แก้ไขได้ก่อน" / "ส่งรูปให้คุณหมอวางแผนตามวันงานของคุณ" / LINE @vinfinityclinic
+TH caption:
+ปีใหม่นี้มีงานแต่ง รับปริญญา หรือทริปสำคัญรออยู่ไหมคะ? 🗓️
+ฟิลเลอร์ HA, Sculptra และ Ellansé ฉีดเหมือนกัน แต่ใช้เวลาให้เห็นผลไม่เท่ากัน
+• ฟิลเลอร์ HA: เห็นรูปทรงหลังฉีด รอบวมยุบราว 2 สัปดาห์ มักทำครั้งเดียว และสลายได้ด้วยเอนไซม์ถ้าไม่พอใจ
+• Sculptra (PLLA): กระตุ้นให้ผิวสร้างคอลลาเจนเอง ผลค่อย ๆ ชัดในหลายสัปดาห์ถึงหลายเดือน มักทำ 2–4 ครั้ง ห่างกัน 4–6 สัปดาห์ สลายด้วยเอนไซม์ไม่ได้
+• Ellansé (PCL): ได้ปริมาตรบางส่วนจากเจล แล้วคอลลาเจนค่อย ๆ ก่อตัวรอบอนุภาค สลายด้วยเอนไซม์ไม่ได้ จึงเลี่ยงปาก หว่างคิ้ว และรอบดวงตา
+ถ้าอยากเห็นผลทันวันงาน ควรวางแผนล่วงหน้า และเผื่อเวลาให้รอบวมยุบ
+คนที่ฉีดครั้งแรกมักเริ่มจาก HA ที่แก้ไขได้ก่อน หลายแผนใช้มากกว่าหนึ่งชนิด วางคนละชั้นตามการประเมิน
+อ่านฉบับเต็มพร้อมเอกสารอ้างอิง: vinfinityclinic.com/articles/sculptra-ellanse-vs-ha-filler/
+💬 ส่งรูปหน้าตรงและวันงานของคุณทาง LINE @vinfinityclinic ให้คุณหมอช่วยวางแผน
+นพ.เดโชวัต พรมดา (ว.48943) · 📍 Vinfinity Clinic อุดรธานี · ปิดทุกวันอังคาร
+ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล · การทำหัตถการทุกชนิดอาจมีผลข้างเคียง
+
+EN caption:
+Big event in 2027 — a wedding, a graduation, a trip? HA filler, Sculptra and Ellansé are all injected, but they take different amounts of time. HA filler: shape is visible after the injection, swelling settles in about 2 weeks, usually one session, and it can be dissolved with an enzyme. Sculptra (PLLA): your skin builds its own collagen gradually over weeks to months, usually 2–4 sessions 4–6 weeks apart; it cannot be dissolved. Ellansé (PCL): some volume from the gel, then collagen forms gradually; it cannot be dissolved, so lips, between the brows and around the eyes are avoided. First-timers usually start with HA, which can be corrected. Send a front-facing photo and your event date and the doctor will plan around it. Full article (Thai, with references): vinfinityclinic.com/articles/sculptra-ellanse-vs-ha-filler/ · Dr. Dechowat Promda (license 48943) · consultations in English · LINE @vinfinityclinic · Messenger m.me/Vinfinity.Clinic · closed Tuesdays. Results vary from person to person. All procedures carry possible side effects.
+
+Hashtags: #ฟิลเลอร์ #Sculptra #Ellanse #กระตุ้นคอลลาเจน #VinfinityClinic #คลินิกอุดร #อุดรธานี #CollagenStimulator #UdonThani
+Alt text: แผนภาพเทียบเวลาที่เห็นผลของฟิลเลอร์ HA, Sculptra และ Ellansé บนพื้นน้ำเงินกรมท่า / Diagram comparing when results show for HA filler, Sculptra and Ellansé, on a navy background.
+Graphic brief: 1080×1350, 5 slides. Slide 1 real photo assets/img/treatment.jpg with dark navy gradient (#0B142E → #1A326B) over the lower 55%, silver #EEF2F8 headline. Slides 2–4: article graphic assets/img/articles/sculptra-ellanse-ha-filler-timeline.jpg cropped to the matching column, navy gradient band for 3 short lines each in #D5DDEE. Slide 5: assets/img/reception.jpg + gradient + CTA. Small text footer credit on every slide: "Vinfinity Clinic · LINE @vinfinityclinic · ว.48943 · ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล". No white logo band, no price, no promo, no before/after, no "ทันที" result claim, no Galderma branding.
 
